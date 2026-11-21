@@ -1220,3 +1220,14 @@ body .bl-eyebrow, body .bl-label, body .bl-footer-links h3, body .bl-kit-grid h3
 	#cart-popup .woocommerce-mini-cart-item { padding-left: 96px !important; }
 	.bl-cart-recommendation-row article { flex-basis: 92%; }
 }
+#header .bl-outline-icon::before { content: none !important; display: none !important; }
+#header .header-nav a:focus:not(:focus-visible), #header .bl-search-toggle:focus:not(:focus-visible) { box-shadow: none; outline: none; }
+#header .header-nav a:focus-visible, #header .bl-search-toggle:focus-visible { border-radius: 8px; outline: 2px solid var(--bl-blue); outline-offset: 2px; }
+@media (max-width: 849px) {
+	#header .header-main .flex-col.show-for-medium.flex-right { align-items: center; display: flex; flex-direction: row; gap: 4px; justify-content: flex-end; }
+	#header .header-main .flex-col.show-for-medium.flex-right > ul,
+	#header .header-main .bl-search-wrap,
+	#header .header-main .cart-item { align-items: center; display: flex; height: 40px; margin: 0 !important; }
+	#header .header-main .bl-search-toggle,
+	#header .header-main .header-cart-link { align-items: center; display: inline-flex; justify-content: center; margin: 0; padding: 0; }
+}
