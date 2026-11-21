@@ -99,12 +99,12 @@ add_shortcode(
 	'bl_image',
 	function ( $atts ) {
 		$atts = shortcode_atts( array( 'name' => 'hero', 'class' => '' ), $atts, 'bl_image' );
-		$allowed = array( 'hero', 'lifestyle', 'how-it-works', 'autoship', 'safe-home', 'instagram-1', 'instagram-2', 'instagram-3', 'instagram-4', 'kit-foam', 'kit-multi', 'kit-tablet', 'kit-spray' );
+		$allowed = array( 'hero', 'lifestyle', 'how-it-works', 'safe-home', 'instagram-1', 'instagram-2', 'instagram-3', 'instagram-4', 'kit-foam', 'kit-multi', 'kit-tablet', 'kit-spray' );
 		$name = sanitize_key( $atts['name'] );
 		if ( ! in_array( $name, $allowed, true ) ) {
 			return '';
 		}
-		$photography = array( 'hero', 'lifestyle', 'how-it-works', 'autoship', 'safe-home', 'instagram-1', 'instagram-2', 'instagram-3', 'instagram-4' );
+		$photography = array( 'hero', 'lifestyle', 'how-it-works', 'safe-home', 'instagram-1', 'instagram-2', 'instagram-3', 'instagram-4' );
 		$extension = in_array( $name, $photography, true ) ? 'jpg' : 'png';
 		$alt = $name ? ucwords( str_replace( '-', ' ', $name ) ) : '';
 		return '<img loading="eager" decoding="async" class="bl-content-image ' . esc_attr( sanitize_html_class( $atts['class'] ) ) . '" src="' . esc_url( BL_CHILD_URL . '/assets/images/' . $name . '.' . $extension ) . '" alt="' . esc_attr( $alt ) . '">';

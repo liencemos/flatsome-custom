@@ -90,9 +90,6 @@ function bl_loop_card_details() {
 	$count  = $product->get_review_count();
 	$scents = wc_get_product_terms( $product->get_id(), 'pa_scent', array( 'fields' => 'names' ) );
 	echo '<div class="bl-card-rating"><span class="star-rating" role="img" aria-label="' . esc_attr( sprintf( 'Rated %s out of 5', $rating ) ) . '"><span style="width:' . esc_attr( (float) $rating * 20 ) . '%"></span></span><strong>' . esc_html( number_format_i18n( (float) $rating, 1 ) ) . '</strong><span class="bl-review-count">(' . esc_html( number_format_i18n( $count ) ) . ')</span></div>';
-	if ( $product->is_on_sale() ) {
-		echo '<div class="bl-card-savings">with 20% Autoship savings</div>';
-	}
 	if ( ! empty( $scents ) ) {
 		$swatches = '';
 		foreach ( array_slice( $scents, 0, 1 ) as $index => $scent ) {

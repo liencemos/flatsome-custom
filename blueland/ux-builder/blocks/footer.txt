@@ -12,7 +12,7 @@
 [/col]
 [col span="2" span__sm="12" class="bl-footer-links"]
 [ux_text]
-<h3 class="bl-mobile-accordion-toggle">Shop</h3><ul class="bl-mobile-accordion-content"><li><a href="/shop/">All Products</a></li><li><a href="/product-category/bestsellers/">Bestsellers</a></li><li><a href="/product-category/starter-kits/">Starter Kits</a></li><li><a href="/product-category/refills/">Refills</a></li><li><a href="/autoship/">Autoship</a></li></ul>
+<h3 class="bl-mobile-accordion-toggle">Shop</h3><ul class="bl-mobile-accordion-content"><li><a href="/shop/">All Products</a></li><li><a href="/product-category/bestsellers/">Bestsellers</a></li><li><a href="/product-category/starter-kits/">Starter Kits</a></li><li><a href="/product-category/refills/">Refills</a></li></ul>
 [/ux_text]
 [/col]
 [col span="2" span__sm="12" class="bl-footer-links"]

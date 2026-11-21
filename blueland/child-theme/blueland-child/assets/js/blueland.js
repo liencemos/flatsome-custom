@@ -13,6 +13,13 @@
 		return result;
 	};
 
+	const syncCartLabels = () => {
+		document.querySelectorAll('.header-cart-link').forEach((link) => {
+			const count = Number(link.querySelector('.cart-icon')?.dataset.cartCount || 0);
+			link.setAttribute('aria-label', `Cart (${count} items)`);
+		});
+	};
+
 	const applyFragments = (fragments) => {
 		Object.entries(fragments || {}).forEach(([selector, markup]) => {
 			document.querySelectorAll(selector).forEach((node) => {
@@ -21,8 +28,15 @@
 				node.replaceWith(template.content.cloneNode(true));
 			});
 		});
+		syncCartLabels();
 		document.dispatchEvent(new CustomEvent('bl:cart-updated'));
 	};
+
+	syncCartLabels();
+	const header = document.querySelector('#header');
+	if (header && 'MutationObserver' in window) {
+		new MutationObserver(syncCartLabels).observe(header, { childList: true, subtree: true });
+	}
 
 	const openCart = () => {
 		const cartToggle = document.querySelector('.off-canvas-toggle[data-open="#cart-popup"]');
@@ -63,25 +77,39 @@
 	document.addEventListener('click', (event) => {
 		const toggle = event.target.closest('.bl-search-toggle');
 		if (toggle) {
-			const panel = document.querySelector('.bl-search-panel');
+			const wrapper = toggle.closest('.bl-search-wrap');
+			const panel = wrapper?.querySelector('.bl-search-panel');
 			if (panel) {
 				panel.hidden = false;
 				panel.classList.add('is-open');
 				toggle.setAttribute('aria-expanded', 'true');
-				window.setTimeout(() => document.querySelector('#bl-search-input')?.focus(), 100);
+				window.setTimeout(() => panel.querySelector('input[type="search"]')?.focus(), 100);
 			}
 			return;
 		}
-		if (event.target.closest('.bl-search-close')) {
-			const panel = document.querySelector('.bl-search-panel');
+		const close = event.target.closest('.bl-search-close');
+		if (close) {
+			const wrapper = close.closest('.bl-search-wrap');
+			const panel = wrapper?.querySelector('.bl-search-panel');
 			if (panel) {
 				panel.classList.remove('is-open');
 				panel.hidden = true;
 			}
-			const searchToggle = document.querySelector('.bl-search-toggle');
+			const searchToggle = wrapper?.querySelector('.bl-search-toggle');
 			searchToggle?.setAttribute('aria-expanded', 'false');
 			searchToggle?.focus();
 		}
+	});
+
+	document.addEventListener('keydown', (event) => {
+		if ('Escape' !== event.key) return;
+		const panel = Array.from(document.querySelectorAll('.bl-search-panel')).find((item) => !item.hidden && item.classList.contains('is-open'));
+		if (!panel) return;
+		panel.hidden = true;
+		panel.classList.remove('is-open');
+		const wrapper = panel.closest('.bl-search-wrap');
+		wrapper?.querySelector('.bl-search-toggle')?.setAttribute('aria-expanded', 'false');
+		wrapper?.querySelector('.bl-search-toggle')?.focus();
 	});
 
 	document.addEventListener('change', (event) => {
@@ -98,16 +126,6 @@
 			const url = archiveUrl();
 			url.searchParams.set('orderby', event.target.value);
 			window.location.href = url.toString();
-		}
-		if (event.target.matches('.bl-plan-selector input[name="bl_plan"]')) {
-			const autoship = event.target.value === 'autoship';
-			document.querySelectorAll('.bl-plan-card').forEach((card) => card.classList.toggle('is-selected', card.contains(event.target)));
-			const cards = document.querySelectorAll('.bl-plan-card');
-			const autoshipPrice = cards[0]?.querySelector('.bl-plan-price')?.innerHTML;
-			const oneTimePrice = cards[1]?.querySelector('.bl-plan-price')?.innerHTML;
-			const total = document.querySelector('.bl-plan-total');
-			if (total) total.innerHTML = autoship ? autoshipPrice : oneTimePrice;
-			document.querySelector('.bl-todays-total')?.classList.toggle('is-autoship', autoship);
 		}
 	});
 
@@ -205,23 +223,6 @@
 
 	document.addEventListener('submit', (event) => {
 		const form = event.target;
-		if (form.matches('form.cart')) {
-			const plan = document.querySelector('.bl-plan-selector input[name="bl_plan"]:checked')?.value || 'one-time';
-			const interval = document.querySelector('.bl-plan-selector select[name="bl_interval"]')?.value || '3';
-			[
-				['bl_plan', plan],
-				['bl_interval', interval]
-			].forEach(([name, value]) => {
-				let input = form.querySelector(`input[type="hidden"][name="${name}"]`);
-				if (!input) {
-					input = document.createElement('input');
-					input.type = 'hidden';
-					input.name = name;
-					form.append(input);
-				}
-				input.value = value;
-			});
-		}
 		if (form.matches('.bl-newsletter-form')) {
 			event.preventDefault();
 			const message = form.querySelector('.bl-newsletter-message');

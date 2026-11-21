@@ -46,7 +46,6 @@ Seed dùng đơn vị ngày `F j, Y`, giờ `g:i a`, tuần bắt đầu Chủ N
 
 ## Tích hợp production và dữ liệu demo
 
-- Autoship hiện chỉ là lựa chọn trên storefront, giảm 20% giá trong giỏ và ghi metadata vào đơn hàng. Tính năng này **không** tự tạo đơn định kỳ; cần WooCommerce Subscriptions hoặc dịch vụ tương đương để xử lý thanh toán định kỳ thật.
 - Điểm thưởng trên trang sản phẩm chỉ để hiển thị minh họa; không có hệ thống cộng/trừ điểm ở phía sau.
 - Form newsletter lưu email gửi lên trong một WordPress option. Trước khi ra mắt, thay handler bằng dịch vụ email production (ví dụ Mailchimp) và áp dụng chính sách đồng thuận, lưu trữ phù hợp.
 - Sản phẩm, đánh giá, ảnh và dấu hiệu chứng nhận là nội dung demo chung. Đánh giá seed được tạo thành comment WooCommerce để kiểm thử UX, không được trình bày như đánh giá khách hàng thật hoặc đã xác minh ở production. Hình chứng nhận chỉ là placeholder, không phải tuyên bố chứng nhận bên thứ ba.
@@ -64,13 +63,12 @@ Seed dùng đơn vị ngày `F j, Y`, giờ `g:i a`, tuần bắt đầu Chủ N
 | Quick add | Demo | Thêm nhanh sản phẩm đơn giản; biến thể chuyển sang trang/chọn tuỳ chọn. |
 | Filters/sort | Demo | Bộ lọc danh mục/loại và sắp xếp; thử với taxonomy và catalog production. |
 | Product badges | Demo | Huy hiệu dựa trên taxonomy/meta mẫu; rà soát nhãn và điều kiện hiển thị. |
-| Autoship | Cần plugin | Chọn mua định kỳ cần WooCommerce Subscriptions hoặc dịch vụ subscription tương đương. |
 | Rewards | Chưa tích hợp | Có thể dùng WooCommerce Points and Rewards hoặc YITH WooCommerce Points and Rewards. |
 | Reviews with photos | Chưa tích hợp | Có thể dùng CusRev (Customer Reviews for WooCommerce) hoặc Judge.me; xin phép dùng ảnh/review. |
 | Instagram feed | Placeholder | Tích hợp Smash Balloon Instagram Feed và kết nối tài khoản được uỷ quyền. |
 | Newsletter | Demo | Form hiện lưu dữ liệu cục bộ; dùng Mailchimp for WooCommerce và quy trình đồng ý nhận email. |
 | Sales tax | Mức mẫu | Dùng WooCommerce Tax, TaxJar hoặc Avalara; cấu hình nexus và xác nhận nghĩa vụ thuế. |
-| Payments | Chưa cấu hình production | Tích hợp WooCommerce Payments, Stripe và/hoặc PayPal; xác thực webhook và hoàn tiền. |
+| Payments | Demo | Check payments hiển thị là “Demo payment (no charge)” và không thu tiền; trước khi launch, thay bằng WooPayments, Stripe hoặc PayPal, xác thực webhook và quy trình hoàn tiền. |
 | Shipping labels | Chưa tích hợp | Có thể dùng WooCommerce Shipping hoặc ShipStation; xác nhận hãng vận chuyển và khu vực giao hàng. |
 | SEO | Chưa tích hợp | Có thể dùng Rank Math hoặc Yoast SEO; khai báo metadata, sitemap và redirects. |
 | Speed | Cần tối ưu production | Thiết lập cache trang/object theo hosting, CDN, nén ảnh/WebP và kiểm thử Core Web Vitals. |

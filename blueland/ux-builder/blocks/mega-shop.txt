@@ -2,7 +2,7 @@
 [row class="collapse"]
 [col span="6" class="bl-mega-shop-primary"]
 [ux_text]
-<ul><li><a href="/shop/">Shop All</a></li><li><a href="/product-category/bestsellers/">Bestsellers</a></li><li><a href="/product-category/starter-kits/">Starter Kits</a></li><li><a href="/product-category/refills/">Refills</a></li><li><a href="/product-category/holiday-shop/">Holiday Shop</a></li><li><a href="/product-category/starter-kits/">One Year Bundles <span>STOCK UP</span></a></li><li><a href="/autoship/">Autoship <span>SAVE 20%</span></a></li></ul>
+<ul><li><a href="/shop/">Shop All</a></li><li><a href="/product-category/bestsellers/">Bestsellers</a></li><li><a href="/product-category/starter-kits/">Starter Kits</a></li><li><a href="/product-category/refills/">Refills</a></li><li><a href="/product-category/holiday-shop/">Holiday Shop</a></li><li><a href="/product-category/starter-kits/">One Year Bundles <span>STOCK UP</span></a></li></ul>
 [/ux_text]
 [/col]
 [col span="6"]

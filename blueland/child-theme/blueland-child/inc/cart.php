@@ -9,6 +9,20 @@ function bl_free_shipping_threshold() {
 	return (float) apply_filters( 'bl_free_shipping_threshold', 50 );
 }
 
+add_filter(
+	'woocommerce_package_rates',
+	function ( $rates ) {
+		$free_rates = array();
+		foreach ( $rates as $rate_id => $rate ) {
+			if ( isset( $rate->method_id ) && 'free_shipping' === $rate->method_id ) {
+				$free_rates[ $rate_id ] = $rate;
+			}
+		}
+		return $free_rates ? $free_rates : $rates;
+	},
+	100
+);
+
 add_action(
 	'woocommerce_before_mini_cart',
 	function () {
@@ -28,7 +42,7 @@ add_filter(
 	function ( $quantity, $cart_item, $cart_item_key ) {
 		return '<div class="bl-mini-quantity"><button type="button" data-cart-qty="-1" data-key="' . esc_attr( $cart_item_key ) . '" aria-label="Decrease quantity">−</button><span>' . esc_html( (string) $cart_item['quantity'] ) . '</span><button type="button" data-cart-qty="1" data-key="' . esc_attr( $cart_item_key ) . '" aria-label="Increase quantity">+</button></div><span class="bl-mini-price">' . wp_kses_post( WC()->cart->get_product_price( $cart_item['data'] ) ) . '</span>';
 	},
-	10,
+	20,
 	3
 );
 
@@ -73,7 +87,7 @@ function bl_update_cart_qty() {
 	if ( $cart && isset( $cart->get_cart()[ $key ] ) ) {
 		$current = (int) $cart->get_cart()[ $key ]['quantity'];
 		if ( $current + $delta > 0 ) {
-			$cart->set_quantity( $key, $current + $delta );
+			$cart->set_quantity( $key, $current + $delta, true );
 		} else {
 			$cart->remove_cart_item( $key );
 		}

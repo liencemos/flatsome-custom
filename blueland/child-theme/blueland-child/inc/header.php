@@ -5,6 +5,36 @@
 
 defined( 'ABSPATH' ) || exit;
 
+function bl_header_cart_icon_markup() {
+	$count = WC()->cart ? (int) WC()->cart->get_cart_contents_count() : 0;
+	$badge = $count > 0 ? '<span class="bl-cart-count" aria-hidden="true">' . esc_html( (string) $count ) . '</span>' : '';
+	return '<span class="cart-icon image-icon" data-cart-count="' . esc_attr( (string) $count ) . '"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h2l2.4 11.1a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 8H6"></path><circle cx="9.5" cy="20" r="1.5"></circle><circle cx="18.5" cy="20" r="1.5"></circle></svg>' . $badge . '</span>';
+}
+
+add_filter(
+	'flatsome_icon',
+	function ( $icon_html, $name ) {
+		if ( 'icon-user' === $name ) {
+			return '<i class="icon-user bl-outline-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="7.5" r="3.5"></circle><path d="M5 21v-1a7 7 0 0 1 14 0v1"></path></svg></i>';
+		}
+		if ( 0 === strpos( $name, 'icon-shopping-' ) ) {
+			return bl_header_cart_icon_markup();
+		}
+		return $icon_html;
+	},
+	20,
+	2
+);
+
+add_filter(
+	'woocommerce_add_to_cart_fragments',
+	function ( $fragments ) {
+		$fragments['.header .cart-icon'] = bl_header_cart_icon_markup();
+		return $fragments;
+	},
+	20
+);
+
 add_shortcode(
 	'bl_announcement',
 	function () {
@@ -26,7 +56,7 @@ add_shortcode(
 	'bl_search',
 	function () {
 		$form = '<form role="search" method="get" class="bl-search-form" action="' . esc_url( home_url( '/' ) ) . '"><label class="screen-reader-text" for="bl-search-input">Search products</label><input id="bl-search-input" type="search" name="s" placeholder="Search products…" /><input type="hidden" name="post_type" value="product" /><button type="submit" aria-label="Search">→</button></form>';
-		return '<div class="bl-search-wrap"><button class="bl-search-toggle" type="button" aria-expanded="false" aria-label="Open search"><span class="icon-search" aria-hidden="true"></span></button><div class="bl-search-panel" hidden><div class="bl-search-panel-inner"><div class="bl-search-heading"><strong>What are you searching for?</strong><button type="button" class="bl-search-close" aria-label="Close search">×</button></div>' . $form . '<h3>Popular Products</h3><div class="bl-search-popular">' . do_shortcode( '[products limit="4" columns="4" orderby="popularity"]' ) . '</div></div></div></div>';
+		return '<div class="bl-search-wrap"><button class="bl-search-toggle" type="button" aria-expanded="false" aria-label="Open search"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="7.3"></circle><path d="m16.2 16.2 5.3 5.3"></path></svg></button><div class="bl-search-panel" hidden><div class="bl-search-panel-inner"><div class="bl-search-heading"><strong>What are you searching for?</strong><button type="button" class="bl-search-close" aria-label="Close search">×</button></div>' . $form . '<h3>Popular Products</h3><div class="bl-search-popular">' . do_shortcode( '[products limit="4" columns="4" orderby="popularity"]' ) . '</div></div></div></div>';
 	}
 );
 

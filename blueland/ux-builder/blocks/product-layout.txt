@@ -12,7 +12,7 @@
 [ux_text]
 <details class="bl-promo-bar"><summary>Save on your first order with a refill-ready routine.</summary><p>Explore product bundles for simple starter options and refill-friendly essentials.</p></details>
 [/ux_text]
-[bl_plan_selector]
+[bl_product_price_summary]
 [ux_product_add_to_cart]
 [bl_product_rewards]
 [bl_product_addon]

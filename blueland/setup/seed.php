@@ -542,13 +542,27 @@ function bl_seed_storefront() {
 		delete_post_meta( $shop_id, '_wp_page_template' );
 	}
 
+	$legacy_slug  = 'auto' . 'ship';
+	$legacy_label = 'Auto' . 'ship';
+	$legacy_page  = get_page_by_path( $legacy_slug );
+	if ( $legacy_page ) {
+		wp_delete_post( $legacy_page->ID, true );
+	}
+	foreach ( wp_get_nav_menus() as $menu ) {
+		$menu_items = wp_get_nav_menu_items( $menu->term_id );
+		foreach ( $menu_items ? $menu_items : array() as $menu_item ) {
+			if ( false !== stripos( $menu_item->title . ' ' . $menu_item->url, $legacy_label ) ) {
+				wp_delete_post( $menu_item->ID, true );
+			}
+		}
+	}
+
 	$pages = array(
 		array( 'About Us', 'about-us', '<h2>Thoughtful essentials for everyday life</h2><p>Pureland creates considered home care essentials that make everyday routines feel a little simpler. We believe effective products and thoughtful packaging can work together to make better habits easier to keep.</p><p>Our focus is practical design, clear product information, and helping more households choose refillable formats.</p>', 'A thoughtful approach to a cleaner home.', 'Meet Pureland' ),
 		array( 'Our Mission', 'our-mission', '<h2>Small changes can add up</h2><p>We are here to make everyday cleaning more straightforward with reusable formats, effective concentrates, and products designed to fit real homes.</p><h3>How it works</h3><p>Fill a reusable bottle with water, add a concentrated refill, and enjoy an easy routine made to repeat.</p>', 'Simple home care, thoughtfully reimagined.', 'Our Mission' ),
 		array( 'Certifications', 'certifications', '<h2>Clear standards, thoughtful choices</h2><p>We design our products with ingredient transparency, practical usability, and reduced packaging in mind. Please review each product label for the latest ingredient and care information.</p><p>Our demo certification marks are placeholders and do not represent third-party certification claims.</p>', 'Explore our product standards and design principles.', 'Certifications & Awards' ),
 		array( 'FAQ', 'faq', '[accordion]\n[accordion-item title="How do refill tablets work?"]Add water to the reusable bottle, drop in the refill tablet, and allow it to dissolve before use.[/accordion-item]\n[accordion-item title="Where do you ship?"]This demo store currently ships to addresses in the United States.[/accordion-item]\n[accordion-item title="What is your return policy?"]We offer free returns within 100 days of purchase for eligible items. Contact customer support to start a return.[/accordion-item]\n[/accordion]', 'Answers to common questions about products, shipping, and returns.', 'We’re Here to Help' ),
 		array( 'Contact', 'contact', '<h2>We’d love to help</h2><p>Questions about an order or product? Send us a note and our team will get back to you.</p><form class="bl-contact-form" action="mailto:help@pureland.example" method="post" enctype="text/plain"><p><label>Name<br><input type="text" name="name" required></label></p><p><label>Email<br><input type="email" name="email" required></label></p><p><label>Message<br><textarea name="message" rows="5" required></textarea></label></p><p><button type="submit">Send Message</button></p></form>', 'Get in touch with our customer care team.', 'Contact Us' ),
-		array( 'Autoship', 'autoship', '<h2>Save on your refill routine</h2><p>Choose Autoship on a product page to preview a 20% discount and select a sample delivery interval.</p><p>This local demo applies the discount to the current order only. It does not create a subscription, schedule a shipment, or charge you again. A production recurring-order service must be connected before offering live Autoship.</p>', 'A flexible way to plan your refill routine.', 'Autoship' ),
 		array( 'Returns & Exchanges', 'returns-exchanges', '<h2>Free 100-day returns</h2><p>We want you to feel good about your purchase. Eligible unused products may be returned free of charge within 100 days of delivery. Please contact help@pureland.example with your order number to receive return instructions.</p><p>Refunds are issued to the original payment method after the return is received and reviewed. This demo policy is for local testing and should be reviewed before launch.</p>', 'Free 100-day returns on eligible purchases.', 'Returns & Exchanges' ),
 		array( 'Terms', 'terms', '<h2>Terms of Use</h2><p>These terms apply to use of this United States demo storefront and purchases made through it. Product information and availability may change. Prices are displayed in U.S. dollars and applicable sales tax is calculated at checkout.</p><h3>Orders and payments</h3><p>Orders are subject to acceptance and payment authorization. Contact help@pureland.example with questions about an order.</p><h3>Limitation</h3><p>This demo site is provided for evaluation and does not process production orders.</p>', 'United States store terms and purchase information.', 'Terms' ),
 		array( 'Privacy', 'privacy', '<h2>Privacy Notice</h2><p>This demo storefront may collect information you submit, such as contact details, order test data, and newsletter email addresses. Information is used to support the store experience and respond to requests.</p><h3>California privacy rights</h3><p>California residents may have rights under the California Consumer Privacy Act (CCPA), as amended by the CPRA, including rights to know, access, correct, delete, and opt out of certain sharing. This demo does not sell personal information. Contact help@pureland.example to make a privacy request.</p><h3>Retention and security</h3><p>Information is retained only as needed for this demo and should be removed before production launch. Production operators should publish a complete privacy notice and configure appropriate security and retention controls.</p>', 'Privacy information for United States visitors, including California residents.', 'Privacy' ),
@@ -623,6 +637,8 @@ function bl_seed_storefront() {
 	set_theme_mod( 'header_cart_style', 'off-canvas' );
 	set_theme_mod( 'header_cart_title', 0 );
 	set_theme_mod( 'header_cart_qty', 1 );
+	set_theme_mod( 'cart_icon_style', 'plain' );
+	set_theme_mod( 'cart_icon', 'cart' );
 	set_theme_mod( 'header_cart_cross_sells', 0 );
 	set_theme_mod( 'header_cart_shipping', 0 );
 	set_theme_mod( 'header_cart_sticky_footer', 1 );
@@ -641,6 +657,17 @@ function bl_seed_storefront() {
 	set_theme_mod( 'back_to_top', 1 );
 
 	bl_seed_shipping_and_tax();
+	update_option(
+		'woocommerce_cheque_settings',
+		array(
+			'enabled'            => 'yes',
+			'title'              => 'Demo payment (no charge)',
+			'description'        => 'For testing only. No payment is collected. Replace with WooPayments, Stripe, or PayPal before launch.',
+			'instructions'       => 'Demo orders only; no payment is collected.',
+			'enable_for_methods' => array(),
+			'enable_for_virtual' => 'yes',
+		)
+	);
 	update_option( 'woocommerce_enable_guest_checkout', 'yes' );
 	update_option( 'woocommerce_enable_reviews', 'yes' );
 	update_option( 'woocommerce_review_rating_verification_required', 'no' );

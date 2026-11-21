@@ -5,71 +5,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_filter(
-	'woocommerce_add_cart_item_data',
-	function ( $cart_item_data, $product_id, $variation_id ) {
-		if ( empty( $_POST['bl_plan'] ) || 'autoship' !== sanitize_key( wp_unslash( $_POST['bl_plan'] ) ) ) {
-			return $cart_item_data;
-		}
-		$product = wc_get_product( $variation_id ? $variation_id : $product_id );
-		if ( ! $product ) {
-			return $cart_item_data;
-		}
-		$cart_item_data['bl_plan']         = 'autoship';
-		$cart_item_data['bl_interval']     = isset( $_POST['bl_interval'] ) ? absint( wp_unslash( $_POST['bl_interval'] ) ) : 3;
-		$cart_item_data['bl_plan_unique']  = md5( wp_rand() . microtime( true ) );
-		return $cart_item_data;
-	},
-	10,
-	3
-);
-
-add_action(
-	'woocommerce_before_calculate_totals',
-	function ( $cart ) {
-		if ( is_admin() && ! wp_doing_ajax() ) {
-			return;
-		}
-		if ( ! $cart instanceof WC_Cart ) {
-			return;
-		}
-		foreach ( $cart->get_cart() as $cart_item ) {
-			if ( isset( $cart_item['bl_plan'] ) && 'autoship' === $cart_item['bl_plan'] ) {
-				$product_id = ! empty( $cart_item['variation_id'] ) ? $cart_item['variation_id'] : $cart_item['product_id'];
-				$fresh      = wc_get_product( $product_id );
-				if ( $fresh && isset( $cart_item['data'] ) ) {
-					$cart_item['data']->set_price( (float) $fresh->get_price() * 0.8 );
-				}
-			}
-		}
-	},
-	20
-);
-
-add_filter(
-	'woocommerce_get_item_data',
-	function ( $item_data, $cart_item ) {
-		if ( isset( $cart_item['bl_plan'] ) && 'autoship' === $cart_item['bl_plan'] ) {
-			$item_data[] = array( 'key' => 'Plan', 'value' => 'Autoship — every ' . absint( $cart_item['bl_interval'] ) . ' months (20% off)' );
-		}
-		return $item_data;
-	},
-	10,
-	2
-);
-
-add_action(
-	'woocommerce_checkout_create_order_line_item',
-	function ( $item, $cart_item_key, $values ) {
-		if ( isset( $values['bl_plan'] ) && 'autoship' === $values['bl_plan'] ) {
-			$item->add_meta_data( 'Plan', 'Autoship', true );
-			$item->add_meta_data( 'Refill interval', absint( $values['bl_interval'] ) . ' months', true );
-		}
-	},
-	10,
-	3
-);
-
 add_shortcode(
 	'bl_product_included',
 	function () {
@@ -119,17 +54,13 @@ add_shortcode(
 );
 
 add_shortcode(
-	'bl_plan_selector',
+	'bl_product_price_summary',
 	function () {
 		global $product;
 		if ( ! $product instanceof WC_Product || ! $product->is_purchasable() ) {
 			return '';
 		}
-		$price = (float) $product->get_price();
-		$plan_price = wc_price( $price * 0.8 );
-		$regular    = wc_price( $price );
-		$intervals  = '<select name="bl_interval" aria-label="Autoship delivery interval"><option value="1">Every 1 month</option><option value="2">Every 2 months</option><option value="3" selected>Every 3 months</option></select>';
-		return '<div class="bl-plan-selector"><h3>Your plan</h3><label class="bl-plan-card is-selected"><input type="radio" name="bl_plan" value="autoship" checked><span class="bl-plan-content"><strong>Save 20% with Autoship</strong><span class="bl-plan-line"><s>' . wp_kses_post( $regular ) . '</s><b class="bl-plan-price">' . wp_kses_post( $plan_price ) . '</b></span><small class="bl-plan-interval">Recurring refills (' . $intervals . ')</small></span><em>5% BACK IN REWARDS</em></label><label class="bl-plan-card"><input type="radio" name="bl_plan" value="one-time"><span class="bl-plan-content"><strong>Buy One Time</strong><span class="bl-plan-line"><b class="bl-plan-price">' . wp_kses_post( $regular ) . '</b></span></span></label><div class="bl-todays-total is-autoship"><strong>Today’s Total</strong><span class="bl-plan-regular">' . wp_kses_post( $regular ) . '</span><span class="bl-plan-total">' . wp_kses_post( $plan_price ) . '</span></div></div>';
+		return '<div class="bl-todays-total"><strong>Today’s Total</strong><span class="bl-today-price">' . wp_kses_post( wc_price( (float) $product->get_price() ) ) . '</span></div>';
 	}
 );
 

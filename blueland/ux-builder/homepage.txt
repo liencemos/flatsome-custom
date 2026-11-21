@@ -97,22 +97,6 @@
 [/row]
 [/section]
 
-[section class="bl-split-section bl-autoship-home" padding="0px"]
-[row class="collapse" v_align="middle"]
-[col span="6" span__sm="12" padding="8% 7% 8% 7%"]
-[ux_text]
-<h2>Save More With Autoship</h2>
-<p>Save money (and the planet) when you sign up to get refills sent when and where you want them.</p>
-<ul><li>Save up to 20%</li><li>No commitment</li><li>Ship for less</li><li>Rewards on every purchase</li></ul>
-[button text="Learn More About Autoship" link="/autoship/" style="outline" radius="99"]
-[/ux_text]
-[/col]
-[col span="6" span__sm="12" class="bl-split-image-col"]
-[bl_image name="autoship"]
-[/col]
-[/row]
-[/section]
-
 [section class="bl-certifications-section" padding="75px 0px"]
 [row]
 [col span="12" align="center"]

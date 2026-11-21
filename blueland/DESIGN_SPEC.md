@@ -51,7 +51,7 @@ Breakpoints gốc: 768 / 1024 / 1280.
 1. Announcement bar 40px, bg red, chữ trắng 13px, slider 3 thông điệp, mũi tên ‹ › 2 bên, link gạch chân.
 2. Main nav 65px trắng, pad 0 48px: trái "Shop ▾" (mega) + "Holiday Shop" (plum); giữa logo (≈174×40); phải "About Us ▾", "Our Mission ▾", icon search, account ▾, cart (badge số).
 3. Sub-nav 50px bg sky-98: link 13px w500 navy cách nhau 48px, căn giữa; vạch đứng phân tách nhóm (Starter Kits/Refills/Bestsellers | Dish/Laundry/Toilet/Hand Soap/Spray Cleaners/Extras); active = gạch chân.
-- Mega "Shop": dropdown trắng radius 8, shadow nhẹ, 2 cột (cột 1 nền sky-98: Shop All (blue), Bestsellers, Starter Kits, Refills, Holiday Shop (plum), 1 Year Bundles [badge STOCK UP], Autoship [badge SAVE 30%]; cột 2: Dish, Laundry, Toilet, Hand Soap [NEW SCENTS], Spray Cleaners, Extras).
+- Mega "Shop": dropdown trắng radius 8, shadow nhẹ, 2 cột (cột 1 nền sky-98: Shop All (blue), Bestsellers, Starter Kits, Refills, Holiday Shop (plum), 1 Year Bundles [badge STOCK UP]; cột 2: Dish, Laundry, Toilet, Hand Soap [NEW SCENTS], Spray Cleaners, Extras).
 - Dropdown About/Mission: 1 cột đơn giản.
 - Search: overlay trượt xuống dưới header, ô input gạch chân, "Popular Products" lưới 3 cột thumbnail + sao + giá.
 - Mobile: hamburger trái, logo giữa, search + cart phải; sub-nav cuộn ngang.
@@ -69,7 +69,7 @@ Tiêu đề "Your Cart (n)", dải promo đỏ, **thanh tiến độ free-shippi
 6. Lifestyle banner (795): ảnh full-bleed, box trắng-sky (sky-98) radius 16, bên phải (x≈829, w460), H2 + text + nút outline.
 7. Reviews (711) bg blue: H2 trắng; slider quote (card viền trắng mờ radius 12, w800, slide 2 bên mờ), sao trắng, "– Name on PRODUCT" link uppercase gạch chân; dots + pause.
 8. How It Works (713): 2 cột 50/50 — ảnh trái full, text phải (H2, p 20/30, nút outline).
-9. Autoship (713): 2 cột đảo — text trái (H2, p, list ✓ 4 dòng, nút outline), ảnh phải.
+9. Autoship (713): not implemented — removed by request. Reference measurement: 2 cột đảo — text trái (H2, p, list ✓ 4 dòng, nút outline), ảnh phải.
 10. Certifications (626) bg sky-99: eyebrow + H2 blue; 8 logo 104px + caption 17 w500 blue; link "LEARN ABOUT OUR CERTIFICATIONS →".
 11. Instagram (732): H2 trái + link "FOLLOW ALONG ON INSTAGRAM →"; slider ảnh 301×376 tràn phải.
 12. CTA (272): nền trời mây (sky), H2 blue "Start Your Journey" + nút primary.
@@ -90,7 +90,7 @@ Mobile: cột link thành accordion (+/−).
 ## 8. Product (PDP)
 - Section pad 56px 48px, 2 cột 50/50 gap 24.
 - Trái: thumbnail dọc 76px (gap 14), ảnh chính 565 vuông; badges trên ảnh (góc phải-trên); gallery sticky.
-- Phải (pad-left 48): eyebrow category Pressura 13 uppercase; H1 32; sao + count; hr; "What's Included In Your First Order" (w500) + list •; hr; promo bar đỏ (accordion) radius 4; "Your plan": 2 card radio (Autoship: bg sky-98 viền blue 1px radius 8 pad 20/16, badge "5% BACK IN REWARDS" pill blue góc phải-trên, giá gạch + sale; dòng "Recurring refills (Every 3 months)"; One-time: viền border-2); "Today's Total" 20 w500 + giá; nút ADD TO CART primary full-width; box Rewards (bg sky-98 pill) "Earn 161 points"; note "Free 100-Day Returns | Free Shipping over $50" 14 navy-50; hr; "Popular Add-On" slider card ngang với nút pill outline "ADD | $12 $9.60"; tabs gạch chân Overview / Ingredients / Sustainability.
+- Phải (pad-left 48): eyebrow category Pressura 13 uppercase; H1 32; sao + count; hr; "What's Included In Your First Order" (w500) + list •; hr; promo bar đỏ (accordion) radius 4; reference plan-card presentation (not implemented — removed by request); "Today's Total" 20 w500 + giá; nút ADD TO CART primary full-width; box Rewards (bg sky-98 pill) "Earn 161 points"; note "Free 100-Day Returns | Free Shipping over $50" 14 navy-50; hr; "Popular Add-On" slider card ngang với nút pill outline "ADD | $12 $9.60"; tabs gạch chân Overview / Ingredients / Sustainability.
 - Anchor bar sticky 50px bg sky-95: Our Values / How It Works / Recommendations / Reviews.
 - Sections: "What's In Your Kit" (bg #f7fafc, 4 cột ảnh + label Pressura + mô tả, căn giữa); How It Works (2 cột, text trái với bước số tròn blue 24px FILL/DROP/CLEAN, ảnh phải); "Safe Home, Cleaner Planet" (bg sky-99, tab gạch chân, box trắng radius 16 list ✕ 2 cột, hàng logo, ảnh radius 8 phải); "You'll Also Love…" slider 4 card; Reviews (tổng điểm + biểu đồ thanh 5→1, summary, ảnh khách, chip chủ đề, nút Filters / Write a Review pill viền 2px navy, danh sách review 2 cột: box trái thông tin người mua bg #eff3f6, phải sao + tiêu đề + nội dung).
 - Mobile: sticky Add-to-cart bar đáy.
