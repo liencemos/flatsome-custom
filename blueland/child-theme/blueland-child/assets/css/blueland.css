@@ -1187,7 +1187,7 @@ body .bl-eyebrow, body .bl-label, body .bl-footer-links h3, body .bl-kit-grid h3
 #cart-popup .widget_shopping_cart_content { display: flex; flex: 1 1 auto; flex-direction: column; height: auto; min-height: 0; overflow: hidden; padding: 0 24px 20px; }
 #cart-popup .bl-cart-promo { flex: 0 0 auto; margin: 0 -24px; padding: 10px 24px; }
 #cart-popup .bl-shipping-progress { flex: 0 0 auto; margin: 0 -24px 12px; padding: 10px 24px; }
-#cart-popup .woocommerce-mini-cart { flex: 0 1 auto; margin: 0; max-height: calc(100dvh - 564px); min-height: 0; overflow-y: auto; padding: 0; }
+#cart-popup .woocommerce-mini-cart { flex: 0 1 auto; margin: 0; max-height: max(140px, calc(100dvh - 564px)); min-height: 0; overflow-y: auto; padding: 0; }
 #cart-popup .woocommerce-mini-cart-item { display: block; margin: 10px 0 !important; min-height: 124px; padding: 14px 42px 14px 102px !important; }
 #cart-popup .woocommerce-mini-cart-item img { height: 72px; left: 16px; top: 14px; width: 72px; }
 #cart-popup .woocommerce-mini-cart-item a:not(.remove) { display: block; font-size: 16px; line-height: 1.3; max-height: 2.6em; overflow: hidden; padding-right: 4px; }
