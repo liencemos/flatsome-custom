@@ -40,7 +40,7 @@ add_action(
 add_filter(
 	'woocommerce_widget_cart_item_quantity',
 	function ( $quantity, $cart_item, $cart_item_key ) {
-		return '<div class="bl-mini-quantity"><button type="button" data-cart-qty="-1" data-key="' . esc_attr( $cart_item_key ) . '" aria-label="Decrease quantity">−</button><span>' . esc_html( (string) $cart_item['quantity'] ) . '</span><button type="button" data-cart-qty="1" data-key="' . esc_attr( $cart_item_key ) . '" aria-label="Increase quantity">+</button></div><span class="bl-mini-price">' . wp_kses_post( WC()->cart->get_product_price( $cart_item['data'] ) ) . '</span>';
+		return '<div class="bl-mini-purchase-row"><div class="bl-mini-quantity"><button type="button" data-cart-qty="-1" data-key="' . esc_attr( $cart_item_key ) . '" aria-label="Decrease quantity">−</button><span>' . esc_html( (string) $cart_item['quantity'] ) . '</span><button type="button" data-cart-qty="1" data-key="' . esc_attr( $cart_item_key ) . '" aria-label="Increase quantity">+</button></div><span class="bl-mini-price">' . wp_kses_post( WC()->cart->get_product_price( $cart_item['data'] ) ) . '</span></div>';
 	},
 	20,
 	3
@@ -49,18 +49,33 @@ add_filter(
 add_action(
 	'woocommerce_widget_shopping_cart_before_buttons',
 	function () {
-		$products = wc_get_products( array( 'limit' => 4, 'status' => 'publish', 'orderby' => 'popularity', 'order' => 'DESC' ) );
+		$cart_product_ids = array();
+		foreach ( WC()->cart ? WC()->cart->get_cart() : array() as $cart_item ) {
+			$cart_product_ids[] = absint( $cart_item['product_id'] );
+			if ( ! empty( $cart_item['variation_id'] ) ) {
+				$cart_product_ids[] = absint( $cart_item['variation_id'] );
+			}
+		}
+		$products = wc_get_products( array( 'limit' => 12, 'status' => 'publish', 'type' => 'simple', 'orderby' => 'popularity', 'order' => 'DESC', 'exclude' => array_unique( $cart_product_ids ) ) );
 		if ( empty( $products ) ) {
 			return;
 		}
-		echo '<div class="bl-cart-recommendations"><h3>You may also like</h3><div class="bl-cart-recommendation-row">';
+		$recommendation_cards = '';
+		$shown = 0;
 		foreach ( $products as $product ) {
-			if ( ! $product->is_purchasable() || ! $product->is_in_stock() ) {
+			if ( ! $product->is_type( 'simple' ) || ! $product->is_purchasable() || ! $product->is_in_stock() || in_array( $product->get_id(), $cart_product_ids, true ) ) {
 				continue;
 			}
-			echo '<article><a href="' . esc_url( get_permalink( $product->get_id() ) ) . '">' . $product->get_image( 'woocommerce_thumbnail' ) . '<span>' . esc_html( $product->get_name() ) . '</span></a><span>' . wp_kses_post( $product->get_price_html() ) . '</span></article>';
+			$product_url = get_permalink( $product->get_id() );
+			$recommendation_cards .= '<article class="bl-cart-recommendation"><a class="bl-cart-recommendation-image" href="' . esc_url( $product_url ) . '">' . $product->get_image( 'woocommerce_thumbnail' ) . '</a><div class="bl-cart-recommendation-copy"><a class="bl-cart-recommendation-name" href="' . esc_url( $product_url ) . '">' . esc_html( $product->get_name() ) . '</a><span class="bl-cart-recommendation-price">' . wp_kses_post( $product->get_price_html() ) . '</span></div><a href="' . esc_url( $product->add_to_cart_url() ) . '" data-quantity="1" class="button bl-quick-add add_to_cart_button ajax_add_to_cart product_type_simple" data-product_id="' . esc_attr( $product->get_id() ) . '" data-product_sku="' . esc_attr( $product->get_sku() ) . '" rel="nofollow">+ Add</a></article>';
+			$shown++;
+			if ( 3 === $shown ) {
+				break;
+			}
 		}
-		echo '</div></div>';
+		if ( $recommendation_cards ) {
+			echo '<div class="bl-cart-recommendations"><h3>You may also like</h3><div class="bl-cart-recommendation-row">' . $recommendation_cards . '</div></div>';
+		}
 	}
 );
 
