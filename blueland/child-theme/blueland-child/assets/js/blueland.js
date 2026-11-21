@@ -29,6 +29,22 @@
 		if (cartToggle) cartToggle.click();
 	};
 
+	const archiveUrl = () => {
+		const url = new URL(window.location.href);
+		url.pathname = url.pathname.replace(/\/page\/\d+\/?$/, '/');
+		url.searchParams.delete('paged');
+		return url;
+	};
+
+	const stickyCart = document.querySelector('.bl-mobile-sticky-cart');
+	const primaryAddToCart = document.querySelector('.single-product .bl-pdp-info form.cart .single_add_to_cart_button');
+	if (stickyCart && primaryAddToCart && 'IntersectionObserver' in window) {
+		const cartObserver = new IntersectionObserver(([entry]) => {
+			stickyCart.classList.toggle('is-visible', !entry.isIntersecting && entry.boundingClientRect.bottom <= 0);
+		}, { threshold: 0 });
+		cartObserver.observe(primaryAddToCart);
+	}
+
 	document.addEventListener('click', (event) => {
 		const button = event.target.closest('.bl-announcement-next, .bl-announcement-prev');
 		if (!button) return;
@@ -73,14 +89,15 @@
 			window.location.href = event.target.value;
 		}
 		if (event.target.matches('.bl-type-filter')) {
-			const url = new URL(window.location.href);
-			if (event.target.value) url.searchParams.set('filter_product-type', event.target.value);
+			const url = archiveUrl();
+			if (event.target.value && event.target.value !== 'all') url.searchParams.set('filter_product-type', event.target.value);
 			else url.searchParams.delete('filter_product-type');
-			url.searchParams.delete('paged');
 			window.location.href = url.toString();
 		}
 		if (event.target.matches('.woocommerce-ordering select')) {
-			event.target.form?.requestSubmit();
+			const url = archiveUrl();
+			url.searchParams.set('orderby', event.target.value);
+			window.location.href = url.toString();
 		}
 		if (event.target.matches('.bl-plan-selector input[name="bl_plan"]')) {
 			const autoship = event.target.value === 'autoship';
@@ -138,7 +155,28 @@
 			if (form?.classList.contains('is-open')) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}
 		const chip = event.target.closest('.bl-review-chips button');
-		if (chip) chip.parentElement.querySelectorAll('button').forEach((button) => button.classList.toggle('is-active', button === chip));
+		if (chip) {
+			const list = chip.closest('.bl-review-controls')?.nextElementSibling;
+			if (!list?.classList.contains('bl-review-list')) return;
+			chip.parentElement.querySelectorAll('button').forEach((button) => button.classList.toggle('is-active', button === chip));
+			const filter = chip.dataset.reviewRating;
+			const cards = Array.from(list.querySelectorAll('.bl-review-card'));
+			const visibleCount = Number(list.dataset.visibleCount || 6);
+			cards.forEach((card, index) => {
+				card.hidden = filter === 'all' ? index >= visibleCount : (filter === '3' ? Number(card.dataset.rating) > 3 : Number(card.dataset.rating) !== Number(filter));
+			});
+			const more = list.nextElementSibling;
+			if (more?.classList.contains('bl-review-more')) more.hidden = filter !== 'all' || visibleCount >= cards.length;
+		}
+		const moreReviews = event.target.closest('.bl-review-more');
+		if (moreReviews) {
+			const list = moreReviews.previousElementSibling;
+			const cards = Array.from(list.querySelectorAll('.bl-review-card'));
+			const visibleCount = Math.min(cards.length, Number(list.dataset.visibleCount || 6) + 6);
+			cards.forEach((card, index) => { card.hidden = index >= visibleCount; });
+			list.dataset.visibleCount = String(visibleCount);
+			moreReviews.hidden = visibleCount >= cards.length;
+		}
 	});
 
 	document.addEventListener('click', (event) => {

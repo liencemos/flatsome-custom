@@ -134,7 +134,7 @@ function bl_archive_toolbar() {
 	} else {
 		$terms = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => 0 ) );
 	}
-	echo '<label class="bl-filter-select"><span class="screen-reader-text">Product Category</span><select class="bl-category-filter"><option value="">Product Category</option>';
+	echo '<label class="bl-filter-select bl-category-filter-wrap"><span class="screen-reader-text">Product Category</span><select class="bl-category-filter"><option value="">Product Category</option>';
 	if ( ! is_wp_error( $terms ) ) {
 		foreach ( $terms as $term ) {
 			echo '<option value="' . esc_url( get_term_link( $term ) ) . '">' . esc_html( $term->name ) . '</option>';
@@ -142,10 +142,11 @@ function bl_archive_toolbar() {
 	}
 	echo '</select></label>';
 	$types = taxonomy_exists( 'pa_product-type' ) ? get_terms( array( 'taxonomy' => 'pa_product-type', 'hide_empty' => true ) ) : array();
-	echo '<label class="bl-filter-select"><span class="screen-reader-text">Product Type</span><select class="bl-type-filter"><option value="">Product Type</option>';
+	$current_type = isset( $_GET['filter_product-type'] ) ? sanitize_title( wp_unslash( $_GET['filter_product-type'] ) ) : '';
+	echo '<label class="bl-filter-select bl-type-filter-wrap"><span class="screen-reader-text">Product Type</span><select class="bl-type-filter"><option value="">Product Type</option><option value="all">All types</option>';
 	if ( ! is_wp_error( $types ) ) {
 		foreach ( $types as $type ) {
-			echo '<option value="' . esc_attr( $type->slug ) . '">' . esc_html( $type->name ) . '</option>';
+			echo '<option value="' . esc_attr( $type->slug ) . '"' . selected( $current_type, $type->slug, false ) . '>' . esc_html( $type->name ) . '</option>';
 		}
 	}
 	echo '</select></label>';
@@ -177,7 +178,8 @@ add_filter(
 	'woocommerce_get_catalog_ordering_args',
 	function ( $args, $orderby ) {
 		if ( 'rating_asc' === $orderby ) {
-			$args['orderby'] = 'rating';
+			$args['orderby']  = 'meta_value_num';
+			$args['meta_key'] = '_wc_average_rating';
 			$args['order']   = 'ASC';
 		}
 		return $args;

@@ -3,7 +3,7 @@
 [text_box position_x="50" position_y="91" text_align="center" width="80"]
 <h1>A cleaner routine, made wonderfully simple.</h1>
 <p>Effective everyday essentials, reimagined for a lighter footprint.</p>
-[button text="Shop Now" link="/shop/" style="shade" radius="99" size="large"]
+[button text="Shop Now" link="/shop/" style="shade" radius="99" class="bl-hero-button"]
 [/text_box]
 [/ux_banner]
 [/section]
@@ -83,7 +83,7 @@
 
 [section class="bl-split-section bl-how-it-works-home" padding="0px"]
 [row class="collapse" v_align="middle"]
-[col span="6" span__sm="12"]
+[col span="6" span__sm="12" class="bl-split-image-col"]
 [bl_image name="how-it-works"]
 [/col]
 [col span="6" span__sm="12" padding="8% 7% 8% 7%"]
@@ -107,7 +107,7 @@
 [button text="Learn More About Autoship" link="/autoship/" style="outline" radius="99"]
 [/ux_text]
 [/col]
-[col span="6" span__sm="12"]
+[col span="6" span__sm="12" class="bl-split-image-col"]
 [bl_image name="autoship"]
 [/col]
 [/row]

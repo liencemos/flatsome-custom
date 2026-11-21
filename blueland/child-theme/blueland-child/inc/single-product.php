@@ -17,7 +17,6 @@ add_filter(
 		}
 		$cart_item_data['bl_plan']         = 'autoship';
 		$cart_item_data['bl_interval']     = isset( $_POST['bl_interval'] ) ? absint( wp_unslash( $_POST['bl_interval'] ) ) : 3;
-		$cart_item_data['bl_base_price']   = (float) $product->get_price();
 		$cart_item_data['bl_plan_unique']  = md5( wp_rand() . microtime( true ) );
 		return $cart_item_data;
 	},
@@ -35,8 +34,12 @@ add_action(
 			return;
 		}
 		foreach ( $cart->get_cart() as $cart_item ) {
-			if ( isset( $cart_item['bl_plan'], $cart_item['bl_base_price'] ) && 'autoship' === $cart_item['bl_plan'] ) {
-				$cart_item['data']->set_price( (float) $cart_item['bl_base_price'] * 0.8 );
+			if ( isset( $cart_item['bl_plan'] ) && 'autoship' === $cart_item['bl_plan'] ) {
+				$product_id = ! empty( $cart_item['variation_id'] ) ? $cart_item['variation_id'] : $cart_item['product_id'];
+				$fresh      = wc_get_product( $product_id );
+				if ( $fresh && isset( $cart_item['data'] ) ) {
+					$cart_item['data']->set_price( (float) $fresh->get_price() * 0.8 );
+				}
 			}
 		}
 	},
@@ -227,23 +230,33 @@ add_shortcode(
 				'post_id' => $product->get_id(),
 				'status'  => 'approve',
 				'type'    => 'review',
-				'number'  => 6,
+				'number'  => 0,
 				'orderby' => 'comment_date_gmt',
 				'order'   => 'DESC',
 			)
 		);
-		$html = '<div class="bl-review-controls"><div class="bl-review-chips"><button class="is-active" type="button">All Reviews</button><button type="button">With Photos</button><button type="button">Autoship</button></div><div><button class="bl-review-filter" type="button">Filters</button><button class="bl-write-review" type="button">Write a Review</button></div></div><div class="bl-review-list">';
-		foreach ( $reviews as $review ) {
+		$html = '<div class="bl-review-controls"><div class="bl-review-chips"><button class="is-active" data-review-rating="all" type="button">All Reviews</button><button data-review-rating="5" type="button">5 Stars</button><button data-review-rating="4" type="button">4 Stars</button><button data-review-rating="3" type="button">3 Stars &amp; Below</button></div><div><button class="bl-write-review" type="button">Write a Review</button></div></div><div class="bl-review-list" data-visible-count="6">';
+		foreach ( $reviews as $index => $review ) {
 			$rating = absint( get_comment_meta( $review->comment_ID, 'rating', true ) );
 			$title = get_comment_meta( $review->comment_ID, '_bl_review_title', true );
-			$html .= '<article class="bl-review-card"><div class="bl-review-author"><strong>' . esc_html( $review->comment_author ) . '</strong><span>Verified Buyer</span><small>Reviewing ' . esc_html( $product->get_name() ) . '</small></div><div><p class="bl-review-stars">' . esc_html( str_repeat( '★', min( 5, $rating ) ) ) . '</p><h3>' . esc_html( $title ? $title : 'A simple everyday favorite' ) . '</h3><p>' . esc_html( $review->comment_content ) . '</p><small class="bl-review-date">' . esc_html( get_comment_date( 'F j, Y', $review ) ) . '</small></div></article>';
+			$hidden = $index >= 6 ? ' hidden' : '';
+			$html .= '<article class="bl-review-card" data-rating="' . esc_attr( (string) $rating ) . '"' . $hidden . '><div class="bl-review-author"><strong>' . esc_html( $review->comment_author ) . '</strong><span>Verified Buyer</span><small>Reviewing ' . esc_html( $product->get_name() ) . '</small></div><div><p class="bl-review-stars">' . esc_html( str_repeat( '★', min( 5, $rating ) ) ) . '</p><h3>' . esc_html( $title ? $title : 'A simple everyday favorite' ) . '</h3><p>' . esc_html( $review->comment_content ) . '</p><small class="bl-review-date">' . esc_html( get_comment_date( 'F j, Y', $review ) ) . '</small></div></article>';
 		}
 		$html .= '</div>';
+		if ( count( $reviews ) > 6 ) {
+			$html .= '<button class="bl-review-more" type="button">Show More</button>';
+		}
 		if ( comments_open( $product->get_id() ) ) {
 			$post = get_post( $product->get_id() );
 			setup_postdata( $post );
 			ob_start();
-			comment_form( array( 'title_reply' => 'Write a Review', 'label_submit' => 'Submit Review' ), $product->get_id() );
+			$rating_field = '<p class="comment-form-rating"><label for="rating">Your rating</label><span class="stars"><select name="rating" id="rating" required><option value="">Rate…</option><option value="5">Perfect</option><option value="4">Good</option><option value="3">Average</option><option value="2">Not that bad</option><option value="1">Very poor</option></select></span></p>';
+			$comment_form = array(
+				'title_reply'   => 'Write a Review',
+				'label_submit'  => 'Submit Review',
+				'comment_field' => $rating_field . '<p class="comment-form-comment"><label for="comment">Your review</label><textarea id="comment" name="comment" cols="45" rows="8" required></textarea></p>',
+			);
+			comment_form( $comment_form, $product->get_id() );
 			$html .= '<div class="bl-review-form">' . ob_get_clean() . '</div>';
 			wp_reset_postdata();
 		}
