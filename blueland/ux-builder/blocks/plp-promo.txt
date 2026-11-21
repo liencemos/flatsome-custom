@@ -1,0 +1,7 @@
+[section class="bl-promo-tile"]
+[ux_text]
+<strong>A little more clean for less.</strong>
+<span>Bundle your everyday essentials and save.</span>
+<em>Discount applied automatically</em>
+[/ux_text]
+[/section]

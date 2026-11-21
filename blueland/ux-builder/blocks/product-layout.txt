@@ -1,0 +1,140 @@
+[section class="bl-pdp-main" padding="56px 0px"]
+[row v_align="top"]
+[col span="6" span__sm="12" class="bl-pdp-gallery"]
+[bl_product_badges]
+[ux_product_gallery style="vertical"]
+[/col]
+[col span="6" span__sm="12" padding="0px 0px 0px 48px" class="bl-pdp-info"]
+[bl_product_eyebrow]
+[ux_product_title divider="false"]
+[ux_product_rating count="true"]
+[bl_product_included]
+[ux_text]
+<details class="bl-promo-bar"><summary>Save on your first order with a refill-ready routine.</summary><p>Explore product bundles for simple starter options and refill-friendly essentials.</p></details>
+[/ux_text]
+[bl_plan_selector]
+[ux_product_price]
+[ux_product_add_to_cart]
+[bl_product_rewards]
+[bl_product_addon]
+[ux_product_tabs]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-anchor-bar" padding="0px"]
+[row]
+[col span="12"]
+[ux_text]
+<nav class="bl-content-width"><a href="#our-values">Our Values</a><a href="#how-it-works">How It Works</a><a href="#recommendations">Recommendations</a><a href="#reviews">Reviews</a></nav>
+[/ux_text]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-kit-section" padding="72px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<h2 id="our-values">What’s In Your Kit</h2>
+<p>All the everyday essentials for a simpler, refill-ready clean.</p>
+[/ux_text]
+[/col]
+[/row]
+[row]
+[col span="3" span__sm="6" align="center"]
+[bl_image name="kit-foam"]
+[ux_text]
+<h3>Foaming Hand Soap</h3>
+<p>A reusable bottle and easy-to-use refill tablets.</p>
+[/ux_text]
+[/col]
+[col span="3" span__sm="6" align="center"]
+[bl_image name="kit-multi"]
+[ux_text]
+<h3>Multi-Surface Cleaner</h3>
+<p>Everyday cleaning in a refill-ready format.</p>
+[/ux_text]
+[/col]
+[col span="3" span__sm="6" align="center"]
+[bl_image name="kit-tablet"]
+[ux_text]
+<h3>Refill Tablets</h3>
+<p>Compact concentrates made to use with water.</p>
+[/ux_text]
+[/col]
+[col span="3" span__sm="6" align="center"]
+[bl_image name="kit-spray"]
+[ux_text]
+<h3>Reusable Spray Bottle</h3>
+<p>A simple bottle designed for repeat use.</p>
+[/ux_text]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-how-section" padding="72px 0px"]
+[row class="bl-how-grid" v_align="middle"]
+[col span="6" span__sm="12"]
+[ux_text]
+<h2 id="how-it-works">How It Works</h2>
+<ol>
+<li><strong>FILL</strong><span>Add water to your reusable bottle.</span></li>
+<li><strong>DROP</strong><span>Add one tablet and let it dissolve.</span></li>
+<li><strong>CLEAN</strong><span>Enjoy an easy routine made to repeat.</span></li>
+</ol>
+[/ux_text]
+[/col]
+[col span="6" span__sm="12"]
+[bl_image name="how-it-works"]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-values-section" padding="72px 0px"]
+[row class="bl-values-grid" v_align="middle"]
+[col span="6" span__sm="12"]
+[ux_text]
+<p class="bl-eyebrow">Thoughtful by design</p>
+<h2>Safe Home, Cleaner Planet</h2>
+<p>Considered formats and clear instructions make everyday home care easy to repeat.</p>
+<ul>
+<li>Reusable bottle format</li>
+<li>Refill tablet option</li>
+<li>Concentrated formulas</li>
+<li>Less bulky packaging</li>
+<li>Clear product information</li>
+<li>Easy-to-follow directions</li>
+<li>Designed for everyday use</li>
+<li>Simple to refill</li>
+</ul>
+[/ux_text]
+[/col]
+[col span="6" span__sm="12"]
+[bl_image name="lifestyle"]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-related-section" padding="72px 0px"]
+[row]
+[col span="12"]
+[ux_text]
+<h2 id="recommendations">You’ll Also Love…</h2>
+[/ux_text]
+[bl_product_related]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-reviews-section" padding="72px 0px"]
+[row]
+[col span="12"]
+[ux_text]
+<h2 id="reviews">Sample Reviews</h2>
+[/ux_text]
+[bl_reviews_summary]
+[bl_reviews_list]
+[/col]
+[/row]
+[/section]

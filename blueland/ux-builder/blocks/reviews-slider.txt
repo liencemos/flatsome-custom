@@ -1,0 +1,20 @@
+[ux_slider class="bl-reviews-slider" nav_style="simple" nav_color="light" bullets="true"]
+[row]
+[col span="12" align="center"]
+[ux_text class="bl-review-quote"]
+<p>“A cleaner routine feels easy to keep when the little details work beautifully.”</p>
+<p>★★★★★</p>
+<cite>Sample review · Local preview</cite>
+[/ux_text]
+[/col]
+[/row]
+[row]
+[col span="12" align="center"]
+[ux_text class="bl-review-quote"]
+<p>“Thoughtful design and simple refills make everyday home care feel more approachable.”</p>
+<p>★★★★★</p>
+<cite>Sample review · Local preview</cite>
+[/ux_text]
+[/col]
+[/row]
+[/ux_slider]

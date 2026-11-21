@@ -1,0 +1,41 @@
+[section class="bl-footer" padding="42px 24px 24px"]
+[row class="bl-footer-grid"]
+[col span="5" span__sm="12"]
+[ux_text]
+<h2>Even our emails are cleaner</h2>
+<p>No spam ever—just exclusive offers, cleaner living tips, and new product launches.</p>
+[/ux_text]
+[bl_newsletter]
+[ux_text]
+<div class="bl-social-links"><a href="#" aria-label="Instagram">◎</a><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="TikTok">♪</a><a href="#" aria-label="Pinterest">p</a><a href="#" aria-label="YouTube">▶</a></div>
+[/ux_text]
+[/col]
+[col span="2" span__sm="12" class="bl-footer-links"]
+[ux_text]
+<h3 class="bl-mobile-accordion-toggle">Shop</h3><ul class="bl-mobile-accordion-content"><li><a href="/shop/">All Products</a></li><li><a href="/product-category/bestsellers/">Bestsellers</a></li><li><a href="/product-category/starter-kits/">Starter Kits</a></li><li><a href="/product-category/refills/">Refills</a></li><li><a href="/autoship/">Autoship</a></li></ul>
+[/ux_text]
+[/col]
+[col span="2" span__sm="12" class="bl-footer-links"]
+[ux_text]
+<h3 class="bl-mobile-accordion-toggle">About</h3><ul class="bl-mobile-accordion-content"><li><a href="/our-mission/">Our Mission</a></li><li><a href="/about-us/">About Us</a></li><li><a href="/certifications/">Certifications</a></li><li><a href="/faq/">FAQ</a></li></ul>
+[/ux_text]
+[/col]
+[col span="3" span__sm="12" class="bl-footer-links"]
+[ux_text]
+<h3 class="bl-mobile-accordion-toggle">Help</h3><ul class="bl-mobile-accordion-content"><li><a href="/contact/">Contact Us</a></li><li><a href="/returns-exchanges/">Returns &amp; Exchanges</a></li><li><a href="/terms/">Terms</a></li><li><a href="/privacy/">Privacy</a></li></ul>
+[/ux_text]
+[/col]
+[/row]
+[row class="bl-footer-bottom"]
+[col span="6" span__sm="12"]
+[ux_text]
+<div class="bl-footer-badges"><img src="/wp-content/themes/blueland-child/assets/images/cert-1.png" alt="Certification"><img src="/wp-content/themes/blueland-child/assets/images/cert-2.png" alt="Certification"></div>
+[/ux_text]
+[/col]
+[col span="6" span__sm="12" align="right"]
+[ux_text]
+<p>© 2026 Pureland · help@pureland.example · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a></p>
+[/ux_text]
+[/col]
+[/row]
+[/section]

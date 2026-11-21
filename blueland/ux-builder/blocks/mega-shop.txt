@@ -1,0 +1,14 @@
+[section class="bl-mega-shop" padding="0px"]
+[row class="collapse"]
+[col span="6" class="bl-mega-shop-primary"]
+[ux_text]
+<ul><li><a href="/shop/">Shop All</a></li><li><a href="/product-category/bestsellers/">Bestsellers</a></li><li><a href="/product-category/starter-kits/">Starter Kits</a></li><li><a href="/product-category/refills/">Refills</a></li><li><a href="/product-category/holiday-shop/">Holiday Shop</a></li><li><a href="/product-category/starter-kits/">One Year Bundles <span>STOCK UP</span></a></li><li><a href="/autoship/">Autoship <span>SAVE 20%</span></a></li></ul>
+[/ux_text]
+[/col]
+[col span="6"]
+[ux_text]
+<ul><li><a href="/product-category/dish/">Dish</a></li><li><a href="/product-category/laundry/">Laundry</a></li><li><a href="/product-category/toilet/">Toilet</a></li><li><a href="/product-category/hand-soap/">Hand Soap <span>NEW SCENTS</span></a></li><li><a href="/product-category/spray-cleaners/">Spray Cleaners</a></li><li><a href="/product-category/extras/">Extras</a></li></ul>
+[/ux_text]
+[/col]
+[/row]
+[/section]
