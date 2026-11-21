@@ -194,12 +194,12 @@ def make_wordmark(path):
 
 def make_press_logo(path, label, style):
     styles = (
-        'font-family="Arial,sans-serif" font-size="31" font-weight="700" letter-spacing="1"',
-        'font-family="Arial,sans-serif" font-size="34" font-weight="700" letter-spacing="-1"',
-        'font-family="Arial,sans-serif" font-size="30" font-weight="600" letter-spacing="2"',
-        'font-family="Arial,sans-serif" font-size="32" font-weight="700" letter-spacing="4"',
+        'font-family="Georgia,serif" font-size="31" font-style="italic" font-weight="700"',
+        'font-family="Impact,sans-serif" font-size="32" font-weight="700" letter-spacing="3"',
+        'font-family="Trebuchet MS,sans-serif" font-size="30" font-weight="700" letter-spacing="-1"',
+        'font-family="cursive" font-size="33" font-style="italic" font-weight="600"',
     )
-    svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="360" height="80" viewBox="0 0 360 80"><text x="180" y="51" text-anchor="middle" fill="#0b1057" {styles[style % len(styles)]}>{label}</text></svg>'
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="360" height="80" viewBox="0 0 360 80"><text x="180" y="51" text-anchor="middle" fill="#5e6493" {styles[style % len(styles)]}>{label}</text></svg>'
     path.write_text(svg, encoding="utf-8")
 
 

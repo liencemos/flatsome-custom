@@ -42,7 +42,17 @@ add_shortcode(
 	'bl_home_categories',
 	function () {
 		$slugs = array( 'starter-kits', 'refills', 'dish', 'laundry', 'toilet', 'hand-soap', 'spray-cleaners', 'extras' );
-		$html = '<div class="bl-home-categories-grid">';
+		$descriptions = array(
+			'starter-kits' => 'Everything you need to make the switch.',
+			'refills' => 'Plastic-free refills save money, space, and waste.',
+			'dish' => 'Powerful, plastic-free scrubbing from dishwasher to sink.',
+			'laundry' => 'Plastic-free essentials make laundry day a breeze.',
+			'toilet' => 'Mess-free tablets make cleaning the toilet easier than ever.',
+			'hand-soap' => 'Foaming hand soap in fresh, plant-based scents.',
+			'spray-cleaners' => 'Streak-free cleaning for every surface.',
+			'extras' => 'Reusable tools that complete your routine.',
+		);
+		$html = '<div class="bl-home-category-carousel"><button class="bl-category-prev" type="button" aria-label="Previous categories">‹</button><div class="bl-home-categories-track">';
 		foreach ( $slugs as $slug ) {
 			$term = get_term_by( 'slug', $slug, 'product_cat' );
 			if ( ! $term || is_wp_error( $term ) ) {
@@ -50,8 +60,18 @@ add_shortcode(
 			}
 			$image_id = absint( get_term_meta( $term->term_id, 'thumbnail_id', true ) );
 			$image = $image_id ? wp_get_attachment_image_url( $image_id, 'woocommerce_thumbnail' ) : wc_placeholder_img_src();
-			$description = wp_trim_words( wp_strip_all_tags( $term->description ), 18, '' );
-			$html .= '<a class="bl-home-category-card" href="' . esc_url( get_term_link( $term ) ) . '"><img src="' . esc_url( $image ) . '" alt=""><strong>' . esc_html( $term->name ) . ' →</strong><p>' . esc_html( $description ) . '</p></a>';
+			$html .= '<a class="bl-home-category-card" href="' . esc_url( get_term_link( $term ) ) . '"><img loading="eager" decoding="async" src="' . esc_url( $image ) . '" alt=""><strong>' . esc_html( $term->name ) . ' →</strong><p>' . esc_html( $descriptions[ $slug ] ) . '</p></a>';
+		}
+		return $html . '</div><button class="bl-category-next" type="button" aria-label="Next categories">›</button></div>';
+	}
+);
+
+add_shortcode(
+	'bl_instagram_grid',
+	function () {
+		$html = '<div class="bl-instagram-track">';
+		for ( $index = 1; $index <= 4; $index++ ) {
+			$html .= '<img loading="eager" decoding="async" src="' . esc_url( BL_CHILD_URL . '/assets/images/instagram-' . $index . '.jpg' ) . '" alt="Pureland home care inspiration">';
 		}
 		return $html . '</div>';
 	}
@@ -87,7 +107,7 @@ add_shortcode(
 		$photography = array( 'hero', 'lifestyle', 'how-it-works', 'autoship', 'safe-home', 'instagram-1', 'instagram-2', 'instagram-3', 'instagram-4' );
 		$extension = in_array( $name, $photography, true ) ? 'jpg' : 'png';
 		$alt = $name ? ucwords( str_replace( '-', ' ', $name ) ) : '';
-		return '<img class="bl-content-image ' . esc_attr( sanitize_html_class( $atts['class'] ) ) . '" src="' . esc_url( BL_CHILD_URL . '/assets/images/' . $name . '.' . $extension ) . '" alt="' . esc_attr( $alt ) . '">';
+		return '<img loading="eager" decoding="async" class="bl-content-image ' . esc_attr( sanitize_html_class( $atts['class'] ) ) . '" src="' . esc_url( BL_CHILD_URL . '/assets/images/' . $name . '.' . $extension ) . '" alt="' . esc_attr( $alt ) . '">';
 	}
 );
 

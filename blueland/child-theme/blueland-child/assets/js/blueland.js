@@ -95,6 +95,26 @@
 	});
 
 	document.addEventListener('click', (event) => {
+		const categoryButton = event.target.closest('.bl-category-prev, .bl-category-next');
+		if (categoryButton) {
+			const track = categoryButton.parentElement.querySelector('.bl-home-categories-track');
+			const card = track?.querySelector('.bl-home-category-card');
+			if (track && card) track.scrollBy({ left: (card.getBoundingClientRect().width + 32) * (categoryButton.classList.contains('bl-category-next') ? 1 : -1), behavior: 'smooth' });
+			return;
+		}
+		const addonControl = event.target.closest('[data-addon-direction], [data-addon-index]');
+		if (addonControl) {
+			const widget = addonControl.closest('.bl-product-addon');
+			const track = widget?.querySelector('.bl-product-addon-track');
+			const slides = track ? Array.from(track.querySelectorAll('[data-addon-slide]')) : [];
+			if (track && slides.length) {
+				const current = slides.findIndex((slide) => Math.abs(slide.offsetLeft - track.scrollLeft) < 20);
+				const index = addonControl.hasAttribute('data-addon-index') ? Number(addonControl.dataset.addonIndex) : (current + Number(addonControl.dataset.addonDirection) + slides.length) % slides.length;
+				track.scrollTo({ left: slides[Math.max(0, Math.min(index, slides.length - 1))].offsetLeft, behavior: 'smooth' });
+				widget.querySelectorAll('[data-addon-index]').forEach((dot) => dot.classList.toggle('is-active', Number(dot.dataset.addonIndex) === index));
+			}
+			return;
+		}
 		const press = event.target.closest('.bl-press-logo');
 		if (press) {
 			document.querySelectorAll('.bl-press-logo').forEach((button) => {

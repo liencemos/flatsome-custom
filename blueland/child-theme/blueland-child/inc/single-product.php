@@ -126,7 +126,7 @@ add_shortcode(
 		$plan_price = wc_price( $price * 0.8 );
 		$regular    = wc_price( $price );
 		$intervals  = '<select name="bl_interval" aria-label="Autoship delivery interval"><option value="1">Every 1 month</option><option value="2">Every 2 months</option><option value="3" selected>Every 3 months</option></select>';
-		return '<div class="bl-plan-selector"><h3>Choose Your Plan</h3><label class="bl-plan-card is-selected"><input type="radio" name="bl_plan" value="autoship" checked><span class="bl-plan-content"><strong>Save 20% with Autoship</strong><span class="bl-plan-line"><s>' . wp_kses_post( $regular ) . '</s><b class="bl-plan-price">' . wp_kses_post( $plan_price ) . '</b></span><small class="bl-plan-interval">Recurring refills (' . $intervals . ')</small></span><em>5% BACK IN REWARDS</em></label><label class="bl-plan-card"><input type="radio" name="bl_plan" value="one-time"><span class="bl-plan-content"><strong>Buy One Time</strong><span class="bl-plan-line"><b class="bl-plan-price">' . wp_kses_post( $regular ) . '</b></span></span></label><div class="bl-todays-total is-autoship"><strong>Today’s Total</strong><span class="bl-plan-regular">' . wp_kses_post( $regular ) . '</span><span class="bl-plan-total">' . wp_kses_post( $plan_price ) . '</span></div></div>';
+		return '<div class="bl-plan-selector"><h3>Your plan</h3><label class="bl-plan-card is-selected"><input type="radio" name="bl_plan" value="autoship" checked><span class="bl-plan-content"><strong>Save 20% with Autoship</strong><span class="bl-plan-line"><s>' . wp_kses_post( $regular ) . '</s><b class="bl-plan-price">' . wp_kses_post( $plan_price ) . '</b></span><small class="bl-plan-interval">Recurring refills (' . $intervals . ')</small></span><em>5% BACK IN REWARDS</em></label><label class="bl-plan-card"><input type="radio" name="bl_plan" value="one-time"><span class="bl-plan-content"><strong>Buy One Time</strong><span class="bl-plan-line"><b class="bl-plan-price">' . wp_kses_post( $regular ) . '</b></span></span></label><div class="bl-todays-total is-autoship"><strong>Today’s Total</strong><span class="bl-plan-regular">' . wp_kses_post( $regular ) . '</span><span class="bl-plan-total">' . wp_kses_post( $plan_price ) . '</span></div></div>';
 	}
 );
 
@@ -143,13 +143,17 @@ add_shortcode(
 			return '';
 		}
 		$html = '<div class="bl-product-addon"><h3>Popular Add-On</h3><div class="bl-product-addon-track">';
-		foreach ( $products as $addon ) {
+		foreach ( $products as $index => $addon ) {
 			$button = $addon->is_type( 'simple' ) && $addon->is_purchasable()
 				? '<a href="' . esc_url( $addon->add_to_cart_url() ) . '" data-quantity="1" class="button add_to_cart_button ajax_add_to_cart product_type_simple" data-product_id="' . esc_attr( $addon->get_id() ) . '" rel="nofollow">ADD | ' . wp_kses_post( $addon->get_price_html() ) . '</a>'
 				: '<a class="button" href="' . esc_url( get_permalink( $addon->get_id() ) ) . '">View</a>';
-			$html .= '<article>' . $addon->get_image( 'woocommerce_thumbnail' ) . '<span class="bl-addon-name">' . esc_html( $addon->get_name() ) . '<small>Refill-ready everyday essential</small></span>' . $button . '</article>';
+			$html .= '<article data-addon-slide="' . esc_attr( (string) $index ) . '">' . $addon->get_image( 'woocommerce_thumbnail' ) . '<span class="bl-addon-name"><span>' . esc_html( $addon->get_name() ) . '</span><small>Refill-ready everyday essential</small></span>' . $button . '</article>';
 		}
-		return $html . '</div></div>';
+		$html .= '</div><div class="bl-addon-controls"><button type="button" data-addon-direction="-1" aria-label="Previous add-on">‹</button><div class="bl-addon-dots">';
+		foreach ( $products as $index => $addon ) {
+			$html .= '<button type="button" data-addon-index="' . esc_attr( (string) $index ) . '" aria-label="Add-on ' . esc_attr( (string) ( $index + 1 ) ) . '"' . ( 0 === $index ? ' class="is-active"' : '' ) . '></button>';
+		}
+		return $html . '</div><button type="button" data-addon-direction="1" aria-label="Next add-on">›</button></div></div>';
 	}
 );
 
@@ -231,7 +235,8 @@ add_shortcode(
 		$html = '<div class="bl-review-controls"><div class="bl-review-chips"><button class="is-active" type="button">All Reviews</button><button type="button">With Photos</button><button type="button">Autoship</button></div><div><button class="bl-review-filter" type="button">Filters</button><button class="bl-write-review" type="button">Write a Review</button></div></div><div class="bl-review-list">';
 		foreach ( $reviews as $review ) {
 			$rating = absint( get_comment_meta( $review->comment_ID, 'rating', true ) );
-			$html .= '<article class="bl-review-card"><div class="bl-review-author"><strong>' . esc_html( $review->comment_author ) . '</strong><span>Verified Buyer</span><small>Reviewing ' . esc_html( $product->get_name() ) . '</small></div><div><p class="bl-review-stars">' . esc_html( str_repeat( '★', min( 5, $rating ) ) ) . '</p><h3>Easy to use and thoughtfully made</h3><p>' . esc_html( $review->comment_content ) . '</p><small class="bl-review-date">' . esc_html( get_comment_date( 'F j, Y', $review ) ) . '</small></div></article>';
+			$title = get_comment_meta( $review->comment_ID, '_bl_review_title', true );
+			$html .= '<article class="bl-review-card"><div class="bl-review-author"><strong>' . esc_html( $review->comment_author ) . '</strong><span>Verified Buyer</span><small>Reviewing ' . esc_html( $product->get_name() ) . '</small></div><div><p class="bl-review-stars">' . esc_html( str_repeat( '★', min( 5, $rating ) ) ) . '</p><h3>' . esc_html( $title ? $title : 'A simple everyday favorite' ) . '</h3><p>' . esc_html( $review->comment_content ) . '</p><small class="bl-review-date">' . esc_html( get_comment_date( 'F j, Y', $review ) ) . '</small></div></article>';
 		}
 		$html .= '</div>';
 		if ( comments_open( $product->get_id() ) ) {
@@ -288,14 +293,4 @@ add_action(
 			echo '<div class="bl-mobile-sticky-cart"><button type="button" class="button" data-bl-scroll-add>Add to Cart</button></div>';
 		}
 	}
-);
-
-add_action(
-	'woocommerce_before_single_product',
-	function () {
-		if ( is_product() ) {
-			echo '<div class="bl-pdp-promo">Enjoy free shipping on orders $50+</div>';
-		}
-	},
-	5
 );

@@ -56,6 +56,7 @@ function bl_product_badges_markup( $product ) {
 			return $left_order <=> $right_order;
 		}
 	);
+	$badges = array_slice( $badges, 0, 2 );
 	$html = '<div class="bl-product-badges">';
 	foreach ( $badges as $badge ) {
 		$label = $badge;
@@ -94,10 +95,10 @@ function bl_loop_card_details() {
 	}
 	if ( ! empty( $scents ) ) {
 		$swatches = '';
-		foreach ( array_slice( $scents, 0, 3 ) as $index => $scent ) {
+		foreach ( array_slice( $scents, 0, 1 ) as $index => $scent ) {
 			$swatches .= '<span class="bl-swatch bl-swatch-' . esc_attr( (string) $index ) . '" aria-label="' . esc_attr( $scent ) . '"></span>';
 		}
-		echo '<div class="bl-card-scents">' . $swatches . '<span>Scent: ' . esc_html( implode( ' · ', array_slice( $scents, 0, 3 ) ) ) . '</span></div>';
+		echo '<div class="bl-card-scents">' . $swatches . '<span>| Scent: ' . esc_html( reset( $scents ) ) . '</span></div>';
 	}
 }
 

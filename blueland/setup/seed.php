@@ -167,10 +167,13 @@ function bl_seed_reviews( $product_id, $product_name, $product_index ) {
 		'Simple to refill and easy to keep within reach. A good everyday essential.',
 	);
 	$ratings = array( 5, 5, 4, 5, 4, 5, 5, 5, 4, 5, 4, 5 );
+	$titles = array( 'Easy to refill', 'A helpful everyday set', 'Stores neatly', 'A simple routine upgrade', 'Works well in our home', 'Clear instructions', 'Convenient and effective', 'Just what we needed', 'A practical refill option', 'Pleasant to use', 'Easy to keep stocked', 'A useful home essential' );
 	$count = 'Clean Home Essentials Kit' === $product_name ? 12 : 3 + ( $product_index % 4 );
 	for ( $i = 0; $i < $count; $i++ ) {
 		$email = 'review+' . sanitize_title( $product_name ) . '-' . $i . '@pureland.example';
-		if ( get_comments( array( 'post_id' => $product_id, 'author_email' => $email, 'count' => true ) ) ) {
+		$existing = get_comments( array( 'post_id' => $product_id, 'author_email' => $email, 'number' => 1 ) );
+		if ( $existing ) {
+			update_comment_meta( $existing[0]->comment_ID, '_bl_review_title', $titles[ $i ] );
 			continue;
 		}
 		$comment_id = wp_insert_comment(
@@ -186,6 +189,7 @@ function bl_seed_reviews( $product_id, $product_name, $product_index ) {
 		);
 		if ( $comment_id ) {
 			update_comment_meta( $comment_id, 'rating', $ratings[ $i ] );
+			update_comment_meta( $comment_id, '_bl_review_title', $titles[ $i ] );
 		}
 	}
 	if ( class_exists( 'WC_Comments' ) ) {
@@ -373,16 +377,16 @@ function bl_seed_storefront() {
 	$items = array(
 		array( 'clean-suite-kit', 'Clean Suite Kit', 109, 79, array( 'starter-kits', 'bestsellers' ), 'Bundles', 'giftable,kit-savings:28%,bestseller', "Reusable multi-surface bottle\nThree concentrated refill tablets\nSimple starter guide", true ),
 		array( 'daily-dish-starter-kit', 'Daily Dish Starter Kit', 49, 39, array( 'starter-kits', 'dish', 'bestsellers' ), 'Starter Sets', 'giftable,kit-savings:20%,bestseller', "Reusable dish soap bottle\nTwo concentrated refill tablets\nCountertop tray", false ),
-		array( 'refill-starter-set', 'Refill Starter Set', 32, 24, array( 'starter-kits', 'refills' ), 'Starter Sets', 'new,kit-savings:25%', "Reusable refill container\nThree everyday refill tablets", false ),
+		array( 'refill-starter-set', 'Refill Starter Set', 32, 24, array( 'starter-kits', 'refills', 'bestsellers' ), 'Starter Sets', 'new,kit-savings:25%,bestseller', "Reusable refill container\nThree everyday refill tablets", false ),
 		array( 'laundry-starter-set', 'Laundry Starter Set', 58, 45, array( 'starter-kits', 'laundry', 'bestsellers' ), 'Starter Sets', 'bestseller,kit-savings:22%', "Reusable laundry tin\nLaundry detergent refill tablets\nMeasuring scoop", false ),
 		array( 'dishwashing-tablet-refills', 'Dishwashing Tablet Refills', 24, 18, array( 'dish', 'refills', 'bestsellers' ), 'Refills', 'bestseller,new', "Dishwashing tablet refills\nRecyclable paper packaging", false ),
-		array( 'laundry-detergent-refills', 'Laundry Detergent Refills', 28, 21, array( 'laundry', 'refills' ), 'Refills', 'bestseller', "Laundry detergent refills\nRecyclable paper packaging", false ),
+		array( 'laundry-detergent-refills', 'Laundry Detergent Refills', 28, 21, array( 'laundry', 'refills', 'bestsellers' ), 'Refills', 'bestseller', "Laundry detergent refills\nRecyclable paper packaging", false ),
 		array( 'hand-soap-starter-duo', 'Hand Soap Starter Duo', 36, 29, array( 'starter-kits', 'hand-soap', 'bestsellers' ), 'Starter Sets', 'giftable,kit-savings:19%,bestseller', "Two reusable foaming bottles\nTwo scented refill tablets", false ),
-		array( 'hand-soap-refills', 'Hand Soap Refills', 20, 16, array( 'hand-soap', 'refills' ), 'Refills', 'new', "Four foaming hand soap tablets\nChoose a favorite scent", true ),
-		array( 'toilet-bowl-starter-kit', 'Toilet Bowl Starter Kit', 33, 25, array( 'starter-kits', 'toilet' ), 'Starter Sets', 'bestseller', "Reusable toilet cleaner bottle\nFour cleaning tablets", false ),
+		array( 'hand-soap-refills', 'Hand Soap Refills', 20, 16, array( 'hand-soap', 'refills', 'bestsellers' ), 'Refills', 'new,bestseller', "Four foaming hand soap tablets\nChoose a favorite scent", true ),
+		array( 'toilet-bowl-starter-kit', 'Toilet Bowl Starter Kit', 33, 25, array( 'starter-kits', 'toilet', 'bestsellers' ), 'Starter Sets', 'bestseller', "Reusable toilet cleaner bottle\nFour cleaning tablets", false ),
 		array( 'multi-surface-spray-set', 'Multi-Surface Spray Set', 40, 30, array( 'spray-cleaners', 'starter-kits', 'bestsellers' ), 'Bundles', 'kit-savings:25%,bestseller', "Two reusable spray bottles\nFour multi-surface refill tablets", true ),
 		array( 'reusable-spray-bottle', 'Reusable Spray Bottle', 15, 12, array( 'extras', 'spray-cleaners' ), 'Starter Sets', 'new', "One reusable spray bottle\nRefill-ready design", false ),
-		array( 'scrub-sponge-set', 'Scrub Sponge Set', 12, 9, array( 'extras', 'dish' ), 'Bundles', 'bestseller', "Three durable cleaning sponges\nFor dishes and surfaces", false ),
+		array( 'scrub-sponge-set', 'Scrub Sponge Set', 12, 9.60, array( 'extras', 'dish' ), 'Bundles', 'bestseller', "Three durable cleaning sponges\nFor dishes and surfaces", false ),
 		array( 'clean-home-essentials-kit', 'Clean Home Essentials Kit', 119, 89, array( 'starter-kits', 'bestsellers', 'holiday-shop' ), 'Bundles', 'giftable,kit-savings:25%,bestseller', "Reusable bottles for everyday cleaning\nMulti-room concentrated refill tablets\nA simple home care guide", false ),
 		array( 'laundry-essentials-kit', 'Laundry Essentials Kit', 95, 69, array( 'starter-kits', 'laundry', 'holiday-shop' ), 'Bundles', 'new,kit-savings:27%', "Reusable laundry tin\nLaundry detergent refills\nStain-care essentials", false ),
 	);
@@ -495,6 +499,22 @@ function bl_seed_storefront() {
 		bl_seed_reviews( $product_id, $name, $index );
 	}
 
+	$clean_kit_post = get_page_by_path( 'clean-home-essentials-kit', OBJECT, 'product' );
+	$addon_ids = array();
+	foreach ( array( 'scrub-sponge-set', 'reusable-spray-bottle' ) as $addon_slug ) {
+		$addon_post = get_page_by_path( $addon_slug, OBJECT, 'product' );
+		if ( $addon_post ) {
+			$addon_ids[] = (int) $addon_post->ID;
+		}
+	}
+	if ( $clean_kit_post && $addon_ids ) {
+		$clean_kit = wc_get_product( $clean_kit_post->ID );
+		if ( $clean_kit ) {
+			$clean_kit->set_cross_sell_ids( $addon_ids );
+			$clean_kit->save();
+		}
+	}
+
 	$block_dir = dirname( __FILE__ ) . '/../ux-builder/blocks';
 	$blocks = array(
 		'cta-journey'  => bl_seed_block( 'cta-journey', 'Start Your Journey CTA', $block_dir . '/cta-journey.txt' ),
@@ -573,6 +593,7 @@ function bl_seed_storefront() {
 	set_theme_mod( 'site_width_boxed', '' );
 	set_theme_mod( 'type_size', 100 );
 	set_theme_mod( 'type_size_mobile', 100 );
+	set_theme_mod( 'lazy_load_images', 0 );
 	set_theme_mod( 'type_texts', array( 'font-family' => 'DM Sans', 'variant' => '400' ) );
 	set_theme_mod( 'type_headings', array( 'font-family' => 'DM Sans', 'variant' => '500' ) );
 	set_theme_mod( 'type_nav', array( 'font-family' => 'DM Sans', 'variant' => '500' ) );

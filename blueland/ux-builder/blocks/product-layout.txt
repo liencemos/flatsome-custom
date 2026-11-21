@@ -78,9 +78,9 @@
 [ux_text]
 <h2 id="how-it-works">How It Works</h2>
 <ol>
-<li><strong>FILL</strong><span>Add water to your reusable bottle.</span></li>
-<li><strong>DROP</strong><span>Add one tablet and let it dissolve.</span></li>
-<li><strong>CLEAN</strong><span>Enjoy an easy routine made to repeat.</span></li>
+<li><b>1</b><div><strong>FILL</strong><span>Add water to your reusable bottle.</span></div></li>
+<li><b>2</b><div><strong>DROP</strong><span>Add one tablet and let it dissolve.</span></div></li>
+<li><b>3</b><div><strong>CLEAN</strong><span>Enjoy an easy routine made to repeat.</span></div></li>
 </ol>
 [/ux_text]
 [/col]
@@ -105,15 +105,11 @@
 [ux_text]
 <div class="bl-values-card"><p>Considered formats and clear directions make everyday home care easy to repeat.</p>
 <ul><li>Reusable bottle format</li><li>Refill tablet option</li><li>Concentrated formulas</li><li>Less bulky packaging</li><li>Clear product information</li><li>Easy-to-follow directions</li></ul></div>
+[block id="certifications"]
 [/ux_text]
 [/col]
 [col span="6" span__sm="12"]
 [bl_image name="safe-home"]
-[/col]
-[/row]
-[row]
-[col span="12" align="center"]
-[block id="certifications"]
 [/col]
 [/row]
 [/section]
