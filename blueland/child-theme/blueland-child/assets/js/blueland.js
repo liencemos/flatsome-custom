@@ -86,11 +86,39 @@
 			const autoship = event.target.value === 'autoship';
 			document.querySelectorAll('.bl-plan-card').forEach((card) => card.classList.toggle('is-selected', card.contains(event.target)));
 			const cards = document.querySelectorAll('.bl-plan-card');
-			const autoshipPrice = cards[0]?.querySelector('.bl-plan-content b')?.innerHTML;
-			const oneTimePrice = cards[1]?.querySelector('.bl-plan-content > span')?.innerHTML;
+			const autoshipPrice = cards[0]?.querySelector('.bl-plan-price')?.innerHTML;
+			const oneTimePrice = cards[1]?.querySelector('.bl-plan-price')?.innerHTML;
 			const total = document.querySelector('.bl-plan-total');
 			if (total) total.innerHTML = autoship ? autoshipPrice : oneTimePrice;
+			document.querySelector('.bl-todays-total')?.classList.toggle('is-autoship', autoship);
 		}
+	});
+
+	document.addEventListener('click', (event) => {
+		const press = event.target.closest('.bl-press-logo');
+		if (press) {
+			document.querySelectorAll('.bl-press-logo').forEach((button) => {
+				button.classList.toggle('is-active', button === press);
+				button.setAttribute('aria-pressed', button === press ? 'true' : 'false');
+			});
+			const quote = document.querySelector('.bl-press-quote');
+			if (quote) quote.textContent = `“${press.dataset.quote}”`;
+		}
+		const safeTab = event.target.closest('.bl-safe-home-tabs button');
+		if (safeTab) {
+			safeTab.parentElement.querySelectorAll('button').forEach((button) => {
+				button.classList.toggle('is-active', button === safeTab);
+				button.setAttribute('aria-selected', button === safeTab ? 'true' : 'false');
+			});
+		}
+		const writeReview = event.target.closest('.bl-write-review');
+		if (writeReview) {
+			const form = document.querySelector('.bl-review-form');
+			form?.classList.toggle('is-open');
+			if (form?.classList.contains('is-open')) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+		const chip = event.target.closest('.bl-review-chips button');
+		if (chip) chip.parentElement.querySelectorAll('button').forEach((button) => button.classList.toggle('is-active', button === chip));
 	});
 
 	document.addEventListener('click', (event) => {

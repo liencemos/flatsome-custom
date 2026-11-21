@@ -17,14 +17,14 @@
 [/ux_text]
 [/col]
 [/row]
-[ux_product_categories style="normal" type="slider" columns="5" number="6" orderby="menu_order" image_size="woocommerce_thumbnail" class="bl-home-category"]
+[bl_home_categories]
 [/section]
 
 [section class="bl-usp-section" padding="88px 0px"]
 [row]
 [col span="12" align="center"]
 [ux_text]
-<h2>Thoughtful essentials for everyday homes</h2>
+<h2>4,000,000+ Homes Have Made the Switch</h2>
 [/ux_text]
 [bl_usp_grid]
 [/col]
@@ -53,8 +53,8 @@
 [col span="12" align="center"]
 [ux_text]
 <p class="bl-eyebrow">A Thoughtful Approach</p>
-<h2>“A better kind of clean.”</h2>
-<div class="bl-press-logos"><span>REFILL-READY</span><span>MADE FOR EVERYDAY</span><span>THOUGHTFULLY DESIGNED</span><span>HOME ESSENTIALS</span></div>
+<h2 class="bl-press-quote">“Refill-ready essentials designed to make everyday routines feel easier.”</h2>
+[bl_press_logos]
 [/ux_text]
 [/col]
 [/row]
@@ -89,7 +89,8 @@
 [col span="6" span__sm="12" padding="8% 7% 8% 7%"]
 [ux_text]
 <h2>How It Works</h2>
-<p>One bottle, refill forever. From your sink to your laundry room, we’re eliminating single-use plastic one cleaning product at a time.</p>
+<p>One bottle, refill forever. From your sink to your laundry room, thoughtful formats make everyday care easy to repeat.</p>
+<ul><li>Fill your reusable bottle</li><li>Add a concentrated refill</li><li>Clean, then refill again</li></ul>
 [button text="How It Works" link="/our-mission/" style="outline" radius="99"]
 [/ux_text]
 [/col]
@@ -134,7 +135,7 @@
 [/ux_text]
 [/col]
 [col span="8" span__sm="12"]
-[ux_slider]
+[ux_slider class="bl-instagram-slider"]
 [bl_image name="instagram-1"]
 [bl_image name="instagram-2"]
 [bl_image name="instagram-3"]

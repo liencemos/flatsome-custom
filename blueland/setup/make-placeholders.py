@@ -65,44 +65,71 @@ def gradient(size, top, bottom):
 
 
 def product_image(path, index, name):
-    image = Image.new("RGB", (1100, 1100), "#f2f2f2")
-    draw = ImageDraw.Draw(image)
+    image = Image.new("RGBA", (1100, 1100), "#f2f2f2")
+    shadow = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).ellipse((225, 790, 885, 925), fill=(18, 23, 45, 46))
+    image = Image.alpha_composite(image, shadow.filter(ImageFilter.GaussianBlur(26)))
+    products = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(products)
     dark, light = PALETTES[index % len(PALETTES)]
-    draw.ellipse((210, 760, 900, 930), fill="#e6e6e6")
     label = name.replace("-", " ").upper()
-    if any(word in label for word in ("KIT", "SET", "DUO")) or index in (0, 1, 2, 3, 12, 13):
-        draw.rounded_rectangle((200, 300, 900, 760), radius=36, fill="#d8d2c7")
-        draw.rounded_rectangle((226, 280, 870, 730), radius=28, fill="#f9f6ee")
-        # Refill packets.
-        for item in range(3):
-            x = 270 + item * 180
-            y = 390 + (item % 2) * 12
-            draw.rounded_rectangle((x, y, x + 128, y + 250), radius=32, fill=PALETTES[(index + item) % len(PALETTES)][0], outline="#ffffff", width=5)
-            draw.rounded_rectangle((x + 22, y + 72, x + 106, y + 172), radius=8, fill="#fffdf8")
-            draw.text((x + 27, y + 103), "PURE", font=font(19), fill="#133cd1")
-            draw.text((x + 25, y + 128), "REFILL", font=font(12), fill="#133cd1")
-        draw.rounded_rectangle((365, 254, 710, 322), radius=20, fill=dark)
+    kraft = "#c8ac87"
+    is_kit = any(word in label for word in ("KIT", "SET", "DUO"))
+
+    def pouch(x, y, width, height, accent):
+        draw.rounded_rectangle((x, y, x + width, y + height), radius=28, fill="#ad8f6b")
+        draw.rounded_rectangle((x + 9, y + 8, x + width - 9, y + height - 8), radius=24, fill=kraft)
+        draw.line((x + 22, y + 34, x + width - 22, y + 34), fill="#9c7c5b", width=5)
+        draw.ellipse((x + width * .31, y + height * .34, x + width * .69, y + height * .66), fill=accent)
+        draw.ellipse((x + width * .40, y + height * .43, x + width * .60, y + height * .57), outline="#fffdf7", width=5)
+
+    def bottle(x, y, width, height, accent):
+        body_top = y + int(height * .25)
+        draw.rounded_rectangle((x, body_top, x + width, y + height), radius=int(width * .2), fill=light)
+        draw.rounded_rectangle((x + 10, body_top + 12, x + width - 10, y + height - 10), radius=int(width * .17), outline="#ffffff", width=5)
+        draw.rectangle((x + width * .37, y + height * .14, x + width * .63, body_top + 5), fill="#f8f7f2")
+        draw.rounded_rectangle((x + width * .32, y + height * .06, x + width * .68, y + height * .20), radius=10, fill="#f8f7f2")
+        draw.rounded_rectangle((x + width * .18, y + height * .47, x + width * .82, y + height * .72), radius=18, fill=accent)
+        draw.ellipse((x + width * .42, y + height * .52, x + width * .58, y + height * .68), outline="#fffdf7", width=5)
+
+    def tin(x, y, width, height, accent):
+        draw.rounded_rectangle((x, y + 25, x + width, y + height), radius=42, fill=light)
+        draw.rounded_rectangle((x, y + 5, x + width, y + 75), radius=24, fill="#e7e7e1")
+        draw.line((x + 10, y + 75, x + width - 10, y + 75), fill="#b8b8b2", width=4)
+        draw.ellipse((x + width * .32, y + height * .40, x + width * .68, y + height * .76), fill=accent)
+        draw.ellipse((x + width * .42, y + height * .50, x + width * .58, y + height * .66), outline="#fffdf7", width=5)
+
+    if is_kit:
+        pouch(175, 305, 245, 495, dark)
+        pouch(650, 350, 250, 440, PALETTES[(index + 3) % len(PALETTES)][0])
+        bottle(405, 215, 300, 610, PALETTES[(index + 5) % len(PALETTES)][0])
     elif "SPONGE" in label:
         for item in range(3):
-            x = 245 + item * 190
-            draw.rounded_rectangle((x, 395, x + 170, 690), radius=60, fill=PALETTES[(index + item) % len(PALETTES)][0], outline="#fff", width=8)
-            draw.rounded_rectangle((x, 565, x + 170, 690), radius=45, fill="#c7b29d")
-    elif "BOTTLE" in label or "SPRAY" in label:
-        draw.rounded_rectangle((368, 325, 730, 815), radius=78, fill=dark, outline="#fff", width=10)
-        draw.rounded_rectangle((475, 215, 635, 370), radius=25, fill="#f9f9f4")
-        draw.rounded_rectangle((535, 145, 695, 235), radius=18, fill="#f9f9f4")
-        draw.rectangle((674, 165, 820, 198), fill="#f9f9f4")
-        draw.rounded_rectangle((430, 510, 670, 650), radius=16, fill="#fffdf8")
-        draw.text((472, 545), "PURELAND", font=font(23), fill="#133cd1")
-        draw.text((480, 585), "CLEAN HOME", font=font(15), fill="#444a7b")
+            x = 225 + item * 220
+            draw.rounded_rectangle((x, 390, x + 175, 700), radius=55, fill=PALETTES[(index + item) % len(PALETTES)][0], outline="#fff", width=8)
+            draw.rounded_rectangle((x, 570, x + 175, 700), radius=42, fill="#c7b29d")
+    elif "BOTTLE" in label or "SPRAY" in label or "SOAP" in label:
+        bottle(340, 150, 420, 730, dark)
+    elif "LAUNDRY" in label:
+        tin(300, 270, 500, 575, dark)
+        pouch(660, 405, 240, 410, PALETTES[(index + 2) % len(PALETTES)][0])
+    elif "REFILL" in label or "TABLET" in label:
+        pouch(300, 235, 500, 620, dark)
     else:
-        draw.rounded_rectangle((320, 280, 780, 790), radius=70, fill="#f8f8f2", outline="#fff", width=10)
-        draw.rounded_rectangle((410, 200, 690, 332), radius=28, fill=dark)
-        draw.rounded_rectangle((365, 480, 735, 660), radius=14, fill=light)
-        draw.text((420, 520), "PURELAND", font=font(28), fill="#133cd1")
-        draw.text((427, 566), "REFILL TABLETS", font=font(15), fill="#444a7b")
-    draw.text((55, 1010), "PURELAND  /  " + label[:27], font=font(18), fill="#444a7b")
-    image.save(path, quality=92)
+        tin(300, 270, 500, 575, dark)
+    image = Image.alpha_composite(image, products)
+    image.convert("RGB").save(path, quality=94)
+
+
+def make_gallery_variants(path, slug):
+    base = Image.open(path).convert("RGB")
+    for index, angle in enumerate((-5, -2, 2, 5), start=2):
+        scale = 1.0 + (index - 3) * .035
+        size = int(1100 / scale)
+        left = (1100 - size) // 2
+        view = base.crop((left, left, left + size, left + size)).resize((1100, 1100), Image.Resampling.LANCZOS)
+        view = view.rotate(angle, resample=Image.Resampling.BICUBIC, fillcolor="#f2f2f2")
+        view.save(path.with_name(f"{slug}-{index}.png"), quality=94)
 
 
 def lifestyle(path, palette, title, size=(1600, 1050)):
@@ -165,9 +192,23 @@ def make_wordmark(path):
     image.save(path)
 
 
+def make_press_logo(path, label, style):
+    styles = (
+        'font-family="Arial,sans-serif" font-size="31" font-weight="700" letter-spacing="1"',
+        'font-family="Arial,sans-serif" font-size="34" font-weight="700" letter-spacing="-1"',
+        'font-family="Arial,sans-serif" font-size="30" font-weight="600" letter-spacing="2"',
+        'font-family="Arial,sans-serif" font-size="32" font-weight="700" letter-spacing="4"',
+    )
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="360" height="80" viewBox="0 0 360 80"><text x="180" y="51" text-anchor="middle" fill="#0b1057" {styles[style % len(styles)]}>{label}</text></svg>'
+    path.write_text(svg, encoding="utf-8")
+
+
 def main():
     for index, slug in enumerate(PRODUCTS):
-        product_image(OUTPUT / f"{slug}.png", index, slug)
+        product_path = OUTPUT / f"{slug}.png"
+        product_image(product_path, index, slug)
+        if slug in {"clean-suite-kit", "daily-dish-starter-kit", "refill-starter-set", "laundry-starter-set", "hand-soap-starter-duo", "toilet-bowl-starter-kit", "clean-home-essentials-kit", "laundry-essentials-kit"}:
+            make_gallery_variants(product_path, slug)
     aliases = {
         "kit-foam": "hand-soap-starter-duo",
         "kit-multi": "clean-suite-kit",
@@ -176,17 +217,13 @@ def main():
     }
     for alias, slug in aliases.items():
         Image.open(OUTPUT / f"{slug}.png").save(OUTPUT / f"{alias}.png")
-    lifestyle(OUTPUT / "hero.png", ("#c8d1d1", "#e4cdb2"), "hero", (1920, 1250))
-    lifestyle(OUTPUT / "lifestyle.png", ("#d9e8f1", "#f5dfcf"), "lifestyle", (1600, 1100))
-    lifestyle(OUTPUT / "how-it-works.png", ("#abd8ef", "#eaf4f8"), "how", (1150, 1000))
-    lifestyle(OUTPUT / "autoship.png", ("#b7d8e3", "#e4d6c3"), "autoship", (1150, 1000))
-    for index in range(1, 5):
-        lifestyle(OUTPUT / f"instagram-{index}.png", PALETTES[index], f"social-{index}", (720, 900))
     for index, title in enumerate(("Refill Ready", "Thoughtful Design", "Clear Information", "Reusable Format", "Everyday Use", "Concentrated Formula", "Low-Waste Choice", "Made for Home"), 1):
         make_badge(OUTPUT / f"cert-{index}.png", title, index)
     for index in range(1, 5):
         make_icon(OUTPUT / f"usp-{index}.svg", index - 1)
     make_wordmark(OUTPUT / "pureland-wordmark.png")
+    for index, label in enumerate(("The Daily Edit", "HOME/GOOD", "Green Review", "MORNING"), 1):
+        make_press_logo(OUTPUT / f"press-{index}.svg", label, index - 1)
     print(f"Generated placeholder assets in {OUTPUT}")
 
 

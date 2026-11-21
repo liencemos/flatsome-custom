@@ -27,14 +27,19 @@
 [/col]
 [/row]
 [row class="bl-footer-bottom"]
-[col span="6" span__sm="12"]
+[col span="4" span__sm="12"]
+[ux_text]
+<label class="bl-currency">Currency <select aria-label="Currency"><option>United States (USD $)</option></select></label>
+[/ux_text]
+[/col]
+[col span="3" span__sm="12"]
 [ux_text]
 <div class="bl-footer-badges"><img src="/wp-content/themes/blueland-child/assets/images/cert-1.png" alt="Certification"><img src="/wp-content/themes/blueland-child/assets/images/cert-2.png" alt="Certification"></div>
 [/ux_text]
 [/col]
-[col span="6" span__sm="12" align="right"]
+[col span="5" span__sm="12" align="right"]
 [ux_text]
-<p>© 2026 Pureland · help@pureland.example · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a></p>
+<p>© 2026 Pureland · <a href="mailto:help@pureland.example">Email</a> · <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a></p>
 [/ux_text]
 [/col]
 [/row]

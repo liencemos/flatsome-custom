@@ -1,19 +1,46 @@
-[ux_slider class="bl-reviews-slider" nav_style="simple" nav_color="light" bullets="true"]
+[ux_slider class="bl-reviews-slider" nav_style="simple" nav_color="light" bullets="true" autoplay="false"]
 [row]
 [col span="12" align="center"]
 [ux_text class="bl-review-quote"]
-<p>“A cleaner routine feels easy to keep when the little details work beautifully.”</p>
+<p>“The refills are easy to store and make our everyday routine feel much simpler.”</p>
 <p>★★★★★</p>
-<cite>Sample review · Local preview</cite>
+<cite>– Jamie L. on <a href="/product/clean-suite-kit/">Clean Suite Kit</a></cite>
 [/ux_text]
 [/col]
 [/row]
 [row]
 [col span="12" align="center"]
 [ux_text class="bl-review-quote"]
-<p>“Thoughtful design and simple refills make everyday home care feel more approachable.”</p>
+<p>“I love how easy it is to refill the bottle and keep it ready by the sink.”</p>
 <p>★★★★★</p>
-<cite>Sample review · Local preview</cite>
+<cite>– Morgan R. on <a href="/product/daily-dish-starter-kit/">Daily Dish Starter Kit</a></cite>
+[/ux_text]
+[/col]
+[/row]
+[row]
+[col span="12" align="center"]
+[ux_text class="bl-review-quote"]
+<p>“A thoughtful starter set with clear directions and products we use every day.”</p>
+<p>★★★★★</p>
+<cite>– Taylor S. on <a href="/product/clean-home-essentials-kit/">Clean Home Essentials Kit</a></cite>
+[/ux_text]
+[/col]
+[/row]
+[row]
+[col span="12" align="center"]
+[ux_text class="bl-review-quote"]
+<p>“The compact refills take up less room in our cabinet, and the cleaner works well.”</p>
+<p>★★★★★</p>
+<cite>– Casey W. on <a href="/product/multi-surface-spray-set/">Multi-Surface Spray Set</a></cite>
+[/ux_text]
+[/col]
+[/row]
+[row]
+[col span="12" align="center"]
+[ux_text class="bl-review-quote"]
+<p>“Simple to use, pleasant to have around, and easy to reorder when we need it.”</p>
+<p>★★★★★</p>
+<cite>– Alex P. on <a href="/product/laundry-starter-set/">Laundry Starter Set</a></cite>
 [/ux_text]
 [/col]
 [/row]

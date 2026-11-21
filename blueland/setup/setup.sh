@@ -58,6 +58,7 @@ docker exec "$CONTAINER" chown -R www-data:www-data /var/www/html/wp-content/the
 "$WP_CLI" theme activate blueland-child
 "$WP_CLI" language core install en_US --activate
 "$WP_CLI" eval-file /var/www/html/wp-content/uploads/blueland-seed/seed.php
+"$WP_CLI" media regenerate --yes
 "$WP_CLI" option update permalink_structure '/%postname%/'
 "$WP_CLI" rewrite flush --hard
 "$WP_CLI" cache flush >/dev/null

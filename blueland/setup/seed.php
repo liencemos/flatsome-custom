@@ -151,17 +151,23 @@ function bl_seed_menu( $name, $location, $items ) {
 }
 
 function bl_seed_reviews( $product_id, $product_name, $product_index ) {
-	$names = array( 'Jordan M.', 'Taylor R.', 'Morgan L.', 'Casey D.', 'Sam P.', 'Avery K.' );
+	$names = array( 'Jordan M.', 'Taylor R.', 'Morgan L.', 'Casey D.', 'Sam P.', 'Avery K.', 'Riley W.', 'Jamie B.', 'Drew C.', 'Alex P.', 'Robin S.', 'Cameron T.' );
 	$reviews = array(
-		'Easy to use, thoughtfully made, and a welcome addition to our everyday routine.',
-		'Works beautifully and helps us keep our home feeling fresh.',
-		'The refill format is convenient and the product performs really well.',
-		'A simple swap that makes a noticeable difference in our home.',
-		'Great quality, pleasant to use, and the packaging is easy to store.',
-		'I would happily recommend this to anyone updating their cleaning routine.',
+		'The bottle looks lovely on the counter, and the refill is easy to use.',
+		'Works well for our everyday messes and feels simple to keep stocked.',
+		'I like having a reusable bottle and a refill that stores neatly.',
+		'The routine is easy to follow, and it has been a great fit for our home.',
+		'Thoughtful packaging, clear directions, and a product that does its job.',
+		'Convenient to store and pleasant to use. I would order it again.',
+		'The refill dissolves easily, and the finished cleaner works well on our counters.',
+		'A practical starter set with everything we needed to get going.',
+		'The compact refills take up less room in our cabinet than our old supplies.',
+		'Nice quality and a straightforward way to make our routine feel more organized.',
+		'We have used this for a few weeks and are happy with how easy it is.',
+		'Simple to refill and easy to keep within reach. A good everyday essential.',
 	);
-	$ratings = array( 5, 5, 4, 5, 4, 5 );
-	$count = 3 + ( $product_index % 4 );
+	$ratings = array( 5, 5, 4, 5, 4, 5, 5, 5, 4, 5, 4, 5 );
+	$count = 'Clean Home Essentials Kit' === $product_name ? 12 : 3 + ( $product_index % 4 );
 	for ( $i = 0; $i < $count; $i++ ) {
 		$email = 'review+' . sanitize_title( $product_name ) . '-' . $i . '@pureland.example';
 		if ( get_comments( array( 'post_id' => $product_id, 'author_email' => $email, 'count' => true ) ) ) {
@@ -331,6 +337,18 @@ function bl_seed_storefront() {
 		'bestsellers'     => 'Bestsellers',
 		'holiday-shop'    => 'Holiday Shop',
 	);
+	$category_images = array(
+		'starter-kits'   => 'clean-suite-kit',
+		'refills'        => 'dishwashing-tablet-refills',
+		'dish'           => 'daily-dish-starter-kit',
+		'laundry'        => 'laundry-starter-set',
+		'toilet'         => 'toilet-bowl-starter-kit',
+		'hand-soap'      => 'hand-soap-starter-duo',
+		'spray-cleaners' => 'multi-surface-spray-set',
+		'extras'         => 'scrub-sponge-set',
+		'bestsellers'    => 'clean-home-essentials-kit',
+		'holiday-shop'   => 'laundry-essentials-kit',
+	);
 	$categories = array();
 	foreach ( $category_names as $slug => $name ) {
 		$term_id = bl_seed_term( 'product_cat', $name, $slug );
@@ -344,7 +362,8 @@ function bl_seed_storefront() {
 				)
 			);
 			update_term_meta( $term_id, '_bl_seo_text', 'Thoughtfully designed ' . strtolower( $name ) . ' make it easier to care for your home with effective essentials and convenient refill options. Explore reusable bottles, concentrated formulas, and everyday tools made for simpler routines.' );
-			$category_image = bl_seed_asset( 'clean-suite-kit.png', $name . ' category image' );
+			$image_slug = isset( $category_images[ $slug ] ) ? $category_images[ $slug ] : 'clean-suite-kit';
+			$category_image = bl_seed_asset( $image_slug . '.png', $name . ' category image' );
 			if ( $category_image ) {
 				update_term_meta( $term_id, 'thumbnail_id', $category_image );
 			}
@@ -414,6 +433,17 @@ function bl_seed_storefront() {
 		$image_id = bl_seed_asset( $slug . '.png', $name );
 		if ( $image_id ) {
 			$product->set_image_id( $image_id );
+			$gallery_ids = array();
+			$kit_slugs = array( 'clean-suite-kit', 'daily-dish-starter-kit', 'refill-starter-set', 'laundry-starter-set', 'hand-soap-starter-duo', 'toilet-bowl-starter-kit', 'clean-home-essentials-kit', 'laundry-essentials-kit' );
+			if ( in_array( $slug, $kit_slugs, true ) ) {
+				for ( $gallery_index = 2; $gallery_index <= 5; $gallery_index++ ) {
+					$gallery_id = bl_seed_asset( $slug . '-' . $gallery_index . '.png', $name . ' gallery ' . $gallery_index );
+					if ( $gallery_id ) {
+						$gallery_ids[] = $gallery_id;
+					}
+				}
+			}
+			$product->set_gallery_image_ids( $gallery_ids );
 			$product->save();
 		}
 
@@ -536,6 +566,13 @@ function bl_seed_storefront() {
 	}
 	set_theme_mod( 'color_primary', '#133cd1' );
 	set_theme_mod( 'color_secondary', '#0033a7' );
+	set_theme_mod( 'color_texts', '#0b1057' );
+	set_theme_mod( 'type_headings_color', '#0b1057' );
+	set_theme_mod( 'body_layout', 'full-width' );
+	set_theme_mod( 'site_width', '1329' );
+	set_theme_mod( 'site_width_boxed', '' );
+	set_theme_mod( 'type_size', 100 );
+	set_theme_mod( 'type_size_mobile', 100 );
 	set_theme_mod( 'type_texts', array( 'font-family' => 'DM Sans', 'variant' => '400' ) );
 	set_theme_mod( 'type_headings', array( 'font-family' => 'DM Sans', 'variant' => '500' ) );
 	set_theme_mod( 'type_nav', array( 'font-family' => 'DM Sans', 'variant' => '500' ) );
@@ -561,9 +598,9 @@ function bl_seed_storefront() {
 	set_theme_mod( 'logo_position', 'center' );
 	set_theme_mod( 'dropdown_style', 'simple' );
 	set_theme_mod( 'header_search_form_style', 'flat' );
-	set_theme_mod( 'header_cart_total', 1 );
+	set_theme_mod( 'header_cart_total', 0 );
 	set_theme_mod( 'header_cart_style', 'off-canvas' );
-	set_theme_mod( 'header_cart_title', 1 );
+	set_theme_mod( 'header_cart_title', 0 );
 	set_theme_mod( 'header_cart_qty', 1 );
 	set_theme_mod( 'header_cart_cross_sells', 0 );
 	set_theme_mod( 'header_cart_shipping', 0 );

@@ -15,7 +15,8 @@ add_shortcode(
 		);
 		$items = '';
 		foreach ( $announcements as $index => $announcement ) {
-			$items .= '<span class="bl-announcement-slide' . ( 0 === $index ? ' is-active' : '' ) . '">' . esc_html( $announcement ) . '</span>';
+			$shop_link = 0 === $index ? ' <a href="' . esc_url( home_url( '/shop/' ) ) . '">Shop now</a>' : '';
+			$items .= '<span class="bl-announcement-slide' . ( 0 === $index ? ' is-active' : '' ) . '">' . esc_html( $announcement ) . $shop_link . '</span>';
 		}
 		return '<div class="bl-announcement" aria-label="Store announcements"><button class="bl-announcement-prev" type="button" aria-label="Previous announcement">‹</button><div class="bl-announcement-slides">' . $items . '</div><button class="bl-announcement-next" type="button" aria-label="Next announcement">›</button></div>';
 	}

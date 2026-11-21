@@ -13,7 +13,6 @@
 <details class="bl-promo-bar"><summary>Save on your first order with a refill-ready routine.</summary><p>Explore product bundles for simple starter options and refill-friendly essentials.</p></details>
 [/ux_text]
 [bl_plan_selector]
-[ux_product_price]
 [ux_product_add_to_cart]
 [bl_product_rewards]
 [bl_product_addon]
@@ -73,7 +72,7 @@
 [/row]
 [/section]
 
-[section class="bl-how-section" padding="72px 0px"]
+[section class="bl-how-section bl-pdp-how-split" padding="0px"]
 [row class="bl-how-grid" v_align="middle"]
 [col span="6" span__sm="12"]
 [ux_text]
@@ -92,26 +91,29 @@
 [/section]
 
 [section class="bl-values-section" padding="72px 0px"]
-[row class="bl-values-grid" v_align="middle"]
-[col span="6" span__sm="12"]
+[row]
+[col span="12" align="center"]
 [ux_text]
 <p class="bl-eyebrow">Thoughtful by design</p>
 <h2>Safe Home, Cleaner Planet</h2>
-<p>Considered formats and clear instructions make everyday home care easy to repeat.</p>
-<ul>
-<li>Reusable bottle format</li>
-<li>Refill tablet option</li>
-<li>Concentrated formulas</li>
-<li>Less bulky packaging</li>
-<li>Clear product information</li>
-<li>Easy-to-follow directions</li>
-<li>Designed for everyday use</li>
-<li>Simple to refill</li>
-</ul>
+<div class="bl-safe-home-tabs" role="tablist"><button class="is-active" type="button" aria-selected="true">Our Values</button><button type="button" aria-selected="false">Ingredients</button><button type="button" aria-selected="false">Packaging</button></div>
+[/ux_text]
+[/col]
+[/row]
+[row class="bl-values-grid" v_align="middle"]
+[col span="6" span__sm="12"]
+[ux_text]
+<div class="bl-values-card"><p>Considered formats and clear directions make everyday home care easy to repeat.</p>
+<ul><li>Reusable bottle format</li><li>Refill tablet option</li><li>Concentrated formulas</li><li>Less bulky packaging</li><li>Clear product information</li><li>Easy-to-follow directions</li></ul></div>
 [/ux_text]
 [/col]
 [col span="6" span__sm="12"]
-[bl_image name="lifestyle"]
+[bl_image name="safe-home"]
+[/col]
+[/row]
+[row]
+[col span="12" align="center"]
+[block id="certifications"]
 [/col]
 [/row]
 [/section]
@@ -131,7 +133,7 @@
 [row]
 [col span="12"]
 [ux_text]
-<h2 id="reviews">Sample Reviews</h2>
+<h2 id="reviews">Customer Reviews</h2>
 [/ux_text]
 [bl_reviews_summary]
 [bl_reviews_list]

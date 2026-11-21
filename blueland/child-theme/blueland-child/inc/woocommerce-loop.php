@@ -45,6 +45,17 @@ function bl_product_badges_markup( $product ) {
 	if ( empty( $badges ) ) {
 		return '';
 	}
+	$priority = array( 'giftable' => 0, 'new' => 1, 'bestseller' => 2 );
+	usort(
+		$badges,
+		function ( $left, $right ) use ( $priority ) {
+			$left_type  = false !== strpos( $left, ':' ) ? 'savings' : $left;
+			$right_type = false !== strpos( $right, ':' ) ? 'savings' : $right;
+			$left_order  = isset( $priority[ $left_type ] ) ? $priority[ $left_type ] : ( 'savings' === $left_type ? 9 : 5 );
+			$right_order = isset( $priority[ $right_type ] ) ? $priority[ $right_type ] : ( 'savings' === $right_type ? 9 : 5 );
+			return $left_order <=> $right_order;
+		}
+	);
 	$html = '<div class="bl-product-badges">';
 	foreach ( $badges as $badge ) {
 		$label = $badge;
@@ -147,6 +158,32 @@ function bl_catalog_ordering_markup() {
 	$ordering = ob_get_clean();
 	return $ordering;
 }
+
+add_filter(
+	'woocommerce_catalog_orderby',
+	function ( $options ) {
+		return array(
+			'menu_order' => 'Featured',
+			'price'      => 'Price Low to High',
+			'price-desc' => 'Price High to Low',
+			'rating'     => 'Rating High to Low',
+			'rating_asc' => 'Rating Low to High',
+		);
+	}
+);
+
+add_filter(
+	'woocommerce_get_catalog_ordering_args',
+	function ( $args, $orderby ) {
+		if ( 'rating_asc' === $orderby ) {
+			$args['orderby'] = 'rating';
+			$args['order']   = 'ASC';
+		}
+		return $args;
+	},
+	10,
+	2
+);
 
 add_filter(
 	'woocommerce_product_loop_start',
