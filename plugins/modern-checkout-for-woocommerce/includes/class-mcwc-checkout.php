@@ -400,15 +400,9 @@ function mcwc_find_shipping_threshold() {
 }
 
 function mcwc_free_shipping_threshold() {
-	$override = mcwc_option( 'free_shipping_threshold_override', '' );
-	$automatic_threshold = mcwc_find_shipping_threshold();
-	if ( null === $automatic_threshold && '' === (string) $override ) {
-		return null;
-	}
-	$threshold = apply_filters( 'mcwc_free_shipping_threshold', $automatic_threshold );
-	if ( '' !== (string) $override ) {
-		$threshold = (float) $override;
-	}
+	$override  = mcwc_option( 'free_shipping_threshold_override', '' );
+	$base      = '' !== (string) $override ? (float) $override : mcwc_find_shipping_threshold();
+	$threshold = apply_filters( 'mcwc_free_shipping_threshold', $base );
 	return is_numeric( $threshold ) && (float) $threshold > 0 ? (float) $threshold : null;
 }
 
