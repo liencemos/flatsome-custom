@@ -42,8 +42,9 @@
 			if (!Number.isFinite(amount)) return;
 			todayPrice.textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 		};
-		window.jQuery(document).on('found_variation', 'form.variations_form', (_event, variation) => updateTodayPrice(variation?.display_price));
-		window.jQuery(document).on('reset_data', 'form.variations_form', () => { todayPrice.innerHTML = defaultTodayPrice; });
+		const isMainForm = (form) => !form.closest('.product-lightbox, .mfp-content, .product-quick-view-container');
+		window.jQuery(document).on('found_variation', 'form.variations_form', (event, variation) => { if (isMainForm(event.currentTarget)) updateTodayPrice(variation?.display_price); });
+		window.jQuery(document).on('reset_data', 'form.variations_form', (event) => { if (isMainForm(event.currentTarget)) todayPrice.innerHTML = defaultTodayPrice; });
 	}
 
 	const syncCartLabels = () => {
