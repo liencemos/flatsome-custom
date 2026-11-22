@@ -243,6 +243,9 @@ if ( $cart && has_block( 'woocommerce/cart', $cart ) ) {
 		}
 	}
 	if ( $updated ) {
+		if ( ! metadata_exists( 'post', $cart->ID, '_signal_original_cart_content' ) && ! add_post_meta( $cart->ID, '_signal_original_cart_content', wp_slash( $cart->post_content ), true ) ) {
+			WP_CLI::error( 'Could not back up the original cart content before conversion.' );
+		}
 		signal_seed_result( wp_update_post( array( 'ID' => $cart->ID, 'post_content' => wp_slash( serialize_blocks( $blocks ) ) ), true ) );
 	}
 }

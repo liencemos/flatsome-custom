@@ -20,6 +20,9 @@ signal_check( 'no-sidebar' === get_theme_mod( 'product_layout' ), 'Expected the 
 signal_check( has_shortcode( get_theme_mod( 'html_shop_page', '' ), 'block' ) && 'blocks' === get_post_type( get_theme_mod( 'footer_block' ) ), 'Expected Flatsome UX Blocks on the shop header and footer.' );
 $cart = get_post( wc_get_page_id( 'cart' ) );
 signal_check( $cart && has_shortcode( $cart->post_content, 'woocommerce_cart' ) && ! has_block( 'woocommerce/cart', $cart ), 'Expected the classic WooCommerce cart so Flatsome can refresh its header bag count.' );
+if ( metadata_exists( 'post', $cart->ID, '_signal_original_cart_content' ) ) {
+	signal_check( has_block( 'woocommerce/cart', get_post_meta( $cart->ID, '_signal_original_cart_content', true ) ), 'Expected the original Cart block in the conversion backup.' );
+}
 
 $products = get_posts( array(
 	'post_type'      => 'product',
