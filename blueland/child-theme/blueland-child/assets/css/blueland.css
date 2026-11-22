@@ -1421,5 +1421,8 @@ body .bl-eyebrow, body .bl-label, body .bl-footer-links h3, body .bl-kit-grid h3
 }
 
 .product-small .bl-product-badges {
+	flex-wrap: wrap;
+	max-height: 26px;
 	max-width: calc(100% - 52px);
+	row-gap: 12px;
 }
