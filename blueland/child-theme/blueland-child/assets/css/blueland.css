@@ -1161,7 +1161,7 @@ body .bl-eyebrow, body .bl-label, body .bl-footer-links h3, body .bl-kit-grid h3
 #header .header-cart-link:hover .cart-icon > svg,
 #header .account-item:hover .bl-outline-icon svg { stroke: var(--bl-blue); }
 #header .account-item .nav-top-link { align-items: center; display: inline-flex; }
-#header .account-item .nav-top-link::after { color: var(--bl-navy); content: "⌄"; font-size: 14px; margin-left: 3px; }
+
 #header .account-item { margin-left: 24px !important; margin-right: 8px !important; }
 #header .cart-item { margin-left: 24px !important; margin-right: 0 !important; }
 .bl-promo-cell { border-radius: 8px; overflow: hidden; }
@@ -1464,4 +1464,76 @@ body .bl-eyebrow, body .bl-label, body .bl-footer-links h3, body .bl-kit-grid h3
 
 .product-small .grid-tools .bl-quick-add:hover {
 	box-shadow: 0 6px 16px rgba(11, 16, 87, 0.24);
+}
+
+/* Parent menu / mega menu chevrons */
+#header {
+	--bl-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E");
+}
+
+.bl-right-dropdown > a,
+#header .bl-shop-menu-item > a.nav-top-link,
+#header .account-item .nav-top-link {
+	align-items: center;
+	display: inline-flex;
+	gap: 5px;
+}
+
+.bl-right-dropdown > a .bl-chevron {
+	fill: none;
+	flex: 0 0 auto;
+	height: 12px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.6;
+	transition: transform 0.2s ease;
+	width: 12px;
+}
+
+#header .bl-shop-menu-item > a.nav-top-link::after,
+#header .account-item .nav-top-link::after {
+	background: currentColor;
+	content: "";
+	display: block;
+	flex: 0 0 auto;
+	height: 12px;
+	margin: 0;
+	-webkit-mask: var(--bl-chevron) center / contain no-repeat;
+	mask: var(--bl-chevron) center / contain no-repeat;
+	transition: transform 0.2s ease;
+	width: 12px;
+}
+
+.bl-right-dropdown:hover > a .bl-chevron,
+.bl-right-dropdown:focus-within > a .bl-chevron,
+#header .bl-shop-menu-item:hover > a.nav-top-link::after,
+#header .bl-shop-menu-item:focus-within > a.nav-top-link::after,
+#header .account-item:hover .nav-top-link::after,
+#header .account-item.current-dropdown .nav-top-link::after {
+	transform: rotate(180deg);
+}
+
+.bl-right-dropdown > a:hover,
+.bl-right-dropdown:focus-within > a {
+	color: var(--bl-blue);
+}
+
+.bl-right-dropdown ul {
+	margin-top: 10px;
+}
+
+.bl-right-dropdown ul::before {
+	content: "";
+	height: 12px;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: -12px;
+}
+
+#header .bl-right-dropdown ul {
+	border-radius: 8px;
+	left: -18px;
+	padding: 10px 18px;
 }

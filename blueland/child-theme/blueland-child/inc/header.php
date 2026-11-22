@@ -71,7 +71,7 @@ add_shortcode(
 	'bl_right_nav',
 	function () {
 		$search = do_shortcode( '[bl_search]' );
-		return '<div class="bl-right-nav"><div class="bl-right-dropdown"><a href="' . esc_url( home_url( '/about-us/' ) ) . '">About Us <span>⌄</span></a><ul><li><a href="' . esc_url( home_url( '/about-us/' ) ) . '">Who We Are</a></li><li><a href="' . esc_url( home_url( '/certifications/' ) ) . '">Certifications</a></li></ul></div><div class="bl-right-dropdown"><a href="' . esc_url( home_url( '/our-mission/' ) ) . '">Our Mission <span>⌄</span></a><ul><li><a href="' . esc_url( home_url( '/our-mission/' ) ) . '">Our Approach</a></li><li><a href="' . esc_url( home_url( '/faq/' ) ) . '">FAQs</a></li></ul></div>' . $search . '</div>';
+		return '<div class="bl-right-nav"><div class="bl-right-dropdown"><a href="' . esc_url( home_url( '/about-us/' ) ) . '">About Us<svg class="bl-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M3 4.5 6 7.5 9 4.5"></path></svg></a><ul><li><a href="' . esc_url( home_url( '/about-us/' ) ) . '">Who We Are</a></li><li><a href="' . esc_url( home_url( '/certifications/' ) ) . '">Certifications</a></li></ul></div><div class="bl-right-dropdown"><a href="' . esc_url( home_url( '/our-mission/' ) ) . '">Our Mission<svg class="bl-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M3 4.5 6 7.5 9 4.5"></path></svg></a><ul><li><a href="' . esc_url( home_url( '/our-mission/' ) ) . '">Our Approach</a></li><li><a href="' . esc_url( home_url( '/faq/' ) ) . '">FAQs</a></li></ul></div>' . $search . '</div>';
 	}
 );
 
