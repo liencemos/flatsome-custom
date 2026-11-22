@@ -14,6 +14,11 @@ function signal_check( $condition, $message ) {
 }
 
 signal_check( 'flatsome' === get_template() && 'solana-merch-child' === get_stylesheet() && class_exists( 'WooCommerce' ), 'Expected WooCommerce, Flatsome and its Signal Supply child theme.' );
+foreach ( array( 'header_color', 'content_color', 'footer_bottom_text' ) as $setting ) {
+	signal_check( 'light' === get_theme_mod( $setting ), "Expected Flatsome light text mode for {$setting}." );
+}
+$logo = get_theme_mod( 'site_logo' );
+signal_check( $logo && hash_file( 'sha256', get_stylesheet_directory() . '/assets/art/wordmark.png' ) === get_post_meta( $logo, '_signal_art_hash', true ), 'Expected the current light wordmark version in the media library.' );
 $home = get_post( get_option( 'page_on_front' ) );
 signal_check( $home && has_shortcode( $home->post_content, 'ux_products' ) && false === strpos( $home->post_content, '{{' ), 'Home must contain the seeded Flatsome product grid without unresolved placeholders.' );
 signal_check( 'no-sidebar' === get_theme_mod( 'product_layout' ), 'Expected the native no-sidebar product template.' );

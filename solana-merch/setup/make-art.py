@@ -7,6 +7,7 @@ from PIL import Image
 
 OUT = Path(__file__).resolve().parents[1] / "child-theme/solana-merch-child/assets/art"
 INK, PRUSSIAN, NAVY, BUS, GOLD = "#000814", "#001D3D", "#003566", "#FFC300", "#FFD60A"
+PAPER, FOG, MIST, GRAPHITE = "#FAFAFA", "#EAEAEA", "#F3F3F3", "#262626"
 TEES = ("carrier-wave", "night-grid", "orbital-index", "relay-station", "static-field", "after-hours")
 HATS = ("receiver-cap", "sideband-cap", "orbit-cap", "uplink-cap", "field-cap", "nightshift-cap")
 
@@ -79,20 +80,19 @@ def garment(hat, index, colorway):
     """
 
 
-def backdrop(w, h, warm):
-    a, b = (GOLD, BUS) if warm else (PRUSSIAN, INK)
-    line = INK if warm else NAVY
+def backdrop(w, h, contrast):
+    a, b = (PAPER, FOG) if contrast else (PAPER, MIST)
     return f"""
       <defs>
         <radialGradient id="back"><stop stop-color="{a}"/><stop offset="1" stop-color="{b}"/></radialGradient>
         <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-          <path d="M32 0H0V32" fill="none" stroke="{line}" opacity=".27"/>
+          <path d="M32 0H0V32" fill="none" stroke="{GRAPHITE}" opacity=".16"/>
         </pattern>
       </defs>
       <rect width="{w}" height="{h}" fill="url(#back)"/>
       <rect width="{w}" height="{h}" fill="url(#grid)"/>
       <path d="M28 52V28h24m{w-104} 0h24v24m0 {h-104}v24h-24m-{w-104} 0H28v-24"
-        fill="none" stroke="{line}" stroke-width="2" opacity=".68"/>
+        fill="none" stroke="{GRAPHITE}" stroke-width="2" opacity=".62"/>
     """
 
 
@@ -102,14 +102,14 @@ def raster(name, w, h, body, grain=True, png=False):
     if grain:
         rng = Random(31)
         noise = Image.frombytes("L", photo.size, rng.randbytes(w * h)).point(lambda x: x // 28)
-        photo = Image.composite(Image.new("RGB", photo.size, INK), photo.convert("RGB"), noise)
+        photo = Image.composite(Image.new("RGB", photo.size, GRAPHITE), photo.convert("RGB"), noise)
     if png:
         photo.save(OUT / f"{name}.png", optimize=True)
     else:
         photo.save(OUT / f"{name}.webp", quality=84, method=6)
 
 
-def studio(name, hat, index, colorway, *, wide=False, warm=False, detail=False):
+def studio(name, hat, index, colorway, *, wide=False, contrast=False, detail=False):
     w = 800
     h = 450 if wide else 760
     scale = 1 if wide else 1.125
@@ -117,12 +117,11 @@ def studio(name, hat, index, colorway, *, wide=False, warm=False, detail=False):
         at = f"translate(-{370 if hat else 558} -300) scale(3)"
     else:
         at = f"translate({(w - 640 * scale) / 2} {-101 if wide else 25 if hat else 10}) scale({scale})"
-    label_color = INK if warm else GOLD
-    cross = f'<path d="M{w/2-9} 40h18m-9-9v18M{w/2-9} {h-40}h18m-9-9v18" stroke="{label_color}" opacity=".55"/>'
+    cross = f'<path d="M{w/2-9} 40h18m-9-9v18M{w/2-9} {h-40}h18m-9-9v18" stroke="{GRAPHITE}" opacity=".55"/>'
     title = "FIELD CAPS" if wide and hat else "GRAPHIC TEES" if wide else "SIGNAL / SUPPLY"
     foot = "SIGNAL FIELD MANUAL / VOL. 01" if wide else f"FIG. {index + 1:02d} / {'DETAIL' if detail else colorway.upper()}"
-    raster(name, w, h, backdrop(w, h, warm) + cross + f'<g transform="{at}">' + garment(hat, index, colorway) + "</g>"
-           + label(47, 49, title, 12, label_color, 'letter-spacing="2"') + label(47, h - 43, foot, 12, label_color, 'letter-spacing="2"'))
+    raster(name, w, h, backdrop(w, h, contrast) + cross + f'<g transform="{at}">' + garment(hat, index, colorway) + "</g>"
+           + label(47, 49, title, 12, GRAPHITE, 'letter-spacing="2"') + label(47, h - 43, foot, 12, GRAPHITE, 'letter-spacing="2"'))
 
 
 def main():
@@ -130,22 +129,22 @@ def main():
     for hat, names in ((False, TEES), (True, HATS)):
         for index, name in enumerate(names):
             for tone in ("ink", "navy"):
-                studio(f"{name}-{tone}", hat, index, tone, warm=(index + hat) % 3 == 0)
-            studio(f"{name}-detail", hat, index, "ink", detail=True, warm=(index + hat) % 3 == 0)
+                studio(f"{name}-{tone}", hat, index, tone, contrast=(index + hat) % 3 == 0)
+            studio(f"{name}-detail", hat, index, "ink", detail=True, contrast=(index + hat) % 3 == 0)
     studio("collection-tees", False, 2, "navy", wide=True)
-    studio("collection-hats", True, 0, "ink", wide=True, warm=True)
+    studio("collection-hats", True, 0, "ink", wide=True, contrast=True)
     w, h = 840, 748
     raster("hero", w, h, backdrop(w, h, True) +
-           f'<circle cx="424" cy="345" r="257" fill="none" stroke="{INK}" stroke-width="1" opacity=".3"/>'
-           f'<circle cx="424" cy="345" r="229" fill="none" stroke="{INK}" stroke-width="1" opacity=".24"/>'
+           f'<circle cx="424" cy="345" r="257" fill="none" stroke="{GRAPHITE}" stroke-width="1" opacity=".3"/>'
+           f'<circle cx="424" cy="345" r="229" fill="none" stroke="{GRAPHITE}" stroke-width="1" opacity=".24"/>'
            '<g transform="translate(22 -10) rotate(-10 370 350) scale(1.22)">' + garment(False, 0, "ink") + "</g>"
-           + label(49, 53, "SIG / 001", 15, INK, 'letter-spacing="3"')
-           + label(785, 53, "01—26", 15, INK, 'text-anchor="end" letter-spacing="3"')
-           + label(49, 691, "CARRIER WAVE / GRAPHIC TEE", 13, INK, 'letter-spacing="2"')
-           + label(788, 691, "FIG. 01", 13, INK, 'text-anchor="end" letter-spacing="2"'))
+           + label(49, 53, "SIG / 001", 15, GRAPHITE, 'letter-spacing="3"')
+           + label(785, 53, "01—26", 15, GRAPHITE, 'text-anchor="end" letter-spacing="3"')
+           + label(49, 691, "CARRIER WAVE / GRAPHIC TEE", 13, GRAPHITE, 'letter-spacing="2"')
+           + label(788, 691, "FIG. 01", 13, GRAPHITE, 'text-anchor="end" letter-spacing="2"'))
     raster("wordmark", 422, 76,
            f'<path d="M0 0h76v76H0z" fill="{BUS}"/><path d="M12 39h12l7-17 9 34 10-31 6 14h8" fill="none" stroke="{INK}" stroke-width="4"/>'
-           + label(92, 54, "SIGNAL / SUPPLY", 34, GOLD, 'font-weight="bold" letter-spacing="2"'),
+           + label(92, 54, "SIGNAL / SUPPLY", 34, GRAPHITE, 'font-weight="bold" letter-spacing="2"'),
            grain=False, png=True)
 
 

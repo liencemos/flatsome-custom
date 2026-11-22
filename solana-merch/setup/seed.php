@@ -49,11 +49,18 @@ function signal_seed_post( $type, $slug, $title, $content ) {
 }
 
 function signal_seed_media( $file, $alt ) {
+	$source = get_stylesheet_directory() . '/assets/art/' . $file;
+	$hash   = is_readable( $source ) ? hash_file( 'sha256', $source ) : false;
+	if ( ! $hash ) {
+		WP_CLI::error( "Could not read {$file} for media import." );
+	}
 	$existing = get_posts( array(
 		'post_type'      => 'attachment',
 		'post_status'    => 'inherit',
-		'meta_key'       => '_signal_art',
-		'meta_value'     => $file,
+		'meta_query'     => array(
+			array( 'key' => '_signal_art', 'value' => $file ),
+			array( 'key' => '_signal_art_hash', 'value' => $hash ),
+		),
 		'fields'         => 'ids',
 		'posts_per_page' => 1,
 	) );
@@ -61,7 +68,7 @@ function signal_seed_media( $file, $alt ) {
 		return (int) $existing[0];
 	}
 	$temp = wp_tempnam( $file );
-	if ( ! $temp || ! copy( get_stylesheet_directory() . '/assets/art/' . $file, $temp ) ) {
+	if ( ! $temp || ! copy( $source, $temp ) ) {
 		WP_CLI::error( "Could not stage {$file} for media import." );
 	}
 	$id = media_handle_sideload( array( 'name' => 'signal-' . $file, 'tmp_name' => $temp ), 0, $alt );
@@ -70,6 +77,7 @@ function signal_seed_media( $file, $alt ) {
 	}
 	signal_seed_result( $id );
 	update_post_meta( $id, '_signal_art', $file );
+	update_post_meta( $id, '_signal_art_hash', $hash );
 	update_post_meta( $id, '_wp_attachment_image_alt', $alt );
 	return $id;
 }
@@ -274,7 +282,7 @@ $links = array(
 	'cart_url'    => esc_url( wc_get_cart_url() ),
 );
 $home = signal_seed_post( 'page', 'signal-home', 'Home', signal_seed_render( 'homepage', $links + array(
-	'hero_image'   => signal_seed_media( 'hero.webp', 'Carrier Wave Tee on a gold technical grid' ),
+	'hero_image'   => signal_seed_media( 'hero.webp', 'Carrier Wave Tee on a neutral technical grid' ),
 	'tees_image'   => $tees_image,
 	'hats_image'   => $hats_image,
 	'featured_ids' => implode( ',', array_intersect_key( $products, array_flip( array( 'carrier-wave', 'night-grid', 'receiver-cap', 'sideband-cap' ) ) ) ),
@@ -317,12 +325,12 @@ signal_seed_menu( array(
 $logo = signal_seed_media( 'wordmark.png', 'Signal Supply' );
 $mods = array(
 	'site_logo'                      => $logo,
-	'site_logo_dark'                 => $logo,
+	'site_logo_dark'                 => '',
 	'logo_width'                     => 168,
 	'logo_position'                  => 'left',
 	'logo_position_mobile'           => 'center',
-	'header_bg'                      => '#000814',
-	'header_color'                   => 'dark',
+	'header_bg'                      => '#FFFFFF',
+	'header_color'                   => 'light',
 	'header_height'                  => 72,
 	'header_elements_left'           => array( 'nav' ),
 	'header_elements_right'          => array( 'search', 'account', 'cart' ),
@@ -339,17 +347,17 @@ $mods = array(
 	'header_sticky'                  => 1,
 	'body_layout'                    => 'full-width',
 	'site_width'                     => 1280,
-	'body_bg'                        => '#000814',
-	'content_bg'                     => '#000814',
-	'content_color'                  => 'dark',
-	'color_primary'                  => '#FFC300',
-	'color_secondary'                => '#FFD60A',
-	'color_texts'                    => '#FFD60A',
-	'color_links'                    => '#FFD60A',
-	'color_links_hover'              => '#FFC300',
-	'type_headings_color'            => '#FFD60A',
-	'color_regular_price'            => '#FFD60A',
-	'color_divider'                  => '#003566',
+	'body_bg'                        => '#F8F8F8',
+	'content_bg'                     => '#F8F8F8',
+	'content_color'                  => 'light',
+	'color_primary'                  => '#272727',
+	'color_secondary'                => '#535353',
+	'color_texts'                    => '#272727',
+	'color_links'                    => '#272727',
+	'color_links_hover'              => '#000814',
+	'type_headings_color'            => '#000814',
+	'color_regular_price'            => '#272727',
+	'color_divider'                  => '#DEDEDE',
 	'type_headings'                  => array( 'font-family' => 'Space Grotesk', 'variant' => '700' ),
 	'type_texts'                     => array( 'font-family' => 'Manrope', 'variant' => '400' ),
 	'type_nav'                       => array( 'font-family' => 'Manrope', 'variant' => '700' ),
@@ -368,8 +376,8 @@ $mods = array(
 	'product_layout'                 => 'no-sidebar',
 	'product_image_width'            => 6,
 	'footer_block'                   => $footer,
-	'footer_bottom_color'            => '#000814',
-	'footer_bottom_text'             => 'dark',
+	'footer_bottom_color'            => '#FFFFFF',
+	'footer_bottom_text'             => 'light',
 	'footer_left_text'               => '© ' . gmdate( 'Y' ) . ' SIGNAL SUPPLY / STOREFRONT DEMO',
 	'payment_icons_placement'        => array(),
 );

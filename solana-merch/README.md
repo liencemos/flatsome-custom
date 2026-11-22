@@ -1,14 +1,14 @@
 # Signal Supply — giao diện Flatsome cho áo in và mũ
 
-Signal Supply dùng bố cục dạng chỉ mục, nhãn monospace, đường viền mảnh và các mảng nền tối lấy cảm hứng từ [Solana AI Design Language](https://solana.ai/docs). Logo, hình minh họa và họa tiết sản phẩm là thiết kế riêng. Nội dung demo dùng tiếng Anh (Mỹ); tiền tệ demo là USD.
+Signal Supply chỉ có **Light Mode**, không có nút chuyển giao diện. Bố cục dạng chỉ mục, nhãn monospace và đường viền mảnh lấy cảm hứng từ [Solana AI Design Language](https://solana.ai/docs). Nền website, thẻ và phông ảnh sản phẩm dùng trắng/xám trung tính; bảng màu thương hiệu dành cho nút, vài điểm nhấn và họa tiết sản phẩm. Logo và hình minh họa là thiết kế riêng. Nội dung demo dùng tiếng Anh (Mỹ); tiền tệ demo là USD.
 
 | Token | Mã màu | Vai trò |
 |---|---|---|
-| Ink Black | `#000814` | Nền chính |
-| Prussian Blue | `#001D3D` | Bề mặt thẻ, chân trang |
-| Oxford Navy | `#003566` | Viền, ô lưới và bề mặt tương tác |
-| School Bus Yellow | `#FFC300` | Nút chính và nhấn mạnh |
-| Gold | `#FFD60A` | Tiêu đề, chữ và họa tiết |
+| Ink Black | `#000814` | Tiêu đề và chữ trên nút vàng |
+| Prussian Blue | `#001D3D` | Chữ trên nút viền và họa tiết |
+| Oxford Navy | `#003566` | Viền nút, nhãn nhỏ và chỉ báo focus |
+| School Bus Yellow | `#FFC300` | Nút chính và gạch chân liên kết bộ sưu tập |
+| Gold | `#FFD60A` | Trạng thái hover và điểm nhấn nhỏ |
 
 Typography trong **Flatsome → Theme Options → Style → Typography**: Space Grotesk (tiêu đề), Manrope (nội dung và menu), IBM Plex Mono (nhãn kỹ thuật). Bản demo tải Google Fonts qua CDN; có thể tắt tùy chọn CDN để Flatsome lưu font cục bộ.
 
@@ -30,18 +30,18 @@ Yêu cầu: WordPress, WooCommerce, Flatsome có bản quyền, WP-CLI và thư 
 
    Có thể dùng `--path=/path/to/wordpress` nếu chạy nơi khác. Giữ `setup/` và `ux-builder/` trong cùng gói khi chạy seed. Nếu site dùng Apache và gặp 404, lưu lại **Settings → Permalinks** để WordPress cập nhật cấu hình rewrite.
 
-Seed tạo 2 danh mục và 12 sản phẩm biến thể (6 áo, 6 mũ); áo có S/M/L/XL, mũ có One size, cả hai có Ink/Navy. Mỗi sản phẩm có ảnh chính, ảnh chi tiết và ảnh màu thay thế. Chạy lại cập nhật nội dung demo đã seed, không phải cách đồng bộ nội dung đã chỉnh tay; script dừng nếu gặp slug trang, block, danh mục hoặc SKU trùng với dữ liệu không phải demo.
+Seed tạo 2 danh mục và 12 sản phẩm biến thể (6 áo, 6 mũ); áo có S/M/L/XL, mũ có One size, cả hai có Ink/Navy. Mỗi sản phẩm có ảnh chính, ảnh chi tiết và ảnh màu thay thế. Sau khi cập nhật child theme, chạy lại seed trên site demo để áp dụng tùy chọn Light Mode và ảnh mới. Seed giữ ảnh đã nhập trước đó trong Media Library để không làm hỏng các liên kết cũ. Chạy lại cập nhật nội dung demo đã seed, không phải cách đồng bộ nội dung đã chỉnh tay; script dừng nếu gặp slug trang, block, danh mục hoặc SKU trùng với dữ liệu không phải demo.
 
 ## Demo và vị trí chỉnh sửa
 
 | Trang | Đường dẫn mặc định | Desktop | Mobile |
 |---|---|---|---|
-| Homepage | `/` | [Ảnh](previews/home-desktop.webp) | [Ảnh](previews/home-mobile.webp) |
-| Category Page — Graphic tees | `/product-category/t-shirts/` | [Ảnh](previews/category-desktop.webp) | [Ảnh](previews/category-mobile.webp) |
-| Product Page — Carrier Wave Tee | `/product/carrier-wave/` | [Ảnh](previews/product-desktop.webp) | [Ảnh](previews/product-mobile.webp) |
-| Shop | `/shop/` | [Ảnh](previews/shop-desktop.webp) | — |
-| Cart | `/cart/` | [Ảnh](previews/cart-desktop.webp) | — |
-| Mini-cart | Mở biểu tượng túi hàng | [Ảnh](previews/mini-cart-desktop.webp) | — |
+| Homepage | `/` | [Ảnh](previews/home-desktop-light.webp) | [Ảnh](previews/home-mobile-light.webp) |
+| Category Page — Graphic tees | `/product-category/t-shirts/` | [Ảnh](previews/category-desktop-light.webp) | [Ảnh](previews/category-mobile-light.webp) |
+| Product Page — Carrier Wave Tee | `/product/carrier-wave/` | [Ảnh](previews/product-desktop-light.webp) | [Ảnh](previews/product-mobile-light.webp) |
+| Shop | `/shop/` | [Ảnh](previews/shop-desktop-light.webp) | — |
+| Cart | `/cart/` | [Ảnh](previews/cart-desktop-light.webp) | — |
+| Mini-cart | Mở biểu tượng túi hàng | [Ảnh](previews/mini-cart-desktop-light.webp) | — |
 
 - **Homepage:** Pages → Home → **Edit with UX Builder**. Dùng Section, Row, Column, Text, Image, Button và Products gốc; template Page – Full Width của Flatsome.
 - **Category/Shop:** sản phẩm, breadcrumb, phân trang và sắp xếp do WooCommerce/Flatsome hiển thị. Mở các khối **Signal Supply — Graphic tees / Field caps / The collection** trong **UX Blocks** để sửa banner với UX Builder. Đổi block của từng danh mục tại **Products → Categories → Top Content**; đổi block Shop hoặc bật sidebar/bộ lọc trong **Theme Options → WooCommerce → Product Catalog**.
