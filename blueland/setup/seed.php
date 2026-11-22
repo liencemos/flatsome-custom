@@ -744,8 +744,41 @@ function bl_seed_storefront() {
 		delete_post_meta( $shop_id, '_wp_page_template' );
 	}
 	$checkout_id = wc_get_page_id( 'checkout' );
+	$mcwc_logo_id = bl_seed_asset( 'pureland-wordmark.png', 'Pureland wordmark' );
+	foreach (
+		array(
+			'mcwc_enabled'                       => 'yes',
+			'mcwc_logo_id'                       => $mcwc_logo_id,
+			'mcwc_logo_max_height'               => 32,
+			'mcwc_primary_color'                 => '#133cd1',
+			'mcwc_text_color'                    => '#0b1057',
+			'mcwc_muted_color'                   => '#5b6190',
+			'mcwc_summary_background'            => '#f0f7ff',
+			'mcwc_border_color'                  => '#dfe3ef',
+			'mcwc_font'                          => 'DM Sans',
+			'mcwc_input_radius'                  => 8,
+			'mcwc_button_radius'                 => 999,
+			'mcwc_header_right_text'             => 'Secure Checkout',
+			'mcwc_trust_1_text'                  => 'Free shipping on $50+',
+			'mcwc_trust_1_icon'                  => 'truck',
+			'mcwc_trust_2_text'                  => '100-day returns',
+			'mcwc_trust_2_icon'                  => 'return',
+			'mcwc_trust_3_text'                  => 'Secure checkout',
+			'mcwc_trust_3_icon'                  => 'lock',
+			'mcwc_show_free_shipping'             => 'yes',
+			'mcwc_show_coupon'                   => 'yes',
+			'mcwc_show_order_notes'              => 'yes',
+			'mcwc_free_shipping_threshold_override' => '',
+			'mcwc_exclude_virtual'               => 'yes',
+		) as $option_name => $option_value
+	) {
+		update_option( $option_name, $option_value );
+	}
 	if ( $checkout_id > 0 ) {
 		$checkout_page = get_post( $checkout_id );
+		if ( $checkout_page && function_exists( 'has_block' ) && has_block( 'woocommerce/checkout', $checkout_page ) && false === get_option( 'mcwc_previous_checkout_content', false ) ) {
+			update_option( 'mcwc_previous_checkout_content', $checkout_page->post_content, false );
+		}
 		if ( $checkout_page && '[woocommerce_checkout]' !== trim( $checkout_page->post_content ) ) {
 			wp_update_post(
 				array(
