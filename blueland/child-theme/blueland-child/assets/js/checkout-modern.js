@@ -172,18 +172,47 @@
 			const notice = form.querySelector('.woocommerce-NoticeGroup-checkout, .woocommerce-error');
 			const fieldNotice = form.querySelector('.woocommerce-NoticeGroup-checkout li[data-id], .woocommerce-error li[data-id]');
 			const fieldName = fieldNotice?.getAttribute('data-id') || '';
+			const invalidField = fieldName ? getField(fieldName) : null;
+			const fieldPanel = invalidField?.closest('[data-co-panel]');
 			let step = 'information';
-			if (/^(shipping_method|shipping_)/.test(fieldName)) step = stepNames.includes('shipping') ? 'shipping' : 'information';
-			else if (/^(payment_method|terms)/.test(fieldName)) step = 'payment';
+			if (fieldPanel) step = fieldPanel.dataset.coPanel;
+			else if (/^(shipping_method|order_comments|gift_wrap)/.test(fieldName)) step = stepNames.includes('shipping') ? 'shipping' : 'information';
+			else if (/^(payment_method|payment|terms)/.test(fieldName)) step = 'payment';
 			const firstPanel = panels.find((panel) => panel.dataset.coPanel === step);
 			furthestStep = Math.max(furthestStep, stepNames.indexOf(step));
 			setStep(step);
 			if (notice && firstPanel && !firstPanel.contains(notice)) {
 				firstPanel.querySelector('h1')?.after(notice);
 			}
-			const invalidField = fieldName ? getField(fieldName) : null;
 			(invalidField || firstPanel?.querySelector('h1'))?.focus();
 		}, 0);
+	});
+
+	const applyCoupon = () => {
+		const input = form.querySelector('#bl-co-coupon-code');
+		const notice = form.querySelector('.bl-co-coupon-notice');
+		const code = input?.value.trim();
+		if (!code || !window.wc_checkout_params) return;
+		const url = wc_checkout_params.wc_ajax_url.toString().replace('%%endpoint%%', 'apply_coupon');
+		$.post(url, {
+			security: wc_checkout_params.apply_coupon_nonce,
+			coupon_code: code,
+			billing_email: getField('billing_email')?.value.trim() || ''
+		})
+			.done((response) => {
+				const message = new DOMParser().parseFromString(response, 'text/html').querySelector('.woocommerce-error, .woocommerce-message');
+				if (notice) notice.textContent = message?.textContent.trim() || '';
+				$(document.body).trigger('update_checkout');
+			})
+			.fail(() => {
+				if (notice) notice.textContent = 'We could not apply that code. Please try again.';
+			});
+	};
+
+	form.addEventListener('keydown', (event) => {
+		if (event.key !== 'Enter' || event.target.id !== 'bl-co-coupon-code') return;
+		event.preventDefault();
+		form.querySelector('[data-co-coupon-apply]')?.click();
 	});
 
 	form.addEventListener('click', (event) => {
@@ -196,20 +225,7 @@
 			if (!couponForm.hidden) couponForm.querySelector('input')?.focus();
 		}
 		if (event.target.closest('[data-co-coupon-apply]')) {
-			const input = form.querySelector('#bl-co-coupon-code');
-			const notice = form.querySelector('.bl-co-coupon-notice');
-			const code = input?.value.trim();
-			if (!code || !window.wc_checkout_params) return;
-			const url = wc_checkout_params.wc_ajax_url.toString().replace('%%endpoint%%', 'apply_coupon');
-			$.post(url, { security: wc_checkout_params.apply_coupon_nonce, coupon_code: code })
-				.done((response) => {
-					const message = new DOMParser().parseFromString(response, 'text/html').querySelector('.woocommerce-error, .woocommerce-message');
-					if (notice) notice.textContent = message?.textContent.trim() || '';
-					$(document.body).trigger('update_checkout');
-				})
-				.fail(() => {
-					if (notice) notice.textContent = 'We could not apply that code. Please try again.';
-				});
+			applyCoupon();
 		}
 	});
 
