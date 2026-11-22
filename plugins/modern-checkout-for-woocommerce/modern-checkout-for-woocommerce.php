@@ -50,18 +50,18 @@ add_action( 'init', 'mcwc_load_textdomain', 0 );
 add_action( 'plugins_loaded', 'mcwc_bootstrap', 20 );
 
 function mcwc_restore_checkout_content() {
-	$checkout_id = function_exists( 'wc_get_page_id' ) ? wc_get_page_id( 'checkout' ) : 0;
-	$previous    = get_option( 'mcwc_previous_checkout_content', false );
-	$page        = $checkout_id > 0 ? get_post( $checkout_id ) : null;
-
-	if ( $page && '[woocommerce_checkout]' === $page->post_content && false !== $previous ) {
-		wp_update_post(
-			array(
-				'ID'           => $checkout_id,
-				'post_content' => wp_slash( $previous ),
-			)
-		);
-		delete_option( 'mcwc_previous_checkout_content' );
+	$previous = get_option( 'mcwc_previous_checkout_content', false );
+	if ( is_array( $previous ) && ! empty( $previous['page_id'] ) && isset( $previous['content'] ) ) {
+		$page = get_post( absint( $previous['page_id'] ) );
+		if ( $page && '[woocommerce_checkout]' === $page->post_content && is_string( $previous['content'] ) ) {
+			wp_update_post(
+				array(
+					'ID'           => $page->ID,
+					'post_content' => wp_slash( $previous['content'] ),
+				)
+			);
+		}
 	}
+	delete_option( 'mcwc_previous_checkout_content' );
 }
 register_deactivation_hook( MCWC_FILE, 'mcwc_restore_checkout_content' );

@@ -25,8 +25,16 @@ function mcwc_switch_checkout_block_to_shortcode() {
 	if ( ! $page || ! has_block( 'woocommerce/checkout', $page ) ) {
 		return;
 	}
-	if ( false === get_option( 'mcwc_previous_checkout_content', false ) ) {
-		update_option( 'mcwc_previous_checkout_content', $page->post_content, false );
+	$previous = get_option( 'mcwc_previous_checkout_content', false );
+	if ( ! is_array( $previous ) || absint( $previous['page_id'] ?? 0 ) !== (int) $page->ID ) {
+		update_option(
+			'mcwc_previous_checkout_content',
+			array(
+				'page_id' => (int) $page->ID,
+				'content' => $page->post_content,
+			),
+			false
+		);
 	}
 	wp_update_post(
 		array(
