@@ -92,7 +92,8 @@ wp_cli theme activate blueland-child
 wp_cli language core install en_US --activate
 wp_cli eval-file "$SEED_PATH"
 wp_cli media regenerate --yes
-wp_cli option update permalink_structure '/%postname%/'
+# Set via PHP so Git Bash on Windows does not rewrite the leading "/" into a filesystem path.
+wp_cli eval "update_option( 'permalink_structure', '/%postname%/' ); flush_rewrite_rules( true );"
 wp_cli rewrite flush --hard
 wp_cli cache flush >/dev/null
 
