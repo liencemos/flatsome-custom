@@ -49,7 +49,7 @@ add_shortcode(
 	'bl_product_badges',
 	function () {
 		global $product;
-		return bl_product_badges_markup( $product );
+		return bl_product_badges_markup( $product ) . ( function_exists( 'bl_stock_status_badges_markup' ) ? bl_stock_status_badges_markup( $product ) : '' );
 	}
 );
 
@@ -166,12 +166,15 @@ add_shortcode(
 				'order'   => 'DESC',
 			)
 		);
-		$html = '<div class="bl-review-controls"><div class="bl-review-chips"><button class="is-active" data-review-rating="all" type="button">All Reviews</button><button data-review-rating="5" type="button">5 Stars</button><button data-review-rating="4" type="button">4 Stars</button><button data-review-rating="3" type="button">3 Stars &amp; Below</button></div><div><button class="bl-write-review" type="button">Write a Review</button></div></div><div class="bl-review-list" data-visible-count="6">';
+		$html = '<div class="bl-review-controls"><div class="bl-review-chips"><button class="is-active" data-review-rating="all" type="button">All Reviews</button><button data-review-rating="5" type="button">5 Stars</button><button data-review-rating="4" type="button">4 Stars</button><button data-review-rating="3" type="button">3 Stars &amp; Below</button><button data-review-rating="photos" type="button">With Photos</button></div><div><button class="bl-write-review" type="button">Write a Review</button></div></div><div class="bl-review-list" data-visible-count="6">';
 		foreach ( $reviews as $index => $review ) {
 			$rating = absint( get_comment_meta( $review->comment_ID, 'rating', true ) );
 			$title = get_comment_meta( $review->comment_ID, '_bl_review_title', true );
 			$hidden = $index >= 6 ? ' hidden' : '';
-			$html .= '<article class="bl-review-card" data-rating="' . esc_attr( (string) $rating ) . '"' . $hidden . '><div class="bl-review-author"><strong>' . esc_html( $review->comment_author ) . '</strong><span>Verified Buyer</span><small>Reviewing ' . esc_html( $product->get_name() ) . '</small></div><div><p class="bl-review-stars">' . esc_html( str_repeat( '★', min( 5, $rating ) ) ) . '</p><h3>' . esc_html( $title ? $title : 'A simple everyday favorite' ) . '</h3><p>' . esc_html( $review->comment_content ) . '</p><small class="bl-review-date">' . esc_html( get_comment_date( 'F j, Y', $review ) ) . '</small></div></article>';
+			$filled_stars = min( 5, max( 0, $rating ) );
+			$stars = '<span class="bl-review-stars-filled">' . str_repeat( '★', $filled_stars ) . '</span><span class="bl-review-stars-empty">' . str_repeat( '★', 5 - $filled_stars ) . '</span>';
+			$photos = function_exists( 'bl_review_photos_markup' ) ? bl_review_photos_markup( $review->comment_ID ) : '';
+			$html .= '<article class="bl-review-card" data-rating="' . esc_attr( (string) $rating ) . '"' . $hidden . '><div class="bl-review-author"><strong>' . esc_html( $review->comment_author ) . '</strong><span>Verified Buyer</span><small>Reviewing ' . esc_html( $product->get_name() ) . '</small></div><div><p class="bl-review-stars" aria-label="' . esc_attr( $filled_stars . ' out of 5 stars' ) . '">' . $stars . '</p><h3>' . esc_html( $title ? $title : 'A simple everyday favorite' ) . '</h3><p>' . esc_html( $review->comment_content ) . '</p>' . $photos . '<small class="bl-review-date">' . esc_html( get_comment_date( 'F j, Y', $review ) ) . '</small></div></article>';
 		}
 		$html .= '</div>';
 		if ( count( $reviews ) > 6 ) {
@@ -182,10 +185,12 @@ add_shortcode(
 			setup_postdata( $post );
 			ob_start();
 			$rating_field = '<p class="comment-form-rating"><label for="rating">Your rating</label><span class="stars"><select name="rating" id="rating" required><option value="">Rate…</option><option value="5">Perfect</option><option value="4">Good</option><option value="3">Average</option><option value="2">Not that bad</option><option value="1">Very poor</option></select></span></p>';
+			$photo_field = '<p class="comment-form-attachments"><label for="bl-review-photos">Add photos (JPEG, PNG, or WebP; up to 3)</label><input id="bl-review-photos" type="file" name="bl_review_photos[]" accept="image/jpeg,image/png,image/webp" multiple></p>';
+			$nonce_field = '<input type="hidden" name="bl_review_nonce" value="' . esc_attr( wp_create_nonce( 'bl_review_' . $product->get_id() ) ) . '"><label class="bl-review-honeypot" aria-hidden="true">Leave this field empty<input type="text" name="bl_review_website" tabindex="-1" autocomplete="off"></label>';
 			$comment_form = array(
 				'title_reply'   => 'Write a Review',
 				'label_submit'  => 'Submit Review',
-				'comment_field' => $rating_field . '<p class="comment-form-comment"><label for="comment">Your review</label><textarea id="comment" name="comment" cols="45" rows="8" required></textarea></p>',
+				'comment_field' => $rating_field . '<p class="comment-form-comment"><label for="comment">Your review</label><textarea id="comment" name="comment" cols="45" rows="8" required></textarea></p>' . $photo_field . $nonce_field,
 			);
 			comment_form( $comment_form, $product->get_id() );
 			$html .= '<div class="bl-review-form">' . ob_get_clean() . '</div>';

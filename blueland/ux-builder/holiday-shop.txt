@@ -1,0 +1,54 @@
+[section class="bl-holiday-hero" padding="72px 0px"]
+[row v_align="middle"]
+[col span="6" span__sm="12"]
+[ux_text]
+<p class="bl-eyebrow">Thoughtful gifting</p>
+<h1>Holiday Shop</h1>
+<p>Considered home essentials for every kind of home.</p>
+[/ux_text]
+[/col]
+[col span="6" span__sm="12"]
+[bl_image name="lifestyle"]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-holiday-gifts" padding="64px 0px"]
+[row]
+[col span="12"]
+[ux_text]
+<h2>Gift Sets</h2>
+<p>Ready-to-gift favorites for cleaner, simpler routines.</p>
+[/ux_text]
+[products category="holiday-shop" limit="4" columns="4"]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-holiday-gift-card" padding="52px 0px"]
+[row]
+[col span="12"]
+[bl_gift_card_feature]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-holiday-wrap" padding="28px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<p><strong>Gift-ready, thoughtfully wrapped.</strong> Add gift wrapping and a personal note at checkout.</p>
+[/ux_text]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-holiday-cutoff" padding="36px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<p class="bl-holiday-shipping-cutoff">Order by Dec 15 for delivery by Dec 24 with standard shipping</p>
+[/ux_text]
+[/col]
+[/row]
+[/section]

@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 add_shortcode(
 	'bl_newsletter',
 	function () {
-		return '<form class="bl-newsletter-form"><label class="screen-reader-text" for="bl-newsletter-email">Email address</label><input id="bl-newsletter-email" type="email" name="email" placeholder="Email Address" required><button type="submit" aria-label="Subscribe">→</button><p class="bl-newsletter-message" aria-live="polite">By signing up, you consent to our Privacy Policy. You may unsubscribe at any time.</p></form>';
+		return '<form class="bl-newsletter-form"><label class="screen-reader-text" for="bl-newsletter-email">Email address</label><input id="bl-newsletter-email" type="email" name="email" placeholder="Email Address" required><label class="bl-newsletter-honeypot" aria-hidden="true">Leave this field empty<input type="text" name="bl_newsletter_website" tabindex="-1" autocomplete="off"></label><button type="submit" aria-label="Subscribe">→</button><p class="bl-newsletter-message" aria-live="polite">By signing up, you consent to our Privacy Policy. You may unsubscribe at any time.</p></form>';
 	}
 );
 
@@ -16,6 +16,10 @@ add_action( 'wp_ajax_bl_newsletter', 'bl_newsletter_submit' );
 add_action( 'wp_ajax_nopriv_bl_newsletter', 'bl_newsletter_submit' );
 function bl_newsletter_submit() {
 	check_ajax_referer( 'bl_storefront', 'nonce' );
+	$honeypot = isset( $_POST['bl_newsletter_website'] ) ? sanitize_text_field( wp_unslash( $_POST['bl_newsletter_website'] ) ) : '';
+	if ( '' !== $honeypot ) {
+		wp_send_json_error( array( 'message' => 'Unable to process this request.' ), 400 );
+	}
 	$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 	if ( ! is_email( $email ) ) {
 		wp_send_json_error( array( 'message' => 'Enter a valid email address.' ), 400 );
@@ -23,7 +27,11 @@ function bl_newsletter_submit() {
 	$subscribers = get_option( 'bl_newsletter_emails', array() );
 	$subscribers[] = $email;
 	update_option( 'bl_newsletter_emails', array_values( array_unique( $subscribers ) ), false );
-	wp_send_json_success( array( 'message' => 'Thanks for subscribing!' ) );
+	$response = array( 'message' => 'Thanks for subscribing!' );
+	if ( isset( $_POST['source'] ) && 'popup' === sanitize_key( wp_unslash( $_POST['source'] ) ) ) {
+		$response['code'] = 'WELCOME10';
+	}
+	wp_send_json_success( $response );
 }
 
 add_shortcode(
@@ -32,7 +40,7 @@ add_shortcode(
 		$logos = array( 'Refill Ready', 'Thoughtful Design', 'Clear Information', 'Reusable Format', 'Everyday Use', 'Concentrated Formula', 'Low-Waste Choice', 'Made for Home' );
 		$html = '<div class="bl-certifications-grid">';
 		foreach ( $logos as $index => $label ) {
-			$html .= '<div><img src="' . esc_url( BL_CHILD_URL . '/assets/images/cert-' . ( $index + 1 ) . '.png' ) . '" alt=""><span>' . esc_html( $label ) . '</span></div>';
+			$html .= '<div><img src="' . esc_url( BL_CHILD_URL . '/assets/images/cert-' . ( $index + 1 ) . '.png' ) . '" alt="" loading="lazy" decoding="async"><span>' . esc_html( $label ) . '</span></div>';
 		}
 		return $html . '</div>';
 	}
@@ -60,7 +68,7 @@ add_shortcode(
 			}
 			$image_id = absint( get_term_meta( $term->term_id, 'thumbnail_id', true ) );
 			$image = $image_id ? wp_get_attachment_image_url( $image_id, 'woocommerce_thumbnail' ) : wc_placeholder_img_src();
-			$html .= '<a class="bl-home-category-card" href="' . esc_url( get_term_link( $term ) ) . '"><img loading="eager" decoding="async" src="' . esc_url( $image ) . '" alt=""><strong>' . esc_html( $term->name ) . ' →</strong><p>' . esc_html( $descriptions[ $slug ] ) . '</p></a>';
+			$html .= '<a class="bl-home-category-card" href="' . esc_url( get_term_link( $term ) ) . '"><img loading="lazy" decoding="async" src="' . esc_url( $image ) . '" alt=""><strong>' . esc_html( $term->name ) . ' →</strong><p>' . esc_html( $descriptions[ $slug ] ) . '</p></a>';
 		}
 		return $html . '</div><button class="bl-category-next" type="button" aria-label="Next categories">›</button></div>';
 	}
@@ -71,7 +79,8 @@ add_shortcode(
 	function () {
 		$html = '<div class="bl-instagram-track">';
 		for ( $index = 1; $index <= 4; $index++ ) {
-			$html .= '<img loading="eager" decoding="async" src="' . esc_url( BL_CHILD_URL . '/assets/images/instagram-' . $index . '.jpg' ) . '" alt="Pureland home care inspiration">';
+			$extension = file_exists( BL_CHILD_DIR . '/assets/images/instagram-' . $index . '.webp' ) ? 'webp' : 'jpg';
+			$html .= '<img loading="lazy" decoding="async" src="' . esc_url( BL_CHILD_URL . '/assets/images/instagram-' . $index . '.' . $extension ) . '" alt="Pureland home care inspiration">';
 		}
 		return $html . '</div>';
 	}
@@ -106,8 +115,13 @@ add_shortcode(
 		}
 		$photography = array( 'hero', 'lifestyle', 'how-it-works', 'safe-home', 'instagram-1', 'instagram-2', 'instagram-3', 'instagram-4' );
 		$extension = in_array( $name, $photography, true ) ? 'jpg' : 'png';
+		if ( file_exists( BL_CHILD_DIR . '/assets/images/' . $name . '.webp' ) ) {
+			$extension = 'webp';
+		}
 		$alt = $name ? ucwords( str_replace( '-', ' ', $name ) ) : '';
-		return '<img loading="eager" decoding="async" class="bl-content-image ' . esc_attr( sanitize_html_class( $atts['class'] ) ) . '" src="' . esc_url( BL_CHILD_URL . '/assets/images/' . $name . '.' . $extension ) . '" alt="' . esc_attr( $alt ) . '">';
+		$loading = 'hero' === $name ? 'eager' : 'lazy';
+		$priority = 'hero' === $name ? ' fetchpriority="high"' : '';
+		return '<img loading="' . esc_attr( $loading ) . '"' . $priority . ' decoding="async" class="bl-content-image ' . esc_attr( sanitize_html_class( $atts['class'] ) ) . '" src="' . esc_url( BL_CHILD_URL . '/assets/images/' . $name . '.' . $extension ) . '" alt="' . esc_attr( $alt ) . '">';
 	}
 );
 

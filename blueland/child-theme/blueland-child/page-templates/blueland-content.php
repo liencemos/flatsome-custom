@@ -7,8 +7,10 @@
 
 get_header();
 $eyebrow = get_post_meta( get_the_ID(), '_bl_eyebrow', true );
+$is_holiday_shop = is_page( 'holiday-shop' );
 ?>
 <main id="main" class="bl-content-page">
+	<?php if ( ! $is_holiday_shop ) : ?>
 	<section class="bl-content-hero">
 		<div class="bl-content-width">
 			<?php if ( $eyebrow ) : ?>
@@ -20,6 +22,7 @@ $eyebrow = get_post_meta( get_the_ID(), '_bl_eyebrow', true );
 			<?php endif; ?>
 		</div>
 	</section>
+	<?php endif; ?>
 	<div class="bl-content-body">
 		<?php while ( have_posts() ) : the_post(); ?>
 			<?php the_content(); ?>

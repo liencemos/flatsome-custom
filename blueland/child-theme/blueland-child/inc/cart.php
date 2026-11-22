@@ -5,10 +5,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-function bl_free_shipping_threshold() {
-	return (float) apply_filters( 'bl_free_shipping_threshold', 50 );
-}
-
 add_filter(
 	'woocommerce_package_rates',
 	function ( $rates ) {
@@ -21,20 +17,6 @@ add_filter(
 		return $free_rates ? $free_rates : $rates;
 	},
 	100
-);
-
-add_action(
-	'woocommerce_before_mini_cart',
-	function () {
-		if ( ! WC()->cart ) {
-			return;
-		}
-		$threshold = bl_free_shipping_threshold();
-		$total = (float) WC()->cart->get_cart_contents_total();
-		$remaining = max( 0, $threshold - $total );
-		$progress = min( 100, ( $total / max( 1, $threshold ) ) * 100 );
-		echo '<div class="bl-cart-promo">Free shipping on orders $50+</div><div class="bl-shipping-progress"><p>' . ( $remaining > 0 ? 'Add ' . wp_kses_post( wc_price( $remaining ) ) . ' to get free shipping' : 'You’ve unlocked free shipping!' ) . '</p><div role="progressbar" aria-valuenow="' . esc_attr( (string) round( $progress ) ) . '" aria-valuemin="0" aria-valuemax="100"><span style="width:' . esc_attr( $progress ) . '%"></span></div><small>$0 <span>Free shipping at $50</span></small></div>';
-	}
 );
 
 add_filter(

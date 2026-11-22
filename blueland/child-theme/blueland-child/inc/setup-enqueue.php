@@ -42,6 +42,9 @@ add_filter(
 	function ( $classes ) {
 		if ( is_product() ) {
 			$classes[] = 'bl-product-page';
+			if ( bl_is_gift_card_product( get_queried_object_id() ) ) {
+				$classes[] = 'bl-gift-card-product';
+			}
 		}
 		return $classes;
 	}

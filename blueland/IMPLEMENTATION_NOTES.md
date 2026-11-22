@@ -64,12 +64,25 @@ Seed dùng đơn vị ngày `F j, Y`, giờ `g:i a`, tuần bắt đầu Chủ N
 | Filters/sort | Demo | Bộ lọc danh mục/loại và sắp xếp; thử với taxonomy và catalog production. |
 | Product badges | Demo | Huy hiệu dựa trên taxonomy/meta mẫu; rà soát nhãn và điều kiện hiển thị. |
 | Rewards | Chưa tích hợp | Có thể dùng WooCommerce Points and Rewards hoặc YITH WooCommerce Points and Rewards. |
-| Reviews with photos | Chưa tích hợp | Có thể dùng CusRev (Customer Reviews for WooCommerce) hoặc Judge.me; xin phép dùng ảnh/review. |
+| Reviews with photos | Demo | Child theme nhận ảnh review; CusRev hoặc Judge.me có thể thay thế khi cần workflow production. |
+| Product Q&A | Demo | Hỏi đáp dùng comment moderation; kiểm duyệt câu hỏi và câu trả lời trước khi dùng thật. |
+| Stock alerts | Demo | Form lưu email trong post meta; production cần dịch vụ gửi mail và quy trình unsubscribe. |
+| Gift cards / gift wrap / Holiday Shop | Demo | Coupon một lần; dùng plugin gift-card production để giữ số dư chưa dùng. |
 | Instagram feed | Placeholder | Tích hợp Smash Balloon Instagram Feed và kết nối tài khoản được uỷ quyền. |
 | Newsletter | Demo | Form hiện lưu dữ liệu cục bộ; dùng Mailchimp for WooCommerce và quy trình đồng ý nhận email. |
 | Sales tax | Mức mẫu | Dùng WooCommerce Tax, TaxJar hoặc Avalara; cấu hình nexus và xác nhận nghĩa vụ thuế. |
 | Payments | Demo | Check payments hiển thị là “Demo payment (no charge)” và không thu tiền; trước khi launch, thay bằng WooPayments, Stripe hoặc PayPal, xác thực webhook và quy trình hoàn tiền. |
 | Shipping labels | Chưa tích hợp | Có thể dùng WooCommerce Shipping hoặc ShipStation; xác nhận hãng vận chuyển và khu vực giao hàng. |
 | SEO | Chưa tích hợp | Có thể dùng Rank Math hoặc Yoast SEO; khai báo metadata, sitemap và redirects. |
-| Speed | Cần tối ưu production | Thiết lập cache trang/object theo hosting, CDN, nén ảnh/WebP và kiểm thử Core Web Vitals. |
+| Speed | Có tối ưu cơ bản | WebP, preload hero, preconnect font, defer JS và tắt emoji; vẫn cần cache/CDN và kiểm thử Core Web Vitals ở production. |
 | Accessibility | Cần rà soát | Kiểm tra bàn phím/focus, tương phản, nhãn biểu mẫu, heading order, alt text, zoom và screen reader; kiểm thử thủ công cùng công cụ tự động. |
+
+## Bảy tính năng storefront demo
+
+1. **Thanh giao hàng miễn phí:** dùng chung một renderer ở drawer, giỏ hàng, checkout và trang sản phẩm; chỉ tính dòng hàng vật lý, ngưỡng mẫu $50.
+2. **Trải nghiệm di động:** menu có các ô danh mục và liên kết nhanh; bộ lọc danh mục dùng bottom sheet với khóa cuộn, focus và nút áp dụng/xóa.
+3. **Popup email:** ưu đãi WELCOME10 được kích hoạt theo hành vi, lưu trạng thái bằng cookie và gửi qua AJAX có nonce/honeypot; email newsletter hiện chỉ lưu local.
+4. **Review có ảnh và Q&A:** ảnh review giới hạn JPEG/PNG/WebP, tối đa 3 ảnh và 5 MB mỗi ảnh; câu hỏi là comment chờ duyệt, câu trả lời được duyệt mới hiển thị.
+5. **Tình trạng kho:** huy hiệu số lượng thấp/hết hàng/hàng về, form đăng ký email và thông báo khi chuyển sang còn hàng; nên bổ sung xử lý unsubscribe và dịch vụ email production.
+6. **Hiệu năng ảnh/tài nguyên:** ảnh lớn được chuyển sang WebP, có preload hero, preconnect font, defer JavaScript và tắt emoji khi hệ thống hỗ trợ.
+7. **Quà tặng và Holiday Shop:** Gift Card demo tạo coupon cố định một lần cho mỗi đơn vị; mã dùng một lần nên mọi số dư chưa dùng sẽ mất. Với production, nên dùng plugin gift-card chuyên dụng để hỗ trợ số dư còn lại, hoàn tiền, gửi lại mã và theo dõi bảo mật. Gift wrap cộng $4.95 và lưu lời nhắn trong đơn hàng; trang Holiday Shop có thể chỉnh sửa bằng UX Builder.

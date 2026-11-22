@@ -34,7 +34,7 @@ function bl_loop_badges() {
 	if ( ! $product instanceof WC_Product ) {
 		return;
 	}
-	echo bl_product_badges_markup( $product );
+	echo bl_product_badges_markup( $product ) . ( function_exists( 'bl_stock_status_badges_markup' ) ? bl_stock_status_badges_markup( $product ) : '' );
 }
 
 function bl_product_badges_markup( $product ) {
@@ -101,7 +101,14 @@ function bl_loop_card_details() {
 
 function bl_loop_quick_add() {
 	global $product;
-	if ( ! $product instanceof WC_Product || ! $product->is_purchasable() ) {
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+	if ( ! $product->is_in_stock() ) {
+		echo '<a class="button bl-quick-add bl-stock-notify-link" href="' . esc_url( get_permalink( $product->get_id() ) ) . '">Notify Me</a>';
+		return;
+	}
+	if ( ! $product->is_purchasable() ) {
 		return;
 	}
 	if ( $product->is_type( 'simple' ) ) {
@@ -148,7 +155,7 @@ function bl_archive_toolbar() {
 	}
 	echo '</select></label>';
 	echo '<label class="bl-filter-select bl-order-filter"><span class="screen-reader-text">Sort products</span>' . bl_catalog_ordering_markup() . '</label>';
-	echo '</div><button type="button" class="bl-mobile-filter-toggle" aria-expanded="false">Filter &amp; Sort</button></div><div class="bl-mobile-filter-panel" role="dialog" aria-modal="true" aria-label="Filter and sort products" hidden><div class="bl-mobile-filter-header"><strong>Filter &amp; Sort</strong><button type="button" class="bl-mobile-filter-close" aria-label="Close filters">×</button></div></div>';
+	echo '</div><button type="button" class="bl-mobile-filter-toggle" aria-controls="bl-mobile-filter-panel" aria-haspopup="dialog" aria-expanded="false">Filter &amp; Sort</button></div>';
 }
 
 function bl_catalog_ordering_markup() {

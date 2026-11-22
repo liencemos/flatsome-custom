@@ -129,7 +129,7 @@ def make_gallery_variants(path, slug):
         left = (1100 - size) // 2
         view = base.crop((left, left, left + size, left + size)).resize((1100, 1100), Image.Resampling.LANCZOS)
         view = view.rotate(angle, resample=Image.Resampling.BICUBIC, fillcolor="#f2f2f2")
-        view.save(path.with_name(f"{slug}-{index}.png"), quality=94)
+        view.save(path.with_name(f"{slug}-{index}.webp"), "WEBP", quality=82, method=6)
 
 
 def lifestyle(path, palette, title, size=(1600, 1050)):

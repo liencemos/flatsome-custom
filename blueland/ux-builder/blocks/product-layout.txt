@@ -13,8 +13,9 @@
 <details class="bl-promo-bar"><summary>Save on your first order with a refill-ready routine.</summary><p>Explore product bundles for simple starter options and refill-friendly essentials.</p></details>
 [/ux_text]
 [bl_product_price_summary]
-[ux_product_add_to_cart]
+[bl_stock_notify_pdp]
 [bl_product_rewards]
+[bl_free_shipping_progress]
 [bl_product_addon]
 [ux_product_tabs]
 [/col]
@@ -25,7 +26,7 @@
 [row]
 [col span="12"]
 [ux_text]
-<nav class="bl-content-width"><a href="#our-values">Our Values</a><a href="#how-it-works">How It Works</a><a href="#recommendations">Recommendations</a><a href="#reviews">Reviews</a></nav>
+<nav class="bl-content-width"><a href="#our-values">Our Values</a><a href="#how-it-works">How It Works</a><a href="#recommendations">Recommendations</a><a href="#reviews">Reviews</a><a href="#questions-answers">Q&amp;A</a></nav>
 [/ux_text]
 [/col]
 [/row]
@@ -136,3 +137,5 @@
 [/col]
 [/row]
 [/section]
+
+[bl_product_qa]

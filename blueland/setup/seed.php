@@ -8,6 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function bl_seed_asset( $filename, $title = '' ) {
+	$uploads = wp_upload_dir();
+	$asset_dir = trailingslashit( $uploads['basedir'] ) . 'blueland/';
+	$webp_filename = preg_replace( '/\.(png|jpe?g)$/i', '.webp', $filename );
+	if ( $webp_filename !== $filename && file_exists( $asset_dir . $webp_filename ) ) {
+		$filename = $webp_filename;
+	}
 	$existing = get_posts(
 		array(
 			'post_type'      => 'attachment',
@@ -21,8 +27,7 @@ function bl_seed_asset( $filename, $title = '' ) {
 	if ( $existing ) {
 		return (int) $existing[0];
 	}
-	$uploads = wp_upload_dir();
-	$file = trailingslashit( $uploads['basedir'] ) . 'blueland/' . $filename;
+	$file = $asset_dir . $filename;
 	if ( ! file_exists( $file ) ) {
 		return 0;
 	}
@@ -44,6 +49,23 @@ function bl_seed_asset( $filename, $title = '' ) {
 		wp_update_attachment_metadata( $attachment_id, $metadata );
 	}
 	return (int) $attachment_id;
+}
+
+function bl_seed_welcome_coupon() {
+	if ( ! class_exists( 'WC_Coupon' ) || ! function_exists( 'wc_get_coupon_id_by_code' ) ) {
+		return;
+	}
+	$coupon_id = wc_get_coupon_id_by_code( 'WELCOME10' );
+	$coupon = $coupon_id ? new WC_Coupon( $coupon_id ) : new WC_Coupon();
+	$coupon->set_code( 'WELCOME10' );
+	$coupon->set_discount_type( 'percent' );
+	$coupon->set_amount( 10 );
+	$coupon->set_individual_use( true );
+	$coupon->set_usage_limit_per_user( 1 );
+	$coupon->set_date_expires( null );
+	$gift_card = get_page_by_path( 'pureland-gift-card', OBJECT, 'product' );
+	$coupon->set_excluded_product_ids( $gift_card ? array( (int) $gift_card->ID ) : array() );
+	$coupon->save();
 }
 
 function bl_seed_term( $taxonomy, $name, $slug = '' ) {
@@ -90,6 +112,82 @@ function bl_seed_attribute( $label, $slug ) {
 		);
 	}
 	return $attribute_id;
+}
+
+function bl_seed_gift_card_product() {
+	$attribute_id = bl_seed_attribute( 'Amount', 'amount' );
+	$amounts = array(
+		'$25'  => 25,
+		'$50'  => 50,
+		'$100' => 100,
+		'$150' => 150,
+	);
+	$amount_term_ids = array();
+	foreach ( array_keys( $amounts ) as $amount_label ) {
+		$amount_term_ids[ sanitize_title( $amount_label ) ] = bl_seed_term( 'pa_amount', $amount_label, sanitize_title( $amount_label ) );
+	}
+
+	$post = get_page_by_path( 'pureland-gift-card', OBJECT, 'product' );
+	$product = $post ? wc_get_product( $post->ID ) : false;
+	$product = $product instanceof WC_Product_Variable ? $product : new WC_Product_Variable( $post ? $post->ID : 0 );
+	$product->set_name( 'Pureland Gift Card' );
+	$product->set_slug( 'pureland-gift-card' );
+	$product->set_status( 'publish' );
+	$product->set_catalog_visibility( 'visible' );
+	$product->set_description( 'A flexible gift for a cleaner, simpler home. Choose an amount and send it directly to someone you love.' );
+	$product->set_short_description( 'A thoughtful gift for any home.' );
+	$product->set_virtual( true );
+	$product->set_tax_status( 'none' );
+	$product->set_manage_stock( false );
+	$product->set_reviews_allowed( false );
+	$extras_term = get_term_by( 'slug', 'extras', 'product_cat' );
+	if ( $extras_term ) {
+		$product->set_category_ids( array( (int) $extras_term->term_id ) );
+	}
+
+	if ( $attribute_id && $amount_term_ids ) {
+		$attribute = new WC_Product_Attribute();
+		$attribute->set_id( $attribute_id );
+		$attribute->set_name( 'pa_amount' );
+		$attribute->set_options( array_values( $amount_term_ids ) );
+		$attribute->set_visible( true );
+		$attribute->set_variation( true );
+		$product->set_attributes( array( $attribute ) );
+	}
+
+	$product_id = $product->save();
+	$image_id = bl_seed_asset( 'lifestyle.jpg', 'Pureland gift card' );
+	if ( $image_id ) {
+		$product->set_image_id( $image_id );
+	}
+	update_post_meta( $product_id, '_bl_is_gift_card', 'yes' );
+	$product_id = $product->save();
+
+	foreach ( $amounts as $amount_label => $amount ) {
+		$amount_slug = sanitize_title( $amount_label );
+		$variation_id = 0;
+		foreach ( $product->get_children() as $child_id ) {
+			$existing_variation = wc_get_product( $child_id );
+			if ( $existing_variation && isset( $existing_variation->get_attributes()['pa_amount'] ) && $amount_slug === $existing_variation->get_attributes()['pa_amount'] ) {
+				$variation_id = $child_id;
+				break;
+			}
+		}
+		$variation = new WC_Product_Variation( $variation_id );
+		$variation->set_parent_id( $product_id );
+		$variation->set_attributes( array( 'pa_amount' => $amount_slug ) );
+		$variation->set_regular_price( (string) $amount );
+		$variation->set_sale_price( '' );
+		$variation->set_virtual( true );
+		$variation->set_status( 'publish' );
+		$variation->set_manage_stock( false );
+		$variation->save();
+	}
+	WC_Product_Variable::sync( $product_id );
+	update_post_meta( $product_id, '_virtual', 'yes' );
+	delete_post_meta( $product_id, '_bl_restocked_at' );
+	wc_delete_product_transients( $product_id );
+	clean_post_cache( $product_id );
 }
 
 function bl_seed_page( $title, $slug, $content, $excerpt = '', $eyebrow = '' ) {
@@ -174,6 +272,12 @@ function bl_seed_reviews( $product_id, $product_name, $product_index ) {
 		$existing = get_comments( array( 'post_id' => $product_id, 'author_email' => $email, 'number' => 1 ) );
 		if ( $existing ) {
 			update_comment_meta( $existing[0]->comment_ID, '_bl_review_title', $titles[ $i ] );
+			if ( 0 === $i && in_array( $product_index, array( 0, 1, 2 ), true ) ) {
+				$photo_id = get_post_thumbnail_id( $product_id );
+				if ( $photo_id ) {
+					update_comment_meta( $existing[0]->comment_ID, '_bl_review_photos', array( (int) $photo_id ) );
+				}
+			}
 			continue;
 		}
 		$comment_id = wp_insert_comment(
@@ -190,10 +294,75 @@ function bl_seed_reviews( $product_id, $product_name, $product_index ) {
 		if ( $comment_id ) {
 			update_comment_meta( $comment_id, 'rating', $ratings[ $i ] );
 			update_comment_meta( $comment_id, '_bl_review_title', $titles[ $i ] );
+			if ( 0 === $i && in_array( $product_index, array( 0, 1, 2 ), true ) ) {
+				$photo_id = get_post_thumbnail_id( $product_id );
+				if ( $photo_id ) {
+					update_comment_meta( $comment_id, '_bl_review_photos', array( (int) $photo_id ) );
+				}
+			}
 		}
 	}
 	if ( class_exists( 'WC_Comments' ) ) {
 		WC_Comments::clear_transients( $product_id );
+	}
+}
+
+function bl_seed_questions_answers( $product_id ) {
+	$questions = array(
+		array( 'refill-water', 'Can I add water before I put in the refill tablet?', 'Yes. Fill your reusable bottle with water to the marked line, add the tablet, and allow it to dissolve before use.' ),
+		array( 'other-bottles', 'Will these refills work with a different spray bottle?', 'The refills are designed for the Pureland reusable bottle. Check the package directions if you use another container.' ),
+		array( 'storage', 'How should I store the refill tablets?', 'Keep unused tablets in their original packaging in a cool, dry place.' ),
+	);
+	$admins = get_users( array( 'role' => 'administrator', 'number' => 1 ) );
+	$admin = $admins ? $admins[0] : null;
+
+	foreach ( $questions as $question_data ) {
+		list( $key, $question_text, $answer_text ) = $question_data;
+		$existing = get_comments(
+			array(
+				'post_id'    => $product_id,
+				'type'       => 'bl_question',
+				'status'     => 'approve',
+				'number'     => 1,
+				'meta_key'   => '_bl_seed_qa_key',
+				'meta_value' => $key,
+			)
+		);
+		if ( $existing ) {
+			$question_id = (int) $existing[0]->comment_ID;
+		} else {
+			$question_id = wp_insert_comment(
+				array(
+					'comment_post_ID'      => $product_id,
+					'comment_author'       => 'Pureland Customer',
+					'comment_author_email' => 'questions@pureland.example',
+					'comment_content'      => $question_text,
+					'comment_type'         => 'bl_question',
+					'comment_approved'     => 1,
+				)
+			);
+			if ( ! $question_id || is_wp_error( $question_id ) ) {
+				continue;
+			}
+			update_comment_meta( $question_id, '_bl_seed_qa_key', $key );
+		}
+
+		$answers = get_comments( array( 'post_id' => $product_id, 'parent' => $question_id, 'status' => 'approve', 'number' => 1 ) );
+		if ( $answers ) {
+			continue;
+		}
+		wp_insert_comment(
+			array(
+				'comment_post_ID'      => $product_id,
+				'comment_parent'       => $question_id,
+				'user_id'              => $admin ? (int) $admin->ID : 0,
+				'comment_author'       => $admin ? $admin->display_name : 'Pureland Team',
+				'comment_author_email' => $admin ? $admin->user_email : 'help@pureland.example',
+				'comment_content'      => $answer_text,
+				'comment_type'         => 'comment',
+				'comment_approved'     => 1,
+			)
+		);
 	}
 }
 
@@ -499,8 +668,40 @@ function bl_seed_storefront() {
 		}
 		bl_seed_reviews( $product_id, $name, $index );
 	}
+	bl_seed_gift_card_product();
+	update_option( 'woocommerce_notify_low_stock_amount', 5 );
+	update_option( 'woocommerce_hide_out_of_stock_items', 'no' );
+	$stock_seeds = array(
+		'reusable-spray-bottle'   => array( 3, 'instock' ),
+		'toilet-bowl-starter-kit' => array( 0, 'outofstock' ),
+	);
+	foreach ( $stock_seeds as $slug => $stock_data ) {
+		$stock_post = get_page_by_path( $slug, OBJECT, 'product' );
+		$stock_product = $stock_post ? wc_get_product( $stock_post->ID ) : false;
+		if ( $stock_product ) {
+			$stock_product->set_manage_stock( true );
+			$stock_product->set_stock_quantity( $stock_data[0] );
+			$stock_product->set_stock_status( $stock_data[1] );
+			$stock_product->save();
+		}
+	}
+	foreach ( wc_get_products( array( 'limit' => -1, 'status' => 'publish' ) ) as $seeded_product ) {
+		$product_ids = array_merge( array( $seeded_product->get_id() ), $seeded_product->get_children() );
+		foreach ( array_unique( $product_ids ) as $product_id ) {
+			$stock_item = wc_get_product( $product_id );
+			if ( ! $stock_item ) {
+				continue;
+			}
+			update_post_meta( $product_id, '_bl_stock_last_status', $stock_item->get_stock_status() );
+			delete_post_meta( $product_id, '_bl_restocked_at' );
+		}
+	}
+	bl_seed_welcome_coupon();
 
 	$clean_kit_post = get_page_by_path( 'clean-home-essentials-kit', OBJECT, 'product' );
+	if ( $clean_kit_post ) {
+		bl_seed_questions_answers( $clean_kit_post->ID );
+	}
 	$addon_ids = array();
 	foreach ( array( 'scrub-sponge-set', 'reusable-spray-bottle' ) as $addon_slug ) {
 		$addon_post = get_page_by_path( $addon_slug, OBJECT, 'product' );
@@ -571,13 +772,16 @@ function bl_seed_storefront() {
 	foreach ( $pages as $page ) {
 		bl_seed_page( $page[0], $page[1], $page[2], $page[3], $page[4] );
 	}
+	$holiday_path = dirname( __FILE__ ) . '/../ux-builder/holiday-shop.txt';
+	$holiday_content = file_exists( $holiday_path ) ? file_get_contents( $holiday_path ) : '';
+	bl_seed_page( 'Holiday Shop', 'holiday-shop', $holiday_content, 'Thoughtful gift sets and essentials for the holidays.', 'Thoughtful gifting' );
 
 	bl_seed_menu(
 		'Primary',
 		'primary',
 		array(
 			array( 'Shop', home_url( '/shop/' ), 'bl-shop-menu-item' ),
-			array( 'Holiday Shop', home_url( '/product-category/holiday-shop/' ), 'bl-holiday-link' ),
+			array( 'Holiday Shop', home_url( '/holiday-shop/' ), 'bl-holiday-link' ),
 		)
 	);
 	bl_seed_menu( 'Primary Right', 'secondary', array( array( 'About Us', home_url( '/about-us/' ) ), array( 'Our Mission', home_url( '/our-mission/' ) ) ) );

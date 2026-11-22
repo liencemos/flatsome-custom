@@ -13,6 +13,27 @@
 		return result;
 	};
 
+	const mountGiftWrapControl = () => {
+		const template = document.querySelector('#bl-gift-wrap-block-template');
+		if (!template) return;
+		if (document.querySelector('.bl-gift-wrap-control')) {
+			template.remove();
+			return;
+		}
+		const target = document.querySelector('.wc-block-cart__submit-container, .wc-block-checkout__payment-method');
+		const control = template.content.firstElementChild?.cloneNode(true);
+		if (!target || !control) return;
+		target.parentNode.insertBefore(control, target);
+		template.remove();
+	};
+
+	if (document.querySelector('#bl-gift-wrap-block-template')) {
+		const giftWrapObserver = new MutationObserver(mountGiftWrapControl);
+		giftWrapObserver.observe(document.body, { childList: true, subtree: true });
+		mountGiftWrapControl();
+		window.setTimeout(() => giftWrapObserver.disconnect(), 10000);
+	}
+
 	const syncCartLabels = () => {
 		document.querySelectorAll('.header-cart-link').forEach((link) => {
 			const count = Number(link.querySelector('.cart-icon')?.dataset.cartCount || 0);
@@ -47,6 +68,69 @@
 		const url = new URL(window.location.href);
 		url.pathname = url.pathname.replace(/\/page\/\d+\/?$/, '/');
 		url.searchParams.delete('paged');
+		return url;
+	};
+
+	const mobileFilterPanel = document.querySelector('#bl-mobile-filter-panel');
+	let archiveFilterPlaceholder = null;
+	const reviewLightbox = document.querySelector('#bl-review-lightbox');
+	let reviewPhotoFocus = null;
+
+	const closeReviewLightbox = () => {
+		if (!reviewLightbox || reviewLightbox.hidden) return;
+		reviewLightbox.hidden = true;
+		document.body.classList.remove('bl-review-lightbox-open');
+		const image = reviewLightbox.querySelector('img');
+		if (image) image.removeAttribute('src');
+		reviewPhotoFocus?.focus();
+	};
+
+	const openMobileFilterSheet = (toggle) => {
+		if (!mobileFilterPanel || !window.matchMedia('(max-width: 849px)').matches) return;
+		const filters = document.querySelector('.bl-archive-toolbar .bl-archive-filters');
+		const content = mobileFilterPanel.querySelector('.bl-mobile-filter-content');
+		if (filters && content && !content.contains(filters)) {
+			archiveFilterPlaceholder = document.createElement('span');
+			archiveFilterPlaceholder.hidden = true;
+			filters.before(archiveFilterPlaceholder);
+			content.append(filters);
+		}
+		mobileFilterPanel.hidden = false;
+		mobileFilterPanel.classList.add('is-open');
+		document.body.classList.add('bl-filter-sheet-open');
+		toggle.setAttribute('aria-expanded', 'true');
+		window.setTimeout(() => mobileFilterPanel.querySelector('.bl-mobile-filter-close')?.focus(), 30);
+	};
+
+	const closeMobileFilterSheet = (restoreFocus = true) => {
+		if (!mobileFilterPanel || mobileFilterPanel.hidden) return;
+		mobileFilterPanel.classList.remove('is-open');
+		mobileFilterPanel.hidden = true;
+		document.body.classList.remove('bl-filter-sheet-open');
+		const filters = mobileFilterPanel.querySelector('.bl-mobile-filter-content .bl-archive-filters');
+		if (filters && archiveFilterPlaceholder?.parentNode) {
+			archiveFilterPlaceholder.before(filters);
+			archiveFilterPlaceholder.remove();
+		}
+		archiveFilterPlaceholder = null;
+		const toggle = document.querySelector('.bl-mobile-filter-toggle');
+		toggle?.setAttribute('aria-expanded', 'false');
+		if (restoreFocus) toggle?.focus();
+	};
+
+	const mobileArchiveUrl = () => {
+		let url = archiveUrl();
+		const category = mobileFilterPanel?.querySelector('.bl-category-filter')?.value;
+		if (category) url = new URL(category, window.location.href);
+		url.pathname = url.pathname.replace(/\/page\/\d+\/?$/, '/');
+		url.searchParams.delete('paged');
+		const type = mobileFilterPanel?.querySelector('.bl-type-filter')?.value;
+		if (type && type !== 'all') url.searchParams.set('filter_product-type', type);
+		else url.searchParams.delete('filter_product-type');
+		const order = mobileFilterPanel?.querySelector('.woocommerce-ordering select');
+		const defaultOrder = order?.options[0]?.value || 'menu_order';
+		if (order?.value && order.value !== defaultOrder) url.searchParams.set('orderby', order.value);
+		else url.searchParams.delete('orderby');
 		return url;
 	};
 
@@ -102,6 +186,37 @@
 	});
 
 	document.addEventListener('keydown', (event) => {
+		if (reviewLightbox && !reviewLightbox.hidden) {
+			if (event.key === 'Escape') {
+				closeReviewLightbox();
+				return;
+			}
+			if (event.key === 'Tab') {
+				event.preventDefault();
+				reviewLightbox.querySelector('.bl-review-lightbox-close')?.focus();
+				return;
+			}
+		}
+		if (mobileFilterPanel && !mobileFilterPanel.hidden) {
+			if (event.key === 'Escape') {
+				closeMobileFilterSheet();
+				return;
+			}
+			if (event.key === 'Tab') {
+				const focusable = Array.from(mobileFilterPanel.querySelectorAll('button:not([disabled]), select:not([disabled]), a[href]'))
+					.filter((element) => element.getClientRects().length);
+				const first = focusable[0];
+				const last = focusable[focusable.length - 1];
+				if (event.shiftKey && document.activeElement === first) {
+					event.preventDefault();
+					last?.focus();
+				} else if (!event.shiftKey && document.activeElement === last) {
+					event.preventDefault();
+					first?.focus();
+				}
+				return;
+			}
+		}
 		if ('Escape' !== event.key) return;
 		const panel = Array.from(document.querySelectorAll('.bl-search-panel')).find((item) => !item.hidden && item.classList.contains('is-open'));
 		if (!panel) return;
@@ -113,6 +228,40 @@
 	});
 
 	document.addEventListener('change', (event) => {
+		if (event.target.closest('.bl-mobile-filter-panel')) return;
+		const giftWrapInput = event.target.closest('[data-gift-wrap-toggle], [data-gift-wrap-note]');
+		if (giftWrapInput) {
+			const control = giftWrapInput.closest('.bl-gift-wrap-control');
+			const toggle = control?.querySelector('[data-gift-wrap-toggle]');
+			const note = control?.querySelector('[data-gift-wrap-note]');
+			const message = control?.querySelector('.bl-gift-wrap-message');
+			if (giftWrapInput.matches('[data-gift-wrap-toggle]') && note) note.hidden = !toggle.checked;
+			const payload = {
+				action: 'bl_update_gift_wrap',
+				enabled: toggle?.checked ? '1' : '0',
+				note: note?.value || '',
+				nonce: control?.querySelector('[data-gift-wrap-nonce]')?.value || '',
+				bl_gift_website: control?.querySelector('[data-gift-wrap-website]')?.value || ''
+			};
+			ajaxPost(payload)
+				.then(() => {
+					if (message) message.textContent = 'Gift wrap updated.';
+					if (document.querySelector('.wp-block-woocommerce-cart, .wp-block-woocommerce-checkout')) {
+						const cartStore = window.wp?.data?.dispatch?.('wc/store/cart');
+						if (cartStore?.invalidateResolutionForStore) cartStore.invalidateResolutionForStore();
+						else window.location.reload();
+					} else if (document.body.classList.contains('woocommerce-checkout')) {
+						if (window.jQuery) window.jQuery(document.body).trigger('update_checkout');
+						else window.location.reload();
+					} else {
+						window.location.reload();
+					}
+				})
+				.catch((error) => {
+					if (message) message.textContent = error?.data?.message || 'Please try again.';
+				});
+			return;
+		}
 		if (event.target.matches('.bl-category-filter') && event.target.value) {
 			window.location.href = event.target.value;
 		}
@@ -172,6 +321,22 @@
 			form?.classList.toggle('is-open');
 			if (form?.classList.contains('is-open')) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}
+		const reviewPhoto = event.target.closest('.bl-review-photo');
+		if (reviewPhoto && reviewLightbox) {
+			event.preventDefault();
+			reviewPhotoFocus = reviewPhoto;
+			const image = reviewLightbox.querySelector('img');
+			if (image) {
+				image.src = reviewPhoto.href;
+				image.alt = reviewPhoto.querySelector('img')?.alt || 'Customer review photo';
+			}
+			reviewLightbox.hidden = false;
+			document.body.classList.add('bl-review-lightbox-open');
+			reviewLightbox.querySelector('.bl-review-lightbox-close')?.focus();
+		}
+		if (event.target.closest('.bl-review-lightbox-close') || event.target === reviewLightbox) {
+			closeReviewLightbox();
+		}
 		const chip = event.target.closest('.bl-review-chips button');
 		if (chip) {
 			const list = chip.closest('.bl-review-controls')?.nextElementSibling;
@@ -181,7 +346,10 @@
 			const cards = Array.from(list.querySelectorAll('.bl-review-card'));
 			const visibleCount = Number(list.dataset.visibleCount || 6);
 			cards.forEach((card, index) => {
-				card.hidden = filter === 'all' ? index >= visibleCount : (filter === '3' ? Number(card.dataset.rating) > 3 : Number(card.dataset.rating) !== Number(filter));
+				if (filter === 'all') card.hidden = index >= visibleCount;
+				else if (filter === 'photos') card.hidden = !card.querySelector('.bl-review-photo');
+				else if (filter === '3') card.hidden = Number(card.dataset.rating) > 3;
+				else card.hidden = Number(card.dataset.rating) !== Number(filter);
 			});
 			const more = list.nextElementSibling;
 			if (more?.classList.contains('bl-review-more')) more.hidden = filter !== 'all' || visibleCount >= cards.length;
@@ -200,42 +368,220 @@
 	document.addEventListener('click', (event) => {
 		const toggle = event.target.closest('.bl-mobile-filter-toggle');
 		if (toggle) {
-			const panel = document.querySelector('.bl-mobile-filter-panel');
-			const filters = document.querySelector('.bl-archive-filters');
-			if (!panel || !filters) return;
-			if (!panel.querySelector('.bl-archive-filters')) panel.append(filters.cloneNode(true));
-			panel.hidden = false;
-			panel.classList.add('is-open');
-			toggle.setAttribute('aria-expanded', 'true');
+			openMobileFilterSheet(toggle);
 			return;
 		}
-		if (event.target.closest('.bl-mobile-filter-close')) {
-			const panel = document.querySelector('.bl-mobile-filter-panel');
-			if (panel) {
-				panel.hidden = true;
-				panel.classList.remove('is-open');
-			}
-			const filterToggle = document.querySelector('.bl-mobile-filter-toggle');
-			filterToggle?.setAttribute('aria-expanded', 'false');
-			filterToggle?.focus();
+		if (event.target.closest('.bl-mobile-filter-close, [data-mobile-filter-close]') || event.target === mobileFilterPanel) {
+			closeMobileFilterSheet();
+			return;
+		}
+		if (event.target.closest('.bl-mobile-filter-clear')) {
+			const category = mobileFilterPanel?.querySelector('.bl-category-filter');
+			const type = mobileFilterPanel?.querySelector('.bl-type-filter');
+			const order = mobileFilterPanel?.querySelector('.woocommerce-ordering select');
+			if (category) category.value = '';
+			if (type) type.value = 'all';
+			if (order) order.value = order.options[0]?.value || 'menu_order';
+			return;
+		}
+		if (event.target.closest('.bl-mobile-filter-apply')) {
+			const url = mobileArchiveUrl();
+			closeMobileFilterSheet(false);
+			window.location.assign(url.toString());
+		}
+	});
+
+	window.addEventListener('resize', () => {
+		if (mobileFilterPanel && !mobileFilterPanel.hidden && !window.matchMedia('(max-width: 849px)').matches) {
+			closeMobileFilterSheet(false);
 		}
 	});
 
 	document.addEventListener('submit', (event) => {
 		const form = event.target;
-		if (form.matches('.bl-newsletter-form')) {
+		if (form.matches('.bl-stock-notify-form')) {
 			event.preventDefault();
-			const message = form.querySelector('.bl-newsletter-message');
-			const email = form.querySelector('[name="email"]')?.value || '';
-			ajaxPost({ action: 'bl_newsletter', email })
+			const message = form.querySelector('.bl-stock-notify-message');
+			const submit = form.querySelector('[type="submit"]');
+			const payload = Object.fromEntries(new FormData(form).entries());
+			payload.action = 'bl_stock_notify';
+			if (submit) submit.disabled = true;
+			if (message) message.textContent = '';
+			ajaxPost(payload)
 				.then((result) => {
 					if (message) message.textContent = result.data.message;
+					form.reset();
 				})
 				.catch((error) => {
 					if (message) message.textContent = error?.data?.message || 'Please try again.';
+				})
+				.finally(() => {
+					if (submit) submit.disabled = false;
+				});
+			return;
+		}
+		if (form.matches('.bl-qa-form')) {
+			event.preventDefault();
+			const message = form.querySelector('.bl-qa-message');
+			const submit = form.querySelector('[type="submit"]');
+			const payload = Object.fromEntries(new FormData(form).entries());
+			payload.action = 'bl_submit_product_question';
+			if (submit) submit.disabled = true;
+			if (message) message.textContent = '';
+			ajaxPost(payload)
+				.then((result) => {
+					if (message) message.textContent = result.data.message;
+					form.reset();
+				})
+				.catch((error) => {
+					if (message) message.textContent = error?.data?.message || 'Please try again.';
+				})
+				.finally(() => {
+					if (submit) submit.disabled = false;
+				});
+			return;
+		}
+		if (form.matches('.bl-newsletter-form, .bl-popup-form')) {
+			event.preventDefault();
+			const isPopup = form.matches('.bl-popup-form');
+			const message = form.querySelector(isPopup ? '.bl-email-popup-error' : '.bl-newsletter-message');
+			const email = form.querySelector('[name="email"]')?.value || '';
+			const payload = {
+				action: 'bl_newsletter',
+				email,
+				bl_newsletter_website: form.querySelector('[name="bl_newsletter_website"]')?.value || ''
+			};
+			if (isPopup) payload.source = 'popup';
+			const submit = form.querySelector('[type="submit"]');
+			if (submit) submit.disabled = true;
+			if (message) message.textContent = '';
+			ajaxPost(payload)
+				.then((result) => {
+					if (isPopup && result.data.code) {
+						const popup = form.closest('#bl-email-popup');
+						const success = popup?.querySelector('.bl-popup-success');
+						if (success) {
+							form.hidden = true;
+							success.hidden = false;
+							document.cookie = `bl_popup_seen=1; Max-Age=${365 * 24 * 60 * 60}; Path=/; SameSite=Lax${window.location.protocol === 'https:' ? '; Secure' : ''}`;
+						}
+					} else if (message) {
+						message.textContent = result.data.message;
+					}
+				})
+				.catch((error) => {
+					if (message) message.textContent = error?.data?.message || 'Please try again.';
+				})
+				.finally(() => {
+					if (submit) submit.disabled = false;
 				});
 		}
 	}, true);
+
+	document.querySelectorAll('.bl-review-form form').forEach((form) => {
+		form.enctype = 'multipart/form-data';
+	});
+
+	const emailPopup = document.querySelector('#bl-email-popup');
+	if (emailPopup) {
+		let popupOpened = false;
+		let previousFocus = null;
+		const popupCookieExists = () => document.cookie.split(';').some((cookie) => cookie.trim().startsWith('bl_popup_seen='));
+		const setPopupCookie = (days) => {
+			document.cookie = `bl_popup_seen=1; Max-Age=${days * 24 * 60 * 60}; Path=/; SameSite=Lax${window.location.protocol === 'https:' ? '; Secure' : ''}`;
+		};
+		const isVisible = (element) => {
+			if (!element) return false;
+			const style = window.getComputedStyle(element);
+			const rect = element.getBoundingClientRect();
+			return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0 && rect.left < window.innerWidth && rect.right > 0 && rect.top < window.innerHeight && rect.bottom > 0;
+		};
+		const isPopupBlocked = () => (
+			isVisible(document.querySelector('.off-canvas-cart'))
+			|| isVisible(document.querySelector('.mfp-wrap.mfp-ready'))
+			|| Boolean(document.querySelector('.bl-mobile-filter-panel.is-open'))
+		);
+		const closeEmailPopup = () => {
+			if (emailPopup.hidden) return;
+			const subscribed = !emailPopup.querySelector('.bl-popup-success')?.hidden;
+			setPopupCookie(subscribed ? 365 : 14);
+			emailPopup.hidden = true;
+			emailPopup.classList.remove('is-open');
+			document.body.classList.remove('bl-email-popup-open');
+			emailPopup.setAttribute('aria-hidden', 'true');
+			if (previousFocus && typeof previousFocus.focus === 'function') previousFocus.focus();
+		};
+		const openEmailPopup = () => {
+			if (popupOpened || popupCookieExists()) return;
+			if (isPopupBlocked()) {
+				window.setTimeout(openEmailPopup, 750);
+				return;
+			}
+			popupOpened = true;
+			previousFocus = document.activeElement;
+			emailPopup.hidden = false;
+			emailPopup.setAttribute('aria-hidden', 'false');
+			emailPopup.classList.add('is-open');
+			document.body.classList.add('bl-email-popup-open');
+			window.setTimeout(() => emailPopup.querySelector('#bl-popup-email')?.focus(), 40);
+		};
+
+		emailPopup.addEventListener('click', (event) => {
+			if (event.target === emailPopup || event.target.closest('[data-popup-dismiss]')) {
+				closeEmailPopup();
+				return;
+			}
+			const copyButton = event.target.closest('.bl-popup-copy');
+			if (copyButton) {
+				const code = 'WELCOME10';
+				if (navigator.clipboard?.writeText) {
+					navigator.clipboard.writeText(code).then(() => {
+						copyButton.textContent = 'Copied!';
+					}).catch(() => {
+						copyButton.textContent = code;
+					});
+				} else {
+					copyButton.textContent = code;
+				}
+			}
+		});
+		document.addEventListener('keydown', (event) => {
+			if (emailPopup.hidden) return;
+			if (event.key === 'Escape') {
+				closeEmailPopup();
+				return;
+			}
+			if (event.key === 'Tab') {
+				const focusable = Array.from(emailPopup.querySelectorAll('input:not([disabled]), button:not([disabled]), a[href]'))
+					.filter((element) => element.getClientRects().length);
+				const first = focusable[0];
+				const last = focusable[focusable.length - 1];
+				if (event.shiftKey && document.activeElement === first) {
+					event.preventDefault();
+					last?.focus();
+				} else if (!event.shiftKey && document.activeElement === last) {
+					event.preventDefault();
+					first?.focus();
+				}
+			}
+		});
+
+		if (!popupCookieExists()) {
+			const startedAt = Date.now();
+			if (window.matchMedia('(max-width: 849px)').matches) {
+				window.setTimeout(openEmailPopup, 25000);
+				document.addEventListener('scroll', () => {
+					const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+					if (scrollable > 0 && window.scrollY / scrollable >= 0.5) openEmailPopup();
+				}, { passive: true });
+			} else {
+				window.setTimeout(openEmailPopup, 30000);
+				document.addEventListener('mouseout', (event) => {
+					if (event.clientY <= 0 && Date.now() - startedAt >= 5000) openEmailPopup();
+				});
+			}
+		}
+	}
 
 	document.addEventListener('click', async (event) => {
 		const button = event.target.closest('.bl-quick-add.add_to_cart_button, .bl-product-addon .add_to_cart_button');
