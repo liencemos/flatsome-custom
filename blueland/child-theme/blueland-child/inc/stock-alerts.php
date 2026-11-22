@@ -116,12 +116,20 @@ function bl_send_restock_notifications( $product_id, $stock_status, $product = n
 		$link    = get_permalink( $target_id );
 		$subject = sprintf( '%s is back in stock', $name );
 		$message = sprintf( "Good news! %1\$s is back in stock.\n\nShop now: %2\$s", $name, $link );
+		$failed_subscribers = array();
 		foreach ( array_unique( array_map( 'strtolower', array_map( 'sanitize_email', $subscribers ) ) ) as $subscriber ) {
-			if ( is_email( $subscriber ) ) {
-				wp_mail( $subscriber, $subject, $message );
+			if ( ! is_email( $subscriber ) ) {
+				continue;
+			}
+			if ( ! wp_mail( $subscriber, $subject, $message ) ) {
+				$failed_subscribers[] = $subscriber;
 			}
 		}
-		delete_post_meta( $target_id, '_bl_stock_notify' );
+		if ( $failed_subscribers ) {
+			update_post_meta( $target_id, '_bl_stock_notify', $failed_subscribers );
+		} else {
+			delete_post_meta( $target_id, '_bl_stock_notify' );
+		}
 	}
 }
 add_action( 'woocommerce_product_set_stock_status', 'bl_send_restock_notifications', 10, 3 );
