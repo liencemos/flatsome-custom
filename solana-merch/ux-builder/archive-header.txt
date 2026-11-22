@@ -1,0 +1,14 @@
+[section class="signal-archive-title" padding="40px"]
+[row v_align="middle"]
+[col span="8" span__sm="12"]
+[ux_text]
+<p class="signal-eyebrow">{{archive_index}}</p>
+<h1>{{archive_title}}</h1>
+<p>{{archive_intro}}</p>
+[/ux_text]
+[/col]
+[col span="4" span__sm="12" align="left"]
+[button text="{{archive_cta}}" link="{{archive_url}}" style="outline"]
+[/col]
+[/row]
+[/section]

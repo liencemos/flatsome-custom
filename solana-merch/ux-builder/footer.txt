@@ -1,0 +1,23 @@
+[section class="signal-footer" padding="38px"]
+[row]
+[col span="6" span__sm="12"]
+[ux_text]
+<p class="signal-eyebrow">● &nbsp; SIGNAL / SUPPLY</p>
+<h2>Stay on frequency.</h2>
+<p>Independent graphic tees and caps.</p>
+[/ux_text]
+[/col]
+[col span="3" span__sm="6"]
+[ux_text]
+<h3>Catalog</h3>
+<p><a href="{{shop_url}}">All products →</a><br><a href="{{tees_url}}">Graphic tees →</a><br><a href="{{hats_url}}">Field caps →</a></p>
+[/ux_text]
+[/col]
+[col span="3" span__sm="6"]
+[ux_text]
+<h3>Your order</h3>
+<p><a href="{{account_url}}">My account →</a><br><a href="{{cart_url}}">Shopping bag →</a></p>
+[/ux_text]
+[/col]
+[/row]
+[/section]

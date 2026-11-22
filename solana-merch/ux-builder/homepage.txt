@@ -1,0 +1,73 @@
+[section class="signal-hero" padding="0px"]
+[row style="collapse" class="signal-hero-row"]
+[col span="6" span__md="12" span__sm="12" class="signal-hero-copy"]
+[ux_text]
+<p class="signal-eyebrow">● &nbsp; DROP_001 / FIELD EDITION</p>
+<h1>Wear the <br><span>signal.</span></h1>
+<p>Graphic tees and caps for life after dark. Tune into our first collection.</p>
+[/ux_text]
+[button text="Explore the drop →" link="{{shop_url}}"]
+[/col]
+[col span="6" span__md="12" span__sm="12" class="signal-hero-art"]
+[ux_image id="{{hero_image}}" image_size="original" link="{{product_url}}"]
+[/col]
+[/row]
+[row class="signal-rail"]
+[col span="8" span__sm="12"]
+[ux_text]<p>01 / PRINTED TEES &nbsp;·&nbsp; 02 / EMBROIDERED CAPS</p>[/ux_text]
+[/col]
+[col span="4" span__sm="12" align="right"]
+[ux_text]<p>INDEPENDENT GRAPHIC GOODS &nbsp; // &nbsp; EST. 2026</p>[/ux_text]
+[/col]
+[/row]
+[/section]
+
+[section class="signal-collections" padding="52px"]
+[row class="signal-section-title"]
+[col span="12"]
+[ux_text]
+<p class="signal-eyebrow">01 / COLLECTION INDEX</p>
+<h2>Find your frequency.</h2>
+[/ux_text]
+[/col]
+[/row]
+[row]
+[col span="6" span__sm="6" class="signal-collection-card"]
+[ux_image id="{{tees_image}}" image_size="original" link="{{tees_url}}"]
+[ux_text]<p class="signal-meta">01 / DESIGNED TO WEAR IN</p><h3>Graphic tees</h3>[/ux_text]
+[button text="Shop tees →" link="{{tees_url}}" style="link"]
+[/col]
+[col span="6" span__sm="6" class="signal-collection-card"]
+[ux_image id="{{hats_image}}" image_size="original" link="{{hats_url}}"]
+[ux_text]<p class="signal-meta">02 / BUILT TO TOP IT OFF</p><h3>Field caps</h3>[/ux_text]
+[button text="Shop hats →" link="{{hats_url}}" style="link"]
+[/col]
+[/row]
+[/section]
+
+[section class="signal-featured" padding="52px"]
+[row class="signal-section-title"]
+[col span="12"]
+[ux_text]
+<p class="signal-eyebrow">02 / FIRST TRANSMISSION</p>
+<h2>Pick up the drop.</h2>
+[/ux_text]
+[/col]
+[/row]
+[ux_products type="row" columns="4" columns__md="4" columns__sm="2" ids="{{featured_ids}}" show="featured"]
+[/section]
+
+[section class="signal-outro" padding="58px"]
+[row v_align="middle"]
+[col span="8" span__sm="12"]
+[ux_text]
+<p class="signal-eyebrow">03 / THE SIGNAL SUPPLY MANUAL</p>
+<h2>Graphic goods.<br>No static.</h2>
+<p>Small runs, bold marks, everyday fits. Get dressed on your own frequency.</p>
+[/ux_text]
+[/col]
+[col span="4" span__sm="12" align="left"]
+[button text="Shop the collection →" link="{{shop_url}}" style="outline"]
+[/col]
+[/row]
+[/section]
