@@ -261,17 +261,7 @@ function bl_clear_gift_wrap_session() {
 	WC()->session->set( 'bl_gift_wrap_note', '' );
 }
 
-function bl_clear_gift_wrap_session_after_order( $order_or_id ) {
-	$order = $order_or_id instanceof WC_Order ? $order_or_id : wc_get_order( absint( $order_or_id ) );
-	if ( ! $order || 'yes' !== $order->get_meta( '_bl_gift_wrap', true ) ) {
-		return;
-	}
-	bl_clear_gift_wrap_session();
-}
-
 add_action( 'woocommerce_cart_emptied', 'bl_clear_gift_wrap_session' );
-add_action( 'woocommerce_checkout_order_processed', 'bl_clear_gift_wrap_session_after_order', 10, 1 );
-add_action( 'woocommerce_store_api_checkout_order_processed', 'bl_clear_gift_wrap_session_after_order', 10, 1 );
 
 function bl_display_gift_wrap_email_meta( $order, $sent_to_admin, $plain_text, $email ) {
 	$note = $order->get_meta( '_bl_gift_wrap_note', true );
