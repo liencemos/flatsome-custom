@@ -1426,3 +1426,42 @@ body .bl-eyebrow, body .bl-label, body .bl-footer-links h3, body .bl-kit-grid h3
 	max-width: calc(100% - 52px);
 	row-gap: 12px;
 }
+
+/* Compact Quick Add pill on product cards */
+.product-small .box-image .image-tools.grid-tools {
+	background: transparent;
+	bottom: 14px;
+	display: flex;
+	justify-content: center;
+	left: 0;
+	padding: 0 14px !important;
+	pointer-events: none;
+	right: 0;
+	width: 100%;
+}
+
+.product-small .grid-tools .bl-quick-add {
+	align-items: center;
+	border-radius: 9999px;
+	box-shadow: 0 4px 12px rgba(11, 16, 87, 0.18);
+	display: inline-flex;
+	flex: 0 0 auto;
+	font-size: 12px;
+	height: 36px;
+	justify-content: center;
+	left: auto;
+	letter-spacing: 0.06em;
+	line-height: 1 !important;
+	max-width: 100%;
+	min-height: 36px;
+	padding: 0 22px !important;
+	pointer-events: auto;
+	position: static;
+	right: auto;
+	white-space: nowrap;
+	width: auto;
+}
+
+.product-small .grid-tools .bl-quick-add:hover {
+	box-shadow: 0 6px 16px rgba(11, 16, 87, 0.24);
+}
