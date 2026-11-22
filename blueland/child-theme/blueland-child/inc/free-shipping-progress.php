@@ -38,7 +38,7 @@ function bl_free_shipping_eligible_subtotal() {
 		$subtotal += isset( $cart_item['line_total'] ) ? (float) $cart_item['line_total'] : 0.0;
 	}
 
-	return max( 0.0, $subtotal );
+	return max( 0.0, round( $subtotal, wc_get_price_decimals() ) );
 }
 
 function bl_free_shipping_progress_html() {
