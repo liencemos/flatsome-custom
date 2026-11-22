@@ -218,6 +218,7 @@ function bl_seed_block( $slug, $title, $path ) {
 
 function bl_seed_shipping_and_tax() {
 	update_option( 'woocommerce_coming_soon', 'no' );
+	update_option( 'yith_wcwl_after_add_to_wishlist_behaviour', 'remove' );
 	update_option( 'woocommerce_default_country', 'US:CA' );
 	update_option( 'woocommerce_allowed_countries', 'specific' );
 	update_option( 'woocommerce_specific_allowed_countries', array( 'US' ) );
