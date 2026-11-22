@@ -74,17 +74,22 @@ function signal_seed_media( $file, $alt ) {
 	return $id;
 }
 
-function signal_seed_category( $slug, $name, $image_id ) {
+function signal_seed_existing_category( $slug ) {
 	$term = get_term_by( 'slug', $slug, 'product_cat' );
+	if ( $term && ! get_term_meta( $term->term_id, '_signal_demo', true ) ) {
+		WP_CLI::error( "The product category {$slug} already belongs to non-demo content." );
+	}
+	return $term;
+}
+
+function signal_seed_category( $slug, $name, $image_id ) {
+	$term = signal_seed_existing_category( $slug );
 	if ( ! $term ) {
 		$term = signal_seed_result( wp_insert_term( $name, 'product_cat', array( 'slug' => $slug ) ) );
 		$id   = (int) $term['term_id'];
 		update_term_meta( $id, '_signal_demo', 1 );
 	} else {
 		$id = $term->term_id;
-		if ( ! get_term_meta( $id, '_signal_demo', true ) ) {
-			WP_CLI::error( "The product category {$slug} already belongs to non-demo content." );
-		}
 	}
 	update_term_meta( $id, 'thumbnail_id', $image_id );
 	return $id;
@@ -220,6 +225,10 @@ $hats = array(
 	array( 'field-cap', 'Static Field Cap', '28.00', 'An embroidered wave pattern with a low-profile fit for everyday wear.' ),
 	array( 'nightshift-cap', 'Nightshift Cap', '30.00', 'A radial Gold mark for late starts and early finishes.' ),
 );
+
+foreach ( array( 't-shirts', 'hats' ) as $slug ) {
+	signal_seed_existing_category( $slug );
+}
 
 WC_Install::create_pages();
 update_option( 'woocommerce_coming_soon', 'no' );
