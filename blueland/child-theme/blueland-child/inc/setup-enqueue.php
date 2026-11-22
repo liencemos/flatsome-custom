@@ -23,8 +23,8 @@ add_action(
 			array(),
 			null
 		);
-		wp_enqueue_style( 'blueland-child', BL_CHILD_URL . '/assets/css/blueland.css', array(), BL_CHILD_VERSION );
-		wp_enqueue_script( 'blueland-child', BL_CHILD_URL . '/assets/js/blueland.js', array(), BL_CHILD_VERSION, true );
+		wp_enqueue_style( 'blueland-child', BL_CHILD_URL . '/assets/css/blueland.css', array(), (string) filemtime( BL_CHILD_DIR . '/assets/css/blueland.css' ) );
+		wp_enqueue_script( 'blueland-child', BL_CHILD_URL . '/assets/js/blueland.js', array(), (string) filemtime( BL_CHILD_DIR . '/assets/js/blueland.js' ), true );
 		wp_localize_script(
 			'blueland-child',
 			'blStore',
