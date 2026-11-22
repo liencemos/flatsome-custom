@@ -208,6 +208,9 @@ function bl_checkout_shipping_value() {
 		return 'Calculated at next step';
 	}
 	$total = (float) WC()->cart->get_shipping_total();
+	if ( WC()->cart->display_prices_including_tax() ) {
+		$total += (float) WC()->cart->get_shipping_tax();
+	}
 	return $total <= 0 ? 'Free' : wc_price( $total );
 }
 
