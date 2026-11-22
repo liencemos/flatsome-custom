@@ -30,6 +30,10 @@ function bl_hold_review_comment( $comment_id ) {
 }
 
 function bl_handle_review_photo_uploads( $comment_id, $comment_approved, $commentdata ) {
+	if ( in_array( (string) $comment_approved, array( 'spam', 'trash' ), true ) ) {
+		return;
+	}
+
 	$comment = get_comment( $comment_id );
 	if ( ! $comment || 'product' !== get_post_type( $comment->comment_post_ID ) || 'review' !== $comment->comment_type ) {
 		return;
@@ -53,11 +57,36 @@ function bl_handle_review_photo_uploads( $comment_id, $comment_approved, $commen
 	);
 	$uploads      = array();
 	$file_set     = $_FILES['bl_review_photos'];
+	$file_indices = array();
 	foreach ( array_keys( $file_set['name'] ) as $index ) {
 		$error = isset( $file_set['error'][ $index ] ) ? (int) $file_set['error'][ $index ] : UPLOAD_ERR_NO_FILE;
 		if ( UPLOAD_ERR_NO_FILE === $error ) {
 			continue;
 		}
+		$file_indices[] = $index;
+	}
+
+	if ( count( $file_indices ) > 3 ) {
+		bl_hold_review_comment( $comment_id );
+		return;
+	}
+	if ( empty( $file_indices ) ) {
+		return;
+	}
+
+	$ip_address = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+	$limit_key  = 'bl_review_photos_' . md5( $ip_address );
+	$used       = max( 0, (int) get_transient( $limit_key ) );
+	$remaining  = max( 0, 6 - $used );
+	if ( 0 === $remaining ) {
+		return;
+	}
+
+	foreach ( $file_indices as $index ) {
+		if ( count( $uploads ) >= $remaining ) {
+			continue;
+		}
+		$error = isset( $file_set['error'][ $index ] ) ? (int) $file_set['error'][ $index ] : UPLOAD_ERR_NO_FILE;
 		if (
 			UPLOAD_ERR_OK !== $error
 			|| empty( $file_set['tmp_name'][ $index ] )
@@ -82,10 +111,6 @@ function bl_handle_review_photo_uploads( $comment_id, $comment_approved, $commen
 		);
 	}
 
-	if ( count( $uploads ) > 3 ) {
-		bl_hold_review_comment( $comment_id );
-		return;
-	}
 	if ( empty( $uploads ) ) {
 		return;
 	}
@@ -117,6 +142,7 @@ function bl_handle_review_photo_uploads( $comment_id, $comment_approved, $commen
 		$attachment_ids[] = (int) $attachment_id;
 	}
 	update_comment_meta( $comment_id, '_bl_review_photos', $attachment_ids );
+	set_transient( $limit_key, $used + count( $attachment_ids ), HOUR_IN_SECONDS );
 }
 add_action( 'comment_post', 'bl_handle_review_photo_uploads', 20, 3 );
 
@@ -182,6 +208,19 @@ function bl_submit_product_question() {
 		wp_send_json_error( array( 'message' => 'Please check your details and try again.' ), 400 );
 	}
 
+	$ip_address = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+	$ip_hash    = md5( $ip_address );
+	$last_key   = 'bl_qa_last_' . $ip_hash;
+	$hour_key   = 'bl_qa_hour_' . $ip_hash;
+	$hour_count = max( 0, (int) get_transient( $hour_key ) );
+	if ( get_transient( $last_key ) || $hour_count >= 5 ) {
+		wp_send_json_error( array( 'message' => 'Please wait a moment before asking another question.' ), 429 );
+	}
+	set_transient( $last_key, 1, MINUTE_IN_SECONDS );
+	set_transient( $hour_key, $hour_count + 1, HOUR_IN_SECONDS );
+
+	$user_agent        = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+	$comment_approved = wp_check_comment_disallowed_list( $name, $email, '', $question, $ip_address, $user_agent ) ? 'spam' : 0;
 	$comment_id = wp_insert_comment(
 		array(
 			'comment_post_ID'      => $product_id,
@@ -189,7 +228,7 @@ function bl_submit_product_question() {
 			'comment_author_email' => $email,
 			'comment_content'      => $question,
 			'comment_type'         => 'bl_question',
-			'comment_approved'     => 0,
+			'comment_approved'     => $comment_approved,
 		)
 	);
 	if ( ! $comment_id || is_wp_error( $comment_id ) ) {
