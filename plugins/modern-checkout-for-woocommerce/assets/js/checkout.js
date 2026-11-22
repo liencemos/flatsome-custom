@@ -107,6 +107,8 @@
 		let firstInvalid = null;
 		panel.querySelectorAll('.validate-required, .validate-email').forEach((row) => {
 			if (!isVisible(row)) return;
+			const accountFields = row.closest('.create-account');
+			if (accountFields && !isVisible(accountFields)) return;
 			const field = Array.from(row.querySelectorAll('input:not([type="hidden"]), select, textarea')).find(isVisible);
 			if (!field || field.disabled) return;
 			let message = '';

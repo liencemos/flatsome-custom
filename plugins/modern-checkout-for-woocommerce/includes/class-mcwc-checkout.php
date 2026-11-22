@@ -175,8 +175,12 @@ function mcwc_checkout_render_billing_fields( $checkout = null ) {
 			echo '<p class="form-row form-row-wide create-account"><label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" id="createaccount" ' . checked( ( true === $checkout->get_value( 'createaccount' ) || true === apply_filters( 'woocommerce_create_account_default_checked', false ) ), true, false ) . ' type="checkbox" name="createaccount" value="1" /> <span>' . esc_html__( 'Create an account?', 'modern-checkout-for-woocommerce' ) . '</span></label></p>';
 		}
 		do_action( 'woocommerce_before_checkout_registration_form', $checkout );
-		foreach ( $checkout->get_checkout_fields( 'account' ) as $key => $field ) {
-			woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
+		if ( $checkout->get_checkout_fields( 'account' ) ) {
+			echo '<div class="create-account">';
+			foreach ( $checkout->get_checkout_fields( 'account' ) as $key => $field ) {
+				woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
+			}
+			echo '<div class="clear"></div></div>';
 		}
 		do_action( 'woocommerce_after_checkout_registration_form', $checkout );
 		echo '</div>';
@@ -337,51 +341,131 @@ function mcwc_checkout_shipping_methods_html() {
 	return ob_get_clean();
 }
 
-function mcwc_find_shipping_threshold() {
-	$packages = function_exists( 'WC' ) && WC()->shipping() ? WC()->shipping()->get_packages() : array();
+function mcwc_find_free_shipping_method() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return false;
+	}
+
+	$packages = WC()->cart->get_shipping_packages();
+	$customer = WC()->customer;
+	$has_destination = $customer && $customer->has_calculated_shipping();
+	if ( ! $has_destination ) {
+		$base = wc_get_base_location();
+		$destination = array(
+			'country'   => $base['country'],
+			'state'     => $base['state'],
+			'postcode'  => get_option( 'woocommerce_store_postcode' ),
+			'city'      => get_option( 'woocommerce_store_city' ),
+			'address'   => get_option( 'woocommerce_store_address' ),
+			'address_1' => get_option( 'woocommerce_store_address' ),
+			'address_2' => get_option( 'woocommerce_store_address_2' ),
+		);
+	} else {
+		$destination = array(
+			'country'   => $customer->get_shipping_country(),
+			'state'     => $customer->get_shipping_state(),
+			'postcode'  => $customer->get_shipping_postcode(),
+			'city'      => $customer->get_shipping_city(),
+			'address'   => $customer->get_shipping_address(),
+			'address_1' => $customer->get_shipping_address_1(),
+			'address_2' => $customer->get_shipping_address_2(),
+		);
+	}
+
+	if ( empty( $packages ) ) {
+		$packages = array( array( 'destination' => $destination ) );
+	} elseif ( ! $has_destination ) {
+		foreach ( $packages as &$package ) {
+			$package['destination'] = $destination;
+		}
+		unset( $package );
+	}
+
 	foreach ( $packages as $package ) {
 		$zone = WC_Shipping_Zones::get_zone_matching_package( $package );
 		foreach ( $zone->get_shipping_methods( true ) as $method ) {
-			if ( 'free_shipping' === $method->id && 'yes' === $method->enabled && isset( $method->min_amount ) && (float) $method->min_amount > 0 ) {
-				return (float) $method->min_amount;
+			$minimum = (float) $method->get_option( 'min_amount', 0 );
+			if ( 'free_shipping' === $method->id && 'yes' === $method->enabled && $minimum > 0 ) {
+				return $method;
 			}
 		}
 	}
-	$zone_ids = array( 0 );
-	foreach ( WC_Shipping_Zones::get_zones() as $zone_data ) {
-		$zone_ids[] = absint( $zone_data['id'] );
-	}
-	foreach ( array_unique( $zone_ids ) as $zone_id ) {
-		$zone = new WC_Shipping_Zone( $zone_id );
-		foreach ( $zone->get_shipping_methods( true ) as $method ) {
-			if ( 'free_shipping' === $method->id && 'yes' === $method->enabled && isset( $method->min_amount ) && (float) $method->min_amount > 0 ) {
-				return (float) $method->min_amount;
-			}
-		}
-	}
-	return null;
+
+	return false;
+}
+
+function mcwc_find_shipping_threshold() {
+	$method = mcwc_find_free_shipping_method();
+	return $method ? (float) $method->get_option( 'min_amount', 0 ) : null;
 }
 
 function mcwc_free_shipping_threshold() {
 	$override = mcwc_option( 'free_shipping_threshold_override', '' );
-	$threshold = '' !== (string) $override ? (float) $override : mcwc_find_shipping_threshold();
-	$threshold = apply_filters( 'mcwc_free_shipping_threshold', $threshold );
+	$automatic_threshold = mcwc_find_shipping_threshold();
+	if ( null === $automatic_threshold && '' === (string) $override ) {
+		return null;
+	}
+	$threshold = apply_filters( 'mcwc_free_shipping_threshold', $automatic_threshold );
+	if ( '' !== (string) $override ) {
+		$threshold = (float) $override;
+	}
 	return is_numeric( $threshold ) && (float) $threshold > 0 ? (float) $threshold : null;
 }
 
 function mcwc_free_shipping_eligible_subtotal() {
 	$subtotal = 0.0;
 	if ( function_exists( 'WC' ) && WC()->cart ) {
-		foreach ( WC()->cart->get_cart() as $cart_item ) {
-			$product = $cart_item['data'] ?? null;
-			if ( 'yes' === mcwc_option( 'exclude_virtual', 'yes' ) && $product instanceof WC_Product && $product->is_virtual() ) {
-				continue;
+		$cart             = WC()->cart;
+		$method           = mcwc_find_free_shipping_method();
+		$exclude_virtual  = 'yes' === mcwc_option( 'exclude_virtual', 'yes' );
+		$has_override     = '' !== (string) mcwc_option( 'free_shipping_threshold_override', '' );
+		if ( ! $method && $has_override ) {
+			foreach ( $cart->get_cart() as $cart_item ) {
+				$product = $cart_item['data'] ?? null;
+				if ( $exclude_virtual && $product instanceof WC_Product && $product->is_virtual() ) {
+					continue;
+				}
+				$subtotal += isset( $cart_item['line_total'] ) ? (float) $cart_item['line_total'] : 0.0;
 			}
-			$subtotal += isset( $cart_item['line_total'] ) ? (float) $cart_item['line_total'] : 0.0;
+		} elseif ( $method ) {
+			$includes_tax = $cart->display_prices_including_tax();
+			$subtotal     = (float) $cart->get_displayed_subtotal();
+			if ( $includes_tax ) {
+				$subtotal -= (float) $cart->get_discount_tax();
+			}
+
+			$apply_discounts = 'no' === $method->get_option( 'ignore_discounts', 'no' );
+			if ( $apply_discounts ) {
+				$subtotal -= (float) $cart->get_discount_total();
+			}
+
+			if ( $exclude_virtual ) {
+				$virtual_subtotal = 0.0;
+				$virtual_discount = 0.0;
+				foreach ( $cart->get_cart() as $cart_item ) {
+					$product = $cart_item['data'] ?? null;
+					if ( ! $product instanceof WC_Product || ! $product->is_virtual() ) {
+						continue;
+					}
+					$line_subtotal = (float) ( $cart_item['line_subtotal'] ?? 0 );
+					$line_tax      = (float) ( $cart_item['line_subtotal_tax'] ?? 0 );
+					$virtual_subtotal += $line_subtotal + ( $includes_tax ? $line_tax : 0 );
+					if ( $apply_discounts ) {
+						$virtual_discount += max( 0, $line_subtotal - (float) ( $cart_item['line_total'] ?? 0 ) );
+						if ( $includes_tax ) {
+							$virtual_discount += max( 0, $line_tax - (float) ( $cart_item['line_tax'] ?? 0 ) );
+						}
+					}
+				}
+				$subtotal -= $virtual_subtotal;
+				if ( $apply_discounts ) {
+					$subtotal += $virtual_discount;
+				}
+			}
 		}
 	}
 	$subtotal = round( max( 0, $subtotal ), wc_get_price_decimals() );
-	return max( 0, (float) apply_filters( 'mcwc_free_shipping_eligible_subtotal', $subtotal ) );
+	return (float) apply_filters( 'mcwc_free_shipping_eligible_subtotal', $subtotal );
 }
 
 function mcwc_free_shipping_progress_html() {
