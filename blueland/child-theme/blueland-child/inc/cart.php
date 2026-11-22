@@ -1,0 +1,93 @@
+<?php
+/**
+ * Mini-cart progress, quantity controls, and cross-sells.
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+add_filter(
+	'woocommerce_package_rates',
+	function ( $rates ) {
+		$free_rates = array();
+		foreach ( $rates as $rate_id => $rate ) {
+			if ( isset( $rate->method_id ) && 'free_shipping' === $rate->method_id ) {
+				$free_rates[ $rate_id ] = $rate;
+			}
+		}
+		return $free_rates ? $free_rates : $rates;
+	},
+	100
+);
+
+add_filter(
+	'woocommerce_widget_cart_item_quantity',
+	function ( $quantity, $cart_item, $cart_item_key ) {
+		return '<div class="bl-mini-purchase-row"><div class="bl-mini-quantity"><button type="button" data-cart-qty="-1" data-key="' . esc_attr( $cart_item_key ) . '" aria-label="Decrease quantity">−</button><span>' . esc_html( (string) $cart_item['quantity'] ) . '</span><button type="button" data-cart-qty="1" data-key="' . esc_attr( $cart_item_key ) . '" aria-label="Increase quantity">+</button></div><span class="bl-mini-price">' . wp_kses_post( WC()->cart->get_product_price( $cart_item['data'] ) ) . '</span></div>';
+	},
+	20,
+	3
+);
+
+add_action(
+	'woocommerce_widget_shopping_cart_before_buttons',
+	function () {
+		$cart_product_ids = array();
+		foreach ( WC()->cart ? WC()->cart->get_cart() : array() as $cart_item ) {
+			$cart_product_ids[] = absint( $cart_item['product_id'] );
+			if ( ! empty( $cart_item['variation_id'] ) ) {
+				$cart_product_ids[] = absint( $cart_item['variation_id'] );
+			}
+		}
+		$products = wc_get_products( array( 'limit' => 12, 'status' => 'publish', 'type' => 'simple', 'orderby' => 'popularity', 'order' => 'DESC', 'exclude' => array_unique( $cart_product_ids ) ) );
+		if ( empty( $products ) ) {
+			return;
+		}
+		$recommendation_cards = '';
+		$shown = 0;
+		foreach ( $products as $product ) {
+			if ( ! $product->is_type( 'simple' ) || ! $product->is_purchasable() || ! $product->is_in_stock() || in_array( $product->get_id(), $cart_product_ids, true ) ) {
+				continue;
+			}
+			$product_url = get_permalink( $product->get_id() );
+			$recommendation_cards .= '<article class="bl-cart-recommendation"><a class="bl-cart-recommendation-image" href="' . esc_url( $product_url ) . '">' . $product->get_image( 'woocommerce_thumbnail' ) . '</a><div class="bl-cart-recommendation-copy"><a class="bl-cart-recommendation-name" href="' . esc_url( $product_url ) . '">' . esc_html( $product->get_name() ) . '</a><span class="bl-cart-recommendation-price">' . wp_kses_post( $product->get_price_html() ) . '</span></div><a href="' . esc_url( $product->add_to_cart_url() ) . '" data-quantity="1" class="button bl-quick-add add_to_cart_button ajax_add_to_cart product_type_simple" data-product_id="' . esc_attr( $product->get_id() ) . '" data-product_sku="' . esc_attr( $product->get_sku() ) . '" rel="nofollow">+ Add</a></article>';
+			$shown++;
+			if ( 3 === $shown ) {
+				break;
+			}
+		}
+		if ( $recommendation_cards ) {
+			echo '<div class="bl-cart-recommendations"><h3>You may also like</h3><div class="bl-cart-recommendation-row">' . $recommendation_cards . '</div></div>';
+		}
+	}
+);
+
+add_action(
+	'woocommerce_widget_shopping_cart_after_buttons',
+	function () {
+		echo '<p class="bl-cart-tax-note">Taxes and shipping calculated at checkout.</p>';
+	}
+);
+
+add_action(
+	'wp_ajax_bl_update_cart_qty',
+	'bl_update_cart_qty'
+);
+add_action(
+	'wp_ajax_nopriv_bl_update_cart_qty',
+	'bl_update_cart_qty'
+);
+function bl_update_cart_qty() {
+	check_ajax_referer( 'bl_storefront', 'nonce' );
+	$key = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
+	$delta = isset( $_POST['delta'] ) ? (int) $_POST['delta'] : 0;
+	$cart = WC()->cart;
+	if ( $cart && isset( $cart->get_cart()[ $key ] ) ) {
+		$current = (int) $cart->get_cart()[ $key ]['quantity'];
+		if ( $current + $delta > 0 ) {
+			$cart->set_quantity( $key, $current + $delta, true );
+		} else {
+			$cart->remove_cart_item( $key );
+		}
+	}
+	WC_AJAX::get_refreshed_fragments();
+}

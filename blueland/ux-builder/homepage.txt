@@ -1,0 +1,127 @@
+[section class="bl-home-hero-section" padding="0px"]
+[ux_banner height="745px" class="bl-home-hero-banner"]
+[text_box position_x="50" position_y="91" text_align="center" width="80"]
+<h1>A cleaner routine, made wonderfully simple.</h1>
+<p>Effective everyday essentials, reimagined for a lighter footprint.</p>
+[button text="Shop Now" link="/shop/" style="shade" radius="99" class="bl-hero-button"]
+[/text_box]
+[/ux_banner]
+[/section]
+
+[section class="bl-home-section bl-shop-categories" padding="84px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<h2>Shop By Category</h2>
+<p class="bl-home-subtitle">Explore all of our reusable and sustainable cleaning products for your home.</p>
+[/ux_text]
+[/col]
+[/row]
+[bl_home_categories]
+[/section]
+
+[section class="bl-usp-section" padding="88px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<h2>4,000,000+ Homes Have Made the Switch</h2>
+[/ux_text]
+[bl_usp_grid]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-home-products" padding="82px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<h2>Bestsellers</h2>
+<p class="bl-home-subtitle">Powerfully effective essentials you can trust to keep your home clean, over and over again.</p>
+[/ux_text]
+[/col]
+[/row]
+[ux_products type="slider" columns="4" orderby="popularity" order="DESC" class="bl-home-products-grid"]
+[row]
+[col span="12" align="center"]
+[button text="Shop All" link="/product-category/bestsellers/" style="outline" radius="99"]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-press-section" padding="75px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<p class="bl-eyebrow">A Thoughtful Approach</p>
+<h2 class="bl-press-quote">“Refill-ready essentials designed to make everyday routines feel easier.”</h2>
+[bl_press_logos]
+[/ux_text]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-home-lifestyle" padding="0px"]
+[ux_banner height="650px" class="bl-home-lifestyle-banner"]
+[text_box position_x="80" position_y="50" width="38" text_align="left"]
+<h2>A clean the whole planet can feel.</h2>
+<p>Thoughtful formulas and reusable bottles make everyday cleaning feel good from the first spray to the last refill.</p>
+[button text="Shop All Products" link="/shop/" style="outline" radius="99"]
+[/text_box]
+[/ux_banner]
+[/section]
+
+[section class="bl-reviews-band" padding="88px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<h2>10,000+ 5-Star Reviews and Counting</h2>
+[/ux_text]
+[block id="reviews-slider"]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-split-section bl-how-it-works-home" padding="0px"]
+[row class="collapse" v_align="middle"]
+[col span="6" span__sm="12" class="bl-split-image-col"]
+[bl_image name="how-it-works"]
+[/col]
+[col span="6" span__sm="12" padding="8% 7% 8% 7%"]
+[ux_text]
+<h2>How It Works</h2>
+<p>One bottle, refill forever. From your sink to your laundry room, thoughtful formats make everyday care easy to repeat.</p>
+<ul><li>Fill your reusable bottle</li><li>Add a concentrated refill</li><li>Clean, then refill again</li></ul>
+[button text="How It Works" link="/our-mission/" style="outline" radius="99"]
+[/ux_text]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-certifications-section" padding="75px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<p class="bl-eyebrow">Certifications &amp; Awards</p>
+<h2>A Higher Standard of Clean</h2>
+[/ux_text]
+[block id="certifications"]
+[button text="Learn About Our Certifications →" link="/certifications/" style="link" class="bl-link-arrow"]
+[/col]
+[/row]
+[/section]
+
+[section class="bl-home-instagram" padding="70px 0px"]
+[row]
+[col span="4" span__sm="12"]
+[ux_text]
+<h2>Good Clean Fun</h2>
+<a class="bl-link-arrow" href="https://www.instagram.com/">Follow Along on Instagram →</a>
+[/ux_text]
+[/col]
+[col span="8" span__sm="12"]
+[bl_instagram_grid]
+[/col]
+[/row]
+[/section]
+
+[block id="cta-journey"]

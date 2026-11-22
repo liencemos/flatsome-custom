@@ -1,0 +1,10 @@
+[section class="bl-journey-cta" padding="52px 0px"]
+[row]
+[col span="12" align="center"]
+[ux_text]
+<h2>Start Your Journey</h2>
+[/ux_text]
+[button text="Shop All Products" link="/shop/" style="shade" radius="99"]
+[/col]
+[/row]
+[/section]
