@@ -231,6 +231,21 @@ foreach ( array( 't-shirts', 'hats' ) as $slug ) {
 }
 
 WC_Install::create_pages();
+$cart = get_post( wc_get_page_id( 'cart' ) );
+if ( $cart && has_block( 'woocommerce/cart', $cart ) ) {
+	$blocks  = parse_blocks( $cart->post_content );
+	$classic = parse_blocks( '<!-- wp:shortcode -->[woocommerce_cart]<!-- /wp:shortcode -->' );
+	$updated = false;
+	foreach ( $blocks as $index => $block ) {
+		if ( 'woocommerce/cart' === $block['blockName'] ) {
+			$blocks[ $index ] = $classic[0];
+			$updated = true;
+		}
+	}
+	if ( $updated ) {
+		signal_seed_result( wp_update_post( array( 'ID' => $cart->ID, 'post_content' => wp_slash( serialize_blocks( $blocks ) ) ), true ) );
+	}
+}
 update_option( 'woocommerce_coming_soon', 'no' );
 update_option( 'woocommerce_currency', 'USD' );
 update_option( 'blogname', 'Signal Supply' );

@@ -18,6 +18,8 @@ $home = get_post( get_option( 'page_on_front' ) );
 signal_check( $home && has_shortcode( $home->post_content, 'ux_products' ) && false === strpos( $home->post_content, '{{' ), 'Home must contain the seeded Flatsome product grid without unresolved placeholders.' );
 signal_check( 'no-sidebar' === get_theme_mod( 'product_layout' ), 'Expected the native no-sidebar product template.' );
 signal_check( has_shortcode( get_theme_mod( 'html_shop_page', '' ), 'block' ) && 'blocks' === get_post_type( get_theme_mod( 'footer_block' ) ), 'Expected Flatsome UX Blocks on the shop header and footer.' );
+$cart = get_post( wc_get_page_id( 'cart' ) );
+signal_check( $cart && has_shortcode( $cart->post_content, 'woocommerce_cart' ) && ! has_block( 'woocommerce/cart', $cart ), 'Expected the classic WooCommerce cart so Flatsome can refresh its header bag count.' );
 
 $products = get_posts( array(
 	'post_type'      => 'product',
