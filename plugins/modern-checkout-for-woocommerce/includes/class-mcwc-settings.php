@@ -210,6 +210,9 @@ class MCWC_Settings extends WC_Settings_Page {
 
 	public static function sanitize_option( $value, $option, $raw_value ) {
 		$id = is_array( $option ) && isset( $option['id'] ) ? $option['id'] : ( is_string( $option ) ? $option : '' );
+		if ( 0 !== strpos( (string) $id, 'mcwc_' ) ) {
+			return $value;
+		}
 		if ( 'mcwc_enabled' === $id || in_array( $id, array( 'mcwc_show_free_shipping', 'mcwc_show_coupon', 'mcwc_show_order_notes', 'mcwc_exclude_virtual' ), true ) ) {
 			return 'yes' === $value ? 'yes' : 'no';
 		}
