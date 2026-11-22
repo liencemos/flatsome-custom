@@ -86,3 +86,7 @@ Seed dùng đơn vị ngày `F j, Y`, giờ `g:i a`, tuần bắt đầu Chủ N
 5. **Tình trạng kho:** huy hiệu số lượng thấp/hết hàng/hàng về, form đăng ký email và thông báo khi chuyển sang còn hàng; nên bổ sung xử lý unsubscribe và dịch vụ email production.
 6. **Hiệu năng ảnh/tài nguyên:** ảnh lớn được chuyển sang WebP, có preload hero, preconnect font, defer JavaScript và tắt emoji khi hệ thống hỗ trợ.
 7. **Quà tặng và Holiday Shop:** Gift Card demo tạo coupon cố định một lần cho mỗi đơn vị; mã dùng một lần nên mọi số dư chưa dùng sẽ mất. Với production, nên dùng plugin gift-card chuyên dụng để hỗ trợ số dư còn lại, hoàn tiền, gửi lại mã và theo dõi bảo mật. Gift wrap cộng $4.95 và lưu lời nhắn trong đơn hàng; trang Holiday Shop có thể chỉnh sửa bằng UX Builder.
+
+## Checkout nhiều bước
+
+Trang checkout dùng shortcode WooCommerce cổ điển và bố cục ba bước Information, Shipping, Payment; nội dung nhập liệu, phí giao hàng, mã giảm giá và phương thức thanh toán vẫn do WooCommerce xử lý. Thanh tiến độ giao hàng miễn phí chỉ tính sản phẩm vật lý. Kiểm tra địa chỉ/ZIP và luồng đặt hàng trước khi triển khai production; thanh toán mẫu hiện không thu tiền.

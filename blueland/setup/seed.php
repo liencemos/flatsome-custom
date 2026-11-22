@@ -743,6 +743,18 @@ function bl_seed_storefront() {
 	if ( $shop_id > 0 ) {
 		delete_post_meta( $shop_id, '_wp_page_template' );
 	}
+	$checkout_id = wc_get_page_id( 'checkout' );
+	if ( $checkout_id > 0 ) {
+		$checkout_page = get_post( $checkout_id );
+		if ( $checkout_page && '[woocommerce_checkout]' !== trim( $checkout_page->post_content ) ) {
+			wp_update_post(
+				array(
+					'ID'           => $checkout_id,
+					'post_content' => '[woocommerce_checkout]',
+				)
+			);
+		}
+	}
 
 	$legacy_slug  = 'auto' . 'ship';
 	$legacy_label = 'Auto' . 'ship';
