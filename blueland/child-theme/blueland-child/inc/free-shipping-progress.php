@@ -9,6 +9,15 @@ function bl_free_shipping_threshold() {
 	return (float) apply_filters( 'bl_free_shipping_threshold', 50 );
 }
 
+add_filter(
+	'woocommerce_shipping_free_shipping_is_available',
+	function ( $is_available, $package, $shipping_method ) {
+		return $is_available && bl_free_shipping_eligible_subtotal() >= bl_free_shipping_threshold();
+	},
+	10,
+	3
+);
+
 function bl_free_shipping_eligible_subtotal() {
 	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 		return 0.0;
@@ -17,8 +26,14 @@ function bl_free_shipping_eligible_subtotal() {
 	$subtotal = 0.0;
 	foreach ( WC()->cart->get_cart() as $cart_item ) {
 		$product = isset( $cart_item['data'] ) ? $cart_item['data'] : null;
-		if ( $product instanceof WC_Product && $product->is_virtual() ) {
-			continue;
+		if ( $product instanceof WC_Product ) {
+			if ( $product->is_virtual() ) {
+				continue;
+			}
+			$product_id = isset( $cart_item['product_id'] ) ? absint( $cart_item['product_id'] ) : $product->get_id();
+			if ( function_exists( 'bl_is_gift_card_product' ) && bl_is_gift_card_product( $product_id ) ) {
+				continue;
+			}
 		}
 		$subtotal += isset( $cart_item['line_total'] ) ? (float) $cart_item['line_total'] : 0.0;
 	}
