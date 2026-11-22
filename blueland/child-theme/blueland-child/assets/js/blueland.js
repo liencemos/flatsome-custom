@@ -34,6 +34,18 @@
 		window.setTimeout(() => giftWrapObserver.disconnect(), 10000);
 	}
 
+	const todayPrice = document.querySelector('.bl-today-price');
+	if (todayPrice && window.jQuery) {
+		const defaultTodayPrice = todayPrice.innerHTML;
+		const updateTodayPrice = (price) => {
+			const amount = Number(price);
+			if (!Number.isFinite(amount)) return;
+			todayPrice.textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+		};
+		window.jQuery(document).on('found_variation', 'form.variations_form', (_event, variation) => updateTodayPrice(variation?.display_price));
+		window.jQuery(document).on('reset_data', 'form.variations_form', () => { todayPrice.innerHTML = defaultTodayPrice; });
+	}
+
 	const syncCartLabels = () => {
 		document.querySelectorAll('.header-cart-link').forEach((link) => {
 			const count = Number(link.querySelector('.cart-icon')?.dataset.cartCount || 0);
@@ -73,6 +85,17 @@
 
 	const mobileFilterPanel = document.querySelector('#bl-mobile-filter-panel');
 	let archiveFilterPlaceholder = null;
+	document.addEventListener('change', (event) => {
+		const select = event.target;
+		if (!mobileFilterPanel || mobileFilterPanel.hidden || !mobileFilterPanel.contains(select) || !select.matches('.woocommerce-ordering select.orderby')) return;
+		event.stopImmediatePropagation();
+	}, true);
+	document.addEventListener('submit', (event) => {
+		const form = event.target;
+		if (!mobileFilterPanel || mobileFilterPanel.hidden || !mobileFilterPanel.contains(form) || !form.matches('.woocommerce-ordering')) return;
+		event.preventDefault();
+		event.stopImmediatePropagation();
+	}, true);
 	const reviewLightbox = document.querySelector('#bl-review-lightbox');
 	let reviewPhotoFocus = null;
 
