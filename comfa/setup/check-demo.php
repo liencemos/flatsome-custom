@@ -30,6 +30,8 @@ foreach ( $cf_catalog['products'] as $cf_item ) {
 	$cf_expect( $cf_product->get_image_id() && count( $cf_product->get_gallery_image_ids() ) >= 2, $cf_item['slug'] . ': images missing.' );
 	$cf_default = function_exists( 'cf_default_variation' ) ? cf_default_variation( $cf_product ) : null;
 	$cf_expect( $cf_default && $cf_default->is_purchasable() && $cf_default->is_in_stock(), $cf_item['slug'] . ': default variation is not purchasable.' );
+	// Cards show the default variation's price; WooCommerce sorts and filters by the lowest one.
+	$cf_expect( $cf_default && (float) $cf_default->get_price() === (float) $cf_product->get_variation_price( 'min' ), $cf_item['slug'] . ': default variation is not the lowest-priced one.' );
 	foreach ( $cf_children as $cf_child_id ) {
 		$cf_child = wc_get_product( $cf_child_id );
 		$cf_pack  = get_term_by( 'slug', $cf_child->get_attributes()['pa_pack'], 'pa_pack' );

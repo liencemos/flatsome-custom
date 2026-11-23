@@ -27,7 +27,7 @@ Script chép child theme, ảnh và nội dung UX Builder vào site, kích hoạ
 
 - **Trang chủ, footer, mega menu, 404, khối giới thiệu sản phẩm (`pdp-story`):** sửa bằng UX Builder.
 - **Màu, font, header, layout danh mục và sản phẩm:** Flatsome > Theme Options.
-- **Sản phẩm:** sản phẩm biến thể chuẩn của WooCommerce với ba thuộc tính Pack, Color, Size. Giá gói là giá khuyến mãi của biến thể; nhãn "10% Pack Savings" được tính từ đó. Ô màu và ô size dùng tính năng Swatches có sẵn của Flatsome.
+- **Sản phẩm:** sản phẩm biến thể chuẩn của WooCommerce với ba thuộc tính Pack, Color, Size. Giá gói là giá khuyến mãi của biến thể; nhãn "10% Pack Savings" được tính từ đó. Gói mặc định của mỗi sản phẩm là gói rẻ nhất (Single); thẻ sản phẩm hiện giá này, và sắp xếp, lọc theo giá cũng tính theo giá thấp nhất. Ô màu và ô size dùng tính năng Swatches có sẵn của Flatsome.
 - **Nhãn "In Demand" / "New"** và dòng Product Highlight: custom field `_cf_badge` và `_cf_highlight` của sản phẩm. Ghi chú dưới size: `_cf_size_notes`.
 - **Ngưỡng freeship, mã chào mừng, dòng chữ trên thanh khuyến mãi:** filter `cf_settings` (xem `inc/setup.php`).
 - **Thêm màu sản phẩm mẫu:** sửa `setup/catalog.json`, chạy `python3 comfa/setup/make-art.py` (cần Pillow và numpy) rồi chạy lại `setup.sh`.

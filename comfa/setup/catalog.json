@@ -33,7 +33,7 @@
     "socks": {"name": "Socks", "image": "tile-socks.webp", "blurb": "Cushioned ribbed socks that stay up all day.", "children": {}}
   },
   "products": [
-    {"slug": "everyday-crew-tee", "name": "Everyday Crew Tee", "base": "tee-crew", "cat": "t-shirts", "sub": "crew-neck", "style": "casual", "colors": ["navy", "white", "black", "heather", "sage"], "packs": "tee", "default_pack": "3-Pack", "sizes": "apparel", "price": 28, "weight": "Midweight", "badge": "In Demand", "print": false, "featured": true,
+    {"slug": "everyday-crew-tee", "name": "Everyday Crew Tee", "base": "tee-crew", "cat": "t-shirts", "sub": "crew-neck", "style": "casual", "colors": ["navy", "white", "black", "heather", "sage"], "packs": "tee", "default_pack": "Single", "sizes": "apparel", "price": 28, "weight": "Midweight", "badge": "In Demand", "print": false, "featured": true,
      "short": "The tee you reach for first. Combed ringspun cotton, a collar that keeps its shape and a fit that sits just right.", "highlight": "Just enough weight to drape well without feeling heavy."},
     {"slug": "sunset-graphic-tee", "name": "Sunset Graphic Tee", "base": "tee-sun", "cat": "t-shirts", "sub": "graphic-tees", "style": "graphic", "colors": ["cream", "white", "sky"], "packs": "tee", "default_pack": "Single", "sizes": "apparel", "price": 34, "weight": "Midweight", "badge": "New", "print": true, "featured": true,
      "short": "A retro sunset screen-printed with soft-hand water-based inks, so the print feels like part of the fabric.", "highlight": "Water-based print that will not crack or peel."},
@@ -45,7 +45,7 @@
      "short": "A sturdier heavyweight tee with a reinforced chest pocket and a relaxed, boxy fit.", "highlight": "Dense 240 gsm jersey with a structured drape."},
     {"slug": "long-sleeve-tee", "name": "Long Sleeve Tee", "base": "tee-long", "cat": "t-shirts", "sub": "long-sleeve", "style": "outdoor", "colors": ["black", "cream", "burgundy", "navy"], "packs": "tee", "default_pack": "Single", "sizes": "apparel", "price": 36, "weight": "Midweight", "badge": "", "print": false, "featured": false,
      "short": "Everything you like about the Everyday Crew with full sleeves and ribbed cuffs that stay put.", "highlight": "Ribbed cuffs keep sleeves where you push them."},
-    {"slug": "v-neck-tee", "name": "V-Neck Tee", "base": "tee-vneck", "cat": "t-shirts", "sub": "v-neck", "style": "casual", "colors": ["white", "black", "heather", "pink"], "packs": "tee", "default_pack": "3-Pack", "sizes": "apparel", "price": 28, "weight": "Lightweight", "badge": "", "print": false, "featured": false,
+    {"slug": "v-neck-tee", "name": "V-Neck Tee", "base": "tee-vneck", "cat": "t-shirts", "sub": "v-neck", "style": "casual", "colors": ["white", "black", "heather", "pink"], "packs": "tee", "default_pack": "Single", "sizes": "apparel", "price": 28, "weight": "Lightweight", "badge": "", "print": false, "featured": false,
      "short": "A lighter jersey and an easy V collar that layers neatly under anything.", "highlight": "Airy 150 gsm jersey for warm days and layering."},
     {"slug": "active-tee", "name": "Active Tee", "base": "tee-crew", "cat": "t-shirts", "sub": "crew-neck", "style": "sport", "colors": ["clay", "sky", "black"], "packs": "tee", "default_pack": "Single", "sizes": "apparel", "price": 32, "weight": "Lightweight", "badge": "New", "print": false, "featured": false,
      "short": "A quick-drying cotton blend that moves with you on runs, rides and everything after.", "highlight": "Sweat-wicking blend that dries fast."},
@@ -61,7 +61,7 @@
      "short": "Brushed-back fleece, a lined hood and a roomy kangaroo pocket. Built for cold mornings.", "highlight": "400 gsm brushed fleece with a double-lined hood."},
     {"slug": "crewneck-sweatshirt", "name": "Crewneck Sweatshirt", "base": "crewneck", "cat": "hoodies", "sub": "", "style": "casual", "colors": ["cream", "forest", "burgundy"], "packs": "hoodie", "default_pack": "Single", "sizes": "apparel", "price": 58, "weight": "Heavyweight", "badge": "", "print": false, "featured": false,
      "short": "The same heavyweight fleece as our hoodie in a clean crew neck with ribbed side panels.", "highlight": "400 gsm brushed fleece that keeps its shape."},
-    {"slug": "ribbed-crew-socks", "name": "Ribbed Crew Socks", "base": "socks-crew", "cat": "socks", "sub": "", "style": "sport", "colors": ["white", "black", "heather", "clay"], "packs": "socks", "default_pack": "4-Pack", "sizes": "socks", "price": 14, "weight": "Cushioned", "badge": "", "print": false, "featured": false,
+    {"slug": "ribbed-crew-socks", "name": "Ribbed Crew Socks", "base": "socks-crew", "cat": "socks", "sub": "", "style": "sport", "colors": ["white", "black", "heather", "clay"], "packs": "socks", "default_pack": "Single", "sizes": "socks", "price": 14, "weight": "Cushioned", "badge": "", "print": false, "featured": false,
      "short": "Cushioned footbeds, a seamless toe and a ribbed cuff that stays up without squeezing.", "highlight": "Cushioned sole with a seamless toe."}
   ]
 }

@@ -89,3 +89,23 @@ function cf_archive_toolbar() {
 	woocommerce_catalog_ordering();
 	echo '</div></div>';
 }
+
+// Cards show the lowest (default pack) price. WooCommerce sorts "high to low", filters and sizes the price slider by the highest variation price.
+if ( ! is_admin() ) {
+	add_filter(
+		'posts_clauses',
+		function ( $clauses ) {
+			foreach ( array( 'where', 'orderby' ) as $part ) {
+				$clauses[ $part ] = str_replace( 'wc_product_meta_lookup.max_price', 'wc_product_meta_lookup.min_price', $clauses[ $part ] );
+			}
+			return $clauses;
+		},
+		20
+	);
+	add_filter(
+		'woocommerce_price_filter_sql',
+		function ( $sql ) {
+			return str_replace( 'MAX( max_price )', 'MAX( min_price )', $sql );
+		}
+	);
+}
