@@ -74,30 +74,47 @@ function dewier_cart_drawer_title() {
 add_filter( 'theme_mod_shoptimizer_cart_title', 'dewier_cart_drawer_title' );
 
 /**
- * The free-shipping method WooCommerce offers the shopper's zone, as
- * array( minimum order amount, cart amount counted towards it ), or null when
- * the zone has no free shipping that depends on the order amount alone.
+ * Free-shipping state of the bag for the shopper's shipping zone:
+ * array( amount still to spend, percent of the minimum reached ), with 0 and
+ * 100 once WooCommerce offers a free shipping rate. Null when the zone has no
+ * free shipping an order amount can unlock.
  */
 function dewier_free_shipping() {
 	$packages = WC()->cart->get_shipping_packages();
 	if ( ! $packages ) {
 		return null;
 	}
-	$zone = WC_Shipping_Zones::get_zone_matching_package( current( $packages ) );
-	foreach ( $zone->get_shipping_methods( true ) as $method ) {
-		if ( 'free_shipping' !== $method->id || ! in_array( $method->requires, array( '', 'min_amount', 'either' ), true ) ) {
+	$package = current( $packages );
+	$state   = null;
+	foreach ( WC_Shipping_Zones::get_zone_matching_package( $package )->get_shipping_methods( true ) as $method ) {
+		if ( 'free_shipping' !== $method->id ) {
 			continue;
 		}
+		// WooCommerce decides whether the rate is offered: coupons, discounts and filters included.
+		if ( $method->is_available( $package ) ) {
+			return array( 0.0, 100 );
+		}
+		$minimum = (float) $method->min_amount;
+		if ( $minimum <= 0 || ! in_array( $method->requires, array( 'min_amount', 'either' ), true ) ) {
+			continue;
+		}
+		// Same order amount WC_Shipping_Free_Shipping::is_available() compares with the minimum.
 		$total = (float) WC()->cart->get_displayed_subtotal();
-		if ( WC()->cart->display_prices_including_tax() ) {
-			$total -= (float) WC()->cart->get_discount_tax();
-		}
-		if ( 'yes' !== $method->ignore_discounts ) {
+		if ( 'no' === $method->ignore_discounts ) {
 			$total -= (float) WC()->cart->get_discount_total();
+			if ( WC()->cart->display_prices_including_tax() ) {
+				$total -= (float) WC()->cart->get_discount_tax();
+			}
 		}
-		return array( '' === $method->requires ? 0.0 : (float) $method->min_amount, $total );
+		$total = round( $total, wc_get_price_decimals() );
+		if ( $total >= $minimum ) {
+			continue;
+		}
+		if ( ! $state || $minimum - $total < $state[0] ) {
+			$state = array( $minimum - $total, (int) round( max( 0, $total ) / $minimum * 100 ) );
+		}
 	}
-	return null;
+	return $state;
 }
 
 /**
@@ -107,13 +124,11 @@ function dewier_cart_progress() {
 	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
 		return;
 	}
-	$free = dewier_free_shipping();
-	if ( ! $free ) {
+	$state = dewier_free_shipping();
+	if ( ! $state ) {
 		return;
 	}
-	list( $threshold, $subtotal ) = $free;
-	$remaining = max( 0, $threshold - $subtotal );
-	$percent   = $threshold > 0 ? min( 100, round( $subtotal / $threshold * 100 ) ) : 100;
+	list( $remaining, $percent ) = $state;
 	?>
 	<div class="dw-progress">
 		<p class="dw-progress__text">
