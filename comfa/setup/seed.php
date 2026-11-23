@@ -352,7 +352,7 @@ $cf_blocks  = array( 'footer' => 'Footer', 'mega-tees' => 'Mega Menu: T-Shirts',
 foreach ( $cf_blocks as $cf_slug => $cf_title ) {
 	$cf_context['blocks'][ $cf_slug ] = cf_seed_post( 'blocks', $cf_slug, $cf_title, cf_seed_render( (string) file_get_contents( $cf_ux . 'blocks/' . $cf_slug . '.txt' ), $cf_context ) );
 }
-$cf_pages = array( 'home' => 'Home', 'mission' => 'Our Mission', 'help' => 'Help & FAQ', 'shipping-returns' => 'Shipping & Returns', 'size-guide' => 'Size Guide', 'contact' => 'Contact', 'privacy-policy' => 'Privacy Policy', 'terms-of-service' => 'Terms of Service', 'return-refund-policy' => 'Return & Refund Policy', 'dmca' => 'DMCA' );
+$cf_pages = array( 'home' => 'Home', 'mission' => 'Our Mission', 'help' => 'Help & FAQ', 'shipping-returns' => 'Shipping & Returns', 'size-guide' => 'Size Guide', 'contact' => 'Contact', 'privacy-policy' => 'Privacy Policy', 'terms-of-service' => 'Terms of Service', 'return-refund-policy' => 'Return & Refund Policy', 'dmca' => 'DMCA', 'ip-claim' => 'Intellectual Property Claim Form' );
 $cf_page_ids = array();
 // WordPress installs a draft "Privacy Policy" on the slug the Comfa page uses. A draft is moved aside, still a draft; a published policy is kept.
 $cf_policy = get_page_by_path( 'privacy-policy', OBJECT, 'page' );

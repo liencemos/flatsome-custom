@@ -290,6 +290,30 @@
 .cf-doc__cta-title { font-size: 16px; font-weight: 800; color: var(--cf-ink); margin-bottom: 8px; }
 .cf-doc__cta p a { text-decoration: underline; }
 .cf-doc__cta .button { margin: 0; }
+.cf-doc__cta ul { margin: 0 0 0 18px; }
+.cf-doc__cta li { margin-bottom: 6px; }
+.cf-claim { scroll-margin-top: 90px; }
+.cf-claim__group { margin: 0 0 26px; padding: 0 0 6px; border: 0; border-bottom: 1px solid var(--cf-line); }
+.cf-claim__group legend { width: 100%; padding: 0; margin: 0 0 14px; border: 0; font-size: 18px; font-weight: 800; text-transform: none; color: var(--cf-ink); }
+.cf-claim__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+.cf-claim__field { margin-bottom: 16px; min-width: 0; }
+.cf-claim__field--textarea, .cf-claim__field--checkbox, .cf-claim__field--signature { grid-column: 1 / -1; }
+.cf-claim__field label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 700; color: var(--cf-ink); }
+.cf-claim__field input, .cf-claim__field select, .cf-claim__field textarea { margin: 0; border-color: var(--cf-line); background-color: #fff; font-size: 15px; }
+.cf-claim__field input:not([type="checkbox"]), .cf-claim__field select { height: 46px; }
+.cf-claim__field textarea { height: auto; min-height: 0; padding-top: 10px; }
+.cf-claim__field--checkbox label { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; line-height: 1.5; }
+.cf-claim__field--checkbox input { flex: none; width: 18px; height: 18px; margin-top: 2px; accent-color: var(--cf-navy); }
+.cf-claim__req { color: var(--cf-red); }
+.cf-claim__help, .cf-claim__error { display: block; margin-top: 5px; font-size: 13px; line-height: 1.4; color: var(--cf-muted); }
+.cf-claim__error { color: var(--cf-red); font-weight: 700; }
+.cf-claim__field.has-error input:not([type="checkbox"]), .cf-claim__field.has-error select, .cf-claim__field.has-error textarea { border-color: var(--cf-red); }
+.cf-claim__notice { margin: 0 0 22px; padding: 12px 16px; border-left: 4px solid var(--cf-red); border-radius: 8px; background: var(--cf-soft); font-size: 14px; font-weight: 700; color: var(--cf-ink); }
+.cf-claim__hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.cf-store .button.cf-claim__submit { margin: 0 0 14px; min-height: 52px; padding: 0 30px; font-size: 16px; line-height: 52px; background-color: var(--cf-yellow); color: var(--cf-ink); }
+.cf-store .button.cf-claim__submit:hover { background-color: var(--cf-gold); }
+.cf-claim__privacy { margin: 0; font-size: 13px; color: var(--cf-muted); }
+.cf-claim--sent h2 { margin-top: 0; padding-top: 0; border-top: 0; }
 .cf-doc__body > .col-inner { padding: 34px 40px 20px; font-size: 15px; line-height: 1.7; }
 .cf-doc__body h2 { font-size: 24px; font-weight: 800; margin: 30px 0 14px; padding-top: 30px; border-top: 1px solid var(--cf-line); scroll-margin-top: 90px; }
 .cf-doc__body h2:first-child, .cf-doc__body .cf-doc__note + h2 { margin-top: 0; padding-top: 0; border-top: 0; }
@@ -318,6 +342,7 @@
 	.cf-doc__sub { margin-bottom: 0; }
 	.cf-doc__toc, .cf-doc__group { display: none; }
 	.cf-doc__more { margin-top: 14px; }
+	.cf-claim__grid { grid-template-columns: 1fr; }
 	.cf-doc__body > .col-inner { padding: 24px 20px 8px; font-size: 14.5px; line-height: 1.8; }
 	.cf-doc__body h2 { font-size: 20px; margin-top: 24px; padding-top: 24px; }
 	.cf-doc__body h3 { font-size: 16px; }

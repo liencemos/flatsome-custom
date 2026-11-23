@@ -10,8 +10,8 @@
 </ul>
 <div class="cf-doc__cta">
 <p class="cf-doc__cta-title">Trademark &amp; IP reports</p>
-<p>To report a trademark or other intellectual property concern, send it to our team through the <a href="{{url:/contact/}}">contact page</a>.</p>
-[button text="Submit an IP claim" style="outline" color="secondary" radius="99" icon="icon-angle-right" link="{{url:/contact/}}" class="cf-btn-outline"]
+<p>To report a trademark or other intellectual property concern, please submit it through our <a href="{{url:/ip-claim/}}">Intellectual Property Claim Form</a>.</p>
+[button text="Submit an IP claim" style="outline" color="secondary" radius="99" icon="icon-angle-right" link="{{url:/ip-claim/}}" class="cf-btn-outline"]
 </div>
 [/col]
 [col span="8" span__md="12" span__sm="12" class="cf-doc__body"]
@@ -19,7 +19,7 @@
 <p>Comfa designs and sells its own tees, caps, hoodies and socks, and we respect the intellectual property rights of others, including copyright, trademark and related rights. If you believe that something on this website, such as a product design, a photo or a customer review, infringes your rights, please tell us using the procedure below.</p>
 <h2 id="reporting-intellectual-property-infringement">A. Reporting Intellectual Property Infringement</h2>
 <p>When we receive a complete notice, our policy is to (1) remove or block access to any content, including text, graphics and photos, that we believe in good faith infringes the rights of others, and (2) stop working with repeat infringers.</p>
-<p>To report infringement, send a notice with the following information to the Designated Agent listed at the end of this page:</p>
+<p>To report infringement, fill in the <a href="{{url:/ip-claim/}}">Intellectual Property Claim Form</a>, or send a notice with the following information to the Designated Agent listed at the end of this page:</p>
 <ol>
 <li>The copyrighted work, trademark or other intellectual property you believe has been infringed, with any registration numbers.</li>
 <li>The content you believe infringes it, including (a) how it uses your work in a way that infringes, and (b) where it appears on this website, for example the page address, in enough detail for us to find it.</li>
@@ -47,7 +47,7 @@
 <p>When we receive a counter-notice we may send a copy to the person who made the original complaint and tell them that the content may be restored in 10 business days. Unless the rights holder files a court action against you, the content may be restored 10 to 14 business days or more after we receive the counter-notice, at our discretion.</p>
 <p>Please note that under Section 512(f) of the U.S. Digital Millennium Copyright Act, a person who knowingly misrepresents that content is infringing, or that it was removed by mistake, may be liable for damages, including legal fees.</p>
 <h3>Designated Agent</h3>
-<p>Send notices and counter-notices to Comfa's Designated Agent:</p>
+<p>Report infringement with the <a href="{{url:/ip-claim/}}">Intellectual Property Claim Form</a>. Counter-notices, and notices sent by email or post, go to Comfa's Designated Agent:</p>
 <p>[Company legal name], [address]<br><a href="mailto:legal@example.com">legal@example.com</a></p>
 [/col]
 [/row]

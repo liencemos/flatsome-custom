@@ -9,7 +9,7 @@ Child theme Flatsome dựng lại bố cục và trải nghiệm mua hàng của
 | Thư mục | Nội dung |
 | --- | --- |
 | `child-theme/comfa-child/` | Child theme: CSS, JS và các hook WooCommerce. Không ghi đè template nào của Flatsome hay WooCommerce. |
-| `ux-builder/` | Nội dung UX Builder: trang chủ, UX Block (footer, mega menu, khối giới thiệu ở trang sản phẩm, 404) và các trang Mission, Help & FAQ, Shipping & Returns, Size Guide, Contact, Privacy Policy, Terms of Service, Return & Refund Policy, DMCA. |
+| `ux-builder/` | Nội dung UX Builder: trang chủ, UX Block (footer, mega menu, khối giới thiệu ở trang sản phẩm, 404) và các trang Mission, Help & FAQ, Shipping & Returns, Size Guide, Contact, Privacy Policy, Terms of Service, Return & Refund Policy, DMCA, Intellectual Property Claim Form. |
 | `demo-images/` | Ảnh mẫu (sản phẩm theo từng màu, ảnh lifestyle, logo). |
 | `setup/` | `setup.sh`, `seed.php`, `check-demo.php`, `catalog.json` và `make-art.py` (tạo lại ảnh sản phẩm theo màu). |
 
@@ -38,6 +38,7 @@ Script chép child theme, ảnh và nội dung UX Builder vào site, kích hoạ
 - Thay ảnh, mô tả, đánh giá mẫu và các trang chính sách bằng nội dung thật.
 - Số "250,000+ Items Given" và chương trình "One Bought = One Given" là nội dung mẫu; chỉ giữ nếu shop thật sự có chương trình này.
 - Form đăng ký nhận tin lưu mỗi email thành một mục trong menu Subscribers của wp-admin và gọi action `cf_newsletter_signup`; cần nối với dịch vụ email của bạn (kể cả bước xác nhận email nếu cần).
+- Form báo cáo vi phạm sở hữu trí tuệ (`/ip-claim/`, shortcode `[cf_ip_claim_form]`) lưu mỗi báo cáo thành một mục trong menu IP Claims của wp-admin (chỉ quản trị viên xem được) và gửi email tới địa chỉ quản trị của site; đổi người nhận bằng filter `cf_ip_claim_recipient`. Cần cấu hình SMTP để email được gửi đi.
 - Privacy Policy, Terms of Service, Return & Refund Policy và DMCA là văn bản mẫu: điền các chỗ trong `[ngoặc vuông]` (tên pháp nhân, địa chỉ, quốc gia, ngày cập nhật), thay email `privacy@example.com` / `legal@example.com`, sửa điều kiện đổi trả theo chính sách thật và nhờ người có chuyên môn rà soát.
 - `seed.php` đặt trang Privacy Policy mẫu làm trang chính sách bảo mật trong Settings → Privacy, trừ khi shop đã chọn một trang đã xuất bản. Bản nháp "Privacy Policy" mặc định của WordPress được chuyển sang đường dẫn `privacy-policy-draft` (vẫn là bản nháp). Link "Privacy" ở footer chỉ hiện khi trang được chọn đã xuất bản. Trong nội dung trang, dùng `[cf_privacy_link text="Privacy Policy"]` để link luôn trỏ tới trang được chọn (trang Terms of Service dùng cách này).
 - Cấu hình vận chuyển và cổng thanh toán thật. Dữ liệu mẫu bật COD, phí giao $6, freeship từ $75 và mã `HELLO10` giảm 10%.
