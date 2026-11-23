@@ -266,6 +266,10 @@ add_shortcode( 'form_edit_contact', function () {
 	return ob_get_clean();
 } );
 
+function form_edit_contact_message( $message ) {
+	return trim( wp_strip_all_tags( wp_check_invalid_utf8( $message ) ) );
+}
+
 function form_edit_request_contact() {
 	check_admin_referer( 'form_edit_contact', 'studio_contact_nonce' );
 	$fields = array();
@@ -275,7 +279,7 @@ function form_edit_request_contact() {
 	$name = sanitize_text_field( $fields['name'] );
 	$phone = sanitize_text_field( $fields['phone'] );
 	$email = sanitize_email( $fields['email'] );
-	$message = sanitize_textarea_field( $fields['message'] );
+	$message = form_edit_contact_message( $fields['message'] );
 	$sent = '' === ( $_POST['studio_contact_website'] ?? '' )
 		&& '' !== $name && mb_strlen( $name ) <= 100
 		&& ( '' === $phone || preg_match( '/^[0-9+().# x-]{1,30}$/iD', $phone ) )
