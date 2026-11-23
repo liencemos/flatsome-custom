@@ -1,0 +1,58 @@
+<?php
+/**
+ * Run against a disposable seeded demo with WP-CLI: wp eval-file /path/to/setup/check-seed-slug-conflict.php
+ */
+
+if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+	exit;
+}
+
+$home = get_page_by_path( 'signal-home', OBJECT, array( 'page' ) );
+if ( ! $home || ! get_post_meta( $home->ID, '_signal_demo', true ) || $home->ID !== (int) get_option( 'page_on_front' ) ) {
+	WP_CLI::error( 'This regression test requires a disposable seeded demo with signal-home as the front page.' );
+}
+
+$site_title = get_option( 'blogname' );
+$sentinel = 'FORM / EDIT slug conflict test';
+$attachment = 0;
+try {
+	$moved = wp_update_post( array( 'ID' => $home->ID, 'post_name' => 'form-edit-slug-conflict-test-home' ), true );
+	if ( is_wp_error( $moved ) ) {
+		throw new RuntimeException( $moved->get_error_message() );
+	}
+	$attachment = wp_insert_attachment( array(
+		'post_name'   => 'signal-home',
+		'post_title'  => 'FORM / EDIT slug conflict test',
+		'post_parent' => 0,
+	), false, 0, true );
+	if ( is_wp_error( $attachment ) || 'signal-home' !== get_post_field( 'post_name', $attachment ) ) {
+		throw new RuntimeException( 'Could not create the same-slug attachment fixture.' );
+	}
+	update_option( 'blogname', $sentinel );
+	$before = wp_count_posts( 'page' );
+	$result = WP_CLI::runcommand( 'eval-file ' . escapeshellarg( __DIR__ . '/seed.php' ), array(
+		'return'     => 'all',
+		'exit_error' => false,
+		'launch'     => true,
+	) );
+	if ( ! $result->return_code || false === strpos( $result->stderr, 'page slug signal-home is already taken by a post of type attachment' ) ) {
+		throw new RuntimeException( 'Seed did not report the attachment conflict: ' . $result->stderr );
+	}
+	wp_cache_delete( _count_posts_cache_key( 'page' ), 'counts' );
+	foreach ( array( 'alloptions', 'page_on_front', 'blogname' ) as $option_cache_key ) {
+		wp_cache_delete( $option_cache_key, 'options' );
+	}
+	clean_post_cache( $attachment );
+	if ( $before != wp_count_posts( 'page' ) || $home->ID !== (int) get_option( 'page_on_front' ) || $sentinel !== get_option( 'blogname' ) ||
+		'signal-home' !== get_post_field( 'post_name', $attachment ) || 'attachment' !== get_post_type( $attachment ) ) {
+		throw new RuntimeException( 'Seed changed a page, the attachment, or site settings despite the slug conflict.' );
+	}
+} finally {
+	if ( $attachment && ! is_wp_error( $attachment ) ) {
+		wp_delete_attachment( $attachment, true );
+	}
+	wp_update_post( array( 'ID' => $home->ID, 'post_name' => 'signal-home' ) );
+	update_option( 'page_on_front', $home->ID );
+	update_option( 'blogname', $site_title );
+}
+WP_CLI::success( 'The unattached signal-home attachment blocked the seed before creating a page or changing the front page or site title.' );

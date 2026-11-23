@@ -26,17 +26,46 @@ function signal_seed_result( $result ) {
 	return $result;
 }
 
-function signal_seed_existing_post( $type, $slug ) {
+function signal_seed_slug_post( $type, $slug ) {
 	$post = get_page_by_path( $slug, OBJECT, array( $type ) );
+	if ( ! $post ) {
+		$trashed = get_page_by_path( $slug . '__trashed', OBJECT, array( $type ) );
+		if ( $trashed && 'trash' === $trashed->post_status ) {
+			$post = $trashed;
+		}
+	}
+	if ( $post && 'publish' !== $post->post_status ) {
+		WP_CLI::error( "{$type} slug {$slug} belongs to a {$post->post_status} post; resolve its status before seeding." );
+	}
+	$conflicts = get_posts( array(
+		'name'           => $slug,
+		'post_type'      => array_values( array_diff( get_post_types(), array( $type ) ) ),
+		'post_status'    => array_values( get_post_stati() ),
+		'post_parent'    => 0,
+		'posts_per_page' => 1,
+		'fields'         => 'ids',
+	) );
+	if ( $conflicts ) {
+		$conflict_type = get_post_type( $conflicts[0] );
+		WP_CLI::error( "{$type} slug {$slug} is already taken by a post of type {$conflict_type}." );
+	}
+	if ( $slug !== wp_unique_post_slug( $slug, $post ? $post->ID : 0, 'publish', $type, 0 ) ) {
+		WP_CLI::error( "{$type} slug {$slug} is unavailable." );
+	}
+	return $post;
+}
+
+function signal_seed_existing_post( $type, $slug ) {
+	$post = signal_seed_slug_post( $type, $slug );
 	if ( $post && ! get_post_meta( $post->ID, '_signal_demo', true ) ) {
 		WP_CLI::error( "The {$type} slug {$slug} already belongs to non-demo content." );
 	}
 	return $post ? $post->ID : 0;
 }
 
-function signal_seed_post( $type, $slug, $title, $content ) {
+function signal_seed_post( $id, $type, $slug, $title, $content ) {
 	$id = signal_seed_result( wp_insert_post( array(
-		'ID'           => signal_seed_existing_post( $type, $slug ),
+		'ID'           => $id,
 		'post_type'    => $type,
 		'post_name'    => $slug,
 		'post_title'   => $title,
@@ -175,7 +204,15 @@ function form_edit_seed_product_id( $slug, $sku ) {
 	if ( $id && $legacy_id && $id !== $legacy_id && get_post_meta( $legacy_id, '_signal_demo', true ) ) {
 		WP_CLI::error( "SKUs {$sku} and {$legacy_sku} belong to different demo records." );
 	}
-	return $id ?: $legacy_id;
+	$id = $id ?: $legacy_id;
+	$post = signal_seed_slug_post( 'product', $slug );
+	if ( $post && $post->ID !== $id ) {
+		WP_CLI::error( "Product slug {$slug} belongs to a different record than SKU {$sku}." );
+	}
+	if ( $id && 'publish' !== get_post_status( $id ) ) {
+		WP_CLI::error( "Product SKU {$sku} belongs to a non-published product." );
+	}
+	return $id;
 }
 
 function form_edit_seed_review( $product_id, $hat ) {
@@ -395,29 +432,16 @@ function form_edit_seed_page_targets() {
 	);
 	$targets = array();
 	foreach ( $titles as $slug => $title ) {
-		$page = get_page_by_path( $slug, OBJECT, array( 'page' ) );
-		if ( ! $page ) {
-			$trashed = get_page_by_path( $slug . '__trashed', OBJECT, array( 'page' ) );
-			if ( $trashed && 'trash' === $trashed->post_status ) {
-				$page = $trashed;
-			}
-		}
-		if ( $page && 'publish' !== $page->post_status ) {
-			WP_CLI::error( "Page {$slug} is {$page->post_status}; resolve its status before seeding." );
-		}
-		if ( ! $page && $slug !== wp_unique_post_slug( $slug, 0, 'publish', 'page', 0 ) ) {
-			WP_CLI::error( "Page slug {$slug} is unavailable; check for an attachment with the same slug before seeding." );
-		}
-		$targets[ $slug ] = array( $title, $page );
+		$targets[ $slug ] = array( $title, signal_seed_slug_post( 'page', $slug ) );
 	}
 	return $targets;
 }
 
-function form_edit_seed_pages( $links, $art, $targets ) {
+function form_edit_seed_pages( $links, $art, $targets, $not_found ) {
 	$pages = array();
 	$new = array();
 	foreach ( $targets as $slug => list( $title, $page ) ) {
-		$pages[ $slug ] = $page ? (int) $page->ID : signal_seed_post( 'page', $slug, $title, '' );
+		$pages[ $slug ] = $page ? (int) $page->ID : signal_seed_post( 0, 'page', $slug, $title, '' );
 		if ( ! $page ) {
 			update_post_meta( $pages[ $slug ], '_wp_page_template', 'page-blank.php' );
 		}
@@ -433,9 +457,8 @@ function form_edit_seed_pages( $links, $art, $targets ) {
 			signal_seed_result( wp_update_post( array( 'ID' => $id, 'post_content' => wp_slash( $content ) ), true ) );
 		}
 	}
-	if ( ! get_theme_mod( '404_block' ) ) {
-		$block = get_page_by_path( 'form-edit-404', OBJECT, 'blocks' );
-		$block_id = $block ? $block->ID : signal_seed_post( 'blocks', 'form-edit-404', 'FORM / EDIT — 404', signal_seed_render( 'pages/404', $links ) );
+	if ( false !== $not_found ) {
+		$block_id = $not_found ? $not_found->ID : signal_seed_post( 0, 'blocks', 'form-edit-404', 'FORM / EDIT — 404', signal_seed_render( 'pages/404', $links ) );
 		set_theme_mod( '404_block', $block_id );
 	}
 	return array( $pages, $links );
@@ -458,6 +481,12 @@ $hats = array(
 	array( 'nightshift-cap', 'FE-FACET-06-CAP', 'Facet 06 Cap', '30.00', 'Diamond-shaped embroidery on a six-panel cotton twill cap.' ),
 );
 
+$archives = array(
+	'graphic-tees'    => array( '01 / EDITION 001', 'Printed tees.', 'Six graphic studies on heavyweight cotton jersey. Cut with room to move.' ),
+	'field-caps'      => array( '02 / EDITION 001', 'Embroidered caps.', 'Six embroidered studies on soft cotton twill. One adjustable fit.' ),
+	'the-collection'  => array( '00 / COLLECTION INDEX', 'Edition 01.', 'Twelve graphic pieces, split between two everyday forms.' ),
+);
+
 foreach ( array( 't-shirts', 'hats' ) as $slug ) {
 	signal_seed_existing_category( $slug );
 }
@@ -469,6 +498,19 @@ $coupon = new WC_Coupon( 'first10' );
 if ( $coupon->get_id() && ! $coupon->get_meta( '_signal_demo' ) ) {
 	WP_CLI::error( 'Coupon FIRST10 already belongs to non-demo content.' );
 }
+$coupon_post = signal_seed_slug_post( 'shop_coupon', 'first10' );
+if ( $coupon_post && $coupon_post->ID !== $coupon->get_id() ) {
+	WP_CLI::error( 'Coupon slug first10 belongs to a different record than code FIRST10.' );
+}
+$home_id = signal_seed_existing_post( 'page', 'signal-home' );
+$footer_id = signal_seed_existing_post( 'blocks', 'signal-footer' );
+$archive_ids = array();
+foreach ( array_keys( $archives ) as $slug ) {
+	$archive_ids[ $slug ] = signal_seed_existing_post( 'blocks', 'signal-archive-' . $slug );
+}
+$seed_wishlist = class_exists( 'YITH_WCWL' ) && ! get_post( (int) get_option( 'yith_wcwl_wishlist_page_id' ) );
+$wishlist_id = $seed_wishlist ? signal_seed_existing_post( 'page', 'wishlist' ) : 0;
+$not_found = get_theme_mod( '404_block' ) ? false : signal_seed_slug_post( 'blocks', 'form-edit-404' );
 $page_targets = form_edit_seed_page_targets();
 
 WC_Install::create_pages();
@@ -508,8 +550,8 @@ $coupon->save();
 form_edit_seed_shipping();
 $cod = (array) get_option( 'woocommerce_cod_settings', array() );
 update_option( 'woocommerce_cod_settings', array( 'enabled' => 'yes', 'enable_for_methods' => array() ) + $cod );
-if ( class_exists( 'YITH_WCWL' ) && ! get_post( (int) get_option( 'yith_wcwl_wishlist_page_id' ) ) ) {
-	$wishlist = signal_seed_post( 'page', 'wishlist', 'Wishlist', '[yith_wcwl_wishlist]' );
+if ( $seed_wishlist ) {
+	$wishlist = signal_seed_post( $wishlist_id, 'page', 'wishlist', 'Wishlist', '[yith_wcwl_wishlist]' );
 	update_option( 'yith_wcwl_wishlist_page_id', $wishlist );
 }
 update_option( 'blogname', 'FORM / EDIT' );
@@ -558,27 +600,25 @@ $art = array(
 	'process_print'   => signal_seed_media( 'process-print.webp', 'Close-up of the four-square print on a cotton tee' ),
 	'process_stitch'  => signal_seed_media( 'process-stitch.webp', 'Close-up of the four-square embroidery on a cap' ),
 );
-$home = signal_seed_post( 'page', 'signal-home', 'Home', signal_seed_render( 'homepage', $links + $art + array(
+$home = signal_seed_post( $home_id, 'page', 'signal-home', 'Home', signal_seed_render( 'homepage', $links + $art + array(
 	'featured_ids' => implode( ',', array( $products['carrier-wave'], $products['receiver-cap'], $products['night-grid'] ) ),
 ) ) );
 update_post_meta( $home, '_wp_page_template', 'page-blank.php' );
 update_option( 'show_on_front', 'page' );
 update_option( 'page_on_front', $home );
-list( $content_pages, $links ) = form_edit_seed_pages( $links, $art + array( 'about_image' => $art['process_layout'] ), $page_targets );
-$footer = signal_seed_post( 'blocks', 'signal-footer', 'FORM / EDIT Footer', signal_seed_render( 'footer', $links ) );
+list( $content_pages, $links ) = form_edit_seed_pages( $links, $art + array( 'about_image' => $art['process_layout'] ), $page_targets, $not_found );
+$footer = signal_seed_post( $footer_id, 'blocks', 'signal-footer', 'FORM / EDIT Footer', signal_seed_render( 'footer', $links ) );
 
-foreach ( array(
-	$tees_id => array( 'graphic-tees', '01 / EDITION 001', 'Printed tees.', 'Six graphic studies on heavyweight cotton jersey. Cut with room to move.' ),
-	$hats_id => array( 'field-caps', '02 / EDITION 001', 'Embroidered caps.', 'Six embroidered studies on soft cotton twill. One adjustable fit.' ),
-	0        => array( 'the-collection', '00 / COLLECTION INDEX', 'Edition 01.', 'Twelve graphic pieces, split between two everyday forms.' ),
-) as $term_id => list( $slug, $index, $title, $intro ) ) {
+$archive_terms = array( 'graphic-tees' => $tees_id, 'field-caps' => $hats_id );
+foreach ( $archives as $slug => list( $index, $title, $intro ) ) {
+	$term_id = $archive_terms[ $slug ] ?? 0;
 	$header = signal_seed_render( 'archive-header', $links + array(
 		'archive_index' => $index,
 		'archive_title' => $title,
 		'archive_intro' => $intro,
 		'archive_image' => array( $tees_id => $tees_image, $hats_id => $hats_image )[ $term_id ] ?? signal_seed_media( 'lookbook.webp', 'Grid 02 studio pairing' ),
 	) );
-	$block_id = signal_seed_post( 'blocks', 'signal-archive-' . $slug, 'FORM / EDIT — ' . $title, $header );
+	$block_id = signal_seed_post( $archive_ids[ $slug ], 'blocks', 'signal-archive-' . $slug, 'FORM / EDIT — ' . $title, $header );
 	$block = '[block id="' . $block_id . '"]';
 	if ( $term_id ) {
 		$meta = (array) get_term_meta( $term_id, 'cat_meta', true );
