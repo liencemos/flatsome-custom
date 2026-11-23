@@ -90,8 +90,9 @@ function cf_seed_term( $taxonomy, $name, $slug = '', $args = array() ) {
  * Create or refresh a page / UX Block unless the merchant has edited it.
  */
 function cf_seed_post( $type, $slug, $title, $content, $extra = array() ) {
-	$existing = get_page_by_path( $slug, OBJECT, $type );
-	$hash     = md5( $content );
+	// get_page_by_path() also matches attachments, so look the slug up for this post type only.
+	$found    = get_posts( array( 'post_type' => $type, 'name' => $slug, 'post_status' => 'any', 'posts_per_page' => 1 ) );
+	$existing = $found ? $found[0] : null;
 	if ( $existing ) {
 		$seeded = get_post_meta( $existing->ID, '_cf_seed_hash', true );
 		if ( $seeded && md5( $existing->post_content ) !== $seeded ) {
@@ -102,18 +103,22 @@ function cf_seed_post( $type, $slug, $title, $content, $extra = array() ) {
 			WP_CLI::log( "Kept existing $type: $slug" );
 			return (int) $existing->ID;
 		}
-		wp_update_post( wp_slash( array( 'ID' => $existing->ID, 'post_title' => $title, 'post_content' => $content, 'post_status' => 'publish' ) ) );
+		// Only the body is refreshed; a renamed title, status or template stays as the merchant left it.
+		wp_update_post( wp_slash( array( 'ID' => $existing->ID, 'post_content' => $content ) ) );
 		$id = (int) $existing->ID;
 	} else {
 		$id = wp_insert_post( wp_slash( array( 'post_type' => $type, 'post_name' => $slug, 'post_title' => $title, 'post_content' => $content, 'post_status' => 'publish' ) ), true );
 		if ( is_wp_error( $id ) ) {
 			WP_CLI::error( "$type $slug: " . $id->get_error_message() );
 		}
+		if ( get_post_field( 'post_name', $id ) !== $slug ) {
+			WP_CLI::error( "$type $slug: the slug is already used by other content." );
+		}
+		if ( 'page' === $type ) {
+			update_post_meta( $id, '_wp_page_template', isset( $extra['template'] ) ? $extra['template'] : 'page-blank.php' );
+		}
 	}
 	update_post_meta( $id, '_cf_seed_hash', md5( get_post_field( 'post_content', $id ) ) );
-	if ( 'page' === $type ) {
-		update_post_meta( $id, '_wp_page_template', isset( $extra['template'] ) ? $extra['template'] : 'page-blank.php' );
-	}
 	return (int) $id;
 }
 
