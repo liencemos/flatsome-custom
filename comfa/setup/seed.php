@@ -163,6 +163,15 @@ foreach ( array( 'woocommerce_thumbnail_cropping' => 'custom', 'woocommerce_thum
 }
 
 // ---------------------------------------------------------------- Attributes.
+// Flatsome only registers its swatch attribute types once swatches are switched on, and WooCommerce
+// falls back to "select" for unknown types. Enable them for this run before creating attributes.
+set_theme_mod( 'swatches', 1 );
+add_filter(
+	'product_attributes_type_selector',
+	function ( $types ) {
+		return array_merge( array( 'ux_color' => 'Color', 'ux_image' => 'Image', 'ux_label' => 'Label' ), $types );
+	}
+);
 $cf_tax = array(
 	'pack'   => cf_seed_attribute( 'Pack', 'pack', 'ux_label' ),
 	'color'  => cf_seed_attribute( 'Color', 'color', 'ux_color' ),

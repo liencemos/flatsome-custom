@@ -49,6 +49,10 @@ foreach ( array( 'home', 'mission', 'help', 'shipping-returns', 'size-guide', 'c
 $cf_expect( (int) get_option( 'page_on_front' ) === (int) get_page_by_path( 'home' )->ID, 'Home is not the front page.' );
 $cf_expect( (int) get_theme_mod( 'footer_block' ) === (int) get_page_by_path( 'footer', OBJECT, 'blocks' )->ID, 'Footer UX Block is not assigned.' );
 $cf_expect( (bool) get_theme_mod( 'swatches' ) && wc_get_attribute( get_theme_mod( 'swatches_box_attribute' ) ), 'Flatsome swatches are not configured.' );
+foreach ( array( 'pa_pack' => 'ux_label', 'pa_color' => 'ux_color', 'pa_size' => 'ux_label' ) as $cf_taxonomy => $cf_type ) {
+	$cf_attribute = wc_get_attribute( wc_attribute_taxonomy_id_by_name( $cf_taxonomy ) );
+	$cf_expect( $cf_attribute && $cf_type === $cf_attribute->type, $cf_taxonomy . ' is not a ' . $cf_type . ' swatch attribute.' );
+}
 $cf_expect( (bool) wc_get_coupon_id_by_code( 'HELLO10' ), 'Coupon HELLO10 is missing.' );
 $cf_expect( false !== strpos( get_post_field( 'post_content', wc_get_page_id( 'cart' ) ), '[woocommerce_cart]' ), 'Cart page does not use the classic shortcode.' );
 
