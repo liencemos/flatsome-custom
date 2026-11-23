@@ -230,33 +230,39 @@ add_shortcode( 'form_edit_policy_toc', function ( $atts, $content = '' ) {
 
 add_shortcode( 'form_edit_contact', function () {
 	$status = isset( $_GET['studio_contact'] ) && is_string( $_GET['studio_contact'] ) ? sanitize_key( wp_unslash( $_GET['studio_contact'] ) ) : '';
+	$fields = get_query_var( 'form_edit_contact_invalid_phone', array() );
 	$privacy = get_privacy_policy_url();
 	ob_start();
 	?>
-	<form id="studio-contact" class="edit-contact-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-		<input type="hidden" name="action" value="form_edit_contact">
+	<form id="studio-contact" class="edit-contact-form" method="post" action="<?php echo esc_url( get_permalink( get_queried_object_id() ) . '#studio-contact' ); ?>">
+		<input type="hidden" name="studio_contact_action" value="send">
 		<?php wp_nonce_field( 'form_edit_contact', 'studio_contact_nonce', false ); ?>
 		<div hidden>
 			<label for="studio-contact-website">Leave this field empty</label>
 			<input id="studio-contact-website" type="text" name="studio_contact_website" tabindex="-1" autocomplete="off">
 		</div>
-		<?php if ( 'sent' === $status ) : ?>
+		<?php if ( ! $fields && 'sent' === $status ) : ?>
 			<p class="edit-contact-status" role="status">Thanks. Your enquiry was sent to the studio.</p>
-		<?php elseif ( 'error' === $status ) : ?>
+		<?php elseif ( ! $fields && 'error' === $status ) : ?>
 			<p class="edit-contact-status" role="status">We couldn’t send your enquiry. Try again later or use the studio email.</p>
 		<?php endif; ?>
 		<div class="edit-contact-fields">
 			<label for="studio-contact-name">Name <span aria-hidden="true">*</span>
-				<input id="studio-contact-name" type="text" name="name" autocomplete="name" maxlength="100" required>
+				<input id="studio-contact-name" type="text" name="studio_contact_fields[name]" value="<?php echo esc_attr( $fields['name'] ?? '' ); ?>" autocomplete="name" maxlength="100" required>
 			</label>
-			<label for="studio-contact-phone">Phone (optional)
-				<input id="studio-contact-phone" type="tel" name="phone" autocomplete="tel" maxlength="30">
-			</label>
+			<div>
+				<label for="studio-contact-phone">Phone (optional)
+					<input id="studio-contact-phone" type="tel" name="studio_contact_fields[phone]" value="<?php echo esc_attr( $fields['phone'] ?? '' ); ?>" autocomplete="tel" maxlength="40"<?php if ( $fields ) : ?> aria-invalid="true" aria-describedby="studio-contact-phone-error" autofocus<?php endif; ?>>
+				</label>
+				<?php if ( $fields ) : ?>
+					<p id="studio-contact-phone-error" class="edit-page-caption" role="alert">Enter a phone number such as +1 (555) 012-3456 ext. 42, or leave it blank.</p>
+				<?php endif; ?>
+			</div>
 			<label class="edit-contact-wide" for="studio-contact-email">Email address <span aria-hidden="true">*</span>
-				<input id="studio-contact-email" type="email" name="email" autocomplete="email" maxlength="254" required>
+				<input id="studio-contact-email" type="email" name="studio_contact_fields[email]" value="<?php echo esc_attr( $fields['email'] ?? '' ); ?>" autocomplete="email" maxlength="254" required>
 			</label>
 			<label class="edit-contact-wide" for="studio-contact-message">Message <span aria-hidden="true">*</span>
-				<textarea id="studio-contact-message" name="message" rows="5" maxlength="3000" required></textarea>
+				<textarea id="studio-contact-message" name="studio_contact_fields[message]" rows="5" maxlength="3000" required><?php echo esc_textarea( $fields['message'] ?? '' ); ?></textarea>
 			</label>
 		</div>
 		<p class="edit-page-caption">Include an order number if relevant. Do not send payment details.<?php if ( $privacy ) : ?> <a href="<?php echo esc_url( $privacy ); ?>">Privacy Policy</a><?php endif; ?></p>
@@ -270,26 +276,39 @@ function form_edit_contact_message( $message ) {
 	return trim( wp_strip_all_tags( wp_check_invalid_utf8( $message ) ) );
 }
 
+function form_edit_contact_valid_phone( $phone ) {
+	return '' === $phone || ( strlen( $phone ) <= 40 && preg_match( '~^[0-9+()./ -]*[0-9][0-9+()./ -]*(?:(?:x|ext\.?) *[0-9]+)?$~iD', $phone ) );
+}
+
 function form_edit_request_contact() {
+	if ( 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' ) || 'send' !== ( $_POST['studio_contact_action'] ?? '' )
+		|| ! is_page() || ! has_shortcode( get_post_field( 'post_content', get_queried_object_id() ), 'form_edit_contact' ) ) {
+		return;
+	}
 	check_admin_referer( 'form_edit_contact', 'studio_contact_nonce' );
+	$submitted = $_POST['studio_contact_fields'] ?? array();
 	$fields = array();
 	foreach ( array( 'name', 'phone', 'email', 'message' ) as $key ) {
-		$fields[ $key ] = isset( $_POST[ $key ] ) && is_string( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '';
+		$fields[ $key ] = is_array( $submitted ) && isset( $submitted[ $key ] ) && is_string( $submitted[ $key ] ) ? wp_unslash( $submitted[ $key ] ) : '';
+	}
+	$phone = trim( $fields['phone'], ' ' );
+	$honeypot_empty = '' === ( $_POST['studio_contact_website'] ?? '' );
+	if ( $honeypot_empty && ! form_edit_contact_valid_phone( $phone ) ) {
+		set_query_var( 'form_edit_contact_invalid_phone', $fields );
+		nocache_headers();
+		status_header( 422 );
+		return;
 	}
 	$name = sanitize_text_field( $fields['name'] );
-	$phone = sanitize_text_field( $fields['phone'] );
 	$email = sanitize_email( $fields['email'] );
 	$message = form_edit_contact_message( $fields['message'] );
-	$sent = '' === ( $_POST['studio_contact_website'] ?? '' )
+	$sent = $honeypot_empty
 		&& '' !== $name && mb_strlen( $name ) <= 100
-		&& ( '' === $phone || preg_match( '/^[0-9+().# x-]{1,30}$/iD', $phone ) )
 		&& strlen( $email ) <= 254 && is_email( $email )
 		&& '' !== $message && mb_strlen( $message ) <= 3000
 		&& form_edit_reserve_mail_request( 'contact', strtolower( $email ) . '|' . $message )
 		&& wp_mail( get_option( 'admin_email' ), 'FORM / EDIT: studio enquiry', "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\n\n{$message}", array( 'Reply-To: ' . $email ) );
-	$page = get_page_by_path( 'contact', OBJECT, array( 'page' ) );
-	wp_safe_redirect( add_query_arg( 'studio_contact', $sent ? 'sent' : 'error', $page ? get_permalink( $page ) : home_url( '/' ) ) . '#studio-contact' );
+	wp_safe_redirect( add_query_arg( 'studio_contact', $sent ? 'sent' : 'error', get_permalink( get_queried_object_id() ) ) . '#studio-contact', 303 );
 	exit;
 }
-add_action( 'admin_post_form_edit_contact', 'form_edit_request_contact' );
-add_action( 'admin_post_nopriv_form_edit_contact', 'form_edit_request_contact' );
+add_action( 'template_redirect', 'form_edit_request_contact', 9 );

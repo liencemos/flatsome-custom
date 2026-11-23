@@ -76,9 +76,11 @@ signal_check( false !== strpos( $shipping_page->post_content, esc_url( get_perma
 $faq = get_page_by_path( 'faq' );
 signal_check( has_shortcode( $faq->post_content, 'accordion' ) && 17 === substr_count( $faq->post_content, '[accordion-item ' ) && 5 === substr_count( $faq->post_content, 'class="edit-help-section"' ), 'Expected 17 native accordion questions in five FAQ categories.' );
 $contact = get_page_by_path( 'contact', OBJECT, array( 'page' ) );
-signal_check( has_shortcode( $contact->post_content, 'form_edit_contact' ) && shortcode_exists( 'form_edit_contact' ) && has_action( 'admin_post_nopriv_form_edit_contact' ), 'Expected the protected contact form shortcode and handler.' );
+signal_check( has_shortcode( $contact->post_content, 'form_edit_contact' ) && shortcode_exists( 'form_edit_contact' ) && has_action( 'template_redirect', 'form_edit_request_contact' ), 'Expected the protected contact form shortcode and handler.' );
 $contact_message = "Order link:\nhttps://example.com/printed%20tee";
 signal_check( $contact_message === form_edit_contact_message( $contact_message ) && 'Plain text' === form_edit_contact_message( '<b>Plain text</b>' ), 'Expected plain-text contact messages to preserve URL escapes and line breaks.' );
+signal_check( form_edit_contact_valid_phone( '+1 (555) 012-3456 ext. 42' ) && form_edit_contact_valid_phone( '020/1234 x5' ) && form_edit_contact_valid_phone( '555-0123 EXT 42' ), 'Expected contact phone numbers to accept common extension formats.' );
+signal_check( form_edit_contact_valid_phone( '' ) && ! form_edit_contact_valid_phone( 'abc555' ) && ! form_edit_contact_valid_phone( str_repeat( '1', 41 ) ), 'Expected an optional phone with a 40-character limit and common phone notation only.' );
 $size_page = get_page_by_path( 'size-guide' );
 $tee = get_page_by_path( 'carrier-wave', OBJECT, 'product' );
 preg_match( '~<table>.*?</table>~s', $size_page->post_content, $size_table );
