@@ -81,6 +81,7 @@ $contact_message = "  Order link:\nhttps://example.com/printed%20tee\n\t<24 hour
 $contact_message_input = "  Order link:\r\nhttps://example.com/printed%20tee\r\t<24 hours for <b>printed\x00 tees</b>.\u{0085}  ";
 signal_check( $contact_message === form_edit_contact_message( $contact_message_input ), 'Expected plain-text contact messages to preserve literal text, URL escapes and whitespace while normalizing line breaks and removing other controls.' );
 signal_check( form_edit_contact_valid_phone( '+1 (555) 012-3456 ext. 42' ) && form_edit_contact_valid_phone( '020/1234 x5' ) && form_edit_contact_valid_phone( '555-0123 EXT 42' ), 'Expected contact phone numbers to accept common extension formats.' );
+signal_check( form_edit_contact_valid_phone( '555-0123 #42' ) && ! form_edit_contact_valid_phone( '555-0123 #' ), 'Expected a hash marker followed by extension digits to be valid.' );
 signal_check( form_edit_contact_valid_phone( '' ) && ! form_edit_contact_valid_phone( 'abc555' ) && ! form_edit_contact_valid_phone( str_repeat( '1', 41 ) ), 'Expected an optional phone with a 40-character limit and common phone notation only.' );
 $size_page = get_page_by_path( 'size-guide' );
 $tee = get_page_by_path( 'carrier-wave', OBJECT, 'product' );

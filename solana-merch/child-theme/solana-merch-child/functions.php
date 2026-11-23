@@ -278,7 +278,7 @@ function form_edit_contact_message( $message ) {
 }
 
 function form_edit_contact_valid_phone( $phone ) {
-	return '' === $phone || ( strlen( $phone ) <= 40 && preg_match( '~^[0-9+()./ -]*[0-9][0-9+()./ -]*(?:(?:x|ext\.?) *[0-9]+)?$~iD', $phone ) );
+	return '' === $phone || ( strlen( $phone ) <= 40 && preg_match( '~^[0-9+()./ -]*[0-9][0-9+()./ -]*(?:(?:x|ext\.?|#) *[0-9]+)?$~iD', $phone ) );
 }
 
 function form_edit_request_contact() {
