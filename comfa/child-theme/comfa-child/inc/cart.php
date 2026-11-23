@@ -103,3 +103,55 @@ add_filter(
 	10,
 	3
 );
+
+/**
+ * The welcome code is for first orders only: reject it for customers who have ordered before.
+ */
+function cf_customer_has_ordered( $user_id, $email ) {
+	$statuses = array_diff( array_keys( wc_get_order_statuses() ), array( 'wc-cancelled', 'wc-failed', 'wc-refunded', 'wc-checkout-draft' ) );
+	foreach ( array_filter( array( $user_id, $email ) ) as $customer ) {
+		if ( wc_get_orders( array( 'customer' => $customer, 'status' => $statuses, 'limit' => 1, 'return' => 'ids' ) ) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function cf_is_welcome_coupon( $code ) {
+	$welcome = (string) cf_setting( 'welcome_code' );
+	return '' !== $welcome && wc_format_coupon_code( $welcome ) === wc_format_coupon_code( $code );
+}
+
+add_filter(
+	'woocommerce_coupon_is_valid',
+	function ( $valid, $coupon ) {
+		if ( ! $valid || ! cf_is_welcome_coupon( $coupon->get_code() ) ) {
+			return $valid;
+		}
+		$email = WC()->customer ? (string) WC()->customer->get_billing_email() : '';
+		if ( cf_customer_has_ordered( get_current_user_id(), $email ) ) {
+			throw new Exception( esc_html__( 'This code is for first orders only.', 'comfa' ), 100 );
+		}
+		return $valid;
+	},
+	10,
+	2
+);
+
+// Guests are only known by the billing email they enter at checkout.
+add_action(
+	'woocommerce_after_checkout_validation',
+	function ( $data, $errors ) {
+		if ( ! WC()->cart || empty( $data['billing_email'] ) ) {
+			return;
+		}
+		foreach ( WC()->cart->get_applied_coupons() as $code ) {
+			if ( cf_is_welcome_coupon( $code ) && cf_customer_has_ordered( get_current_user_id(), $data['billing_email'] ) ) {
+				WC()->cart->remove_coupon( $code );
+				$errors->add( 'cf_welcome_coupon', __( 'The welcome code is for first orders only and has been removed from your bag.', 'comfa' ) );
+			}
+		}
+	},
+	10,
+	2
+);
