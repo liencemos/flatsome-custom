@@ -30,6 +30,8 @@ signal_check( get_theme_mod( 'live_search' ) && ! get_theme_mod( 'disable_quick_
 $coupon = new WC_Coupon( 'first10' );
 signal_check( 'percent' === $coupon->get_discount_type() && 10.0 === (float) $coupon->get_amount() && false !== strpos( get_theme_mod( 'topbar_left' ), 'FIRST10' ), 'Expected working FIRST10 top bar promotion.' );
 $shipping = new WC_Shipping_Zone( (int) get_option( 'form_edit_demo_shipping_zone' ) );
+$us_zone = WC_Shipping_Zones::get_zone_matching_package( array( 'destination' => array( 'country' => 'US', 'state' => 'CA', 'postcode' => '90012' ) ) );
+signal_check( $shipping->get_id() && $shipping->get_id() === $us_zone->get_id(), 'Expected the demo zone to handle US shipping.' );
 $free = array_filter( $shipping->get_shipping_methods( true ), static function ( $method ) {
 	return 'free_shipping' === $method->id && 'min_amount' === $method->requires && 75.0 === (float) $method->min_amount && 'no' === $method->ignore_discounts;
 } );

@@ -212,13 +212,27 @@ function form_edit_seed_review( $product_id, $hat ) {
 
 function form_edit_seed_shipping() {
 	$zone_id = (int) get_option( 'form_edit_demo_shipping_zone' );
-	$zone = new WC_Shipping_Zone( $zone_id ?: null );
+	$zones = WC_Shipping_Zones::get_zones();
+	$zone = new WC_Shipping_Zone( isset( $zones[ $zone_id ] ) ? $zone_id : null );
+	foreach ( $zones as $existing ) {
+		if ( $zone->get_id() !== (int) $existing['zone_id'] && 0 === (int) $existing['zone_order'] ) {
+			foreach ( $zones as $other ) {
+				if ( $zone->get_id() !== (int) $other['zone_id'] ) {
+					$other_zone = new WC_Shipping_Zone( (int) $other['zone_id'] );
+					$other_zone->set_zone_order( (int) $other['zone_order'] + 1 );
+					$other_zone->save();
+				}
+			}
+			break;
+		}
+	}
 	if ( ! $zone->get_id() ) {
 		$zone->set_zone_name( 'FORM / EDIT Demo — United States' );
 		$zone->add_location( 'US', 'country' );
-		$zone->save();
-		update_option( 'form_edit_demo_shipping_zone', $zone->get_id() );
 	}
+	$zone->set_zone_order( 0 );
+	$zone->save();
+	update_option( 'form_edit_demo_shipping_zone', $zone->get_id() );
 	$methods = array();
 	foreach ( $zone->get_shipping_methods() as $method ) {
 		$methods[ $method->id ] = $method->instance_id;
