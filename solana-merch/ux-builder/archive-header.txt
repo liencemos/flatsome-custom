@@ -1,14 +1,24 @@
-[section class="signal-archive-title" padding="40px"]
-[row v_align="middle"]
+[section class="edit-archive" padding="0px"]
+[row v_align="bottom"]
 [col span="8" span__sm="12"]
 [ux_text]
-<p class="signal-eyebrow">{{archive_index}}</p>
+<p class="edit-label edit-accent">{{archive_index}}</p>
 <h1>{{archive_title}}</h1>
-<p>{{archive_intro}}</p>
 [/ux_text]
 [/col]
-[col span="4" span__sm="12" align="left"]
-[button text="{{archive_cta}}" link="{{archive_url}}" style="outline"]
+[col span="4" span__sm="12"]
+[ux_text]<p class="edit-archive-intro">{{archive_intro}}</p>[/ux_text]
+[/col]
+[/row]
+[row]
+[col span="12"]
+[ux_text]
+<nav class="edit-archive-index" aria-label="Collection index">
+<a href="{{shop_url}}">00 &nbsp; All pieces</a>
+<a href="{{tees_url}}">01 &nbsp; Tees</a>
+<a href="{{hats_url}}">02 &nbsp; Caps</a>
+</nav>
+[/ux_text]
 [/col]
 [/row]
 [/section]

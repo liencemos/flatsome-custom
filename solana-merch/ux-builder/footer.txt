@@ -1,22 +1,21 @@
-[section class="signal-footer" padding="38px"]
+[section class="edit-footer" padding="0px"]
 [row]
 [col span="6" span__sm="12"]
 [ux_text]
-<p class="signal-eyebrow">● &nbsp; SIGNAL / SUPPLY</p>
-<h2>Stay on frequency.</h2>
-<p>Independent graphic tees and caps.</p>
+<p class="edit-label">INDEPENDENT CLOTHING EDITIONS</p>
+<p class="edit-footer-mark">FORM / EDIT<span aria-hidden="true">.</span></p>
 [/ux_text]
 [/col]
 [col span="3" span__sm="6"]
 [ux_text]
-<h3>Catalog</h3>
-<p><a href="{{shop_url}}">All products →</a><br><a href="{{tees_url}}">Graphic tees →</a><br><a href="{{hats_url}}">Field caps →</a></p>
+<p class="edit-label">01 &nbsp; / &nbsp; INDEX</p>
+<ul><li><a href="{{shop_url}}">All pieces</a></li><li><a href="{{tees_url}}">Printed tees</a></li><li><a href="{{hats_url}}">Embroidered caps</a></li></ul>
 [/ux_text]
 [/col]
 [col span="3" span__sm="6"]
 [ux_text]
-<h3>Your order</h3>
-<p><a href="{{account_url}}">My account →</a><br><a href="{{cart_url}}">Shopping bag →</a></p>
+<p class="edit-label">02 &nbsp; / &nbsp; SERVICE</p>
+<ul><li><a href="{{account_url}}">Your account</a></li><li><a href="{{cart_url}}">Shopping bag</a></li></ul>
 [/ux_text]
 [/col]
 [/row]

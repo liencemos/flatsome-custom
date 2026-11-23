@@ -13,7 +13,7 @@ function signal_check( $condition, $message ) {
 	}
 }
 
-signal_check( 'flatsome' === get_template() && 'solana-merch-child' === get_stylesheet() && class_exists( 'WooCommerce' ), 'Expected WooCommerce, Flatsome and its Signal Supply child theme.' );
+signal_check( 'flatsome' === get_template() && 'solana-merch-child' === get_stylesheet() && class_exists( 'WooCommerce' ), 'Expected WooCommerce, Flatsome and its FORM / EDIT child theme.' );
 foreach ( array( 'header_color', 'content_color', 'footer_bottom_text' ) as $setting ) {
 	signal_check( 'light' === get_theme_mod( $setting ), "Expected Flatsome light text mode for {$setting}." );
 }
@@ -21,7 +21,7 @@ $logo = get_theme_mod( 'site_logo' );
 signal_check( $logo && hash_file( 'sha256', get_stylesheet_directory() . '/assets/art/wordmark.png' ) === get_post_meta( $logo, '_signal_art_hash', true ), 'Expected the current light wordmark version in the media library.' );
 $home = get_post( get_option( 'page_on_front' ) );
 signal_check( $home && has_shortcode( $home->post_content, 'ux_products' ) && false === strpos( $home->post_content, '{{' ), 'Home must contain the seeded Flatsome product grid without unresolved placeholders.' );
-signal_check( 'no-sidebar' === get_theme_mod( 'product_layout' ), 'Expected the native no-sidebar product template.' );
+signal_check( 'stacked-right' === get_theme_mod( 'product_layout' ) && 'fade_in_back' === get_theme_mod( 'product_hover' ), 'Expected the native stacked product gallery and second-image hover.' );
 signal_check( has_shortcode( get_theme_mod( 'html_shop_page', '' ), 'block' ) && 'blocks' === get_post_type( get_theme_mod( 'footer_block' ) ), 'Expected Flatsome UX Blocks on the shop header and footer.' );
 $cart = get_post( wc_get_page_id( 'cart' ) );
 signal_check( $cart && has_shortcode( $cart->post_content, 'woocommerce_cart' ) && ! has_block( 'woocommerce/cart', $cart ), 'Expected the classic WooCommerce cart so Flatsome can refresh its header bag count.' );
@@ -53,7 +53,7 @@ foreach ( $products as $product_id ) {
 	$sizes = 't-shirts' === $terms[0] ? array( 'S', 'M', 'L', 'XL' ) : array( 'One size' );
 	$expected = array();
 	foreach ( $sizes as $size ) {
-		foreach ( array( 'Ink', 'Navy' ) as $color ) {
+		foreach ( array( 'Ink', 'Stone' ) as $color ) {
 			$expected[] = $size . '|' . $color;
 		}
 	}

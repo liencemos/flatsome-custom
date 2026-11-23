@@ -1,73 +1,62 @@
-[section class="signal-hero" padding="0px"]
-[row style="collapse" class="signal-hero-row"]
-[col span="6" span__md="12" span__sm="12" class="signal-hero-copy"]
+[section class="edit-hero" padding="0px"]
+[row class="edit-hero-row"]
+[col span="5" span__md="12" class="edit-hero-copy"]
 [ux_text]
-<p class="signal-eyebrow">● &nbsp; DROP_001 / FIELD EDITION</p>
-<h1>Wear the <br><span>signal.</span></h1>
-<p>Graphic tees and caps for life after dark. Tune into our first collection.</p>
+<p class="edit-label edit-accent">FORM / EDIT &nbsp;—&nbsp; 01 / 06</p>
+<h1>Studies in <br><em class="alt-font">form.</em></h1>
+<p class="edit-lede">An edition of graphic tees and caps. Familiar shapes, redrawn with intention.</p>
 [/ux_text]
-[button text="Explore the drop →" link="{{shop_url}}"]
+[button text="View Edition 01 ↗" link="{{shop_url}}"]
 [/col]
-[col span="6" span__md="12" span__sm="12" class="signal-hero-art"]
+[col span="7" span__md="12" class="edit-hero-art"]
 [ux_image id="{{hero_image}}" image_size="original" link="{{product_url}}"]
-[/col]
-[/row]
-[row class="signal-rail"]
-[col span="8" span__sm="12"]
-[ux_text]<p>01 / PRINTED TEES &nbsp;·&nbsp; 02 / EMBROIDERED CAPS</p>[/ux_text]
-[/col]
-[col span="4" span__sm="12" align="right"]
-[ux_text]<p>INDEPENDENT GRAPHIC GOODS &nbsp; // &nbsp; EST. 2026</p>[/ux_text]
+[ux_text]<p class="edit-caption"><span>FIG. 01 &nbsp; / &nbsp; THE STUDIO SET</span><span>EDITION 001</span></p>[/ux_text]
 [/col]
 [/row]
 [/section]
 
-[section class="signal-collections" padding="52px"]
-[row class="signal-section-title"]
-[col span="12"]
-[ux_text]
-<p class="signal-eyebrow">01 / COLLECTION INDEX</p>
-<h2>Find your frequency.</h2>
-[/ux_text]
-[/col]
-[/row]
+[section class="edit-index" padding="0px"]
 [row]
-[col span="6" span__sm="6" class="signal-collection-card"]
-[ux_image id="{{tees_image}}" image_size="original" link="{{tees_url}}"]
-[ux_text]<p class="signal-meta">01 / DESIGNED TO WEAR IN</p><h3>Graphic tees</h3>[/ux_text]
-[button text="Shop tees →" link="{{tees_url}}" style="link"]
-[/col]
-[col span="6" span__sm="6" class="signal-collection-card"]
-[ux_image id="{{hats_image}}" image_size="original" link="{{hats_url}}"]
-[ux_text]<p class="signal-meta">02 / BUILT TO TOP IT OFF</p><h3>Field caps</h3>[/ux_text]
-[button text="Shop hats →" link="{{hats_url}}" style="link"]
-[/col]
-[/row]
-[/section]
-
-[section class="signal-featured" padding="52px"]
-[row class="signal-section-title"]
-[col span="12"]
+[col span="4" span__md="12"]
 [ux_text]
-<p class="signal-eyebrow">02 / FIRST TRANSMISSION</p>
-<h2>Pick up the drop.</h2>
+<p class="edit-label">01 &nbsp; / &nbsp; THE INDEX</p>
+<h2>Two forms.</h2>
+[/ux_text]
+[/col]
+[col span="8" span__md="12"]
+[ux_text]
+<a class="edit-index-link" href="{{tees_url}}"><span class="edit-label">01</span><strong>Printed tees</strong><span class="edit-index-count">06 DESIGNS</span><span aria-hidden="true">↗</span></a>
+<a class="edit-index-link" href="{{hats_url}}"><span class="edit-label">02</span><strong>Embroidered caps</strong><span class="edit-index-count">06 DESIGNS</span><span aria-hidden="true">↗</span></a>
 [/ux_text]
 [/col]
 [/row]
-[ux_products type="row" columns="4" columns__md="4" columns__sm="2" ids="{{featured_ids}}" show="featured"]
 [/section]
 
-[section class="signal-outro" padding="58px"]
-[row v_align="middle"]
+[section class="edit-selection" padding="0px"]
+[row h_align="between" v_align="bottom"]
+[col span="8" span__sm="9"]
+[ux_text]
+<p class="edit-label">02 &nbsp; / &nbsp; FROM EDITION 01</p>
+<h2>Selected works.</h2>
+[/ux_text]
+[/col]
+[col span="4" span__sm="3" align="right"]
+[ux_text]<a class="edit-text-link" href="{{shop_url}}">View all ↗</a>[/ux_text]
+[/col]
+[/row]
+[ux_products type="row" columns="3" columns__md="3" columns__sm="2" ids="{{featured_ids}}" show="featured"]
+[/section]
+
+[section class="edit-note" padding="0px"]
+[row]
+[col span="4" span__sm="12"]
+[ux_text]<p class="edit-label">03 &nbsp; / &nbsp; STUDIO NOTE</p>[/ux_text]
+[/col]
 [col span="8" span__sm="12"]
 [ux_text]
-<p class="signal-eyebrow">03 / THE SIGNAL SUPPLY MANUAL</p>
-<h2>Graphic goods.<br>No static.</h2>
-<p>Small runs, bold marks, everyday fits. Get dressed on your own frequency.</p>
+<p class="alt-font">A small wardrobe.<br>Room for everything else.</p>
+<p>Printed and embroidered graphics, on pieces made to be worn often.</p>
 [/ux_text]
-[/col]
-[col span="4" span__sm="12" align="left"]
-[button text="Shop the collection →" link="{{shop_url}}" style="outline"]
 [/col]
 [/row]
 [/section]

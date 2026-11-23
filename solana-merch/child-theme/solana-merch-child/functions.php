@@ -8,6 +8,6 @@ add_action( 'wp_enqueue_scripts', function () {
 add_action( 'woocommerce_single_product_summary', function () {
 	$product = wc_get_product( get_the_ID() );
 	if ( $product && get_post_meta( $product->get_id(), '_signal_demo', true ) ) {
-		echo '<p class="signal-eyebrow signal-product-edition">● &nbsp; DROP 001 / FIELD EDITION</p>';
+		echo '<p class="edit-code edit-accent">FORM / EDIT &nbsp;—&nbsp; EDITION 001</p>';
 	}
 }, 4 );

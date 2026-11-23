@@ -8,7 +8,7 @@ if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 }
 
 if ( ! class_exists( 'WooCommerce' ) || 'flatsome' !== get_template() || 'solana-merch-child' !== get_stylesheet() ) {
-	WP_CLI::error( 'Activate WooCommerce and the Signal Supply Flatsome child theme before seeding.' );
+	WP_CLI::error( 'Activate WooCommerce and the FORM / EDIT Flatsome child theme before seeding.' );
 }
 
 if ( ! get_option( 'permalink_structure' ) ) {
@@ -122,13 +122,13 @@ function signal_seed_product( $category, $hat, $record, $index ) {
 	}
 
 	$ink    = signal_seed_media( $slug . '-ink.webp', $title . ' in Ink, front view' );
-	$navy   = signal_seed_media( $slug . '-navy.webp', $title . ' in Navy, front view' );
+	$stone  = signal_seed_media( $slug . '-stone.webp', $title . ' in Stone, front view' );
 	$detail = signal_seed_media( $slug . '-detail.webp', $title . ' print detail' );
 	$sizes  = $hat ? array( 'One size' ) : array( 'S', 'M', 'L', 'XL' );
-	$colors = array( 'Ink', 'Navy' );
+	$colors = array( 'Ink', 'Stone' );
 	$specs  = $hat
-		? '<ul><li>Six-panel cotton twill</li><li>Curved brim and adjustable strap</li><li>Front embroidery in Gold</li></ul>'
-		: '<ul><li>Heavyweight 100% cotton jersey</li><li>Relaxed unisex fit with a ribbed crew neck</li><li>Front screen print in Gold</li></ul>';
+		? '<ul><li>Six-panel cotton twill</li><li>Curved brim and adjustable strap</li><li>Embroidered front graphic</li></ul>'
+		: '<ul><li>Heavyweight 100% cotton jersey</li><li>Relaxed unisex fit with a ribbed crew neck</li><li>Screen-printed front graphic</li></ul>';
 	$care   = $hat
 		? 'Spot clean with a damp cloth; air dry.'
 		: 'Wash cold, inside out, with like colors. Hang dry; do not iron the print.';
@@ -143,9 +143,9 @@ function signal_seed_product( $category, $hat, $record, $index ) {
 	$product->set_menu_order( $index * 2 + (int) $hat );
 	$product->set_category_ids( array( $category ) );
 	$product->set_short_description( $intro );
-	$product->set_description( '<p>' . esc_html( $intro ) . '</p><h3>Field specs</h3>' . $specs . '<h3>Care</h3><p>' . esc_html( $care ) . '</p>' );
+	$product->set_description( '<h3>Material &amp; construction</h3>' . $specs . '<h3>Care</h3><p>' . esc_html( $care ) . '</p>' );
 	$product->set_image_id( $ink );
-	$product->set_gallery_image_ids( array( $detail, $navy ) );
+	$product->set_gallery_image_ids( array( $detail, $stone ) );
 	$product->set_attributes( array( signal_seed_attribute( 'Size', $sizes ), signal_seed_attribute( 'Color', $colors ) ) );
 	$product->update_meta_data( '_signal_demo', 1 );
 	$id = $product->save();
@@ -162,13 +162,13 @@ function signal_seed_product( $category, $hat, $record, $index ) {
 	foreach ( $sizes as $size ) {
 		foreach ( $colors as $color ) {
 			$key       = $size . '|' . $color;
-			$variation = $existing[ $key ] ?? new WC_Product_Variation();
+			$variation = $existing[ $key ] ?? ( 'Stone' === $color ? ( $existing[ $size . '|Navy' ] ?? null ) : null ) ?? new WC_Product_Variation();
 			$variation->set_parent_id( $id );
 			$variation->set_status( 'publish' );
 			$variation->set_attributes( array( 'size' => $size, 'color' => $color ) );
 			$variation->set_regular_price( $price );
 			$variation->set_stock_status( 'instock' );
-			$variation->set_image_id( 'Ink' === $color ? $ink : $navy );
+			$variation->set_image_id( 'Ink' === $color ? $ink : $stone );
 			$variation->update_meta_data( '_signal_demo', 1 );
 			$variation->save();
 		}
@@ -194,7 +194,7 @@ function signal_seed_render( $file, $values ) {
 }
 
 function signal_seed_menu( $items ) {
-	$name = 'Signal Supply Demo Navigation';
+	$name = 'FORM / EDIT Demo Navigation';
 	$menu = wp_get_nav_menu_object( $name );
 	$id   = $menu ? (int) $menu->term_id : signal_seed_result( wp_create_nav_menu( $name ) );
 	$existing = array();
@@ -218,20 +218,20 @@ function signal_seed_menu( $items ) {
 }
 
 $tees = array(
-	array( 'carrier-wave', 'Carrier Wave Tee', '34.00', 'A pulse trace in high-contrast Gold, printed on heavyweight cotton. The anchor piece of Drop 001.' ),
-	array( 'night-grid', 'Night Grid Tee', '32.00', 'A gridded coordinate mark for navigating after dark, printed on a relaxed crew neck.' ),
-	array( 'orbital-index', 'Orbital Index Tee', '36.00', 'A tilted orbit and a single tracking point, screen printed in Gold.' ),
-	array( 'relay-station', 'Relay Station Tee', '34.00', 'An antenna emblem from an imaginary relay station, drawn in a single line.' ),
-	array( 'static-field', 'Static Field Tee', '32.00', 'Four oscillating lines turn a moment of interference into a front graphic.' ),
-	array( 'after-hours', 'After Hours Tee', '36.00', 'A clean radial mark for late trains, long sets, and the hours in between.' ),
+	array( 'carrier-wave', 'Block 01 Tee', '34.00', 'A solid form and its missing square. Screen printed just off center on heavyweight cotton jersey.' ),
+	array( 'night-grid', 'Grid 02 Tee', '32.00', 'Four squares in two weights. A modular print on a relaxed crew neck.' ),
+	array( 'orbital-index', 'Orbit 03 Tee', '36.00', 'A bisected circle, screen printed on heavyweight cotton jersey.' ),
+	array( 'relay-station', 'Angle 04 Tee', '34.00', 'A sharp triangular form interrupted by a smaller notch.' ),
+	array( 'static-field', 'Line 05 Tee', '32.00', 'Four horizontal forms, each shorter than the last.' ),
+	array( 'after-hours', 'Facet 06 Tee', '36.00', 'A diamond cut from a diamond, with a single point at its center.' ),
 );
 $hats = array(
-	array( 'receiver-cap', 'Receiver Cap', '28.00', 'Our signature pulse trace in Gold thread on an adjustable six-panel cap.' ),
-	array( 'sideband-cap', 'Sideband Cap', '28.00', 'Gold grid embroidery on a cotton twill cap with a curved brim.' ),
-	array( 'orbit-cap', 'Orbit Cap', '30.00', 'A compact orbital diagram embroidered on the front of an everyday cap.' ),
-	array( 'uplink-cap', 'Uplink Cap', '30.00', 'A small antenna mark embroidered in Gold, finished with an adjustable back strap.' ),
-	array( 'field-cap', 'Static Field Cap', '28.00', 'An embroidered wave pattern with a low-profile fit for everyday wear.' ),
-	array( 'nightshift-cap', 'Nightshift Cap', '30.00', 'A radial Gold mark for late starts and early finishes.' ),
+	array( 'receiver-cap', 'Block 01 Cap', '28.00', 'A compact block embroidered on an adjustable six-panel cap.' ),
+	array( 'sideband-cap', 'Grid 02 Cap', '28.00', 'A four-square study in raised thread on soft cotton twill.' ),
+	array( 'orbit-cap', 'Orbit 03 Cap', '30.00', 'A bisected circle embroidered above the curved brim.' ),
+	array( 'uplink-cap', 'Angle 04 Cap', '30.00', 'An embroidered triangular mark and an adjustable back strap.' ),
+	array( 'field-cap', 'Line 05 Cap', '28.00', 'Four stepped bars embroidered on a low-profile cap.' ),
+	array( 'nightshift-cap', 'Facet 06 Cap', '30.00', 'Diamond-shaped embroidery on a six-panel cotton twill cap.' ),
 );
 
 foreach ( array( 't-shirts', 'hats' ) as $slug ) {
@@ -259,10 +259,10 @@ if ( $cart && has_block( 'woocommerce/cart', $cart ) ) {
 }
 update_option( 'woocommerce_coming_soon', 'no' );
 update_option( 'woocommerce_currency', 'USD' );
-update_option( 'blogname', 'Signal Supply' );
-update_option( 'blogdescription', 'Independent graphic tees and caps' );
-$tees_image = signal_seed_media( 'collection-tees.webp', 'Orbital Index Tee, graphic tees collection' );
-$hats_image = signal_seed_media( 'collection-hats.webp', 'Receiver Cap, field caps collection' );
+update_option( 'blogname', 'FORM / EDIT' );
+update_option( 'blogdescription', 'Independent clothing editions' );
+$tees_image = signal_seed_media( 'collection-tees.webp', 'Orbit 03 Tee in Stone' );
+$hats_image = signal_seed_media( 'collection-hats.webp', 'Angle 04 Cap in Ink' );
 $tees_id    = signal_seed_category( 't-shirts', 'T-shirts', $tees_image );
 $hats_id    = signal_seed_category( 'hats', 'Hats', $hats_image );
 $products   = array();
@@ -282,29 +282,25 @@ $links = array(
 	'cart_url'    => esc_url( wc_get_cart_url() ),
 );
 $home = signal_seed_post( 'page', 'signal-home', 'Home', signal_seed_render( 'homepage', $links + array(
-	'hero_image'   => signal_seed_media( 'hero.webp', 'Carrier Wave Tee on a neutral technical grid' ),
-	'tees_image'   => $tees_image,
-	'hats_image'   => $hats_image,
-	'featured_ids' => implode( ',', array_intersect_key( $products, array_flip( array( 'carrier-wave', 'night-grid', 'receiver-cap', 'sideband-cap' ) ) ) ),
+	'hero_image'   => signal_seed_media( 'hero.webp', 'Block 01 Tee and Orbit 03 Cap arranged on a studio surface' ),
+	'featured_ids' => implode( ',', array( $products['carrier-wave'], $products['receiver-cap'], $products['night-grid'] ) ),
 ) ) );
 update_post_meta( $home, '_wp_page_template', 'page-blank.php' );
 update_option( 'show_on_front', 'page' );
 update_option( 'page_on_front', $home );
-$footer = signal_seed_post( 'blocks', 'signal-footer', 'Signal Supply Footer', signal_seed_render( 'footer', $links ) );
+$footer = signal_seed_post( 'blocks', 'signal-footer', 'FORM / EDIT Footer', signal_seed_render( 'footer', $links ) );
 
 foreach ( array(
-	$tees_id => array( '01 / DROP_001', 'Graphic tees', 'Heavyweight cotton, clean lines, and prints made for the night shift.', 'Explore field caps →', $links['hats_url'] ),
-	$hats_id => array( '02 / DROP_001', 'Field caps', 'Six-panel caps with embroidered signals and an adjustable fit.', 'Explore graphic tees →', $links['tees_url'] ),
-	0        => array( '00 / DROP_001', 'The collection', 'Two collections. Twelve designs. Find your frequency.', 'Explore graphic tees →', $links['tees_url'] ),
-) as $term_id => list( $index, $title, $intro, $cta, $url ) ) {
-	$header = signal_seed_render( 'archive-header', array(
+	$tees_id => array( 'graphic-tees', '01 / EDITION 001', 'Printed tees.', 'Six graphic studies on heavyweight cotton jersey. Cut with room to move.' ),
+	$hats_id => array( 'field-caps', '02 / EDITION 001', 'Embroidered caps.', 'Six embroidered studies on soft cotton twill. One adjustable fit.' ),
+	0        => array( 'the-collection', '00 / COLLECTION INDEX', 'Edition 01.', 'Twelve graphic pieces, split between two everyday forms.' ),
+) as $term_id => list( $slug, $index, $title, $intro ) ) {
+	$header = signal_seed_render( 'archive-header', $links + array(
 		'archive_index' => $index,
 		'archive_title' => $title,
 		'archive_intro' => $intro,
-		'archive_cta'   => $cta,
-		'archive_url'   => $url,
 	) );
-	$block_id = signal_seed_post( 'blocks', 'signal-archive-' . sanitize_title( $title ), 'Signal Supply — ' . $title, $header );
+	$block_id = signal_seed_post( 'blocks', 'signal-archive-' . $slug, 'FORM / EDIT — ' . $title, $header );
 	$block = '[block id="' . $block_id . '"]';
 	if ( $term_id ) {
 		$meta = (array) get_term_meta( $term_id, 'cat_meta', true );
@@ -316,17 +312,16 @@ foreach ( array(
 }
 
 signal_seed_menu( array(
-	array( 'Home', 'page', $home ),
-	array( 'Shop', 'page', wc_get_page_id( 'shop' ) ),
-	array( 'T-shirts', 'product_cat', $tees_id ),
-	array( 'Hats', 'product_cat', $hats_id ),
+	array( 'Edition 01', 'page', wc_get_page_id( 'shop' ) ),
+	array( 'Tees', 'product_cat', $tees_id ),
+	array( 'Caps', 'product_cat', $hats_id ),
 ) );
 
-$logo = signal_seed_media( 'wordmark.png', 'Signal Supply' );
+$logo = signal_seed_media( 'wordmark.png', 'FORM / EDIT' );
 $mods = array(
 	'site_logo'                      => $logo,
 	'site_logo_dark'                 => '',
-	'logo_width'                     => 168,
+	'logo_width'                     => 144,
 	'logo_position'                  => 'left',
 	'logo_position_mobile'           => 'center',
 	'header_bg'                      => '#FFFFFF',
@@ -346,46 +341,47 @@ $mods = array(
 	'topbar_show'                    => 0,
 	'header_sticky'                  => 1,
 	'body_layout'                    => 'full-width',
-	'site_width'                     => 1280,
-	'body_bg'                        => '#F8F8F8',
-	'content_bg'                     => '#F8F8F8',
+	'site_width'                     => 1440,
+	'body_bg'                        => '#FFFFFF',
+	'content_bg'                     => '#FFFFFF',
 	'content_color'                  => 'light',
-	'color_primary'                  => '#272727',
-	'color_secondary'                => '#535353',
-	'color_texts'                    => '#272727',
-	'color_links'                    => '#272727',
+	'color_primary'                  => '#1B1B1B',
+	'color_secondary'                => '#5C5B58',
+	'color_texts'                    => '#1B1B1B',
+	'color_links'                    => '#1B1B1B',
 	'color_links_hover'              => '#000814',
-	'type_headings_color'            => '#000814',
-	'color_regular_price'            => '#272727',
-	'color_divider'                  => '#DEDEDE',
-	'type_headings'                  => array( 'font-family' => 'Space Grotesk', 'variant' => '700' ),
-	'type_texts'                     => array( 'font-family' => 'Manrope', 'variant' => '400' ),
-	'type_nav'                       => array( 'font-family' => 'Manrope', 'variant' => '700' ),
-	'type_alt'                       => array( 'font-family' => 'IBM Plex Mono', 'variant' => '500' ),
+	'type_headings_color'            => '#1B1B1B',
+	'color_regular_price'            => '#1B1B1B',
+	'color_divider'                  => '#D5D3CF',
+	'type_headings'                  => array( 'font-family' => 'Inter Tight', 'variant' => '500' ),
+	'type_texts'                     => array( 'font-family' => 'Inter', 'variant' => '400' ),
+	'type_nav'                       => array( 'font-family' => 'Inter', 'variant' => '600' ),
+	'type_alt'                       => array( 'font-family' => 'Bodoni Moda', 'variant' => '400italic' ),
 	'google_fonts_cdn'               => 1,
 	'category_title_style'           => '',
 	'category_show_title'            => 0,
 	'category_sidebar'               => 'none',
-	'category_row_count'             => 4,
+	'category_row_count'             => 3,
 	'category_row_count_tablet'      => 3,
 	'category_row_count_mobile'      => 2,
 	'products_pr_page'               => 12,
 	'product_box_category'           => 1,
+	'product_hover'                  => 'fade_in_back',
 	'disable_quick_view'             => 0,
 	'product_next_prev_nav'          => 0,
-	'product_layout'                 => 'no-sidebar',
-	'product_image_width'            => 6,
+	'product_layout'                 => 'stacked-right',
+	'product_image_width'            => 7,
 	'footer_block'                   => $footer,
 	'footer_bottom_color'            => '#FFFFFF',
 	'footer_bottom_text'             => 'light',
-	'footer_left_text'               => '© ' . gmdate( 'Y' ) . ' SIGNAL SUPPLY / STOREFRONT DEMO',
+	'footer_left_text'               => '© ' . gmdate( 'Y' ) . ' FORM / EDIT',
 	'payment_icons_placement'        => array(),
 );
 foreach ( $mods as $setting => $value ) {
 	set_theme_mod( $setting, $value );
 }
 
-WP_CLI::success( sprintf( 'Signal Supply: %d variable products seeded.', count( $products ) ) );
+WP_CLI::success( sprintf( 'FORM / EDIT: %d variable products seeded.', count( $products ) ) );
 WP_CLI::log( 'Homepage: ' . home_url( '/' ) );
 WP_CLI::log( 'Category: ' . $links['tees_url'] );
 WP_CLI::log( 'Product: ' . $product_url );
