@@ -362,7 +362,7 @@
 .cf-color-nav__dot { width: 58px; height: 58px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .14); transition: transform .15s ease, box-shadow .15s ease; }
 .cf-color-nav a:hover .cf-color-nav__dot { transform: translateY(-3px); box-shadow: 0 0 0 2px var(--cf-page), 0 0 0 4px var(--cf-ink); }
 @media (prefers-reduced-motion: reduce) {
-	.cf-ticker__track { animation: none; width: auto; flex-wrap: wrap; }
+	.cf-ticker__track { display: block; animation: none; width: auto; }
 	.cf-ticker__group[aria-hidden] { display: none; }
 	.cf-ticker__group { flex-wrap: wrap; justify-content: center; }
 }
