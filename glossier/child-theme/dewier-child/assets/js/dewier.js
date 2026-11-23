@@ -371,6 +371,10 @@
 				return;
 			}
 			all( '.dw-faq__item' ).forEach( function ( item ) {
+				// Skip questions in a widget that is hidden at this screen size.
+				if ( ! item.getClientRects().length ) {
+					return;
+				}
 				var question = item.querySelector( '.dw-faq__q' ).textContent.toLowerCase();
 				var text = question + ' ' + item.querySelector( '.dw-faq__a' ).textContent.toLowerCase();
 				function within( haystack ) {
