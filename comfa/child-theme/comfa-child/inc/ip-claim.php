@@ -167,7 +167,11 @@ function cf_ip_claim_store( $values ) {
 	if ( is_wp_error( $id ) || ! $id ) {
 		return 0;
 	}
-	update_post_meta( $id, '_cf_ip_claim', wp_slash( $values ) );
+	// A report without its details is useless: do not keep it or count it as received.
+	if ( ! update_post_meta( $id, '_cf_ip_claim', wp_slash( $values ) ) ) {
+		wp_delete_post( $id, true );
+		return 0;
+	}
 	return (int) $id;
 }
 
