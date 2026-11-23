@@ -182,14 +182,15 @@ add_shortcode( 'form_edit_newsletter', function () {
 	return ob_get_clean();
 } );
 
-function form_edit_reserve_newsletter_request( $email ) {
+function form_edit_reserve_mail_request( $channel, $signature ) {
 	global $wpdb;
 
 	$ip = $_SERVER['REMOTE_ADDR'] ?? '';
-	$ip_key = 'form_edit_letter_ip_' . wp_hash( $ip );
-	$email_key = 'form_edit_letter_email_' . wp_hash( strtolower( $email ) );
-	$hour_key = 'form_edit_letter_hour_' . intdiv( time(), HOUR_IN_SECONDS );
-	$lock = 'form_edit_letter_' . md5( DB_NAME . ':' . $wpdb->prefix );
+	$prefix = 'form_edit_' . $channel . '_';
+	$ip_key = $prefix . 'ip_' . wp_hash( $ip );
+	$email_key = $prefix . 'email_' . wp_hash( $signature );
+	$hour_key = $prefix . 'hour_' . intdiv( time(), HOUR_IN_SECONDS );
+	$lock = $prefix . md5( DB_NAME . ':' . $wpdb->prefix );
 	if ( '1' !== (string) $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK(%s, 0)', $lock ) ) ) {
 		return false;
 	}
@@ -213,10 +214,78 @@ function form_edit_request_newsletter() {
 	$sent = '' === ( $_POST['studio_letter_website'] ?? '' )
 		&& strlen( $email ) <= 254
 		&& is_email( $email )
-		&& form_edit_reserve_newsletter_request( $email )
+		&& form_edit_reserve_mail_request( 'letter', strtolower( $email ) )
 		&& wp_mail( get_option( 'admin_email' ), 'FORM / EDIT: studio letter signup request', 'Requested signup: ' . $email );
 	wp_safe_redirect( add_query_arg( 'studio_letter', $sent ? 'sent' : 'error', home_url( '/' ) ) . '#studio-letter' );
 	exit;
 }
 add_action( 'admin_post_form_edit_newsletter', 'form_edit_request_newsletter' );
 add_action( 'admin_post_nopriv_form_edit_newsletter', 'form_edit_request_newsletter' );
+
+add_shortcode( 'form_edit_policy_toc', function ( $atts, $content = '' ) {
+	$list = wp_kses_post( trim( $content ?? '' ) );
+	return '<nav class="edit-policy-toc edit-policy-toc-desktop" aria-label="On this page"><p class="edit-label">On this page</p>' . $list . '</nav>'
+		. '<details class="edit-policy-toc edit-policy-toc-mobile"><summary>On this page</summary><nav aria-label="On this page">' . $list . '</nav></details>';
+} );
+
+add_shortcode( 'form_edit_contact', function () {
+	$status = isset( $_GET['studio_contact'] ) && is_string( $_GET['studio_contact'] ) ? sanitize_key( wp_unslash( $_GET['studio_contact'] ) ) : '';
+	$privacy = get_privacy_policy_url();
+	ob_start();
+	?>
+	<form id="studio-contact" class="edit-contact-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="form_edit_contact">
+		<?php wp_nonce_field( 'form_edit_contact', 'studio_contact_nonce', false ); ?>
+		<div hidden>
+			<label for="studio-contact-website">Leave this field empty</label>
+			<input id="studio-contact-website" type="text" name="studio_contact_website" tabindex="-1" autocomplete="off">
+		</div>
+		<?php if ( 'sent' === $status ) : ?>
+			<p class="edit-contact-status" role="status">Thanks. Your enquiry was sent to the studio.</p>
+		<?php elseif ( 'error' === $status ) : ?>
+			<p class="edit-contact-status" role="status">We couldn’t send your enquiry. Try again later or use the studio email.</p>
+		<?php endif; ?>
+		<div class="edit-contact-fields">
+			<label for="studio-contact-name">Name <span aria-hidden="true">*</span>
+				<input id="studio-contact-name" type="text" name="name" autocomplete="name" maxlength="100" required>
+			</label>
+			<label for="studio-contact-phone">Phone (optional)
+				<input id="studio-contact-phone" type="tel" name="phone" autocomplete="tel" maxlength="30">
+			</label>
+			<label class="edit-contact-wide" for="studio-contact-email">Email address <span aria-hidden="true">*</span>
+				<input id="studio-contact-email" type="email" name="email" autocomplete="email" maxlength="254" required>
+			</label>
+			<label class="edit-contact-wide" for="studio-contact-message">Message <span aria-hidden="true">*</span>
+				<textarea id="studio-contact-message" name="message" rows="5" maxlength="3000" required></textarea>
+			</label>
+		</div>
+		<p class="edit-page-caption">Include an order number if relevant. Do not send payment details.<?php if ( $privacy ) : ?> <a href="<?php echo esc_url( $privacy ); ?>">Privacy Policy</a><?php endif; ?></p>
+		<button class="button primary" type="submit">Send enquiry</button>
+	</form>
+	<?php
+	return ob_get_clean();
+} );
+
+function form_edit_request_contact() {
+	check_admin_referer( 'form_edit_contact', 'studio_contact_nonce' );
+	$fields = array();
+	foreach ( array( 'name', 'phone', 'email', 'message' ) as $key ) {
+		$fields[ $key ] = isset( $_POST[ $key ] ) && is_string( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : '';
+	}
+	$name = sanitize_text_field( $fields['name'] );
+	$phone = sanitize_text_field( $fields['phone'] );
+	$email = sanitize_email( $fields['email'] );
+	$message = sanitize_textarea_field( $fields['message'] );
+	$sent = '' === ( $_POST['studio_contact_website'] ?? '' )
+		&& '' !== $name && mb_strlen( $name ) <= 100
+		&& ( '' === $phone || preg_match( '/^[0-9+().# x-]{1,30}$/iD', $phone ) )
+		&& strlen( $email ) <= 254 && is_email( $email )
+		&& '' !== $message && mb_strlen( $message ) <= 3000
+		&& form_edit_reserve_mail_request( 'contact', strtolower( $email ) . '|' . $message )
+		&& wp_mail( get_option( 'admin_email' ), 'FORM / EDIT: studio enquiry', "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\n\n{$message}", array( 'Reply-To: ' . $email ) );
+	$page = get_page_by_path( 'contact', OBJECT, array( 'page' ) );
+	wp_safe_redirect( add_query_arg( 'studio_contact', $sent ? 'sent' : 'error', $page ? get_permalink( $page ) : home_url( '/' ) ) . '#studio-contact' );
+	exit;
+}
+add_action( 'admin_post_form_edit_contact', 'form_edit_request_contact' );
+add_action( 'admin_post_nopriv_form_edit_contact', 'form_edit_request_contact' );

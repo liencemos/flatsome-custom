@@ -1,0 +1,82 @@
+[section class="edit-page edit-policy" padding="0px"]
+[row]
+[col span="12"]
+[ux_text]
+<p class="edit-label">09 / STORE POLICIES</p>
+<h1>Terms of <em>service.</em></h1>
+<p class="edit-page-lede">The terms for browsing, buying and contacting our independent clothing studio.</p>
+<p class="edit-policy-draft">Demo policy · Review and complete before publishing.</p>
+[/ux_text]
+[/col]
+[/row]
+[row class="edit-policy-layout"]
+[col span="4" span__sm="12" class="edit-policy-aside"]
+[form_edit_policy_toc]
+<ol><li><a href="#agreement">User agreement</a></li><li><a href="#campaigns">Campaigns and custom work</a></li><li><a href="#ip-complaints">Intellectual property complaints</a></li><li><a href="#counter-notices">Counter-notices</a></li><li><a href="#repeat-reports">Repeated intellectual property reports</a></li><li><a href="#taxes">Taxes and withholding</a></li><li><a href="#indemnity">Indemnification</a></li><li><a href="#general-terms">General provisions</a></li><li><a href="#buyer-terms">Payments, returns and cancellations</a></li><li><a href="#integrations">API and integrations</a></li></ol>
+[/form_edit_policy_toc]
+[/col]
+[col span="8" span__sm="12"]
+[ux_text]
+<section class="edit-policy-entry" id="agreement">
+<p class="edit-label">01 / POLICY</p>
+<h2>User agreement</h2>
+<p>These terms concern the FORM / EDIT storefront, operated by [Company legal name]. Effective date: [Effective date].</p>
+<h3>Delivery</h3><p>Product pages show estimated delivery windows, not guaranteed dates.</p>
+<h3>Print and embroidery variation</h3><p>Print position, thread texture and colour can vary slightly between garments and screens.</p>
+<h3>Prices and payment</h3><p>Checkout lists prices, charges and available payment methods before you place an order.</p>
+</section>
+<section class="edit-policy-entry" id="campaigns">
+<p class="edit-label">02 / POLICY</p>
+<h2>Campaigns and custom work</h2>
+<p>FORM / EDIT sells its own editions of printed tees and embroidered caps. The demo has no seller marketplace, public campaign creator or payout programme. Any commissioned work would require a separate agreement.</p>
+</section>
+<section class="edit-policy-entry" id="ip-complaints">
+<p class="edit-label">03 / POLICY</p>
+<h2>Intellectual property complaints</h2>
+<p>If you believe material on this site uses protected work without permission, contact <a href="mailto:studio@example.com?subject=Intellectual%20property%20report">studio@example.com</a>. Identify the rights and relevant page, describe the issue, and include contact details and proof of authority where appropriate.</p>
+</section>
+<section class="edit-policy-entry" id="counter-notices">
+<p class="edit-label">04 / POLICY</p>
+<h2>Counter-notices</h2>
+<p>If you believe content was removed in error, reply with the material, the reason for your request and your contact details. The store operator will review it under the process required by applicable law.</p>
+</section>
+<section class="edit-policy-entry" id="repeat-reports">
+<p class="edit-label">05 / POLICY</p>
+<h2>Repeated intellectual property reports</h2>
+<p>Where relevant and permitted, the store operator may limit access or remove material following substantiated repeat infringements. Confirm the reporting process and designated contact before publishing.</p>
+</section>
+<section class="edit-policy-entry" id="taxes">
+<p class="edit-label">06 / POLICY</p>
+<h2>Taxes and withholding</h2>
+<p>Checkout shows taxes the store is configured to collect. This demo does not remit seller payouts. Confirm any tax, duty and withholding terms for the markets you serve.</p>
+</section>
+<section class="edit-policy-entry" id="indemnity">
+<p class="edit-label">07 / POLICY</p>
+<h2>Indemnification</h2>
+<p>[Have counsel review whether an indemnity applies and what it may cover for misuse of the store or third-party rights. Do not publish this placeholder.]</p>
+</section>
+<section class="edit-policy-entry" id="general-terms">
+<p class="edit-label">08 / POLICY</p>
+<h2>General provisions</h2>
+<h3>Agreement and relationship</h3><p>FORM / EDIT sells directly to customers; the demo does not support seller purchase orders or agency. [Confirm which documents form the entire agreement and which prevails if they conflict.]</p>
+<h3>Assignment and severability</h3><p>[Have counsel confirm the provisions on transferring rights and on any term a court finds unenforceable.]</p>
+<h3>Governing law and disputes</h3><p>[Confirm governing law, venue and any applicable dispute terms.] These draft terms do not seek to waive rights that consumers cannot legally waive.</p>
+</section>
+<section class="edit-policy-entry" id="buyer-terms">
+<p class="edit-label">09 / POLICY</p>
+<h2>Payments, returns and cancellations</h2>
+<h3>Payment methods and timing</h3><p>Checkout lists payment methods. The demo uses Cash on Delivery, with payment due on delivery.</p>
+<h3>Shipment timing and missing parcels</h3><p>Check your dispatch email for tracking. Contact the studio if the parcel is missing or you suspect it was stolen.</p>
+<h3>Cancellations, refunds and exchanges</h3><p>See the <a href="{{return_refund_policy_url}}">Return &amp; Refund Policy</a> before returning or replacing an item.</p>
+</section>
+<section class="edit-policy-entry" id="integrations">
+<p class="edit-label">10 / POLICY</p>
+<h2>API and integrations</h2>
+<h3>Integration overview</h3><p>The storefront uses WooCommerce for orders and checkout; it does not offer a public fulfilment API or Shopify integration.</p>
+<h3>Lost shipments</h3><p>If an integration is added, document who investigates and resolves lost or stolen parcels.</p>
+<h3>Printing and production</h3><p>Set separate production and payment terms before offering custom fulfilment or a third-party print service.</p>
+</section>
+[/ux_text]
+[/col]
+[/row]
+[/section]

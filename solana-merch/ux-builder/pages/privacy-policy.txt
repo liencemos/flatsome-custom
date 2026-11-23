@@ -1,0 +1,72 @@
+[section class="edit-page edit-policy" padding="0px"]
+[row]
+[col span="12"]
+[ux_text]
+<p class="edit-label">08 / STORE POLICIES</p>
+<h1>Privacy <em>policy.</em></h1>
+<p class="edit-page-lede">What we collect when you visit the store, place an order, or contact the studio.</p>
+<p class="edit-policy-draft">Demo policy · Review and complete before publishing.</p>
+[/ux_text]
+[/col]
+[/row]
+[row class="edit-policy-layout"]
+[col span="4" span__sm="12" class="edit-policy-aside"]
+[form_edit_policy_toc]
+<ol><li><a href="#introduction">Introduction</a></li><li><a href="#collection">How we collect information</a></li><li><a href="#use">How we use information</a></li><li><a href="#sharing">How we share information</a></li><li><a href="#security">How we protect information</a></li><li><a href="#choices">Your privacy choices</a></li><li><a href="#updates">Updates to this policy</a></li></ol>
+[/form_edit_policy_toc]
+[/col]
+[col span="8" span__sm="12"]
+[ux_text]
+<section class="edit-policy-entry" id="introduction">
+<p class="edit-label">01 / POLICY</p>
+<h2>Introduction</h2>
+<p>FORM / EDIT is operated by [Company legal name]. Effective date: [Effective date]. For privacy questions, contact <a href="mailto:studio@example.com">studio@example.com</a>.</p>
+<h3>What this notice covers</h3><p>This notice covers our online store and its support channels.</p>
+<h3>What it does not cover</h3><p>Other sites and independent providers have their own notices.</p>
+<h3>Where information is processed</h3><p>[Confirm where the store and its vendors process data, including any transfers to or from the United States and the applicable safeguards.]</p>
+</section>
+<section class="edit-policy-entry" id="collection">
+<p class="edit-label">02 / POLICY</p>
+<h2>How we collect information</h2>
+<h3>Information you provide</h3>
+<ul><li><strong>Accounts:</strong> The store receives the contact details you enter to create an account.</li><li><strong>Payouts:</strong> The demo has no seller accounts or seller payouts.</li><li><strong>Orders:</strong> When you order a tee or cap, the store receives your delivery address and order information.</li><li><strong>Support:</strong> We receive your enquiry and any information you choose to include.</li></ul>
+<h3>Technical information</h3>
+<ul><li><strong>Logs and analytics:</strong> Hosting may generate access and security logs. [List any analytics services enabled.]</li><li><strong>Advertising pixels:</strong> [Identify any pixels that are enabled and the controls available.]</li><li><strong>Cookies:</strong> WooCommerce uses cookies to keep carts and sessions working.</li><li><strong>Browser signals:</strong> [Document how the live store responds to applicable preference signals.]</li></ul>
+<h3>Children and payment details</h3><p>This store is not intended for children. If you enable card payments, the payment provider should handle card details; do not send those details to support.</p>
+</section>
+<section class="edit-policy-entry" id="use">
+<p class="edit-label">03 / POLICY</p>
+<h2>How we use information</h2>
+<h3>Providing the service</h3><p>We use order and account details to fulfil purchases and manage the store.</p>
+<h3>Communicating with you</h3><p>We use contact information for order updates and replies to enquiries. Studio letters are promotional and separate from service messages.</p>
+<h3>Related services and the store website</h3><p>The demo is an independent storefront, not a network of seller services. [Confirm how customer content, including product reviews, appears on the live site.]</p>
+<h3>Reporting and analysis</h3><p>We use operational information to help detect abuse and understand store performance.</p>
+</section>
+<section class="edit-policy-entry" id="sharing">
+<p class="edit-label">04 / POLICY</p>
+<h2>How we share information</h2>
+<h3>Sharing with third parties</h3><p>We do not connect buyers with outside sellers in the demo. Hosting, payment, delivery and email providers may receive details needed for their roles. Linked services have their own practices. [List your actual providers and confirm your position on data sales, rental or advertising sharing.]</p>
+<h3>Legal requests and business transfers</h3><p>Information may need to be disclosed when required by law or during an acquisition, subject to applicable safeguards.</p>
+<h3>Jurisdiction-specific rights</h3><p>[Confirm which privacy rights apply in the jurisdictions you serve, including California if relevant.]</p>
+</section>
+<section class="edit-policy-entry" id="security">
+<p class="edit-label">05 / POLICY</p>
+<h2>How we protect information</h2>
+<h3>Account security</h3><p>Use strong credentials and report suspected misuse.</p>
+<h3>Network security and operating procedures</h3><p>The store operator should configure HTTPS, restrict administrative access, keep software current and confirm the practices of vendors. [Set retention periods for order and support records.]</p>
+</section>
+<section class="edit-policy-entry" id="choices">
+<p class="edit-label">06 / POLICY</p>
+<h2>Your privacy choices</h2>
+<h3>Access, account updates and deletion</h3><p>Contact us to request access, correction or deletion where available. We may need to verify your identity or retain some order records as required by law.</p>
+<h3>Communications and advertising</h3><p>Use the unsubscribe instructions in promotional messages. [Add the relevant opt-out or consent controls if you enable analytics or advertising.]</p>
+</section>
+<section class="edit-policy-entry" id="updates">
+<p class="edit-label">07 / POLICY</p>
+<h2>Updates to this policy</h2>
+<p>We will publish updates on this page and revise the effective date. For questions or requests, use the <a href="{{contact_url}}">Contact Us</a> page.</p>
+</section>
+[/ux_text]
+[/col]
+[/row]
+[/section]

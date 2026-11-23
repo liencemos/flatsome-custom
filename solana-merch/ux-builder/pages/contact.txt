@@ -1,16 +1,29 @@
-[section class="edit-page" padding="0px"]
+[section class="edit-page edit-contact" padding="0px"]
 [row]
 [col span="5" span__sm="12"]
-[ux_text]<p class="edit-label">03 / CUSTOMER SERVICE</p><h1>Get in <em>touch.</em></h1><p class="edit-page-lede">Questions about fit, an order, or an edition? Send us a note.</p>[/ux_text]
+[ux_text]
+<p class="edit-label">03 / CUSTOMER SERVICE</p>
+<h1>Contact <em>us.</em></h1>
+<p class="edit-page-lede">Questions about an order, size or edition? Send us a note and we’ll reply by email.</p>
+<div class="edit-contact-note">
+<p class="edit-label">01 / STUDIO DETAILS</p>
+<ul class="edit-contact-details">
+<li><a href="mailto:studio@example.com">studio@example.com</a></li>
+<li>[Business address]</li>
+<li>[Support hours and time zone]</li>
+</ul>
+</div>
+<div class="edit-contact-note">
+<p class="edit-label">02 / TRADEMARK &amp; IP</p>
+<h2>Report an IP concern.</h2>
+<p>Include the relevant product link and a description of the rights at issue. See our <a href="{{terms_of_service_url}}#ip-complaints">reporting process</a>.</p>
+</div>
+[/ux_text]
+[button text="Email an IP report" link="mailto:studio@example.com?subject=Intellectual%20property%20report" style="outline"]
 [/col]
 [col span="7" span__sm="12" class="edit-page-panel"]
-[ux_text]<p class="edit-label">01 / EMAIL</p><h2>Write to the studio.</h2><p>For help with an order, include the order number and the email you used at checkout. Please don’t send payment details.</p>[/ux_text]
-[button text="Email the studio" link="mailto:studio@example.com"]
-[ux_text]<p class="edit-page-caption">Demo email address. The shop owner must replace it before launch.</p>[/ux_text]
+[ux_text]<p class="edit-label">03 / SEND A MESSAGE</p><h2>Send us your enquiry.</h2>[/ux_text]
+[form_edit_contact]
 [/col]
-[/row]
-[row class="edit-page-rule"]
-[col span="6" span__sm="12"][ux_text]<p class="edit-label">02 / QUICK ANSWERS</p><h2><a href="{{faq_url}}">Read the FAQ ↗</a></h2><p>Start here for help with sizes, orders and delivery.</p>[/ux_text][/col]
-[col span="6" span__sm="12"][ux_text]<p class="edit-label">03 / ORDER HELP</p><h2><a href="{{shipping_returns_url}}">Shipping &amp; returns ↗</a></h2><p>Find delivery details or see what to include in a return request.</p>[/ux_text][/col]
 [/row]
 [/section]

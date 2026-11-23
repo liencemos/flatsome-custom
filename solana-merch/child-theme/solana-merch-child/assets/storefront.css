@@ -141,6 +141,62 @@ body :focus-visible { outline: 2px solid var(--edit-navy); outline-offset: 3px; 
 .edit-page-size table { background: var(--edit-paper); }
 .edit-page-404 .edit-page-panel h2:last-child { margin-bottom: 0; }
 
+.edit-policy-draft {
+	display: inline-block;
+	padding: 8px 12px;
+	border: 1px solid var(--edit-rule);
+	background: var(--edit-gallery);
+	color: var(--edit-muted);
+	font-size: .83em;
+}
+.edit-policy-layout { align-items: stretch; }
+.edit-policy-aside > .col-inner { height: auto; }
+.edit-policy-toc {
+	padding: clamp(15px, 2vw, 28px);
+	border: 1px solid var(--edit-rule);
+	background: var(--edit-gallery);
+}
+.edit-policy-toc ol { margin: 0; padding-left: 1.5em; font-size: .9em; }
+.edit-policy-toc li { padding-block: 4px; }
+.edit-policy-toc ol ol { margin-top: 4px; font-size: 1em; }
+.edit-policy-toc summary { cursor: pointer; font-weight: 600; }
+.edit-policy-toc summary + nav { margin-top: 12px; }
+.edit-policy-toc-mobile { display: none; }
+.edit-policy-entry, .edit-help-section {
+	padding-top: 23px;
+	border-top: 1px solid var(--edit-rule);
+	scroll-margin-top: 140px;
+}
+.edit-policy-entry + .edit-policy-entry, .edit-help .accordion + .text { margin-top: 32px; }
+.edit-policy-entry :last-child { margin-bottom: 0; }
+.edit-policy-entry h3 { margin-top: 1em; }
+.edit-policy-entry .edit-label + h3 { margin-top: 0; }
+.edit-policy-group:not(:first-child) { margin-top: 40px; }
+.edit-help h1 { font-size: clamp(44px, 5vw, 76px); overflow-wrap: anywhere; }
+.edit-help .accordion { margin-bottom: 28px; }
+.edit-help .accordion-title { padding-block: 12px; }
+.edit-contact-note { margin: 24px 0 0; padding-top: 18px; border-top: 1px solid var(--edit-rule); }
+.edit-contact-details { list-style: none; margin: 0; }
+.edit-contact-details li { margin: 0; }
+.edit-contact-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.edit-contact-wide { grid-column: 1 / -1; }
+.edit-contact-fields label { margin: 0; }
+.edit-contact-fields :is(input, textarea) { margin: 4px 0 0; border-color: var(--edit-rule); box-shadow: none; }
+.edit-contact-fields input { min-height: 44px; }
+.edit-contact-form .button { margin-top: 18px; }
+.edit-contact-status { padding: 11px 14px; border: 1px solid var(--edit-rule); background: var(--edit-paper); }
+@media (min-width: 850px) {
+	.edit-policy-aside > .col-inner { position: sticky; top: 98px; }
+	.edit-policy-toc { max-height: calc(100vh - 118px); overflow-y: auto; }
+}
+@media (max-width: 849px) {
+	.edit-policy-toc-desktop { display: none; }
+	.edit-policy-toc-mobile { display: block; }
+}
+@media (max-width: 549px) {
+	.edit-contact-fields { grid-template-columns: minmax(0, 1fr); }
+}
+
 .edit-service, .edit-module { padding-inline: var(--edit-gutter); }
 .edit-service { margin-top: 26px; }
 .edit-service .section-content { border-block: 1px solid var(--edit-rule); }

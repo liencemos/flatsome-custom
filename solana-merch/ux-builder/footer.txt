@@ -1,12 +1,12 @@
 [section class="edit-footer" padding="0px"]
 [row]
-[col span="6" span__sm="12"]
+[col span="4" span__sm="12"]
 [ux_text]
 <p class="edit-label">INDEPENDENT CLOTHING EDITIONS</p>
 <p class="edit-footer-mark">FORM / EDIT<span aria-hidden="true">.</span></p>
 [/ux_text]
 [/col]
-[col span="3" span__sm="6"]
+[col span="2" span__sm="6"]
 [ux_text]
 <p class="edit-label">01 &nbsp; / &nbsp; INDEX</p>
 <ul><li><a href="{{shop_url}}">All pieces</a></li><li><a href="{{tees_url}}">Printed tees</a></li><li><a href="{{hats_url}}">Embroidered caps</a></li><li><a href="{{about_url}}">About</a></li><li><a href="{{lookbook_url}}">Lookbook</a></li></ul>
@@ -15,7 +15,13 @@
 [col span="3" span__sm="6"]
 [ux_text]
 <p class="edit-label">02 &nbsp; / &nbsp; SERVICE</p>
-<ul><li><a href="{{account_url}}">Your account</a></li><li><a href="{{cart_url}}">Shopping bag</a></li><li><a href="{{contact_url}}">Contact</a></li><li><a href="{{faq_url}}">FAQ</a></li><li><a href="{{shipping_returns_url}}">Shipping &amp; Returns</a></li><li><a href="{{size_guide_url}}">Size Guide</a></li><li><a href="{{care_guide_url}}">Care Guide</a></li></ul>
+<ul><li><a href="{{account_url}}">Your account</a></li><li><a href="{{cart_url}}">Shopping bag</a></li><li><a href="{{contact_url}}">Contact Us</a></li><li><a href="{{faq_url}}">FAQ</a></li><li><a href="{{shipping_returns_url}}">Shipping &amp; Returns</a></li><li><a href="{{size_guide_url}}">Size Guide</a></li><li><a href="{{care_guide_url}}">Care Guide</a></li></ul>
+[/ux_text]
+[/col]
+[col span="3" span__sm="12"]
+[ux_text]
+<p class="edit-label">03 &nbsp; / &nbsp; POLICIES</p>
+<ul><li><a href="{{privacy_policy_url}}">Privacy Policy</a></li><li><a href="{{terms_of_service_url}}">Terms of Service</a></li><li><a href="{{return_refund_policy_url}}">Return &amp; Refund Policy</a></li></ul>
 [/ux_text]
 [/col]
 [/row]

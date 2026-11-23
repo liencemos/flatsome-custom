@@ -1,0 +1,75 @@
+[section class="edit-page edit-policy" padding="0px"]
+[row]
+[col span="12"]
+[ux_text]
+<p class="edit-label">10 / STORE POLICIES</p>
+<h1>Return &amp; <em>refund policy.</em></h1>
+<p class="edit-page-lede">Delivery, returns and payment in one place. Keep your order number handy.</p>
+<p class="edit-policy-draft">Demo policy · Review and complete before publishing.</p>
+[/ux_text]
+[/col]
+[/row]
+[row class="edit-policy-layout"]
+[col span="4" span__sm="12" class="edit-policy-aside"]
+[form_edit_policy_toc]
+<ol><li>Shipping, returns &amp; exchanges<ol><li><a href="#duties">Duties and taxes</a></li><li><a href="#returns">Return and exchange policy</a></li><li><a href="#processing">Replacement and refund timing</a></li><li><a href="#dispatch">Order dispatch</a></li><li><a href="#transit">Delivery after dispatch</a></li><li><a href="#redelivery">Missed deliveries and pickup</a></li></ol></li><li>Payment<ol><li><a href="#payment-methods">Accepted methods</a></li><li><a href="#payment-security">Payment security</a></li><li><a href="#security-code">Card security codes</a></li><li><a href="#charge-timing">When payment is due</a></li></ol></li></ol>
+[/form_edit_policy_toc]
+[/col]
+[col span="8" span__sm="12"]
+[ux_text]
+<h2 class="edit-policy-group">Shipping, returns &amp; exchanges</h2>
+<section class="edit-policy-entry" id="duties">
+<p class="edit-label">01 / POLICY</p>
+<h3>Duties and taxes</h3>
+<p>Demo delivery is limited to US addresses. VAT and customs are not collected for international demo orders because those orders are not offered. Confirm duties and taxes if you expand shipping destinations.</p>
+</section>
+<section class="edit-policy-entry" id="returns">
+<p class="edit-label">02 / POLICY</p>
+<h3>Return and exchange policy</h3>
+<p><a href="{{contact_url}}">Contact the studio</a> before mailing anything. Include your order number, the item and why you are returning it. For damage or a wrong item, include a photo if possible. Wait for approval and the correct return address.</p><p>[Confirm the return window, eligible condition, exclusions, and who pays shipping before launch.] This does not limit statutory rights.</p>
+</section>
+<section class="edit-policy-entry" id="processing">
+<p class="edit-label">03 / POLICY</p>
+<h3>Replacement and refund timing</h3>
+<p>We review the request first and confirm the next step by email. Approved replacement and refund timelines depend on availability and the payment method. [Confirm response, inspection and refund timeframes before launch.]</p>
+</section>
+<section class="edit-policy-entry" id="dispatch">
+<p class="edit-label">04 / POLICY</p>
+<h3>Order dispatch</h3>
+<p>Your order confirmation records the items and address. We send tracking when available. Contact support promptly if you need to cancel or change an order before it is packed.</p>
+</section>
+<section class="edit-policy-entry" id="transit">
+<p class="edit-label">05 / POLICY</p>
+<h3>Delivery after dispatch</h3>
+<p>The US demo offers $6 standard shipping and free shipping from $75 after discounts. Product pages estimate delivery in 3–5 business days; that is an estimate, not a guaranteed time in transit.</p>
+</section>
+<section class="edit-policy-entry" id="redelivery">
+<p class="edit-label">06 / POLICY</p>
+<h3>Missed deliveries and pickup</h3>
+<p>Check tracking for redelivery or pickup instructions. If a parcel shows delivered but is missing, or is returned to the sender, contact us before placing a second order.</p>
+</section>
+<h2 class="edit-policy-group">Payment</h2>
+<section class="edit-policy-entry" id="payment-methods">
+<p class="edit-label">07 / POLICY</p>
+<h3>Accepted methods</h3>
+<p>Available methods appear at checkout. The demo enables Cash on Delivery; a live store may show other methods once configured.</p>
+</section>
+<section class="edit-policy-entry" id="payment-security">
+<p class="edit-label">08 / POLICY</p>
+<h3>Payment security</h3>
+<p>Use the store checkout. Never email card numbers, passwords or security codes. Review the <a href="{{privacy_policy_url}}">Privacy Policy</a> for the handling of order information.</p>
+</section>
+<section class="edit-policy-entry" id="security-code">
+<p class="edit-label">09 / POLICY</p>
+<h3>Card security codes</h3>
+<p>If a live payment provider asks for a CVV or CVC, enter it only in that provider’s secure checkout field. It is not needed for the demo’s Cash on Delivery.</p>
+</section>
+<section class="edit-policy-entry" id="charge-timing">
+<p class="edit-label">10 / POLICY</p>
+<h3>When payment is due</h3>
+<p>For Cash on Delivery, payment is due when the parcel arrives. Any live card-payment provider will show the applicable authorisation and charge details at checkout.</p>
+</section>
+[/ux_text]
+[/col]
+[/row]
+[/section]

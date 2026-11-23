@@ -55,15 +55,35 @@ foreach ( array( 'about', 'lookbook', 'contact', 'faq', 'shipping-returns', 'siz
 	signal_check( 1 === count( $matches ), "Expected exactly one header menu entry: {$slug}." );
 	signal_check( 'page-blank.php' === get_page_template_slug( $page ) && has_shortcode( $page->post_content, 'section' ) && false === strpos( $page->post_content, '{{' ), "Expected seeded Flatsome layout: {$slug}." );
 }
+foreach ( array( 'privacy-policy', 'terms-of-service', 'return-refund-policy' ) as $slug ) {
+	$policy = get_page_by_path( $slug, OBJECT, array( 'page' ) );
+	signal_check( $policy && 'publish' === $policy->post_status && 'page-blank.php' === get_page_template_slug( $policy ), "Missing published Flatsome policy: {$slug}." );
+	signal_check( has_shortcode( $policy->post_content, 'form_edit_policy_toc' ) && false === strpos( $policy->post_content, '{{' ), "Missing policy TOC: {$slug}." );
+	preg_match_all( '/href="#([^"]+)"/', $policy->post_content, $anchors );
+	signal_check( count( $anchors[1] ) >= 7, "Expected policy section links: {$slug}." );
+	foreach ( $anchors[1] as $anchor ) {
+		signal_check( 1 === substr_count( $policy->post_content, 'id="' . $anchor . '"' ), "Expected one target for {$slug}#{$anchor}." );
+	}
+	if ( 'privacy-policy' !== $slug ) {
+		signal_check( false !== strpos( $footer->post_content, esc_url( get_permalink( $policy ) ) ), "Missing footer policy link: {$slug}." );
+	}
+}
+$privacy = get_post( (int) get_option( 'wp_page_for_privacy_policy' ) );
+signal_check( $privacy && 'page' === $privacy->post_type && 'publish' === $privacy->post_status, 'Expected a published Privacy Policy selected in WordPress.' );
+signal_check( false !== strpos( $footer->post_content, esc_url( get_permalink( $privacy ) ) ), 'Expected the footer to link to the selected Privacy Policy.' );
+$shipping_page = get_page_by_path( 'shipping-returns', OBJECT, array( 'page' ) );
+signal_check( false !== strpos( $shipping_page->post_content, esc_url( get_permalink( get_page_by_path( 'return-refund-policy', OBJECT, array( 'page' ) ) ) ) ), 'Expected Shipping & Returns to link to the Return & Refund Policy.' );
 $faq = get_page_by_path( 'faq' );
-signal_check( has_shortcode( $faq->post_content, 'accordion' ), 'Expected a native Flatsome FAQ accordion.' );
+signal_check( has_shortcode( $faq->post_content, 'accordion' ) && 17 === substr_count( $faq->post_content, '[accordion-item ' ) && 5 === substr_count( $faq->post_content, 'class="edit-help-section"' ), 'Expected 17 native accordion questions in five FAQ categories.' );
+$contact = get_page_by_path( 'contact', OBJECT, array( 'page' ) );
+signal_check( has_shortcode( $contact->post_content, 'form_edit_contact' ) && shortcode_exists( 'form_edit_contact' ) && has_action( 'admin_post_nopriv_form_edit_contact' ), 'Expected the protected contact form shortcode and handler.' );
 $size_page = get_page_by_path( 'size-guide' );
 $tee = get_page_by_path( 'carrier-wave', OBJECT, 'product' );
 preg_match( '~<table>.*?</table>~s', $size_page->post_content, $size_table );
 signal_check( $tee && ! empty( $size_table[0] ) && false !== strpos( get_post_meta( $tee->ID, '_form_edit_details', true ), $size_table[0] ), 'Expected the same tee size table on the Size Guide and product lightbox.' );
 $not_found = get_post( get_theme_mod( '404_block' ) );
 signal_check( $not_found && 'blocks' === $not_found->post_type && has_shortcode( $not_found->post_content, 'section' ) && false !== strpos( $not_found->post_content, 'edit-page-404' ), 'Expected Flatsome to use the demo 404 UX Block.' );
-WP_CLI::log( 'Editorial demo verified: seven Flatsome pages, desktop/mobile and footer links, FAQ accordion, shared size table and 404 UX Block.' );
+WP_CLI::log( 'Editorial demo verified: ten Flatsome pages, policy anchors and footer links, FAQ accordion, contact form, shared size table and 404 UX Block.' );
 $cart = get_post( wc_get_page_id( 'cart' ) );
 signal_check( $cart && has_shortcode( $cart->post_content, 'woocommerce_cart' ) && ! has_block( 'woocommerce/cart', $cart ), 'Expected the classic WooCommerce cart so Flatsome can refresh its header bag count.' );
 if ( metadata_exists( 'post', $cart->ID, '_signal_original_cart_content' ) ) {

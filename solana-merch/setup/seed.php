@@ -422,13 +422,16 @@ function signal_seed_menu( $items ) {
 
 function form_edit_seed_page_targets() {
 	$titles = array(
-		'about'            => 'About',
-		'lookbook'         => 'Lookbook',
-		'contact'          => 'Contact',
-		'faq'              => 'FAQ',
-		'shipping-returns' => 'Shipping & Returns',
-		'size-guide'       => 'Size Guide',
-		'care-guide'       => 'Care Guide',
+		'about'                => 'About',
+		'lookbook'             => 'Lookbook',
+		'contact'              => 'Contact Us',
+		'faq'                  => 'FAQ',
+		'shipping-returns'     => 'Shipping & Returns',
+		'size-guide'           => 'Size Guide',
+		'care-guide'           => 'Care Guide',
+		'privacy-policy'       => 'Privacy Policy',
+		'terms-of-service'     => 'Terms of Service',
+		'return-refund-policy' => 'Return & Refund Policy',
 	);
 	$targets = array();
 	foreach ( $titles as $slug => $title ) {
@@ -448,13 +451,28 @@ function form_edit_seed_pages( $links, $art, $targets, $not_found ) {
 		$links[ str_replace( '-', '_', $slug ) . '_url' ] = esc_url( get_permalink( $pages[ $slug ] ) );
 		$new[ $slug ] = ! $page;
 	}
+	$privacy = get_post( (int) get_option( 'wp_page_for_privacy_policy' ) );
+	if ( ! $privacy || 'page' !== $privacy->post_type || 'publish' !== $privacy->post_status ) {
+		update_option( 'wp_page_for_privacy_policy', $pages['privacy-policy'] );
+	} else {
+		$links['privacy_policy_url'] = esc_url( get_permalink( $privacy ) );
+	}
+	$legacy_titles = array(
+		'contact'          => 'Contact',
+		'faq'              => 'FAQ',
+		'shipping-returns' => 'Shipping & Returns',
+	);
 	foreach ( $pages as $slug => $id ) {
-		if ( $new[ $slug ] ) {
+		list( $title, $previous ) = $targets[ $slug ];
+		$upgrade = $previous && isset( $legacy_titles[ $slug ] ) && '1' === get_post_meta( $id, '_signal_demo', true )
+			&& $legacy_titles[ $slug ] === $previous->post_title && 'page-blank.php' === get_page_template_slug( $id )
+			&& hash( 'sha256', signal_seed_render( 'pages/legacy/' . $slug, $links ) ) === hash( 'sha256', $previous->post_content );
+		if ( $new[ $slug ] || $upgrade ) {
 			$content = signal_seed_render( 'pages/' . $slug, $links + $art + array(
 				'tee_guide' => form_edit_seed_size_guide( false ),
 				'cap_guide' => form_edit_seed_size_guide( true ),
 			) );
-			signal_seed_result( wp_update_post( array( 'ID' => $id, 'post_content' => wp_slash( $content ) ), true ) );
+			signal_seed_result( wp_update_post( array( 'ID' => $id, 'post_title' => wp_slash( $title ), 'post_content' => wp_slash( $content ) ), true ) );
 		}
 	}
 	if ( false !== $not_found ) {
@@ -635,7 +653,7 @@ signal_seed_menu( array(
 	array( 'Caps', 'product_cat', $hats_id ),
 	array( 'About', 'page', $content_pages['about'] ),
 	array( 'Lookbook', 'page', $content_pages['lookbook'] ),
-	array( 'Contact', 'page', $content_pages['contact'] ),
+	array( 'Contact Us', 'page', $content_pages['contact'] ),
 	array( 'FAQ', 'page', $content_pages['faq'], $content_pages['contact'] ),
 	array( 'Shipping & Returns', 'page', $content_pages['shipping-returns'], $content_pages['contact'] ),
 	array( 'Size Guide', 'page', $content_pages['size-guide'], $content_pages['contact'] ),

@@ -11,6 +11,7 @@
 <hr>
 <p class="edit-label">02 / RETURNS</p><h2>Before sending a return.</h2>
 <p>Contact the studio with your order number and the item you want to return. Wait for the return instructions before sending a package.</p>
+<p>See the <a href="{{return_refund_policy_url}}">Return &amp; Refund Policy</a> for eligibility, replacements and payment questions.</p>
 <p class="edit-page-caption">This is demo copy. Confirm return conditions, time limits and shipping charges before publishing it on a live store.</p>
 [/ux_text]
 [button text="Contact the studio" link="{{contact_url}}"]
