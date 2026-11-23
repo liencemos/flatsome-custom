@@ -47,6 +47,7 @@
 <li>a statement that your notice is accurate and that you are the owner or act for the owner;</li>
 <li>your physical or electronic signature.</li>
 </ul>
+<p>The full procedure is in our <a href="{{url:/dmca/}}">Intellectual Property Rights Policy</a>.</p>
 <h2 id="counter-notice-policy">Counter-Notice Policy</h2>
 <p>If material is removed after a complaint and you believe that was a mistake, send a counter-notice to the same address with:</p>
 <ul>

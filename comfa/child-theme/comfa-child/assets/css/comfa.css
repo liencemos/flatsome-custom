@@ -286,13 +286,17 @@
 .cf-doc__toc a:hover::before { background: var(--cf-yellow); border-color: var(--cf-ink); }
 .cf-doc__more { margin: 20px 0 0; font-size: 14px; font-weight: 700; }
 .cf-doc__more a { text-decoration: underline; }
+.cf-doc__cta { margin-top: 24px; padding: 20px; border-radius: var(--cf-radius); background: #fff; border: 1px solid var(--cf-line); font-size: 14px; }
+.cf-doc__cta-title { font-size: 16px; font-weight: 800; color: var(--cf-ink); margin-bottom: 8px; }
+.cf-doc__cta p a { text-decoration: underline; }
+.cf-doc__cta .button { margin: 0; }
 .cf-doc__body > .col-inner { padding: 34px 40px 20px; font-size: 15px; line-height: 1.7; }
 .cf-doc__body h2 { font-size: 24px; font-weight: 800; margin: 30px 0 14px; padding-top: 30px; border-top: 1px solid var(--cf-line); scroll-margin-top: 90px; }
 .cf-doc__body h2:first-child, .cf-doc__body .cf-doc__note + h2 { margin-top: 0; padding-top: 0; border-top: 0; }
 .cf-doc__body h3 { font-size: 17px; font-weight: 800; line-height: 1.35; margin: 24px 0 10px; padding-left: 12px; border-left: 4px solid var(--cf-yellow); scroll-margin-top: 110px; }
 .cf-doc__body h4 { font-size: 15px; font-weight: 800; margin: 16px 0 4px; }
 .cf-doc__body p { margin-bottom: 12px; }
-.cf-doc__body ul { margin: 0 0 14px 20px; }
+.cf-doc__body ul, .cf-doc__body ol { margin: 0 0 14px 20px; }
 .cf-doc__body li { margin-bottom: 6px; }
 .cf-doc__body a:not(.accordion-title) { text-decoration: underline; }
 .cf-doc__note { padding: 10px 14px; border-radius: 10px; background: var(--cf-soft); border: 1px dashed var(--cf-line); font-size: 13px; color: var(--cf-muted); margin-bottom: 24px; }

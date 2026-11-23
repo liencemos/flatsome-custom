@@ -39,7 +39,7 @@
 [/row]
 [row class="cf-footer__legal"]
 [col span__sm="12"]
-<p>© [cf_year] Comfa. Demo store. <a href="{{url:/return-refund-policy/}}">Returns</a>[cf_privacy_link] <a href="{{url:/terms-of-service/}}">Terms</a> <a href="{{url:/contact/}}">Contact</a></p>
+<p>© [cf_year] Comfa. Demo store. <a href="{{url:/return-refund-policy/}}">Returns</a>[cf_privacy_link] <a href="{{url:/terms-of-service/}}">Terms</a> <a href="{{url:/dmca/}}">DMCA</a> <a href="{{url:/contact/}}">Contact</a></p>
 [/col]
 [/row]
 [/section]
