@@ -86,6 +86,10 @@ add_shortcode( 'form_edit_newsletter', function () {
 	<form class="edit-letter-form" id="studio-letter" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 		<input type="hidden" name="action" value="form_edit_newsletter">
 		<?php wp_nonce_field( 'form_edit_newsletter', 'studio_letter_nonce', false ); ?>
+		<div hidden>
+			<label for="studio-letter-website">Leave this field empty</label>
+			<input id="studio-letter-website" type="text" name="studio_letter_website" tabindex="-1" autocomplete="off">
+		</div>
 		<label for="studio-letter-email">Email address</label>
 		<div class="edit-letter-fields">
 			<input id="studio-letter-email" type="email" name="email" required autocomplete="email" maxlength="254">
@@ -102,10 +106,39 @@ add_shortcode( 'form_edit_newsletter', function () {
 	return ob_get_clean();
 } );
 
+function form_edit_reserve_newsletter_request( $email ) {
+	global $wpdb;
+
+	$ip = $_SERVER['REMOTE_ADDR'] ?? '';
+	$ip_key = 'form_edit_letter_ip_' . wp_hash( $ip );
+	$email_key = 'form_edit_letter_email_' . wp_hash( strtolower( $email ) );
+	$hour_key = 'form_edit_letter_hour_' . intdiv( time(), HOUR_IN_SECONDS );
+	$lock = 'form_edit_letter_' . md5( DB_NAME . ':' . $wpdb->prefix );
+	if ( '1' !== (string) $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK(%s, 0)', $lock ) ) ) {
+		return false;
+	}
+
+	try {
+		$count = (int) get_transient( $hour_key );
+		if ( $count >= 20 || get_transient( $ip_key ) || get_transient( $email_key ) ) {
+			return false;
+		}
+		return set_transient( $hour_key, $count + 1, HOUR_IN_SECONDS )
+			&& set_transient( $ip_key, 1, 10 * MINUTE_IN_SECONDS )
+			&& set_transient( $email_key, 1, DAY_IN_SECONDS );
+	} finally {
+		$wpdb->get_var( $wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', $lock ) );
+	}
+}
+
 function form_edit_request_newsletter() {
 	check_admin_referer( 'form_edit_newsletter', 'studio_letter_nonce' );
 	$email = isset( $_POST['email'] ) && is_string( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-	$sent = is_email( $email ) && wp_mail( get_option( 'admin_email' ), 'FORM / EDIT: studio letter signup request', 'Requested signup: ' . $email );
+	$sent = '' === ( $_POST['studio_letter_website'] ?? '' )
+		&& strlen( $email ) <= 254
+		&& is_email( $email )
+		&& form_edit_reserve_newsletter_request( $email )
+		&& wp_mail( get_option( 'admin_email' ), 'FORM / EDIT: studio letter signup request', 'Requested signup: ' . $email );
 	wp_safe_redirect( add_query_arg( 'studio_letter', $sent ? 'sent' : 'error', home_url( '/' ) ) . '#studio-letter' );
 	exit;
 }
