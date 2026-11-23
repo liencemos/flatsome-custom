@@ -33,7 +33,10 @@ licensed typeface is included.
    wp eval-file seed-site.php
    ```
 
-Both seed scripts can be run again; products are matched by slug and menus are rebuilt.
+Both seed scripts can be run again. Products are matched by SKU and keep their stock
+settings, menus are rebuilt, and an existing home page layout is kept unless you run
+`wp eval-file seed-site.php reset-home`. `seed.php` adds a demo shipping zone ($5 flat
+rate, free from $40) only when the store has no shipping zones.
 
 ## Editing
 
@@ -42,7 +45,8 @@ Both seed scripts can be run again; products are matched by slug and menus are r
 - The header and footer live in the child theme because Elementor free has no theme
   builder. Menus are under Appearance > Menus (Primary plus five footer locations).
 - Announcement bar messages: filter `dewier_promo_messages`.
-- Free-shipping threshold (default 40): filter `dewier_free_shipping_threshold`.
+- The bag's free-shipping bar reads the minimum amount of the WooCommerce free shipping
+  method in the shopper's zone, and is hidden when the zone has none.
 - Product badges: one per line in the `_dewier_badges` product meta, as `promo:Text`
   (blue) or `value:Text` (pink). Card subtitle: `_dewier_subtitle`.
 

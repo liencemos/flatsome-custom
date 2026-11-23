@@ -1532,7 +1532,7 @@ body.dewier {
 }
 
 .dewier .dw-pdp .woocommerce-variation,
-.dewier .dw-pdp .quantity,
+.dewier .dw-pdp form.cart:not(.grouped_form) .quantity,
 .dewier .dw-pdp .woocommerce-variation-price {
 	display: none !important;
 }

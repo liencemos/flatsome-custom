@@ -38,7 +38,9 @@ function dewier_badges( $product ) {
 }
 
 /**
- * Purchasable variations of a product keyed by the term of its first variation attribute.
+ * In-stock variations of a product that varies by a single attribute, one per term.
+ * Products with several variation attributes return nothing: one control cannot
+ * identify a variation, so those are chosen on the product page.
  */
 function dewier_get_options( $product ) {
 	if ( ! $product->is_type( 'variable' ) ) {
@@ -46,13 +48,13 @@ function dewier_get_options( $product ) {
 	}
 	$attributes = $product->get_variation_attributes();
 	$taxonomy   = (string) key( $attributes );
-	if ( ! $taxonomy || ! taxonomy_exists( $taxonomy ) ) {
+	if ( 1 !== count( $attributes ) || ! $taxonomy || ! taxonomy_exists( $taxonomy ) ) {
 		return array();
 	}
 	$by_slug = array();
 	foreach ( $product->get_available_variations( 'objects' ) as $variation ) {
 		$values = $variation->get_attributes();
-		if ( ! empty( $values[ $taxonomy ] ) ) {
+		if ( ! empty( $values[ $taxonomy ] ) && $variation->is_purchasable() && $variation->is_in_stock() ) {
 			$by_slug[ $values[ $taxonomy ] ] = $variation;
 		}
 	}
@@ -74,17 +76,40 @@ function dewier_get_options( $product ) {
 }
 
 /**
+ * How many options a product card shows before linking to the product page.
+ */
+function dewier_card_limit( $options ) {
+	return $options && '' !== $options[0]['color'] ? 8 : 3;
+}
+
+/**
+ * The option a card or add-on row starts on: the product default when it is
+ * among the given options, otherwise the first one.
+ */
+function dewier_selected_option( $product, $options ) {
+	if ( ! $options ) {
+		return null;
+	}
+	$default = $product->get_default_attributes();
+	foreach ( $options as $option ) {
+		if ( isset( $default[ $option['taxonomy'] ] ) && $default[ $option['taxonomy'] ] === $option['slug'] ) {
+			return $option;
+		}
+	}
+	return $options[0];
+}
+
+/**
  * Shade swatches / size pills on product cards. The selected option sets the
  * variation the "Add to bag" button adds.
  */
-function dewier_card_options( $product, $options ) {
+function dewier_card_options( $product, $options, $selected ) {
 	if ( ! $options ) {
 		return;
 	}
 	$is_color = '' !== $options[0]['color'];
-	$default  = $product->get_default_attributes();
-	$selected = isset( $default[ $options[0]['taxonomy'] ] ) ? $default[ $options[0]['taxonomy'] ] : $options[0]['slug'];
-	$limit    = $is_color ? 8 : 3;
+	$selected = $selected ? $selected['slug'] : '';
+	$limit    = dewier_card_limit( $options );
 	$label    = wc_attribute_label( $options[0]['taxonomy'] );
 
 	printf( '<div class="dw-options dw-options--%s" role="radiogroup" aria-label="%s">', $is_color ? 'color' : 'size', esc_attr( $label ) );
@@ -107,7 +132,7 @@ function dewier_card_options( $product, $options ) {
 	echo '</div>';
 }
 
-function dewier_card_button( $product, $options ) {
+function dewier_card_button( $product, $options, $selected ) {
 	if ( ! $product->is_purchasable() && ! $product->is_type( 'variable' ) ) {
 		echo dewier_button( __( 'View product', 'dewier' ), $product->get_permalink(), 'add' ); // phpcs:ignore WordPress.Security.EscapeOutput
 		return;
@@ -120,16 +145,7 @@ function dewier_card_button( $product, $options ) {
 		echo dewier_button( __( 'Choose options', 'dewier' ), $product->get_permalink(), 'add' ); // phpcs:ignore WordPress.Security.EscapeOutput
 		return;
 	}
-	$id = $product->get_id();
-	if ( $options ) {
-		$default = $product->get_default_attributes();
-		$id      = $options[0]['variation']->get_id();
-		foreach ( $options as $option ) {
-			if ( isset( $default[ $option['taxonomy'] ] ) && $default[ $option['taxonomy'] ] === $option['slug'] ) {
-				$id = $option['variation']->get_id();
-			}
-		}
-	}
+	$id = $selected ? $selected['variation']->get_id() : $product->get_id();
 	printf(
 		'<a href="%1$s" class="dw-btn dw-btn--add add_to_cart_button ajax_add_to_cart" data-product_id="%2$d" data-quantity="1" rel="nofollow" aria-label="%3$s"><span>%4$s</span></a>',
 		esc_url( $product->get_permalink() ),
@@ -354,17 +370,20 @@ function dewier_addons( $product ) {
 		if ( ! $addon || ! $addon->is_visible() ) {
 			continue;
 		}
-		$options = dewier_get_options( $addon );
-		$target  = $options ? $options[0]['variation']->get_id() : $addon->get_id();
-		$simple  = $options || $addon->is_type( 'simple' );
+		$option = dewier_selected_option( $addon, dewier_get_options( $addon ) );
+		$target = $option ? $option['variation'] : $addon;
+		$simple = $option || $addon->is_type( 'simple' );
 		echo '<li class="dw-addon">';
 		echo '<a class="dw-addon__img" href="' . esc_url( $addon->get_permalink() ) . '" tabindex="-1" aria-hidden="true">' . $addon->get_image( 'woocommerce_thumbnail' ) . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput
 		echo '<div class="dw-addon__body"><a class="dw-addon__name" href="' . esc_url( $addon->get_permalink() ) . '">' . esc_html( $addon->get_name() ) . '</a>';
 		echo '<span class="dw-addon__sub">' . esc_html( $addon->get_meta( '_dewier_subtitle' ) ) . '</span>';
-		echo '<span class="price">' . wp_kses_post( $addon->get_price_html() ) . '</span></div>';
+		if ( $option ) {
+			echo '<span class="dw-addon__sub">' . esc_html( wc_attribute_label( $option['taxonomy'] ) . ': ' . $option['name'] ) . '</span>';
+		}
+		echo '<span class="price">' . wp_kses_post( $target->get_price_html() ) . '</span></div>';
 		if ( $simple && $addon->is_in_stock() ) {
 			/* translators: %s: product name */
-			printf( '<a href="%s" class="dw-addon__add add_to_cart_button ajax_add_to_cart" data-product_id="%d" data-quantity="1" rel="nofollow" aria-label="%s">%s</a>', esc_url( $addon->get_permalink() ), absint( $target ), esc_attr( sprintf( __( 'Add %s to bag', 'dewier' ), $addon->get_name() ) ), dewier_icon( 'plus' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			printf( '<a href="%s" class="dw-addon__add add_to_cart_button ajax_add_to_cart" data-product_id="%d" data-quantity="1" rel="nofollow" aria-label="%s">%s</a>', esc_url( $addon->get_permalink() ), absint( $target->get_id() ), esc_attr( sprintf( __( 'Add %s to bag', 'dewier' ), $option ? $addon->get_name() . ' - ' . $option['name'] : $addon->get_name() ) ), dewier_icon( 'plus' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 		}
 		echo '</li>';
 	}

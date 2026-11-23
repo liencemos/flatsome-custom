@@ -74,14 +74,44 @@ function dewier_cart_drawer_title() {
 add_filter( 'theme_mod_shoptimizer_cart_title', 'dewier_cart_drawer_title' );
 
 /**
+ * The free-shipping method WooCommerce offers the shopper's zone, as
+ * array( minimum order amount, cart amount counted towards it ), or null when
+ * the zone has no free shipping that depends on the order amount alone.
+ */
+function dewier_free_shipping() {
+	$packages = WC()->cart->get_shipping_packages();
+	if ( ! $packages ) {
+		return null;
+	}
+	$zone = WC_Shipping_Zones::get_zone_matching_package( current( $packages ) );
+	foreach ( $zone->get_shipping_methods( true ) as $method ) {
+		if ( 'free_shipping' !== $method->id || ! in_array( $method->requires, array( '', 'min_amount', 'either' ), true ) ) {
+			continue;
+		}
+		$total = (float) WC()->cart->get_displayed_subtotal();
+		if ( WC()->cart->display_prices_including_tax() ) {
+			$total -= (float) WC()->cart->get_discount_tax();
+		}
+		if ( 'yes' !== $method->ignore_discounts ) {
+			$total -= (float) WC()->cart->get_discount_total();
+		}
+		return array( '' === $method->requires ? 0.0 : (float) $method->min_amount, $total );
+	}
+	return null;
+}
+
+/**
  * Free-shipping progress shown at the top of the bag drawer.
  */
 function dewier_cart_progress() {
 	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
 		return;
 	}
-	$threshold = (float) apply_filters( 'dewier_free_shipping_threshold', 40 );
-	$subtotal  = (float) WC()->cart->get_displayed_subtotal();
+	$free = dewier_free_shipping();
+	if ( ! $free ) {
+		return;
+	}
+	list( $threshold, $subtotal ) = $free;
 	$remaining = max( 0, $threshold - $subtotal );
 	$percent   = $threshold > 0 ? min( 100, round( $subtotal / $threshold * 100 ) ) : 100;
 	?>

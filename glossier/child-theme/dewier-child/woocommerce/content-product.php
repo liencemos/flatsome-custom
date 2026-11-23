@@ -14,7 +14,8 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 	return;
 }
 
-$dewier_options = dewier_get_options( $product );
+$dewier_options  = dewier_get_options( $product );
+$dewier_selected = dewier_selected_option( $product, array_slice( $dewier_options, 0, dewier_card_limit( $dewier_options ) ) );
 $dewier_gallery = $product->get_gallery_image_ids();
 $dewier_link    = $product->get_permalink();
 ?>
@@ -33,8 +34,8 @@ $dewier_link    = $product->get_permalink();
 	<div class="dw-card__info">
 		<h3 class="dw-card__name"><a href="<?php echo esc_url( $dewier_link ); ?>"><?php echo esc_html( $product->get_name() ); ?></a></h3>
 		<p class="dw-card__sub"><?php echo esc_html( $product->get_meta( '_dewier_subtitle' ) ); ?></p>
-		<span class="price"><?php echo wp_kses_post( $dewier_options ? $dewier_options[0]['variation']->get_price_html() : $product->get_price_html() ); ?></span>
+		<span class="price"><?php echo wp_kses_post( $dewier_selected ? $dewier_selected['variation']->get_price_html() : $product->get_price_html() ); ?></span>
 	</div>
-	<?php dewier_card_options( $product, $dewier_options ); ?>
-	<?php dewier_card_button( $product, $dewier_options ); ?>
+	<?php dewier_card_options( $product, $dewier_options, $dewier_selected ); ?>
+	<?php dewier_card_button( $product, $dewier_options, $dewier_selected ); ?>
 </li>

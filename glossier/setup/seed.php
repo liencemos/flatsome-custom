@@ -139,6 +139,18 @@ if ( '/%postname%/' !== get_option( 'permalink_structure' ) ) {
 
 WC_Install::create_pages();
 
+// Demo shipping, only on a store that has none: $5 flat rate, free from $40.
+if ( ! WC_Shipping_Zones::get_zones() ) {
+	$dewier_zone = new WC_Shipping_Zone();
+	$dewier_zone->set_zone_name( 'United States' );
+	$dewier_zone->add_location( 'US', 'country' );
+	$dewier_zone->save();
+	$dewier_flat = $dewier_zone->add_shipping_method( 'flat_rate' );
+	update_option( 'woocommerce_flat_rate_' . $dewier_flat . '_settings', array( 'title' => 'Standard shipping', 'tax_status' => 'none', 'cost' => '5' ) );
+	$dewier_free = $dewier_zone->add_shipping_method( 'free_shipping' );
+	update_option( 'woocommerce_free_shipping_' . $dewier_free . '_settings', array( 'title' => 'Free shipping', 'requires' => 'min_amount', 'min_amount' => '40', 'ignore_discounts' => 'no' ) );
+}
+
 /* ---------- Attributes and categories ---------- */
 
 $dewier_shade_tax = dewier_seed_attribute( 'Shade', 'shade' );
@@ -223,8 +235,10 @@ foreach ( $dewier_catalog['products'] as $index => $item ) {
 	} else {
 		$product->set_regular_price( (string) $item['price'] );
 		$product->set_sale_price( isset( $item['sale'] ) ? (string) $item['sale'] : '' );
-		$product->set_manage_stock( false );
-		$product->set_stock_status( 'instock' );
+		if ( ! $existing_id ) {
+			$product->set_manage_stock( false );
+			$product->set_stock_status( 'instock' );
+		}
 	}
 
 	$product_id = $product->save();
@@ -248,8 +262,10 @@ foreach ( $dewier_catalog['products'] as $index => $item ) {
 			$variation->set_parent_id( $product_id );
 			$variation->set_attributes( array( $taxonomy => $slug ) );
 			$variation->set_regular_price( (string) $data['price'] );
-			$variation->set_manage_stock( false );
-			$variation->set_stock_status( 'instock' );
+			if ( ! isset( $existing[ $slug ] ) ) {
+				$variation->set_manage_stock( false );
+				$variation->set_stock_status( 'instock' );
+			}
 			$variation->set_menu_order( $position++ );
 			$variation->set_status( 'publish' );
 			$variation->save();

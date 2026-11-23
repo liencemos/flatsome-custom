@@ -197,13 +197,20 @@ $dewier_home = array(
 	dewier_site_element( 'dewier-carousel', array( 'eyebrow' => 'Get festive', 'size' => 'large', 'items' => $dewier_social ) ),
 );
 
-$dewier_home_id = dewier_site_page( 'home', 'Home' );
-update_post_meta( $dewier_home_id, '_wp_page_template', 'elementor_header_footer' );
-update_post_meta( $dewier_home_id, '_elementor_edit_mode', 'builder' );
-update_post_meta( $dewier_home_id, '_elementor_template_type', 'wp-page' );
-update_post_meta( $dewier_home_id, '_elementor_data', wp_slash( wp_json_encode( $dewier_home ) ) );
+// An existing home layout is kept unless the script is run with "reset-home".
+$dewier_home_id  = dewier_site_page( 'home', 'Home' );
+$dewier_reset    = isset( $args ) && in_array( 'reset-home', (array) $args, true );
+$dewier_set_home = $dewier_reset || ! get_post_meta( $dewier_home_id, '_elementor_data', true );
+if ( $dewier_set_home ) {
+	update_post_meta( $dewier_home_id, '_wp_page_template', 'elementor_header_footer' );
+	update_post_meta( $dewier_home_id, '_elementor_edit_mode', 'builder' );
+	update_post_meta( $dewier_home_id, '_elementor_template_type', 'wp-page' );
+	update_post_meta( $dewier_home_id, '_elementor_data', wp_slash( wp_json_encode( $dewier_home ) ) );
+}
 if ( defined( 'ELEMENTOR_VERSION' ) ) {
-	update_post_meta( $dewier_home_id, '_elementor_version', ELEMENTOR_VERSION );
+	if ( $dewier_set_home ) {
+		update_post_meta( $dewier_home_id, '_elementor_version', ELEMENTOR_VERSION );
+	}
 	update_option( 'elementor_experiment-container', 'active' );
 	update_option( 'elementor_disable_color_schemes', 'yes' );
 	update_option( 'elementor_disable_typography_schemes', 'yes' );
@@ -224,4 +231,4 @@ $dewier_export = str_replace( str_replace( '/', '\/', home_url() ), '', wp_json_
 file_put_contents( __DIR__ . '/home.json', $dewier_export ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 
 flush_rewrite_rules();
-WP_CLI::log( 'Site seed complete. Home page ID: ' . $dewier_home_id );
+WP_CLI::log( 'Site seed complete. Home page ID: ' . $dewier_home_id . ( $dewier_set_home ? '' : ' (existing layout kept)' ) );

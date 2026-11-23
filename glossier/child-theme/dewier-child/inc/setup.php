@@ -17,13 +17,6 @@ function dewier_asset_version( $path ) {
 function dewier_enqueue_assets() {
 	wp_enqueue_style( 'dewier', DEWIER_URI . '/assets/css/dewier.css', array(), dewier_asset_version( '/assets/css/dewier.css' ) );
 	wp_enqueue_script( 'dewier', DEWIER_URI . '/assets/js/dewier.js', array(), dewier_asset_version( '/assets/js/dewier.js' ), true );
-	wp_localize_script(
-		'dewier',
-		'dewierData',
-		array(
-			'freeShipping' => (float) apply_filters( 'dewier_free_shipping_threshold', 40 ),
-		)
-	);
 }
 add_action( 'wp_enqueue_scripts', 'dewier_enqueue_assets', 100 );
 
