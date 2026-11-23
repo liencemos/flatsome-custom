@@ -105,16 +105,24 @@ add_filter(
 );
 
 /**
- * The welcome code is for first orders only: reject it for customers who have ordered before.
+ * The welcome code is for first orders only. Eligibility is checked against the
+ * account that owns the bag or order; guest emails are not looked up, because
+ * anyone can type any address (WooCommerce's own per-customer limit still applies).
  */
-function cf_customer_has_ordered( $user_id, $email ) {
-	$statuses = array_diff( array_keys( wc_get_order_statuses() ), array( 'wc-cancelled', 'wc-failed', 'wc-refunded', 'wc-checkout-draft' ) );
-	foreach ( array_filter( array( $user_id, $email ) ) as $customer ) {
-		if ( wc_get_orders( array( 'customer' => $customer, 'status' => $statuses, 'limit' => 1, 'return' => 'ids' ) ) ) {
-			return true;
-		}
+function cf_customer_has_ordered( $user_id, $exclude_order_id = 0 ) {
+	if ( ! $user_id ) {
+		return false;
 	}
-	return false;
+	$statuses = array_diff( array_keys( wc_get_order_statuses() ), array( 'wc-cancelled', 'wc-failed', 'wc-refunded', 'wc-checkout-draft' ) );
+	return (bool) wc_get_orders(
+		array(
+			'customer_id' => $user_id,
+			'status'      => $statuses,
+			'limit'       => 1,
+			'return'      => 'ids',
+			'exclude'     => array_filter( array( (int) $exclude_order_id ) ),
+		)
+	);
 }
 
 function cf_is_welcome_coupon( $code ) {
@@ -124,34 +132,20 @@ function cf_is_welcome_coupon( $code ) {
 
 add_filter(
 	'woocommerce_coupon_is_valid',
-	function ( $valid, $coupon ) {
+	function ( $valid, $coupon, $discounts = null ) {
 		if ( ! $valid || ! cf_is_welcome_coupon( $coupon->get_code() ) ) {
 			return $valid;
 		}
-		$email = WC()->customer ? (string) WC()->customer->get_billing_email() : '';
-		if ( cf_customer_has_ordered( get_current_user_id(), $email ) ) {
+		// In the order editor the coupon belongs to the order's customer, not the staff member.
+		$object  = $discounts instanceof WC_Discounts ? $discounts->get_object() : null;
+		$ordered = $object instanceof WC_Order
+			? cf_customer_has_ordered( $object->get_customer_id(), $object->get_id() )
+			: cf_customer_has_ordered( get_current_user_id() );
+		if ( $ordered ) {
 			throw new Exception( esc_html__( 'This code is for first orders only.', 'comfa' ), 100 );
 		}
 		return $valid;
 	},
 	10,
-	2
-);
-
-// Guests are only known by the billing email they enter at checkout.
-add_action(
-	'woocommerce_after_checkout_validation',
-	function ( $data, $errors ) {
-		if ( ! WC()->cart || empty( $data['billing_email'] ) ) {
-			return;
-		}
-		foreach ( WC()->cart->get_applied_coupons() as $code ) {
-			if ( cf_is_welcome_coupon( $code ) && cf_customer_has_ordered( get_current_user_id(), $data['billing_email'] ) ) {
-				WC()->cart->remove_coupon( $code );
-				$errors->add( 'cf_welcome_coupon', __( 'The welcome code is for first orders only and has been removed from your bag.', 'comfa' ) );
-			}
-		}
-	},
-	10,
-	2
+	3
 );
