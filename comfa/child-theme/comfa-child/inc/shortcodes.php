@@ -77,14 +77,28 @@ add_shortcode(
 add_shortcode(
 	'cf_color_nav',
 	function () {
+		if ( ! function_exists( 'wc_get_page_permalink' ) ) {
+			return '';
+		}
 		// Term counts include products the shop hides (catalog visibility, out of stock), so list by visible products.
+		$hidden = array( 'exclude-from-catalog' );
+		if ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) ) {
+			$hidden[] = 'outofstock';
+		}
 		$ids   = get_posts(
 			array(
 				'post_type'      => 'product',
 				'post_status'    => 'publish',
 				'fields'         => 'ids',
 				'posts_per_page' => -1,
-				'tax_query'      => WC()->query->get_tax_query(),
+				'tax_query'      => array(
+					array(
+						'taxonomy' => 'product_visibility',
+						'field'    => 'name',
+						'terms'    => $hidden,
+						'operator' => 'NOT IN',
+					),
+				),
 			)
 		);
 		$terms = $ids ? get_terms( array( 'taxonomy' => 'pa_color', 'object_ids' => $ids ) ) : array();
