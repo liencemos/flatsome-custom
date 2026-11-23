@@ -111,15 +111,24 @@ add_action(
 
 function cf_variation_label( $label, $name ) {
 	$html = '<span class="cf-attr-name">' . esc_html( $label ) . ':</span> <span class="cf-attr-value" data-cf-attr="' . esc_attr( sanitize_title( $name ) ) . '"></span>';
-	if ( 'pa_size' === $name ) {
+	if ( 'pa_size' === $name && cf_size_guide_page() ) {
 		$html .= '<a class="cf-size-guide-link" href="#cf-size-guide">' . esc_html__( 'Size Guide', 'comfa' ) . '</a>';
 	}
 	return $html;
 }
 
-function cf_size_guide_lightbox() {
+/**
+ * The Size Guide page, when it can be shown to every visitor.
+ */
+function cf_size_guide_page() {
 	$page = get_page_by_path( 'size-guide' );
-	if ( ! $page || 'publish' !== $page->post_status ) {
+	// Password-protected pages are published too; never inline those.
+	return $page && 'publish' === $page->post_status && '' === $page->post_password ? $page : null;
+}
+
+function cf_size_guide_lightbox() {
+	$page = cf_size_guide_page();
+	if ( ! $page ) {
 		return;
 	}
 	echo do_shortcode( '[lightbox id="cf-size-guide" width="720px" padding="32px"]' . $page->post_content . '[/lightbox]' );
