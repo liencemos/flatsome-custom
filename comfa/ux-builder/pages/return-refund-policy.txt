@@ -1,6 +1,6 @@
 [section class="cf-doc" padding="40px" padding__sm="16px"]
 [row style="collapse" class="cf-doc__card"]
-[col span="4" span__sm="12" class="cf-doc__side"]
+[col span="4" span__md="12" span__sm="12" class="cf-doc__side"]
 <h1 class="cf-serif">Return and Refund Policy</h1>
 <p class="cf-doc__sub">Shipping, returns, refunds and payment for your order.</p>
 <p class="cf-doc__group">Shipping, Returns and Exchanges</p>
@@ -21,7 +21,7 @@
 </ul>
 <p class="cf-doc__more"><a href="{{url:/contact/}}">Start a return →</a></p>
 [/col]
-[col span="8" span__sm="12" class="cf-doc__body"]
+[col span="8" span__md="12" span__sm="12" class="cf-doc__body"]
 <p class="cf-doc__note">Template text for the demo store. Replace the details in [brackets] and have it reviewed before launch.</p>
 <h2 class="cf-doc__grouptitle">Shipping, Returns and Exchanges</h2>
 <h3 id="do-international-orders-pay-duties-or-vat">Do international orders pay duties or VAT?</h3>

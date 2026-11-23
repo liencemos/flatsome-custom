@@ -1,6 +1,6 @@
 [section class="cf-doc" padding="40px" padding__sm="16px"]
 [row style="collapse" class="cf-doc__card"]
-[col span="4" span__sm="12" class="cf-doc__side"]
+[col span="4" span__md="12" span__sm="12" class="cf-doc__side"]
 <h1 class="cf-serif">Terms of Service</h1>
 <p class="cf-doc__sub">The terms that apply when you use our website and services.</p>
 <ul class="cf-doc__toc">
@@ -16,7 +16,7 @@
 <li><a href="#buyer-payments-returns-refunds-and-cancellation">Buyer Payments, Returns, Refunds and Cancellation</a></li>
 </ul>
 [/col]
-[col span="8" span__sm="12" class="cf-doc__body"]
+[col span="8" span__md="12" span__sm="12" class="cf-doc__body"]
 <p class="cf-doc__note">Template text for the demo store. Replace the details in [brackets] and have it reviewed before launch.</p>
 <h2 id="user-agreement">User Agreement</h2>
 <p>Please read these terms carefully before using the store. Comfa is operated by [Company legal name] ("Comfa", "we", "us"). By visiting the website, creating an account or placing an order you agree to these terms and to our [cf_privacy_link text="Privacy Policy"]. If you do not agree, please do not use the store.</p>

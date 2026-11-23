@@ -42,4 +42,4 @@ Outfit and Fraunces are set in Flatsome > Theme Options > Typography; Bowlby One
 
 **Bag and checkout:** off-canvas mini bag and cart page show free-shipping progress and the giving count; classic WooCommerce cart and checkout styled to match.
 
-**Policy and FAQ pages (UX Builder pages):** one rounded white card. Cream left column with serif title, subtitle and a numbered contents list that stays in view while scrolling; right column with the document, sub-headings marked by a yellow bar. The FAQ groups questions in Flatsome accordions with a yellow +/− marker. On mobile the contents list sits above the document.
+**Policy and FAQ pages (UX Builder pages):** one rounded white card. Cream left column with serif title, subtitle and a numbered contents list that stays in view while scrolling; right column with the document, sub-headings marked by a yellow bar. The FAQ groups questions in Flatsome accordions with a yellow +/− marker. Main sections are separated by a thin rule. Below 850 px the columns stack and the contents list is hidden, leaving the title band above the document.

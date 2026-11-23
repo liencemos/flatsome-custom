@@ -1,6 +1,6 @@
 [section class="cf-doc cf-doc--faq" padding="40px" padding__sm="16px"]
 [row style="collapse" class="cf-doc__card"]
-[col span="4" span__sm="12" class="cf-doc__side"]
+[col span="4" span__md="12" span__sm="12" class="cf-doc__side"]
 <h1 class="cf-serif">Frequently Asked Questions</h1>
 <p class="cf-doc__sub">Quick answers about orders, shipping, payment and returns.</p>
 <ul class="cf-doc__toc">
@@ -12,7 +12,7 @@
 </ul>
 <p class="cf-doc__more">Still have questions? <a href="{{url:/contact/}}">Contact us →</a></p>
 [/col]
-[col span="8" span__sm="12" class="cf-doc__body"]
+[col span="8" span__md="12" span__sm="12" class="cf-doc__body"]
 <h2 id="before-you-place-your-order">Before you place your order</h2>
 [accordion]
 [accordion-item title="How much does shipping cost?"]

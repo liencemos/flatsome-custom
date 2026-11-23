@@ -287,29 +287,37 @@
 .cf-doc__more { margin: 20px 0 0; font-size: 14px; font-weight: 700; }
 .cf-doc__more a { text-decoration: underline; }
 .cf-doc__body > .col-inner { padding: 34px 40px 20px; font-size: 15px; line-height: 1.7; }
-.cf-doc__body h2 { font-size: 24px; font-weight: 800; margin: 34px 0 14px; scroll-margin-top: 110px; }
-.cf-doc__body h2:first-child, .cf-doc__note + h2 { margin-top: 0; }
-.cf-doc__body h3 { font-size: 17px; font-weight: 800; margin: 24px 0 10px; padding-left: 12px; border-left: 4px solid var(--cf-yellow); scroll-margin-top: 110px; }
+.cf-doc__body h2 { font-size: 24px; font-weight: 800; margin: 30px 0 14px; padding-top: 30px; border-top: 1px solid var(--cf-line); scroll-margin-top: 90px; }
+.cf-doc__body h2:first-child, .cf-doc__body .cf-doc__note + h2 { margin-top: 0; padding-top: 0; border-top: 0; }
+.cf-doc__body h3 { font-size: 17px; font-weight: 800; line-height: 1.35; margin: 24px 0 10px; padding-left: 12px; border-left: 4px solid var(--cf-yellow); scroll-margin-top: 110px; }
 .cf-doc__body h4 { font-size: 15px; font-weight: 800; margin: 16px 0 4px; }
 .cf-doc__body p { margin-bottom: 12px; }
 .cf-doc__body ul { margin: 0 0 14px 20px; }
 .cf-doc__body li { margin-bottom: 6px; }
 .cf-doc__body a:not(.accordion-title) { text-decoration: underline; }
 .cf-doc__note { padding: 10px 14px; border-radius: 10px; background: var(--cf-soft); border: 1px dashed var(--cf-line); font-size: 13px; color: var(--cf-muted); margin-bottom: 24px; }
+.cf-doc--faq .accordion { margin-bottom: 0; }
 .cf-doc--faq .accordion-item { border: 1px solid var(--cf-line); border-radius: var(--cf-radius); margin-bottom: 10px; background: #fff; }
-.cf-doc--faq .accordion-title { position: relative; border: 0; padding: 16px 52px 16px 18px; font-size: 15px; font-weight: 700; color: var(--cf-ink); background: none; }
+.cf-doc--faq .accordion-title { position: relative; border: 0; padding: 16px 52px 16px 18px; font-size: 15px; font-weight: 700; line-height: 1.4; color: var(--cf-ink); background: none; }
 .cf-doc--faq .accordion-title.active { background: none; color: var(--cf-ink); }
 .cf-doc--faq .accordion-title .toggle { display: none; }
 .cf-doc--faq .accordion-title::after { content: "+"; position: absolute; right: 16px; top: 50%; width: 24px; height: 24px; margin-top: -12px; border-radius: 50%; background: var(--cf-yellow); color: var(--cf-ink); font-size: 18px; font-weight: 700; line-height: 23px; text-align: center; }
 .cf-doc--faq .accordion-title.active::after { content: "\2212"; }
 .cf-doc--faq .accordion-inner { padding: 0 18px 16px; }
 .cf-doc--faq .accordion-inner p:last-child { margin-bottom: 0; }
+/* Phones and tablets: like the reference pages, the contents list is dropped and the title band sits on top. */
 @media (max-width: 849px) {
+	.cf-doc .cf-doc__card { width: calc(100% - 28px); }
 	.cf-doc__side { border-radius: 15px 15px 0 0; }
 	.cf-doc__side > .col-inner { position: static; padding: 24px 20px; }
-	.cf-doc__side h1 { font-size: 28px; }
-	.cf-doc__body > .col-inner { padding: 24px 20px 8px; }
-	.cf-doc__body h2 { font-size: 21px; }
+	.cf-doc__side h1 { font-size: 26px; margin-bottom: 8px; }
+	.cf-doc__sub { margin-bottom: 0; }
+	.cf-doc__toc, .cf-doc__group { display: none; }
+	.cf-doc__more { margin-top: 14px; }
+	.cf-doc__body > .col-inner { padding: 24px 20px 8px; font-size: 14.5px; line-height: 1.8; }
+	.cf-doc__body h2 { font-size: 20px; margin-top: 24px; padding-top: 24px; }
+	.cf-doc__body h3 { font-size: 16px; }
+	.cf-doc--faq .accordion-title { padding: 14px 48px 14px 16px; }
 }
 .cf-size-table th { text-transform: none; letter-spacing: 0; font-size: 14px; }
 .cf-size-table td, .cf-size-table th { padding: 9px 10px; border-bottom: 1px solid var(--cf-line); }
