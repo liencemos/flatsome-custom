@@ -103,3 +103,51 @@ try {
 	) );
 }
 WP_CLI::success( 'The About Us page and the About menu item kept the same slug across two reseeds.' );
+
+$faq = get_page_by_path( 'faq', OBJECT, array( 'page' ) );
+if ( ! $faq || ! get_post_meta( $faq->ID, '_signal_demo', true ) ) {
+	WP_CLI::error( 'This regression test requires the seeded FAQ page.' );
+}
+$permalink_structure = get_option( 'permalink_structure' );
+$article = 0;
+try {
+	$moved = wp_update_post( array( 'ID' => $faq->ID, 'post_name' => 'form-edit-slug-conflict-test-faq' ), true );
+	if ( is_wp_error( $moved ) ) {
+		throw new RuntimeException( $moved->get_error_message() );
+	}
+	update_option( 'permalink_structure', '/%postname%/' );
+	$article = wp_insert_post( array(
+		'post_name'   => 'faq',
+		'post_title'  => 'FORM / EDIT slug conflict article',
+		'post_type'   => 'post',
+		'post_status' => 'publish',
+	), true );
+	if ( ! $article || is_wp_error( $article ) || 'faq' !== get_post_field( 'post_name', $article ) ) {
+		throw new RuntimeException( 'Could not create the same-slug published blog post fixture.' );
+	}
+	update_option( 'blogname', $sentinel );
+	$result = WP_CLI::runcommand( 'eval-file ' . escapeshellarg( __DIR__ . '/seed.php' ), array(
+		'return'     => 'all',
+		'exit_error' => false,
+		'launch'     => true,
+	) );
+	if ( ! $result->return_code || false === strpos( $result->stderr, 'Page slug faq would shadow a published blog post at /faq/.' ) ) {
+		throw new RuntimeException( 'Seed did not report the published blog post conflict: ' . $result->stderr );
+	}
+	foreach ( array( 'alloptions', 'blogname' ) as $option_cache_key ) {
+		wp_cache_delete( $option_cache_key, 'options' );
+	}
+	clean_post_cache( $article );
+	if ( get_page_by_path( 'faq', OBJECT, array( 'page' ) ) || $sentinel !== get_option( 'blogname' ) ||
+		'publish' !== get_post_status( $article ) || 'faq' !== get_post_field( 'post_name', $article ) ) {
+		throw new RuntimeException( 'Seed changed the article or site settings, or created a page despite the URL conflict.' );
+	}
+} finally {
+	if ( $article && ! is_wp_error( $article ) ) {
+		wp_delete_post( $article, true );
+	}
+	wp_update_post( array( 'ID' => $faq->ID, 'post_name' => 'faq' ) );
+	update_option( 'permalink_structure', $permalink_structure );
+	update_option( 'blogname', $site_title );
+}
+WP_CLI::success( 'The published /faq/ blog post blocked creation of a demo page at the same URL without changing site settings.' );

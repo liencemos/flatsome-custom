@@ -37,6 +37,18 @@ function signal_seed_slug_post( $type, $slug ) {
 	if ( $post && 'publish' !== $post->post_status ) {
 		WP_CLI::error( "{$type} slug {$slug} belongs to a {$post->post_status} post; resolve its status before seeding." );
 	}
+	if ( ! $post && 'page' === $type && '/%postname%/' === get_option( 'permalink_structure' ) ) {
+		$articles = get_posts( array(
+			'name'           => $slug,
+			'post_type'      => 'post',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+		) );
+		if ( $articles ) {
+			WP_CLI::error( "Page slug {$slug} would shadow a published blog post at /{$slug}/." );
+		}
+	}
 	if ( $slug !== wp_unique_post_slug( $slug, $post ? $post->ID : 0, 'publish', $type, 0 ) ) {
 		WP_CLI::error( "{$type} slug {$slug} is unavailable." );
 	}
