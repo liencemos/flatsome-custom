@@ -1,0 +1,256 @@
+{
+    "version": "0.4",
+    "title": "Dewier Home",
+    "type": "page",
+    "content": [
+        {
+            "id": "d8067c3",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "3bb24be",
+                    "elType": "widget",
+                    "widgetType": "dewier-hero",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "id": "5f4042e",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "6faa957",
+                    "elType": "widget",
+                    "widgetType": "dewier-gift",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "id": "49910a3",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "6c7f8d6",
+                    "elType": "widget",
+                    "widgetType": "dewier-products",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "id": "afbad4c",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "6df7a55",
+                    "elType": "widget",
+                    "widgetType": "dewier-promo-cards",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "id": "5c0661c",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "88e7689",
+                    "elType": "widget",
+                    "widgetType": "dewier-story",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "id": "74539b5",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "2489ad8",
+                    "elType": "widget",
+                    "widgetType": "dewier-carousel",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "id": "5ae4e6b",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "9be8b57",
+                    "elType": "widget",
+                    "widgetType": "dewier-carousel",
+                    "settings": {
+                        "eyebrow": "Get festive",
+                        "size": "large",
+                        "items": [
+                            {
+                                "_id": "social1",
+                                "image": {
+                                    "url": "\/wp-content\/themes\/dewier-child\/assets\/images\/social-1.jpg",
+                                    "id": ""
+                                },
+                                "label": "Community photo 1",
+                                "link": {
+                                    "url": "\/shop\/"
+                                }
+                            },
+                            {
+                                "_id": "social2",
+                                "image": {
+                                    "url": "\/wp-content\/themes\/dewier-child\/assets\/images\/social-2.jpg",
+                                    "id": ""
+                                },
+                                "label": "Community photo 2",
+                                "link": {
+                                    "url": "\/shop\/"
+                                }
+                            },
+                            {
+                                "_id": "social3",
+                                "image": {
+                                    "url": "\/wp-content\/themes\/dewier-child\/assets\/images\/social-3.jpg",
+                                    "id": ""
+                                },
+                                "label": "Community photo 3",
+                                "link": {
+                                    "url": "\/shop\/"
+                                }
+                            },
+                            {
+                                "_id": "social4",
+                                "image": {
+                                    "url": "\/wp-content\/themes\/dewier-child\/assets\/images\/social-4.jpg",
+                                    "id": ""
+                                },
+                                "label": "Community photo 4",
+                                "link": {
+                                    "url": "\/shop\/"
+                                }
+                            },
+                            {
+                                "_id": "social5",
+                                "image": {
+                                    "url": "\/wp-content\/themes\/dewier-child\/assets\/images\/social-5.jpg",
+                                    "id": ""
+                                },
+                                "label": "Community photo 5",
+                                "link": {
+                                    "url": "\/shop\/"
+                                }
+                            },
+                            {
+                                "_id": "social6",
+                                "image": {
+                                    "url": "\/wp-content\/themes\/dewier-child\/assets\/images\/social-6.jpg",
+                                    "id": ""
+                                },
+                                "label": "Community photo 6",
+                                "link": {
+                                    "url": "\/shop\/"
+                                }
+                            }
+                        ]
+                    },
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "page_settings": {
+        "template": "elementor_header_footer"
+    }
+}
