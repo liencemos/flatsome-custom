@@ -1,0 +1,11 @@
+[accordion class="edit-product-details"]
+[accordion-item title="Materials"]{{materials}}[/accordion-item]
+[accordion-item title="Shipping &amp; returns"]<p>Shipping options and delivery estimates are shown at checkout. Contact the store before sending a return.</p>[/accordion-item]
+[accordion-item title="Care"]<p>{{care}}</p>[/accordion-item]
+[/accordion]
+
+[lightbox id="edit-size-guide" width="520px" class="edit-size-guide"]
+<p class="edit-label">FORM / EDIT / FIT NOTES</p>
+<h2>Size guide.</h2>
+{{guide}}
+[/lightbox]

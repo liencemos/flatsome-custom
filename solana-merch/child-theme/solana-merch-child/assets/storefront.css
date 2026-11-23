@@ -100,9 +100,29 @@ body :focus-visible { outline: 2px solid var(--edit-navy); outline-offset: 3px; 
 .edit-note { margin-bottom: clamp(66px, 9vw, 130px); }
 .edit-note .alt-font { color: var(--edit-text); font-size: clamp(38px, 6.4vw, 96px); line-height: .94; letter-spacing: -.07em; margin-bottom: 25px; }
 
+.edit-service, .edit-module { padding-inline: var(--edit-gutter); }
+.edit-service { margin-top: 26px; }
+.edit-service .section-content { border-block: 1px solid var(--edit-rule); }
+.edit-service .col { padding-block: 19px; }
+.edit-service p { margin: 0; }
+.edit-service .edit-label { display: block; margin-bottom: 4px; }
+.edit-module { margin-block: clamp(55px, 8vw, 116px); }
+.edit-module .section-content { border-top: 1px solid var(--edit-rule); padding-top: 24px; }
+.edit-module h2 { font-size: clamp(34px, 5vw, 72px); line-height: .98; letter-spacing: -.065em; }
+.edit-lookbook h2, .edit-newsletter h2 { max-width: 9ch; }
+.edit-process .img { margin-bottom: 16px; }
+.edit-process h3 { font-size: clamp(21px, 2.6vw, 35px); letter-spacing: -.035em; }
+.edit-testimonials blockquote { margin: 0; border-left: 1px solid var(--edit-rule); padding: 12px 0 12px 16px; font-size: 1.18rem; }
+.edit-testimonials cite, .edit-letter-note { color: var(--edit-muted); font-size: .84rem; font-style: normal; }
+.edit-social img { aspect-ratio: 1; object-fit: cover; }
+.edit-newsletter .section-content { background: var(--edit-gallery); padding: clamp(20px, 4vw, 56px); }
+.edit-letter-fields { display: flex; flex-wrap: wrap; gap: 8px; }
+.edit-letter-fields input { flex: 1 1 155px; width: auto; min-width: 0; }
+.edit-letter-fields .button { margin-right: 0; }
+
 .edit-archive { padding-top: clamp(43px, 7vw, 106px) !important; }
 .edit-archive h1 { margin: 0 0 26px; font-size: clamp(56px, 9vw, 130px); line-height: .89; letter-spacing: -.068em; }
-.edit-archive-intro { max-width: 27ch; margin-bottom: 26px; font-size: clamp(16px, 1.7vw, 22px); line-height: 1.4; }
+.edit-archive-intro { max-width: 35ch; margin-bottom: 26px; font-size: clamp(16px, 1.7vw, 22px); line-height: 1.4; }
 .edit-archive-index {
 	display: flex;
 	flex-wrap: wrap;
@@ -114,9 +134,32 @@ body :focus-visible { outline: 2px solid var(--edit-navy); outline-offset: 3px; 
 .term-t-shirts .edit-archive-index a[href*="/t-shirts/"],
 .term-hats .edit-archive-index a[href*="/hats/"] { text-decoration: underline; text-underline-offset: 4px; }
 .shop-page-title { padding-inline: var(--edit-gutter); }
+.edit-archive-image img { aspect-ratio: 2; object-fit: cover; }
 .shop-page-title .page-title-inner { min-height: 0; padding-block: 16px; }
 .category-page-row { padding-inline: var(--edit-gutter); padding-top: 6px; }
 .category-page-row > .col { padding-inline: 0; }
+.shop-page-title .page-title-inner { border-bottom: 1px solid var(--edit-rule); }
+.shop-page-title .filter-button { font-size: .75rem; letter-spacing: .09em; text-transform: uppercase; }
+#shop-sidebar .widget-title { font-size: .77rem; letter-spacing: .11em; }
+#shop-sidebar .widget { border-bottom: 1px solid var(--edit-rule); padding-bottom: 16px; margin-bottom: 22px; }
+.badge .edit-new-badge { background: var(--edit-paper); border-color: var(--edit-yellow); color: var(--edit-text); }
+.product-small .out-of-stock-label { background: var(--edit-paper); color: var(--edit-text); }
+
+.variations_form select[hidden], .edit-swatches[hidden] { display: none; }
+.edit-swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+.edit-swatch { border: 1px solid var(--edit-rule); margin: 0; padding-inline: 12px; }
+.edit-swatch[aria-pressed="true"] { background: var(--edit-yellow); border-color: var(--edit-yellow); color: var(--edit-ink); }
+.edit-swatch:disabled { opacity: .4; text-decoration: line-through; }
+.edit-swatch[data-value="Ink"]::before, .edit-swatch[data-value="Stone"]::before { display: inline-block; content: ""; width: .8em; height: .8em; margin-right: 7px; border-radius: 50%; vertical-align: -.025em; background: #272727; }
+.edit-swatch[data-value="Stone"]::before { background: #d6d1c7; }
+.edit-guide-link { display: inline-block; margin-bottom: 10px; font-size: .86rem; text-decoration: underline; text-underline-offset: .18em; }
+.edit-product-details { margin-block: 14px; }
+.edit-size-guide { color: var(--edit-text); }
+.edit-recent .product_list_widget { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 12px 22px; }
+.sticky-add-to-cart { background: var(--edit-paper); }
+@media (min-width: 550px) {
+	.sticky-add-to-cart-wrapper { display: none; }
+}
 .woocommerce-breadcrumb, .woocommerce-result-count { color: var(--edit-muted); }
 .product-small .box-image { background: var(--edit-gallery); }
 .product-small .box-image > div > a { display: block; }

@@ -116,6 +116,18 @@ def main():
         (apparel(False, 0, False), (590, 514), 1.79, 15),
         (apparel(True, 2, True), (1060, 836), 1.06, -12),
     ], ("#F2F0EB", "#DBD9D4")))
+    save("lookbook", scene(1440, 956, [
+        (apparel(False, 1, True), (530, 456), 1.66, -10),
+        (apparel(True, 1, False), (1080, 615), 1.01, 14),
+    ], ("#F4F3F0", "#DEDDD8")))
+    studies = render(380, 320, """
+        <rect x="26" y="20" width="328" height="280" fill="#fff"/>
+        <path d="M60 64H320M60 160H320M60 256H320M92 42V278M190 42V278M288 42V278" stroke="#d8d7d3"/>
+        <path d="M112 88h65v60h-65zm93 72h65v60h-65z" fill="#252525"/>
+        <path d="M207 90h61v56h-61zm-93 72h61v56h-61z" fill="none" stroke="#252525" stroke-width="3"/>""")
+    save("process-layout", scene(900, 670, [(studies, (450, 335), 1.64, -10)], neutral))
+    save("process-print", scene(900, 670, [(apparel(False, 1, True), (438, 392), 2.65, 15)], neutral))
+    save("process-stitch", scene(900, 670, [(apparel(True, 1, False), (470, 335), 2.59, -13)], neutral))
     render(330, 74, """<text x="0" y="57" font-family="Liberation Sans" font-size="59"
         font-weight="bold" letter-spacing="-3" fill="#1B1B1B">FORM<tspan fill="#003566"> / </tspan>EDIT</text>
         <circle cx="319" cy="48" r="5" fill="#FFC300"/>""").save(OUT / "wordmark.png", optimize=True)

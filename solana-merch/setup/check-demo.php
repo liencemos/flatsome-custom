@@ -22,6 +22,11 @@ signal_check( $logo && hash_file( 'sha256', get_stylesheet_directory() . '/asset
 $home = get_post( get_option( 'page_on_front' ) );
 signal_check( $home && has_shortcode( $home->post_content, 'ux_products' ) && false === strpos( $home->post_content, '{{' ), 'Home must contain the seeded Flatsome product grid without unresolved placeholders.' );
 signal_check( 'stacked-right' === get_theme_mod( 'product_layout' ) && 'fade_in_back' === get_theme_mod( 'product_hover' ), 'Expected the native stacked product gallery and second-image hover.' );
+signal_check( has_shortcode( $home->post_content, 'form_edit_newsletter' ) && false !== strpos( $home->post_content, 'edit-process' ), 'Expected the editorial process and newsletter modules.' );
+signal_check( get_theme_mod( 'product_sticky_cart' ) && 'bottom' === get_theme_mod( 'product_upsell' ), 'Expected native sticky cart and below-description upsells.' );
+foreach ( array( 'woocommerce_layered_nav', 'woocommerce_price_filter' ) as $widget ) {
+	signal_check( is_active_widget( false, false, $widget ), "Missing WooCommerce catalog widget {$widget}." );
+}
 signal_check( has_shortcode( get_theme_mod( 'html_shop_page', '' ), 'block' ) && 'blocks' === get_post_type( get_theme_mod( 'footer_block' ) ), 'Expected Flatsome UX Blocks on the shop header and footer.' );
 $cart = get_post( wc_get_page_id( 'cart' ) );
 signal_check( $cart && has_shortcode( $cart->post_content, 'woocommerce_cart' ) && ! has_block( 'woocommerce/cart', $cart ), 'Expected the classic WooCommerce cart so Flatsome can refresh its header bag count.' );
@@ -53,6 +58,12 @@ foreach ( $products as $product_id ) {
 	signal_check( $product->is_type( 'variable' ) && $product->get_image_id() && 2 === count( $product->get_gallery_image_ids() ), "Expected variable product {$product_id} with three catalog images." );
 
 	$sizes = 't-shirts' === $terms[0] ? array( 'S', 'M', 'L', 'XL' ) : array( 'One size' );
+	$filter_sizes = wp_get_post_terms( $product_id, 'pa_size', array( 'fields' => 'names' ) );
+	sort( $filter_sizes );
+	$expected_sizes = $sizes;
+	sort( $expected_sizes );
+	signal_check( $expected_sizes === $filter_sizes && array( 'Ink', 'Stone' ) === wp_get_post_terms( $product_id, 'pa_color', array( 'fields' => 'names' ) ), "Missing native filter terms for {$product_id}." );
+	signal_check( 1 === count( $product->get_upsell_ids() ) && has_shortcode( get_post_meta( $product_id, '_form_edit_details', true ), 'lightbox' ), "Missing paired product or fit guide for {$product_id}." );
 	$expected = array();
 	foreach ( $sizes as $size ) {
 		foreach ( array( 'Ink', 'Stone' ) as $color ) {

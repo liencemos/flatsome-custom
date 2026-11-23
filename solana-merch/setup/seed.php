@@ -113,6 +113,54 @@ function signal_seed_attribute( $name, $values ) {
 	return $attribute;
 }
 
+function form_edit_catalog_attribute( $name, $values ) {
+	$slug = sanitize_title( $name );
+	$id   = wc_attribute_taxonomy_id_by_name( $slug );
+	if ( ! $id ) {
+		$id = signal_seed_result( wc_create_attribute( array( 'name' => $name, 'slug' => $slug ) ) );
+	}
+	$taxonomy = wc_attribute_taxonomy_name( $slug );
+	if ( ! taxonomy_exists( $taxonomy ) ) {
+		signal_seed_result( register_taxonomy( $taxonomy, 'product', array( 'public' => false ) ) );
+	}
+	$terms = array();
+	foreach ( $values as $value ) {
+		$term = term_exists( sanitize_title( $value ), $taxonomy );
+		$term = $term ?: signal_seed_result( wp_insert_term( $value, $taxonomy ) );
+		$terms[ $value ] = (int) $term['term_id'];
+	}
+	$attribute = new WC_Product_Attribute();
+	$attribute->set_id( $id );
+	$attribute->set_name( $taxonomy );
+	$attribute->set_options( array_values( $terms ) );
+	$attribute->set_visible( false );
+	$attribute->set_variation( false );
+	return $attribute;
+}
+
+function form_edit_seed_widget( &$sidebars, $sidebar, $base, $key, $settings ) {
+	$option = 'widget_' . $base;
+	$widgets = (array) get_option( $option, array() );
+	$index = 2;
+	foreach ( $widgets as $number => $widget ) {
+		if ( is_array( $widget ) && ( $widget['_form_edit'] ?? '' ) === $key ) {
+			$index = $number;
+			break;
+		}
+		if ( is_int( $number ) ) {
+			$index = max( $index, $number + 1 );
+		}
+	}
+	$widgets[ $index ] = $settings + array( '_form_edit' => $key );
+	$widgets['_multiwidget'] = 1;
+	update_option( $option, $widgets );
+	$id = $base . '-' . $index;
+	$sidebars[ $sidebar ] = $sidebars[ $sidebar ] ?? array();
+	if ( ! in_array( $id, $sidebars[ $sidebar ], true ) ) {
+		$sidebars[ $sidebar ][] = $id;
+	}
+}
+
 function form_edit_seed_product_id( $slug, $sku ) {
 	$id         = wc_get_product_id_by_sku( $sku );
 	$legacy_sku = 'SIG-' . strtoupper( $slug );
@@ -157,9 +205,23 @@ function signal_seed_product( $id, $category, $hat, $record, $index ) {
 	$product->set_description( '<h3>Material &amp; construction</h3>' . $specs . '<h3>Care</h3><p>' . esc_html( $care ) . '</p>' );
 	$product->set_image_id( $ink );
 	$product->set_gallery_image_ids( array( $detail, $stone ) );
-	$product->set_attributes( array( signal_seed_attribute( 'Size', $sizes ), signal_seed_attribute( 'Color', $colors ) ) );
+	$product->set_attributes( array(
+		signal_seed_attribute( 'Size', $sizes ),
+		signal_seed_attribute( 'Color', $colors ),
+		form_edit_catalog_attribute( 'Size', $sizes ),
+		form_edit_catalog_attribute( 'Color', $colors ),
+	) );
 	$product->update_meta_data( '_signal_demo', 1 );
 	$id = $product->save();
+	$details = signal_seed_render( 'product-details', array(
+		'materials' => $specs,
+		'care'      => esc_html( $care ),
+		'guide'     => $hat
+			? '<p>Adjust the back strap for fit. Measure around your head where the cap will sit.</p><p>Demo size range: 21.5–24 in (55–61 cm).</p>'
+			: '<p>Lay a tee you like flat. Measure across the chest, just below the armholes. Demo garment measurements:</p><table><thead><tr><th scope="col">Size</th><th scope="col">Chest width</th></tr></thead><tbody><tr><th scope="row">S</th><td>20 in / 51 cm</td></tr><tr><th scope="row">M</th><td>21 in / 53 cm</td></tr><tr><th scope="row">L</th><td>22 in / 56 cm</td></tr><tr><th scope="row">XL</th><td>23 in / 58 cm</td></tr></tbody></table>',
+	) );
+	update_post_meta( $id, '_form_edit_details', wp_slash( $details ) );
+	update_post_meta( $id, '_form_edit_new', (int) ( 0 === $index ) );
 
 	$expected = array();
 	foreach ( $sizes as $size ) {
@@ -298,6 +360,22 @@ foreach ( array( array( $tees, $tees_id, false ), array( $hats, $hats_id, true )
 		$products[ $record[0] ] = signal_seed_product( $existing_products[ $record[0] ], $category, $hat, $record, $index );
 	}
 }
+foreach ( $tees as $index => $record ) {
+	$tee = wc_get_product( $products[ $record[0] ] );
+	$cap = wc_get_product( $products[ $hats[ $index ][0] ] );
+	$tee->set_upsell_ids( array( $cap->get_id() ) );
+	$cap->set_upsell_ids( array( $tee->get_id() ) );
+	$tee->save();
+	$cap->save();
+}
+
+$sidebars = wp_get_sidebars_widgets();
+form_edit_seed_widget( $sidebars, 'shop-sidebar', 'woocommerce_layered_nav', 'size', array( 'title' => 'Size', 'attribute' => 'size', 'display_type' => 'list', 'query_type' => 'or' ) );
+form_edit_seed_widget( $sidebars, 'shop-sidebar', 'woocommerce_layered_nav', 'color', array( 'title' => 'Color', 'attribute' => 'color', 'display_type' => 'list', 'query_type' => 'or' ) );
+form_edit_seed_widget( $sidebars, 'shop-sidebar', 'woocommerce_price_filter', 'price', array( 'title' => 'Price' ) );
+form_edit_seed_widget( $sidebars, 'shop-sidebar', 'woocommerce_layered_nav_filters', 'active', array( 'title' => 'Active filters' ) );
+form_edit_seed_widget( $sidebars, 'form-edit-recent', 'woocommerce_recently_viewed_products', 'recent', array( 'title' => 'Recently viewed', 'number' => 4 ) );
+wp_set_sidebars_widgets( $sidebars );
 
 $product_url = get_permalink( $products['carrier-wave'] );
 $links = array(
@@ -310,6 +388,10 @@ $links = array(
 );
 $home = signal_seed_post( 'page', 'signal-home', 'Home', signal_seed_render( 'homepage', $links + array(
 	'hero_image'   => signal_seed_media( 'hero.webp', 'Block 01 Tee and Orbit 03 Cap arranged on a studio surface' ),
+	'lookbook_image'  => signal_seed_media( 'lookbook.webp', 'Grid 02 Tee in Stone paired with the Grid 02 Cap in Ink' ),
+	'process_layout'  => signal_seed_media( 'process-layout.webp', 'Four-square artwork drawn on a ruled layout sheet' ),
+	'process_print'   => signal_seed_media( 'process-print.webp', 'Close-up of the four-square print on a cotton tee' ),
+	'process_stitch'  => signal_seed_media( 'process-stitch.webp', 'Close-up of the four-square embroidery on a cap' ),
 	'featured_ids' => implode( ',', array( $products['carrier-wave'], $products['receiver-cap'], $products['night-grid'] ) ),
 ) ) );
 update_post_meta( $home, '_wp_page_template', 'page-blank.php' );
@@ -326,6 +408,7 @@ foreach ( array(
 		'archive_index' => $index,
 		'archive_title' => $title,
 		'archive_intro' => $intro,
+		'archive_image' => array( $tees_id => $tees_image, $hats_id => $hats_image )[ $term_id ] ?? signal_seed_media( 'lookbook.webp', 'Grid 02 studio pairing' ),
 	) );
 	$block_id = signal_seed_post( 'blocks', 'signal-archive-' . $slug, 'FORM / EDIT — ' . $title, $header );
 	$block = '[block id="' . $block_id . '"]';
@@ -387,7 +470,9 @@ $mods = array(
 	'google_fonts_cdn'               => 1,
 	'category_title_style'           => '',
 	'category_show_title'            => 0,
-	'category_sidebar'               => 'none',
+	'category_sidebar'               => 'off-canvas',
+	'category_filter_text'           => 'Filter collection',
+	'bubble_style'                   => 'style3',
 	'category_row_count'             => 3,
 	'category_row_count_tablet'      => 3,
 	'category_row_count_mobile'      => 2,
@@ -397,6 +482,8 @@ $mods = array(
 	'disable_quick_view'             => 0,
 	'product_next_prev_nav'          => 0,
 	'product_layout'                 => 'stacked-right',
+	'product_upsell'                 => 'bottom',
+	'product_sticky_cart'            => 1,
 	'product_image_width'            => 7,
 	'footer_block'                   => $footer,
 	'footer_bottom_color'            => '#FFFFFF',

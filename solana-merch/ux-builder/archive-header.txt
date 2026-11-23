@@ -1,13 +1,14 @@
 [section class="edit-archive" padding="0px"]
-[row v_align="bottom"]
-[col span="8" span__sm="12"]
+[row v_align="middle"]
+[col span="7" span__sm="12"]
 [ux_text]
 <p class="edit-label edit-accent">{{archive_index}}</p>
 <h1>{{archive_title}}</h1>
+<p class="edit-archive-intro">{{archive_intro}}</p>
 [/ux_text]
 [/col]
-[col span="4" span__sm="12"]
-[ux_text]<p class="edit-archive-intro">{{archive_intro}}</p>[/ux_text]
+[col span="5" span__sm="12" class="edit-archive-image"]
+[ux_image id="{{archive_image}}" image_size="medium_large"]
 [/col]
 [/row]
 [row]
