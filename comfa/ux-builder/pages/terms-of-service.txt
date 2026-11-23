@@ -19,7 +19,7 @@
 [col span="8" span__sm="12" class="cf-doc__body"]
 <p class="cf-doc__note">Template text for the demo store. Replace the details in [brackets] and have it reviewed before launch.</p>
 <h2 id="user-agreement">User Agreement</h2>
-<p>Please read these terms carefully before using the store. Comfa is operated by [Company legal name] ("Comfa", "we", "us"). By visiting the website, creating an account or placing an order you agree to these terms and to our <a href="{{url:/privacy-policy/}}">Privacy Policy</a>. If you do not agree, please do not use the store.</p>
+<p>Please read these terms carefully before using the store. Comfa is operated by [Company legal name] ("Comfa", "we", "us"). By visiting the website, creating an account or placing an order you agree to these terms and to our [cf_privacy_link text="Privacy Policy"]. If you do not agree, please do not use the store.</p>
 <p>You must be old enough to enter a contract where you live, or have the permission of a parent or guardian, to place an order.</p>
 <h2 id="placing-an-order">Placing an Order</h2>
 <h3>Your Account</h3>

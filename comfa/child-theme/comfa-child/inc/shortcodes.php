@@ -20,11 +20,16 @@ add_shortcode(
 	}
 );
 
-// Footer link to the page chosen in Settings > Privacy; hidden until that page is published.
+// Link to the page chosen in Settings > Privacy. The footer form, [cf_privacy_link], is hidden until that page is
+// published; the in-text form, [cf_privacy_link text="Privacy Policy"], falls back to plain text.
 add_shortcode(
 	'cf_privacy_link',
-	function () {
-		$url = get_privacy_policy_url();
+	function ( $atts ) {
+		$atts = shortcode_atts( array( 'text' => '' ), $atts );
+		$url  = get_privacy_policy_url();
+		if ( '' !== $atts['text'] ) {
+			return $url ? '<a href="' . esc_url( $url ) . '">' . esc_html( $atts['text'] ) . '</a>' : esc_html( $atts['text'] );
+		}
 		return $url ? ' <a href="' . esc_url( $url ) . '">' . esc_html__( 'Privacy', 'comfa' ) . '</a>' : '';
 	}
 );
