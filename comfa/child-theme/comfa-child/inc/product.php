@@ -176,7 +176,7 @@ function cf_product_info_card() {
 		$rows .= '<div class="cf-highlight"><span class="cf-highlight__icon" aria-hidden="true"></span><p><strong>' . esc_html( $weight && ! is_wp_error( $weight ) ? $weight[0] : __( 'Made to last', 'comfa' ) ) . '</strong>' . esc_html( $highlight ) . '</p></div>';
 		$rows .= '[/accordion-item]';
 	}
-	if ( $product->get_short_description() ) {
+	if ( $product->get_short_description() || $product->get_description() ) {
 		$rows .= '[accordion-item title="' . esc_attr__( 'Details & Care', 'comfa' ) . '"]' . wp_kses_post( wpautop( $product->get_short_description() ) ) . wp_kses_post( $product->get_description() ) . '[/accordion-item]';
 	}
 	echo '<div class="cf-info-card">';
