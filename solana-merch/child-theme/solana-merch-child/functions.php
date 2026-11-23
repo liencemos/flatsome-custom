@@ -15,6 +15,68 @@ add_action( 'woocommerce_single_product_summary', function () {
 	}
 }, 4 );
 
+function form_edit_shipping_progress() {
+	$zone_id = (int) get_option( 'form_edit_demo_shipping_zone' );
+	$cart = WC()->cart;
+	if ( ! $zone_id || ! $cart || $cart->is_empty() || ! $cart->needs_shipping() ) {
+		return;
+	}
+	$packages = $cart->get_shipping_packages();
+	if ( ! $packages ) {
+		return;
+	}
+	foreach ( $packages as $package ) {
+		$zone = WC_Shipping_Zones::get_zone_matching_package( $package );
+		if ( $zone_id !== $zone->get_id() ) {
+			return;
+		}
+	}
+	foreach ( $zone->get_shipping_methods( true ) as $method ) {
+		if ( 'free_shipping' !== $method->id || 'min_amount' !== $method->requires ) {
+			continue;
+		}
+		$minimum = (float) $method->min_amount;
+		$subtotal = $cart->get_displayed_subtotal();
+		if ( 'no' === $method->ignore_discounts ) {
+			$subtotal -= $cart->get_discount_total();
+			if ( $cart->display_prices_including_tax() ) {
+				$subtotal -= $cart->get_discount_tax();
+			}
+		}
+		$subtotal = round( $subtotal, wc_get_price_decimals() );
+		$left = max( 0, $minimum - $subtotal );
+		$label = $left > 0 ? sprintf( '%s away from free US shipping', wc_price( $left ) ) : 'You qualify for free US shipping';
+		echo '<div class="edit-shipping-progress"><p>' . wp_kses_post( $label ) . '</p><progress aria-label="Progress toward free shipping" max="100" value="' . esc_attr( $minimum > 0 ? min( 100, max( 0, $subtotal / $minimum * 100 ) ) : 100 ) . '"></progress></div>';
+		break;
+	}
+}
+add_action( 'woocommerce_before_cart_table', 'form_edit_shipping_progress' );
+add_action( 'woocommerce_widget_shopping_cart_before_buttons', 'form_edit_shipping_progress' );
+
+function form_edit_delivery_date( $date, $days ) {
+	while ( $days > 0 ) {
+		$date = $date->modify( '+1 day' );
+		if ( (int) $date->format( 'N' ) <= 5 ) {
+			--$days;
+		}
+	}
+	return wp_date( 'M j', $date->getTimestamp(), $date->getTimezone() );
+}
+
+add_action( 'woocommerce_single_product_summary', function () {
+	$product = wc_get_product( get_the_ID() );
+	if ( ! $product || ! $product->get_meta( '_signal_demo' ) || ! $product->needs_shipping() || ! $product->is_in_stock() ) {
+		return;
+	}
+	list( $first, $last ) = apply_filters( 'form_edit_delivery_business_days', array( 3, 5 ), $product );
+	$first = max( 0, (int) $first );
+	$last = max( $first, (int) $last );
+	$today = current_datetime();
+	$start = form_edit_delivery_date( $today, $first );
+	$end = form_edit_delivery_date( $today, $last );
+	echo '<p class="edit-delivery"><strong>Estimated US delivery</strong> ' . esc_html( $start === $end ? $start : "$start – $end" ) . '</p>';
+}, 27 );
+
 add_filter( 'woocommerce_dropdown_variation_attribute_options_html', function ( $html, $args ) {
 	$product = $args['product'];
 	$name = sanitize_title( $args['attribute'] );

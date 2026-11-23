@@ -13,6 +13,17 @@
 	color-scheme: light;
 }
 
+.edit-promo { color: var(--edit-text); font-size: .72rem; letter-spacing: .06em; }
+.edit-promo strong { text-decoration: underline; text-decoration-color: var(--edit-yellow); text-underline-offset: .25em; }
+.edit-delivery { font-size: .86rem; border-block: 1px solid var(--edit-rule); padding-block: 8px; }
+.edit-shipping-progress { padding: 10px 0 16px; color: var(--edit-text); }
+.edit-shipping-progress p { margin: 0 0 5px; font-size: .84rem; }
+.edit-shipping-progress progress { display: block; width: 100%; height: 6px; border: 0; accent-color: var(--edit-yellow); background: var(--edit-gallery); }
+.edit-shipping-progress progress::-webkit-progress-bar { background: var(--edit-gallery); }
+.edit-shipping-progress progress::-webkit-progress-value { background: var(--edit-yellow); }
+.wishlist-icon .wishlist-popup { background: var(--edit-paper); color: var(--edit-text); }
+.wishlist-icon .wishlist-popup a { color: var(--edit-text); }
+
 body #wrapper, body #main { background: var(--edit-paper); }
 .header-main { border-bottom: 1px solid var(--edit-rule); }
 .header-main .header-inner { padding-inline: var(--edit-gutter); }

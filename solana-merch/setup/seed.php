@@ -178,6 +178,61 @@ function form_edit_seed_product_id( $slug, $sku ) {
 	return $id ?: $legacy_id;
 }
 
+function form_edit_seed_review( $product_id, $hat ) {
+	$existing = get_comments( array(
+		'post_id' => $product_id,
+		'type' => 'review',
+		'meta_key' => '_form_edit_demo_review',
+		'number' => 1,
+	) );
+	$review = array(
+		'comment_post_ID' => $product_id,
+		'comment_type' => 'review',
+		'comment_author' => 'FORM / EDIT demo reviewer',
+		'comment_content' => $hat
+			? 'Sample review: The adjustable strap made it easy to find a comfortable fit.'
+			: 'Sample review: The cotton has a good weight and the graphic is crisp.',
+		'comment_approved' => 1,
+		'comment_meta' => array( 'rating' => 5, '_form_edit_demo_review' => 1 ),
+	);
+	if ( $existing ) {
+		$comment_id = (int) $existing[0]->comment_ID;
+		if ( '1' !== $existing[0]->comment_approved ) {
+			wp_set_comment_status( $comment_id, 'approve' );
+		}
+		update_comment_meta( $comment_id, 'rating', 5 );
+	} else {
+		$comment_id = wp_insert_comment( $review );
+	}
+	if ( ! $comment_id ) {
+		WP_CLI::error( "Could not insert sample review for product {$product_id}." );
+	}
+	WC_Comments::clear_transients( $product_id );
+}
+
+function form_edit_seed_shipping() {
+	$zone_id = (int) get_option( 'form_edit_demo_shipping_zone' );
+	$zone = new WC_Shipping_Zone( $zone_id ?: null );
+	if ( ! $zone->get_id() ) {
+		$zone->set_zone_name( 'FORM / EDIT Demo — United States' );
+		$zone->add_location( 'US', 'country' );
+		$zone->save();
+		update_option( 'form_edit_demo_shipping_zone', $zone->get_id() );
+	}
+	$methods = array();
+	foreach ( $zone->get_shipping_methods() as $method ) {
+		$methods[ $method->id ] = $method->instance_id;
+	}
+	foreach ( array(
+		'free_shipping' => array( 'title' => 'Free shipping', 'requires' => 'min_amount', 'min_amount' => '75', 'ignore_discounts' => 'no' ),
+		'flat_rate'     => array( 'title' => 'Standard shipping', 'cost' => '6', 'tax_status' => 'none' ),
+	) as $method_id => $settings ) {
+		$instance = $methods[ $method_id ] ?? $zone->add_shipping_method( $method_id );
+		update_option( "woocommerce_{$method_id}_{$instance}_settings", $settings );
+	}
+	WC_Cache_Helper::get_transient_version( 'shipping', true );
+}
+
 function signal_seed_product( $id, $category, $hat, $record, $index ) {
 	list( $slug, $sku, $title, $price, $intro ) = $record;
 	$ink    = signal_seed_media( $slug . '-ink.webp', $title . ' in Ink, front view' );
@@ -199,6 +254,7 @@ function signal_seed_product( $id, $category, $hat, $record, $index ) {
 	$product->set_status( 'publish' );
 	$product->set_catalog_visibility( 'visible' );
 	$product->set_featured( $index < 2 );
+	$product->set_reviews_allowed( true );
 	$product->set_menu_order( $index * 2 + (int) $hat );
 	$product->set_category_ids( array( $category ) );
 	$product->set_short_description( $intro );
@@ -254,11 +310,15 @@ function signal_seed_product( $id, $category, $hat, $record, $index ) {
 		}
 		$variation->set_status( 'publish' );
 		$variation->set_regular_price( $price );
+		$low = $index < 2 && 'Stone' === $attributes['color'] && ( $hat || 'M' === $attributes['size'] );
+		$variation->set_manage_stock( $low );
+		$variation->set_stock_quantity( $low ? 2 : null );
 		$variation->set_stock_status( 'instock' );
 		$variation->set_image_id( 'Ink' === $attributes['color'] ? $ink : $stone );
 		$variation->save();
 	}
 	WC_Product_Variable::sync( $id );
+	form_edit_seed_review( $id, $hat );
 	return $id;
 }
 
@@ -326,6 +386,10 @@ $existing_products = array();
 foreach ( array_merge( $tees, $hats ) as list( $slug, $sku ) ) {
 	$existing_products[ $slug ] = form_edit_seed_product_id( $slug, $sku );
 }
+$coupon = new WC_Coupon( 'first10' );
+if ( $coupon->get_id() && ! $coupon->get_meta( '_signal_demo' ) ) {
+	WP_CLI::error( 'Coupon FIRST10 already belongs to non-demo content.' );
+}
 
 WC_Install::create_pages();
 $cart = get_post( wc_get_page_id( 'cart' ) );
@@ -348,6 +412,26 @@ if ( $cart && has_block( 'woocommerce/cart', $cart ) ) {
 }
 update_option( 'woocommerce_coming_soon', 'no' );
 update_option( 'woocommerce_currency', 'USD' );
+update_option( 'woocommerce_default_country', 'US' );
+update_option( 'woocommerce_enable_coupons', 'yes' );
+update_option( 'woocommerce_enable_reviews', 'yes' );
+update_option( 'woocommerce_enable_review_rating', 'yes' );
+update_option( 'woocommerce_manage_stock', 'yes' );
+update_option( 'woocommerce_stock_format', 'low_amount' );
+update_option( 'woocommerce_notify_low_stock_amount', 2 );
+$coupon->set_code( 'first10' );
+$coupon->set_discount_type( 'percent' );
+$coupon->set_amount( 10 );
+$coupon->set_usage_limit_per_user( 1 );
+$coupon->update_meta_data( '_signal_demo', 1 );
+$coupon->save();
+form_edit_seed_shipping();
+$cod = (array) get_option( 'woocommerce_cod_settings', array() );
+update_option( 'woocommerce_cod_settings', array( 'enabled' => 'yes', 'enable_for_methods' => array() ) + $cod );
+if ( class_exists( 'YITH_WCWL' ) && ! get_post( (int) get_option( 'yith_wcwl_wishlist_page_id' ) ) ) {
+	$wishlist = signal_seed_post( 'page', 'wishlist', 'Wishlist', '[yith_wcwl_wishlist]' );
+	update_option( 'yith_wcwl_wishlist_page_id', $wishlist );
+}
 update_option( 'blogname', 'FORM / EDIT' );
 update_option( 'blogdescription', 'Independent clothing editions' );
 $tees_image = signal_seed_media( 'collection-tees.webp', 'Orbit 03 Tee in Stone' );
@@ -438,9 +522,9 @@ $mods = array(
 	'header_color'                   => 'light',
 	'header_height'                  => 72,
 	'header_elements_left'           => array( 'nav' ),
-	'header_elements_right'          => array( 'search', 'account', 'cart' ),
+	'header_elements_right'          => array( 'search', 'account', 'wishlist', 'cart' ),
 	'header_mobile_elements_left'    => array( 'menu-icon' ),
-	'header_mobile_elements_right'   => array( 'cart' ),
+	'header_mobile_elements_right'   => array( 'wishlist', 'cart' ),
 	'mobile_sidebar'                 => array( 'search-form', 'nav', 'account' ),
 	'header_cart_style'              => 'off-canvas',
 	'header_cart_total'              => 0,
@@ -448,7 +532,18 @@ $mods = array(
 	'header_cart_qty'                => 1,
 	'header_account_title'           => 0,
 	'cart_icon'                      => 'bag',
-	'topbar_show'                    => 0,
+	'topbar_show'                    => 1,
+	'topbar_bg'                      => '#F5F4F2',
+	'topbar_color'                   => 'light',
+	'topbar_elements_left'           => array(),
+	'topbar_elements_right'          => array(),
+	'topbar_elements_center'         => array( 'html' ),
+	'header_mobile_elements_top'     => array( 'html' ),
+	'topbar_left'                    => signal_seed_render( 'promo-topbar', array() ),
+	'live_search'                    => 1,
+	'header_search_style'           => 'dropdown',
+	'wishlist_icon'                  => 'heart',
+	'wishlist_title'                 => 0,
 	'header_sticky'                  => 1,
 	'body_layout'                    => 'full-width',
 	'site_width'                     => 1440,
@@ -478,12 +573,15 @@ $mods = array(
 	'category_row_count_mobile'      => 2,
 	'products_pr_page'               => 12,
 	'product_box_category'           => 1,
+	'product_box_rating'             => 1,
 	'product_hover'                  => 'fade_in_back',
 	'disable_quick_view'             => 0,
 	'product_next_prev_nav'          => 0,
 	'product_layout'                 => 'stacked-right',
 	'product_upsell'                 => 'bottom',
 	'product_sticky_cart'            => 1,
+	'product_buy_now'                => 1,
+	'product_buy_now_redirect'       => 'checkout',
 	'product_image_width'            => 7,
 	'footer_block'                   => $footer,
 	'footer_bottom_color'            => '#FFFFFF',

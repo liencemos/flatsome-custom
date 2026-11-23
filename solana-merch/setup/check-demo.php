@@ -24,6 +24,17 @@ signal_check( $home && has_shortcode( $home->post_content, 'ux_products' ) && fa
 signal_check( 'stacked-right' === get_theme_mod( 'product_layout' ) && 'fade_in_back' === get_theme_mod( 'product_hover' ), 'Expected the native stacked product gallery and second-image hover.' );
 signal_check( has_shortcode( $home->post_content, 'form_edit_newsletter' ) && false !== strpos( $home->post_content, 'edit-process' ), 'Expected the editorial process and newsletter modules.' );
 signal_check( get_theme_mod( 'product_sticky_cart' ) && 'bottom' === get_theme_mod( 'product_upsell' ), 'Expected native sticky cart and below-description upsells.' );
+signal_check( class_exists( 'YITH_WCWL' ) && in_array( 'wishlist', get_theme_mod( 'header_elements_right', array() ), true ), 'Expected YITH Wishlist and its native Flatsome header element.' );
+signal_check( (int) get_option( 'yith_wcwl_wishlist_page_id' ) > 0 && get_post( (int) get_option( 'yith_wcwl_wishlist_page_id' ) ), 'Expected a configured YITH Wishlist page.' );
+signal_check( get_theme_mod( 'live_search' ) && ! get_theme_mod( 'disable_quick_view' ) && get_theme_mod( 'product_buy_now' ), 'Expected native live search, Quick View, and Buy Now.' );
+$coupon = new WC_Coupon( 'first10' );
+signal_check( 'percent' === $coupon->get_discount_type() && 10.0 === (float) $coupon->get_amount() && false !== strpos( get_theme_mod( 'topbar_left' ), 'FIRST10' ), 'Expected working FIRST10 top bar promotion.' );
+$shipping = new WC_Shipping_Zone( (int) get_option( 'form_edit_demo_shipping_zone' ) );
+$free = array_filter( $shipping->get_shipping_methods( true ), static function ( $method ) {
+	return 'free_shipping' === $method->id && 'min_amount' === $method->requires && 75.0 === (float) $method->min_amount && 'no' === $method->ignore_discounts;
+} );
+signal_check( 1 === count( $free ) && 'yes' === ( get_option( 'woocommerce_cod_settings' )['enabled'] ?? '' ), 'Expected $75 after discounts for free shipping and demo COD.' );
+signal_check( 'Jan 7' === form_edit_delivery_date( new DateTimeImmutable( '2026-01-02T12:00:00Z' ), 3 ), 'Delivery estimate must skip weekends.' );
 foreach ( array( 'woocommerce_layered_nav', 'woocommerce_price_filter' ) as $widget ) {
 	signal_check( is_active_widget( false, false, $widget ), "Missing WooCommerce catalog widget {$widget}." );
 }
@@ -46,6 +57,7 @@ signal_check( 12 === count( $products ), 'Expected 12 demo products.' );
 
 $counts = array( 't-shirts' => 0, 'hats' => 0 );
 $total = 0;
+$low_stock = 0;
 foreach ( $products as $product_id ) {
 	$product = wc_get_product( $product_id );
 	$sku = 'FE-' . strtoupper( sanitize_title( $product->get_name() ) );
@@ -56,6 +68,8 @@ foreach ( $products as $product_id ) {
 	$header = get_term_meta( $product->get_category_ids()[0], 'cat_meta', true );
 	signal_check( has_shortcode( $header['cat_header'] ?? '', 'block' ), "Missing native category header for {$terms[0]}." );
 	signal_check( $product->is_type( 'variable' ) && $product->get_image_id() && 2 === count( $product->get_gallery_image_ids() ), "Expected variable product {$product_id} with three catalog images." );
+	$sample_reviews = get_comments( array( 'post_id' => $product_id, 'type' => 'review', 'meta_key' => '_form_edit_demo_review', 'count' => true ) );
+	signal_check( 1 === (int) $sample_reviews && $product->get_average_rating() > 0, "Missing or duplicate sample rating for {$product_id}." );
 
 	$sizes = 't-shirts' === $terms[0] ? array( 'S', 'M', 'L', 'XL' ) : array( 'One size' );
 	$filter_sizes = wp_get_post_terms( $product_id, 'pa_size', array( 'fields' => 'names' ) );
@@ -76,6 +90,9 @@ foreach ( $products as $product_id ) {
 		$attributes = $variation->get_attributes();
 		$actual[] = ( $attributes['size'] ?? '' ) . '|' . ( $attributes['color'] ?? '' );
 		signal_check( $variation->is_in_stock() && $variation->is_purchasable() && $variation->get_image_id( 'edit' ), "Variation {$variation_id} must be purchasable and have color artwork." );
+		if ( $variation->managing_stock() && 2 === $variation->get_stock_quantity() ) {
+			++$low_stock;
+		}
 	}
 	sort( $actual );
 	sort( $expected );
@@ -83,4 +100,5 @@ foreach ( $products as $product_id ) {
 	$total += count( $actual );
 }
 signal_check( array( 't-shirts' => 6, 'hats' => 6 ) === $counts, 'Expected six tees and six hats.' );
+signal_check( 4 === $low_stock, 'Expected four low-stock demo variations.' );
 WP_CLI::success( "Native demo structure verified: 12 variable products, {$total} purchasable variations, two categories and seeded UX Blocks." );
