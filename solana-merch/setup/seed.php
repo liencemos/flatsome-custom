@@ -27,7 +27,7 @@ function signal_seed_result( $result ) {
 }
 
 function signal_seed_existing_post( $type, $slug ) {
-	$post = get_page_by_path( $slug, OBJECT, $type );
+	$post = get_page_by_path( $slug, OBJECT, array( $type ) );
 	if ( $post && ! get_post_meta( $post->ID, '_signal_demo', true ) ) {
 		WP_CLI::error( "The {$type} slug {$slug} already belongs to non-demo content." );
 	}
@@ -383,7 +383,7 @@ function signal_seed_menu( $items ) {
 	set_theme_mod( 'nav_menu_locations', $locations );
 }
 
-function form_edit_seed_pages( $links, $art ) {
+function form_edit_seed_page_targets() {
 	$titles = array(
 		'about'            => 'About',
 		'lookbook'         => 'Lookbook',
@@ -393,10 +393,30 @@ function form_edit_seed_pages( $links, $art ) {
 		'size-guide'       => 'Size Guide',
 		'care-guide'       => 'Care Guide',
 	);
+	$targets = array();
+	foreach ( $titles as $slug => $title ) {
+		$page = get_page_by_path( $slug, OBJECT, array( 'page' ) );
+		if ( ! $page ) {
+			$trashed = get_page_by_path( $slug . '__trashed', OBJECT, array( 'page' ) );
+			if ( $trashed && 'trash' === $trashed->post_status ) {
+				$page = $trashed;
+			}
+		}
+		if ( $page && 'publish' !== $page->post_status ) {
+			WP_CLI::error( "Page {$slug} is {$page->post_status}; resolve its status before seeding." );
+		}
+		if ( ! $page && $slug !== wp_unique_post_slug( $slug, 0, 'publish', 'page', 0 ) ) {
+			WP_CLI::error( "Page slug {$slug} is unavailable; check for an attachment with the same slug before seeding." );
+		}
+		$targets[ $slug ] = array( $title, $page );
+	}
+	return $targets;
+}
+
+function form_edit_seed_pages( $links, $art, $targets ) {
 	$pages = array();
 	$new = array();
-	foreach ( $titles as $slug => $title ) {
-		$page = get_page_by_path( $slug, OBJECT, 'page' );
+	foreach ( $targets as $slug => list( $title, $page ) ) {
 		$pages[ $slug ] = $page ? (int) $page->ID : signal_seed_post( 'page', $slug, $title, '' );
 		if ( ! $page ) {
 			update_post_meta( $pages[ $slug ], '_wp_page_template', 'page-blank.php' );
@@ -449,6 +469,7 @@ $coupon = new WC_Coupon( 'first10' );
 if ( $coupon->get_id() && ! $coupon->get_meta( '_signal_demo' ) ) {
 	WP_CLI::error( 'Coupon FIRST10 already belongs to non-demo content.' );
 }
+$page_targets = form_edit_seed_page_targets();
 
 WC_Install::create_pages();
 $cart = get_post( wc_get_page_id( 'cart' ) );
@@ -543,7 +564,7 @@ $home = signal_seed_post( 'page', 'signal-home', 'Home', signal_seed_render( 'ho
 update_post_meta( $home, '_wp_page_template', 'page-blank.php' );
 update_option( 'show_on_front', 'page' );
 update_option( 'page_on_front', $home );
-list( $content_pages, $links ) = form_edit_seed_pages( $links, $art + array( 'about_image' => $art['process_layout'] ) );
+list( $content_pages, $links ) = form_edit_seed_pages( $links, $art + array( 'about_image' => $art['process_layout'] ), $page_targets );
 $footer = signal_seed_post( 'blocks', 'signal-footer', 'FORM / EDIT Footer', signal_seed_render( 'footer', $links ) );
 
 foreach ( array(
