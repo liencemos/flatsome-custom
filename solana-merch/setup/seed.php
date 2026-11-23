@@ -161,28 +161,40 @@ function signal_seed_product( $id, $category, $hat, $record, $index ) {
 	$product->update_meta_data( '_signal_demo', 1 );
 	$id = $product->save();
 
+	$expected = array();
+	foreach ( $sizes as $size ) {
+		foreach ( $colors as $color ) {
+			$expected[ $size . '|' . $color ] = array( 'color' => $color, 'size' => $size );
+		}
+	}
+
 	$existing = array();
 	foreach ( $product->get_children() as $child ) {
 		$variation = wc_get_product( $child );
 		if ( $variation && $variation->get_meta( '_signal_demo' ) ) {
 			$attributes = $variation->get_attributes();
-			$existing[ ( $attributes['size'] ?? '' ) . '|' . ( $attributes['color'] ?? '' ) ] = $variation;
+			ksort( $attributes );
+			$key = ( $attributes['size'] ?? '' ) . '|' . ( $attributes['color'] ?? '' );
+			if ( ( $expected[ $key ] ?? null ) === $attributes && ! isset( $existing[ $key ] ) ) {
+				$existing[ $key ] = $variation;
+			} else {
+				$variation->delete();
+			}
 		}
 	}
 
-	foreach ( $sizes as $size ) {
-		foreach ( $colors as $color ) {
-			$key       = $size . '|' . $color;
-			$variation = $existing[ $key ] ?? ( 'Stone' === $color ? ( $existing[ $size . '|Navy' ] ?? null ) : null ) ?? new WC_Product_Variation();
+	foreach ( $expected as $key => $attributes ) {
+		$variation = $existing[ $key ] ?? new WC_Product_Variation();
+		if ( ! $variation->get_id() ) {
 			$variation->set_parent_id( $id );
-			$variation->set_status( 'publish' );
-			$variation->set_attributes( array( 'size' => $size, 'color' => $color ) );
-			$variation->set_regular_price( $price );
-			$variation->set_stock_status( 'instock' );
-			$variation->set_image_id( 'Ink' === $color ? $ink : $stone );
+			$variation->set_attributes( $attributes );
 			$variation->update_meta_data( '_signal_demo', 1 );
-			$variation->save();
 		}
+		$variation->set_status( 'publish' );
+		$variation->set_regular_price( $price );
+		$variation->set_stock_status( 'instock' );
+		$variation->set_image_id( 'Ink' === $attributes['color'] ? $ink : $stone );
+		$variation->save();
 	}
 	WC_Product_Variable::sync( $id );
 	return $id;
