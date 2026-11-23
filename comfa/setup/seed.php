@@ -352,13 +352,23 @@ $cf_blocks  = array( 'footer' => 'Footer', 'mega-tees' => 'Mega Menu: T-Shirts',
 foreach ( $cf_blocks as $cf_slug => $cf_title ) {
 	$cf_context['blocks'][ $cf_slug ] = cf_seed_post( 'blocks', $cf_slug, $cf_title, cf_seed_render( (string) file_get_contents( $cf_ux . 'blocks/' . $cf_slug . '.txt' ), $cf_context ) );
 }
-$cf_pages = array( 'home' => 'Home', 'mission' => 'Our Mission', 'help' => 'Help & FAQ', 'shipping-returns' => 'Shipping & Returns', 'size-guide' => 'Size Guide', 'contact' => 'Contact' );
+$cf_pages = array( 'home' => 'Home', 'mission' => 'Our Mission', 'help' => 'Help & FAQ', 'shipping-returns' => 'Shipping & Returns', 'size-guide' => 'Size Guide', 'contact' => 'Contact', 'privacy-policy' => 'Privacy Policy', 'terms-of-service' => 'Terms of Service', 'return-refund-policy' => 'Return & Refund Policy' );
 $cf_page_ids = array();
+// WordPress installs a draft "Privacy Policy" on the slug the Comfa page uses. A draft is moved aside, still a draft; a published policy is kept.
+$cf_policy = get_page_by_path( 'privacy-policy', OBJECT, 'page' );
+if ( $cf_policy && 'draft' === $cf_policy->post_status && ! get_post_meta( $cf_policy->ID, '_cf_seed_hash', true ) ) {
+	wp_update_post( array( 'ID' => $cf_policy->ID, 'post_name' => 'privacy-policy-draft' ) );
+	WP_CLI::log( 'Moved the draft Privacy Policy page to privacy-policy-draft.' );
+}
 foreach ( $cf_pages as $cf_slug => $cf_title ) {
 	$cf_file = 'home' === $cf_slug ? $cf_ux . 'home.txt' : $cf_ux . 'pages/' . $cf_slug . '.txt';
 	$cf_page_ids[ $cf_slug ] = cf_seed_post( 'page', $cf_slug, $cf_title, cf_seed_render( (string) file_get_contents( $cf_file ), $cf_context ), array( 'template' => 'home' === $cf_slug ? 'page-blank.php' : 'page-blank.php' ) );
 }
 update_option( 'show_on_front', 'page' );
+// Checkout and the footer link to the Settings > Privacy page; a published one the merchant chose is kept.
+if ( 'publish' === get_post_status( $cf_page_ids['privacy-policy'] ) && 'publish' !== get_post_status( (int) get_option( 'wp_page_for_privacy_policy' ) ) ) {
+	update_option( 'wp_page_for_privacy_policy', $cf_page_ids['privacy-policy'] );
+}
 update_option( 'page_on_front', $cf_page_ids['home'] );
 
 // Classic cart and checkout so Flatsome's cart/checkout styling and hooks apply.

@@ -21,6 +21,7 @@
 <li><a href="{{url:/mission/}}">Our Mission</a></li>
 <li><a href="{{url:/size-guide/}}">Size Guide</a></li>
 <li><a href="{{url:/shipping-returns/}}">Shipping &amp; Returns</a></li>
+<li><a href="{{url:/return-refund-policy/}}">Return &amp; Refund Policy</a></li>
 <li><a href="{{url:/my-account/}}">My Account</a></li>
 </ul>
 [/col]
@@ -38,7 +39,7 @@
 [/row]
 [row class="cf-footer__legal"]
 [col span__sm="12"]
-<p>© [cf_year] Comfa. Demo store. <a href="{{url:/shipping-returns/}}">Returns</a>[cf_privacy_link] <a href="{{url:/contact/}}">Contact</a></p>
+<p>© [cf_year] Comfa. Demo store. <a href="{{url:/return-refund-policy/}}">Returns</a>[cf_privacy_link] <a href="{{url:/terms-of-service/}}">Terms</a> <a href="{{url:/contact/}}">Contact</a></p>
 [/col]
 [/row]
 [/section]

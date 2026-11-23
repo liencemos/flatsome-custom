@@ -44,7 +44,7 @@ foreach ( array( 'footer', 'mega-tees', 'mega-caps', 'pdp-story', 'page-404' ) a
 	$cf_block = get_page_by_path( $cf_slug, OBJECT, 'blocks' );
 	$cf_expect( $cf_block && 'publish' === $cf_block->post_status && false === strpos( $cf_block->post_content, '{{' ), 'UX Block missing or has unresolved placeholders: ' . $cf_slug );
 }
-foreach ( array( 'home', 'mission', 'help', 'shipping-returns', 'size-guide', 'contact' ) as $cf_slug ) {
+foreach ( array( 'home', 'mission', 'help', 'shipping-returns', 'size-guide', 'contact', 'privacy-policy', 'terms-of-service', 'return-refund-policy' ) as $cf_slug ) {
 	$cf_page = get_page_by_path( $cf_slug );
 	$cf_expect( $cf_page && 'publish' === $cf_page->post_status && false === strpos( $cf_page->post_content, '{{' ), 'Page missing or has unresolved placeholders: ' . $cf_slug );
 }
@@ -65,4 +65,4 @@ if ( $cf_failures ) {
 	}
 	WP_CLI::error( count( $cf_failures ) . ' check(s) failed.' );
 }
-WP_CLI::success( sprintf( 'Comfa demo verified: %d products, %d variations, 5 UX Blocks, 6 pages, swatches, coupon and classic cart.', count( $cf_catalog['products'] ), $cf_variations ) );
+WP_CLI::success( sprintf( 'Comfa demo verified: %d products, %d variations, 5 UX Blocks, 9 pages, swatches, coupon and classic cart.', count( $cf_catalog['products'] ), $cf_variations ) );

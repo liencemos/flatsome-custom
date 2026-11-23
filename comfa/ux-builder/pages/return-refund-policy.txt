@@ -1,0 +1,73 @@
+[section class="cf-doc" padding="40px" padding__sm="16px"]
+[row style="collapse" class="cf-doc__card"]
+[col span="4" span__sm="12" class="cf-doc__side"]
+<h1 class="cf-serif">Return and Refund Policy</h1>
+<p class="cf-doc__sub">Shipping, returns, refunds and payment for your order.</p>
+<p class="cf-doc__group">Shipping, Returns and Exchanges</p>
+<ul class="cf-doc__toc">
+<li><a href="#do-international-orders-pay-duties-or-vat">Do international orders pay duties or VAT?</a></li>
+<li><a href="#what-is-your-return-policy">What is your return policy?</a></li>
+<li><a href="#how-long-does-a-replacement-refund-or-return-take-to-process">How long does a replacement, refund or return take to process?</a></li>
+<li><a href="#how-long-will-it-take-to-ship-my-order">How long will it take to ship my order?</a></li>
+<li><a href="#shipping-times-after-dispatch">Shipping times after dispatch</a></li>
+<li><a href="#redelivery-and-pickup">Redelivery and pickup</a></li>
+</ul>
+<p class="cf-doc__group">Payment</p>
+<ul class="cf-doc__toc">
+<li><a href="#what-payment-methods-do-you-accept">What payment methods do you accept?</a></li>
+<li><a href="#how-secure-is-my-payment">How secure is my payment?</a></li>
+<li><a href="#what-is-the-security-code">What is the security code?</a></li>
+<li><a href="#is-my-card-charged-as-soon-as-i-order">Is my card charged as soon as I order?</a></li>
+</ul>
+<p class="cf-doc__more"><a href="{{url:/contact/}}">Start a return →</a></p>
+[/col]
+[col span="8" span__sm="12" class="cf-doc__body"]
+<p class="cf-doc__note">Template text for the demo store. Replace the details in [brackets] and have it reviewed before launch.</p>
+<h2 class="cf-doc__grouptitle">Shipping, Returns and Exchanges</h2>
+<h3 id="do-international-orders-pay-duties-or-vat">Do international orders pay duties or VAT?</h3>
+<p>Prices at checkout include any sales tax we are required to collect. For deliveries outside [country], import duties or VAT may be charged by your customs office when the parcel arrives; these are paid by the recipient.</p>
+<h3 id="what-is-your-return-policy">What is your return policy?</h3>
+<p>If you are not happy with an item, send it back within 60 days of delivery for a refund or an exchange. Items should be unworn and unwashed, in their original condition.</p>
+<p>To start a return, <a href="{{url:/contact/}}">contact us</a> with your order number and the email address used for the order. If something arrived wrong or faulty, please attach photos so we can fix it quickly and stop it happening again:</p>
+<ul>
+<li><strong>Wrong size:</strong> the shipping label, the size tag, and the item laid flat with a tape measure across the chest.</li>
+<li><strong>Wrong or faulty item:</strong> the shipping label, the whole item on a flat surface, and a close-up of the problem.</li>
+</ul>
+<p>We cover return shipping for wrong or faulty items. For other returns, return shipping is paid by the customer.</p>
+<p><strong>Not eligible for a refund or replacement</strong></p>
+<ul>
+<li>Items that have been worn, washed or damaged after delivery.</li>
+<li>Items returned more than 60 days after delivery.</li>
+<li>Orders that have already been refunded, or disputed with the card issuer.</li>
+<li>Claims without the order details or photos we need to check them.</li>
+</ul>
+<h3 id="how-long-does-a-replacement-refund-or-return-take-to-process">How long does a replacement, refund or return take to process?</h3>
+<p>We answer return requests within 3 business days. Replacements ship within 5 business days of approval and you receive a new confirmation email with tracking.</p>
+<p>Refunds go back to the original payment method once the return reaches us. Depending on your bank it can take 5–10 business days to show on your statement.</p>
+<h3 id="how-long-will-it-take-to-ship-my-order">How long will it take to ship my order?</h3>
+<p>Orders leave our warehouse within one business day. Graphic tees are screen-printed in small batches and may take up to 3 business days during busy periods.</p>
+<h3 id="shipping-times-after-dispatch">Shipping times after dispatch</h3>
+<ul>
+<li><strong>Standard shipping:</strong> 3–5 business days, $6.</li>
+<li><strong>Free standard shipping:</strong> on orders over $75 after discounts.</li>
+</ul>
+<p>Deliveries take longer around busy periods such as Black Friday, Christmas and New Year. Order early if you need something by a certain date.</p>
+<h3 id="redelivery-and-pickup">Redelivery and pickup</h3>
+<p>If the carrier cannot deliver because the address is incomplete or nobody is available, the parcel goes back to the carrier's depot and we email you to confirm the address.</p>
+<ul>
+<li>Reply within 7 days so we can arrange redelivery.</li>
+<li>A second delivery costs the standard shipping fee.</li>
+</ul>
+<p>If we do not hear from you, the parcel is returned to us and we refund the items, not the original shipping fee.</p>
+<h2 class="cf-doc__grouptitle">Payment</h2>
+<h3 id="what-payment-methods-do-you-accept">What payment methods do you accept?</h3>
+<p>The payment methods available for your order are listed at checkout. The demo store accepts cash on delivery; add your own card and wallet providers in WooCommerce.</p>
+<h3 id="how-secure-is-my-payment">How secure is my payment?</h3>
+<p>Checkout runs over an encrypted (HTTPS) connection, and card payments are processed by the payment provider, not by Comfa. We never see or store your full card number. If a payment looks suspicious we may contact you to confirm the order before shipping it.</p>
+<h3 id="what-is-the-security-code">What is the security code?</h3>
+<p>The security code (CVV) is the 3-digit number on the back of most cards, or the 4-digit number on the front of American Express cards. Your payment provider asks for it to confirm the card is in your hands.</p>
+<h3 id="is-my-card-charged-as-soon-as-i-order">Is my card charged as soon as I order?</h3>
+<p>Yes. Card payments are taken when you place the order. Your bank may first show it as a pending authorisation. With cash on delivery you pay when the parcel arrives.</p>
+[/col]
+[/row]
+[/section]

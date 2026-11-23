@@ -41,3 +41,5 @@ Outfit and Fraunces are set in Flatsome > Theme Options > Typography; Bowlby One
 **Product page:** info column left, two-up image grid right (slider on mobile). Order: breadcrumb, serif title, price line, first-order promo, pack segmented control, colour circles, two-line size buttons with Size Guide lightbox, navy Add to Bag, "N Bought = N Given", info card (rating, shipping, highlight, details). Below: editable story band, giving band, reviews with score header, related products.
 
 **Bag and checkout:** off-canvas mini bag and cart page show free-shipping progress and the giving count; classic WooCommerce cart and checkout styled to match.
+
+**Policy and FAQ pages (UX Builder pages):** one rounded white card. Cream left column with serif title, subtitle and a numbered contents list that stays in view while scrolling; right column with the document, sub-headings marked by a yellow bar. The FAQ groups questions in Flatsome accordions with a yellow +/− marker. On mobile the contents list sits above the document.

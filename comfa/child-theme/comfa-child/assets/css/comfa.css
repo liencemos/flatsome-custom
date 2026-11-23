@@ -270,6 +270,47 @@
 .cf-help-card { background: var(--cf-soft); border-radius: var(--cf-radius); padding: 24px; }
 .cf-help-card .cf-display { font-size: 22px; margin-bottom: 8px; }
 .cf-size-table { margin-bottom: 22px; }
+
+/* ---------- Policy and FAQ pages: contents sidebar + document ---------- */
+.cf-doc__card { max-width: 1240px !important; border: 1px solid var(--cf-line); border-radius: 16px; background: #fff; }
+/* No overflow:hidden on the card: it would stop the contents column from sticking. */
+.cf-doc__side { background: var(--cf-cream); border-radius: 15px 0 0 15px; }
+.cf-doc__side > .col-inner { position: sticky; top: 72px; padding: 34px 30px; }
+.cf-doc__side h1 { font-size: 34px; line-height: 1.1; margin-bottom: 10px; }
+.cf-doc__sub { font-size: 15px; color: var(--cf-muted); margin-bottom: 22px; }
+.cf-doc__group { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--cf-muted); margin: 18px 0 8px; }
+.cf-doc__toc { list-style: none; margin: 0; padding: 0; counter-reset: cf-toc; }
+.cf-doc__toc li { margin: 0; counter-increment: cf-toc; }
+.cf-doc__toc a { display: flex; align-items: flex-start; gap: 12px; padding: 7px 0; font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--cf-ink); }
+.cf-doc__toc a::before { content: counter(cf-toc); flex: none; width: 26px; height: 26px; margin-top: -3px; border-radius: 50%; background: #fff; border: 1px solid var(--cf-line); font-size: 12px; line-height: 24px; text-align: center; }
+.cf-doc__toc a:hover::before { background: var(--cf-yellow); border-color: var(--cf-ink); }
+.cf-doc__more { margin: 20px 0 0; font-size: 14px; font-weight: 700; }
+.cf-doc__more a { text-decoration: underline; }
+.cf-doc__body > .col-inner { padding: 34px 40px 20px; font-size: 15px; line-height: 1.7; }
+.cf-doc__body h2 { font-size: 24px; font-weight: 800; margin: 34px 0 14px; scroll-margin-top: 110px; }
+.cf-doc__body h2:first-child, .cf-doc__note + h2 { margin-top: 0; }
+.cf-doc__body h3 { font-size: 17px; font-weight: 800; margin: 24px 0 10px; padding-left: 12px; border-left: 4px solid var(--cf-yellow); scroll-margin-top: 110px; }
+.cf-doc__body h4 { font-size: 15px; font-weight: 800; margin: 16px 0 4px; }
+.cf-doc__body p { margin-bottom: 12px; }
+.cf-doc__body ul { margin: 0 0 14px 20px; }
+.cf-doc__body li { margin-bottom: 6px; }
+.cf-doc__body a:not(.accordion-title) { text-decoration: underline; }
+.cf-doc__note { padding: 10px 14px; border-radius: 10px; background: var(--cf-soft); border: 1px dashed var(--cf-line); font-size: 13px; color: var(--cf-muted); margin-bottom: 24px; }
+.cf-doc--faq .accordion-item { border: 1px solid var(--cf-line); border-radius: var(--cf-radius); margin-bottom: 10px; background: #fff; }
+.cf-doc--faq .accordion-title { position: relative; border: 0; padding: 16px 52px 16px 18px; font-size: 15px; font-weight: 700; color: var(--cf-ink); background: none; }
+.cf-doc--faq .accordion-title.active { background: none; color: var(--cf-ink); }
+.cf-doc--faq .accordion-title .toggle { display: none; }
+.cf-doc--faq .accordion-title::after { content: "+"; position: absolute; right: 16px; top: 50%; width: 24px; height: 24px; margin-top: -12px; border-radius: 50%; background: var(--cf-yellow); color: var(--cf-ink); font-size: 18px; font-weight: 700; line-height: 23px; text-align: center; }
+.cf-doc--faq .accordion-title.active::after { content: "\2212"; }
+.cf-doc--faq .accordion-inner { padding: 0 18px 16px; }
+.cf-doc--faq .accordion-inner p:last-child { margin-bottom: 0; }
+@media (max-width: 849px) {
+	.cf-doc__side { border-radius: 15px 15px 0 0; }
+	.cf-doc__side > .col-inner { position: static; padding: 24px 20px; }
+	.cf-doc__side h1 { font-size: 28px; }
+	.cf-doc__body > .col-inner { padding: 24px 20px 8px; }
+	.cf-doc__body h2 { font-size: 21px; }
+}
 .cf-size-table th { text-transform: none; letter-spacing: 0; font-size: 14px; }
 .cf-size-table td, .cf-size-table th { padding: 9px 10px; border-bottom: 1px solid var(--cf-line); }
 .cf-404 h1 { font-size: clamp(40px, 6vw, 80px); margin-bottom: 12px; }

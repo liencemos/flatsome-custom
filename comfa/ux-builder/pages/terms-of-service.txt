@@ -1,0 +1,91 @@
+[section class="cf-doc" padding="40px" padding__sm="16px"]
+[row style="collapse" class="cf-doc__card"]
+[col span="4" span__sm="12" class="cf-doc__side"]
+<h1 class="cf-serif">Terms of Service</h1>
+<p class="cf-doc__sub">The terms that apply when you use our website and services.</p>
+<ul class="cf-doc__toc">
+<li><a href="#user-agreement">User Agreement</a></li>
+<li><a href="#placing-an-order">Placing an Order</a></li>
+<li><a href="#products-and-print-variance">Products and Print Variance</a></li>
+<li><a href="#price-and-payment">Price and Payment</a></li>
+<li><a href="#intellectual-property-complaint-policy">Intellectual Property Complaint Policy</a></li>
+<li><a href="#counter-notice-policy">Counter-Notice Policy</a></li>
+<li><a href="#repeat-intellectual-property-complaint-policy">Repeat Intellectual Property Complaint Policy</a></li>
+<li><a href="#indemnification">Indemnification</a></li>
+<li><a href="#miscellaneous-provisions">Miscellaneous Provisions</a></li>
+<li><a href="#buyer-payments-returns-refunds-and-cancellation">Buyer Payments, Returns, Refunds and Cancellation</a></li>
+</ul>
+[/col]
+[col span="8" span__sm="12" class="cf-doc__body"]
+<p class="cf-doc__note">Template text for the demo store. Replace the details in [brackets] and have it reviewed before launch.</p>
+<h2 id="user-agreement">User Agreement</h2>
+<p>Please read these terms carefully before using the store. Comfa is operated by [Company legal name] ("Comfa", "we", "us"). By visiting the website, creating an account or placing an order you agree to these terms and to our <a href="{{url:/privacy-policy/}}">Privacy Policy</a>. If you do not agree, please do not use the store.</p>
+<p>You must be old enough to enter a contract where you live, or have the permission of a parent or guardian, to place an order.</p>
+<h2 id="placing-an-order">Placing an Order</h2>
+<h3>Your Account</h3>
+<p>You can check out as a guest or create an account. Keep your password private; you are responsible for orders placed through your account.</p>
+<h3>When a Contract Is Formed</h3>
+<p>Your order is an offer to buy. We accept it when we send the email confirming that your order has shipped. Until then we may decline an order, for example when an item is out of stock or a price was listed in error, and we will refund anything you have paid.</p>
+<h3>Delivery Procedure</h3>
+<p>Delivery times shown at checkout are estimates, not guarantees. Ownership and risk pass to you when the carrier delivers the order to the address you gave us.</p>
+<h2 id="products-and-print-variance">Products and Print Variance</h2>
+<p>We photograph products as accurately as we can, but colours vary between screens and from one dye lot to the next. Screen-printed artwork is applied by hand, so its position and tone may differ slightly from the picture. Measurements in the <a href="{{url:/size-guide/}}">Size Guide</a> have a tolerance of about 1 inch.</p>
+<h2 id="price-and-payment">Price and Payment</h2>
+<p>Prices are shown in US dollars. Shipping and any sales tax are added at checkout before you pay. Pack savings apply only to the pack shown.</p>
+<h3>Promotions and Codes</h3>
+<p>A discount code can be used once per customer and has no cash value. The welcome code is for a first order only.</p>
+<h3>Taxes and Duties</h3>
+<p>For deliveries outside [country], import duties and taxes charged at the border are the responsibility of the recipient unless checkout states otherwise.</p>
+<h2 id="intellectual-property-complaint-policy">Intellectual Property Complaint Policy</h2>
+<p>The Comfa name, logo, photographs, artwork and text belong to Comfa or its licensors and may not be used without written permission.</p>
+<p>If you believe something on this website infringes your copyright or trademark, write to <a href="mailto:legal@example.com">legal@example.com</a> with:</p>
+<ul>
+<li>your full name, address, telephone number and email address;</li>
+<li>a description of the work or mark you say is infringed;</li>
+<li>the page address of the material you are complaining about;</li>
+<li>a statement that you believe in good faith the use is not authorised by the owner or the law;</li>
+<li>a statement that your notice is accurate and that you are the owner or act for the owner;</li>
+<li>your physical or electronic signature.</li>
+</ul>
+<h2 id="counter-notice-policy">Counter-Notice Policy</h2>
+<p>If material is removed after a complaint and you believe that was a mistake, send a counter-notice to the same address with:</p>
+<ul>
+<li>your full name, address, telephone number and email address;</li>
+<li>the material that was removed and where it appeared;</li>
+<li>a statement, under penalty of perjury, that you believe it was removed by mistake or misidentification;</li>
+<li>your consent to the jurisdiction of the courts named in these terms;</li>
+<li>your physical or electronic signature.</li>
+</ul>
+<h2 id="repeat-intellectual-property-complaint-policy">Repeat Intellectual Property Complaint Policy</h2>
+<p>We may close the account of anyone who repeatedly posts infringing material, for example in product reviews, and remove that material without notice.</p>
+<h2 id="indemnification">Indemnification</h2>
+<p>You agree to cover Comfa for claims and costs that arise from your breach of these terms or your misuse of the website.</p>
+<h3>Disclaimer of Warranties</h3>
+<p>Beyond the guarantees described in our <a href="{{url:/return-refund-policy/}}">Return &amp; Refund Policy</a> and those the law does not allow us to exclude, the website and products are provided "as is".</p>
+<h3>Limitation of Liability</h3>
+<p>To the extent the law allows, Comfa is not liable for indirect or consequential loss, and our total liability for an order is limited to the amount you paid for it. We are not responsible for interruptions to the website or for events outside our reasonable control.</p>
+<h2 id="miscellaneous-provisions">Miscellaneous Provisions</h2>
+<h3>Entire Agreement</h3>
+<p>These terms and the policies linked from them are the whole agreement between you and Comfa about your use of the store.</p>
+<h3>Assignment</h3>
+<p>We may transfer our rights and duties under these terms to another company. You may not transfer yours without our consent.</p>
+<h3>Severability</h3>
+<p>If a court finds part of these terms unenforceable, the rest stays in force.</p>
+<h3>Governing Law; Venue</h3>
+<p>These terms are governed by the laws of [state / country], and its courts have jurisdiction, without affecting consumer rights you have where you live.</p>
+<h3>Changes</h3>
+<p>We may update these terms. The version on this page when you place an order applies to that order. Last updated: [date].</p>
+<h2 id="buyer-payments-returns-refunds-and-cancellation">Buyer Payments, Returns, Refunds and Cancellation</h2>
+<h3>Payment Methods</h3>
+<p>The payment methods available are shown at checkout.</p>
+<h3>Time of Payment</h3>
+<p>Card and wallet payments are taken when you place the order. Cash on delivery is paid to the carrier.</p>
+<h3>Time of Shipment</h3>
+<p>Orders usually leave our warehouse within one business day.</p>
+<h3>Lost or Stolen Shipments</h3>
+<p>If tracking shows your order as delivered and you cannot find it, tell us within 14 days and we will open a claim with the carrier.</p>
+<h3>Cancellations, Refunds and Exchanges</h3>
+<p>See the <a href="{{url:/return-refund-policy/}}">Return &amp; Refund Policy</a> for how to cancel, return or exchange an order.</p>
+[/col]
+[/row]
+[/section]

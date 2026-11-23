@@ -23,6 +23,7 @@
 <li>Items should be unworn and unwashed</li>
 <li>Refunds go back to the original payment method</li>
 </ul>
+<p><a href="{{url:/return-refund-policy/}}">Read the full Return &amp; Refund Policy</a></p>
 [button text="Start a Return" color="secondary" radius="12" link="{{url:/contact/}}" class="cf-btn-dark"]
 [/col]
 [/row]

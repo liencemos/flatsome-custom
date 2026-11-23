@@ -1,47 +1,84 @@
-[section class="cf-page-hero" bg_color="rgb(236, 235, 220)" padding="48px" padding__sm="32px"]
-[row]
-[col span__sm="12"]
-<h1 class="cf-serif">Help &amp; FAQ</h1>
-<p>Answers to the questions we hear most. Still stuck? <a href="{{url:/contact/}}">Contact us</a>.</p>
+[section class="cf-doc cf-doc--faq" padding="40px" padding__sm="16px"]
+[row style="collapse" class="cf-doc__card"]
+[col span="4" span__sm="12" class="cf-doc__side"]
+<h1 class="cf-serif">Frequently Asked Questions</h1>
+<p class="cf-doc__sub">Quick answers about orders, shipping, payment and returns.</p>
+<ul class="cf-doc__toc">
+<li><a href="#before-you-place-your-order">Before you place your order</a></li>
+<li><a href="#order-status-questions">Order status questions</a></li>
+<li><a href="#modifying-or-changing-an-order">Modifying or changing an order</a></li>
+<li><a href="#payment">Payment</a></li>
+<li><a href="#shipping-returns-and-exchanges">Shipping, Returns and Exchanges</a></li>
+</ul>
+<p class="cf-doc__more">Still have questions? <a href="{{url:/contact/}}">Contact us →</a></p>
 [/col]
-[/row]
-[/section]
-[section padding="40px"]
-[row]
-[col span="8" span__sm="12"]
-<h2 class="cf-serif">Orders &amp; Shipping</h2>
+[col span="8" span__sm="12" class="cf-doc__body"]
+<h2 id="before-you-place-your-order">Before you place your order</h2>
 [accordion]
-[accordion-item title="How long does shipping take?"]
+[accordion-item title="How much does shipping cost?"]
+<p>Standard shipping is a flat $6. Shipping is free on orders over $75 after discounts.</p>
+[/accordion-item]
+[accordion-item title="How long will it take to ship my order?"]
 <p>Orders leave our warehouse within one business day and usually arrive in 3–5 business days.</p>
-[/accordion-item]
-[accordion-item title="When is shipping free?"]
-<p>Shipping is free on orders over $75 after discounts. Below that, standard shipping is a flat $6.</p>
-[/accordion-item]
-[accordion-item title="Can I change or cancel my order?"]
-<p>Contact us within one hour of ordering and we will do our best to update it before it ships.</p>
-[/accordion-item]
-[/accordion]
-<h2 class="cf-serif">Returns &amp; Exchanges</h2>
-[accordion]
-[accordion-item title="What is your return policy?"]
-<p>If you are not happy, send it back within 60 days for a refund or an exchange. See <a href="{{url:/shipping-returns/}}">Shipping &amp; Returns</a>.</p>
 [/accordion-item]
 [accordion-item title="How do packs work?"]
 <p>Packs bundle several of the same style at a lower price per item. Pick one colour and size for the whole pack.</p>
 [/accordion-item]
-[/accordion]
-<h2 class="cf-serif">Product &amp; Sizing</h2>
-[accordion]
 [accordion-item title="How do I find my size?"]
 <p>Every product page has a Size Guide link next to the size options, or see the full <a href="{{url:/size-guide/}}">Size Guide</a>.</p>
+[/accordion-item]
+[accordion-item title="I am having issues placing an order."]
+<p>Sorry about that. <a href="{{url:/contact/}}">Contact us</a> with what you were trying to buy and any error message, and we will sort it out.</p>
+[/accordion-item]
+[/accordion]
+<h2 id="order-status-questions">Order status questions</h2>
+[accordion]
+[accordion-item title="What is the status of my order?"]
+<p>We email you when your order is confirmed and again when it ships. If you have an account, your orders are listed in <a href="{{url:/my-account/}}">My Account</a>.</p>
+[/accordion-item]
+[accordion-item title="I need help with a late order."]
+<p>If your order has not arrived 10 business days after it shipped, <a href="{{url:/contact/}}">contact us</a> with your order number and we will chase the carrier.</p>
+[/accordion-item]
+[accordion-item title="My tracking number is not working."]
+<p>Tracking can take 1–2 days to appear in the carrier's system. If it still shows nothing after that, let us know.</p>
+[/accordion-item]
+[/accordion]
+<h2 id="modifying-or-changing-an-order">Modifying or changing an order</h2>
+[accordion]
+[accordion-item title="I would like to modify my order."]
+<p>Contact us within one hour of ordering and we will do our best to update the address or items before it ships.</p>
+[/accordion-item]
+[accordion-item title="I would like to cancel my order."]
+<p>We can cancel an order that has not shipped yet. Once it is on its way, you can return it within 60 days.</p>
+[/accordion-item]
+[accordion-item title="My order is missing or defective."]
+<p>We will put it right. <a href="{{url:/contact/}}">Contact us</a> with your order number and a photo of the problem, and we will send a replacement or a refund.</p>
+[/accordion-item]
+[/accordion]
+<h2 id="payment">Payment</h2>
+[accordion]
+[accordion-item title="What payment methods do you accept?"]
+<p>The payment methods available for your order are listed at checkout.</p>
+[/accordion-item]
+[accordion-item title="How secure is my payment?"]
+<p>Checkout runs over an encrypted connection and card payments are processed by the payment provider. We never see or store your full card number.</p>
+[/accordion-item]
+[accordion-item title="Is my card charged as soon as I order?"]
+<p>Yes, card payments are taken when you place the order. With cash on delivery you pay when the parcel arrives.</p>
+[/accordion-item]
+[/accordion]
+<h2 id="shipping-returns-and-exchanges">Shipping, Returns and Exchanges</h2>
+[accordion]
+[accordion-item title="What is your return policy?"]
+<p>If you are not happy, send it back within 60 days for a refund or an exchange. See the <a href="{{url:/return-refund-policy/}}">Return &amp; Refund Policy</a>.</p>
+[/accordion-item]
+[accordion-item title="How long does a refund or exchange take?"]
+<p>We answer return requests within 3 business days. Refunds can take 5–10 business days to show on your statement.</p>
 [/accordion-item]
 [accordion-item title="How should I wash my tee or cap?"]
 <p>Machine wash tees cold and tumble dry low. Spot clean caps and let them air dry to keep their shape.</p>
 [/accordion-item]
 [/accordion]
-[/col]
-[col span="4" span__sm="12"]
-<div class="cf-help-card"><p class="cf-display">100% Happiness Guaranteed</p><p>Our team answers every message within one business day.</p>[button text="Contact Us" color="secondary" radius="12" link="{{url:/contact/}}" class="cf-btn-dark"]</div>
 [/col]
 [/row]
 [/section]
