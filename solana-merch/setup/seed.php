@@ -247,6 +247,12 @@ function form_edit_seed_shipping() {
 	WC_Cache_Helper::get_transient_version( 'shipping', true );
 }
 
+function form_edit_seed_size_guide( $hat ) {
+	return $hat
+		? '<p>Adjust the back strap for fit. Measure around your head where the cap will sit.</p><p>Demo size range: 21.5–24 in (55–61 cm).</p>'
+		: '<p>Lay a tee you like flat. Measure across the chest, just below the armholes. Demo garment measurements:</p><table><thead><tr><th scope="col">Size</th><th scope="col">Chest width</th></tr></thead><tbody><tr><th scope="row">S</th><td>20 in / 51 cm</td></tr><tr><th scope="row">M</th><td>21 in / 53 cm</td></tr><tr><th scope="row">L</th><td>22 in / 56 cm</td></tr><tr><th scope="row">XL</th><td>23 in / 58 cm</td></tr></tbody></table>';
+}
+
 function signal_seed_product( $id, $category, $hat, $record, $index ) {
 	list( $slug, $sku, $title, $price, $intro ) = $record;
 	$ink    = signal_seed_media( $slug . '-ink.webp', $title . ' in Ink, front view' );
@@ -286,9 +292,7 @@ function signal_seed_product( $id, $category, $hat, $record, $index ) {
 	$details = signal_seed_render( 'product-details', array(
 		'materials' => $specs,
 		'care'      => esc_html( $care ),
-		'guide'     => $hat
-			? '<p>Adjust the back strap for fit. Measure around your head where the cap will sit.</p><p>Demo size range: 21.5–24 in (55–61 cm).</p>'
-			: '<p>Lay a tee you like flat. Measure across the chest, just below the armholes. Demo garment measurements:</p><table><thead><tr><th scope="col">Size</th><th scope="col">Chest width</th></tr></thead><tbody><tr><th scope="row">S</th><td>20 in / 51 cm</td></tr><tr><th scope="row">M</th><td>21 in / 53 cm</td></tr><tr><th scope="row">L</th><td>22 in / 56 cm</td></tr><tr><th scope="row">XL</th><td>23 in / 58 cm</td></tr></tbody></table>',
+		'guide'     => form_edit_seed_size_guide( $hat ),
 	) );
 	update_post_meta( $id, '_form_edit_details', wp_slash( $details ) );
 	update_post_meta( $id, '_form_edit_new', (int) ( 0 === $index ) );
@@ -360,20 +364,61 @@ function signal_seed_menu( $items ) {
 	foreach ( wp_get_nav_menu_items( $id ) ?: array() as $entry ) {
 		$existing[ $entry->object . ':' . $entry->object_id ] = $entry->ID;
 	}
-	foreach ( $items as $position => list( $label, $object, $object_id ) ) {
-		signal_seed_result( wp_update_nav_menu_item( $id, $existing[ $object . ':' . $object_id ] ?? 0, array(
+	foreach ( $items as $position => $item ) {
+		list( $label, $object, $object_id ) = $item;
+		$key = $object . ':' . $object_id;
+		$existing[ $key ] = signal_seed_result( wp_update_nav_menu_item( $id, $existing[ $key ] ?? 0, array(
 			'menu-item-title'     => $label,
 			'menu-item-object'    => $object,
 			'menu-item-object-id' => $object_id,
 			'menu-item-type'      => 'page' === $object ? 'post_type' : 'taxonomy',
 			'menu-item-status'    => 'publish',
 			'menu-item-position'  => $position + 1,
+			'menu-item-parent-id' => isset( $item[3] ) ? $existing[ 'page:' . $item[3] ] : 0,
 		) ) );
 	}
 	$locations                   = get_theme_mod( 'nav_menu_locations', array() );
 	$locations['primary']        = $id;
 	$locations['primary_mobile'] = $id;
 	set_theme_mod( 'nav_menu_locations', $locations );
+}
+
+function form_edit_seed_pages( $links, $art ) {
+	$titles = array(
+		'about'            => 'About',
+		'lookbook'         => 'Lookbook',
+		'contact'          => 'Contact',
+		'faq'              => 'FAQ',
+		'shipping-returns' => 'Shipping & Returns',
+		'size-guide'       => 'Size Guide',
+		'care-guide'       => 'Care Guide',
+	);
+	$pages = array();
+	$new = array();
+	foreach ( $titles as $slug => $title ) {
+		$page = get_page_by_path( $slug, OBJECT, 'page' );
+		$pages[ $slug ] = $page ? (int) $page->ID : signal_seed_post( 'page', $slug, $title, '' );
+		if ( ! $page ) {
+			update_post_meta( $pages[ $slug ], '_wp_page_template', 'page-blank.php' );
+		}
+		$links[ str_replace( '-', '_', $slug ) . '_url' ] = esc_url( get_permalink( $pages[ $slug ] ) );
+		$new[ $slug ] = ! $page;
+	}
+	foreach ( $pages as $slug => $id ) {
+		if ( $new[ $slug ] ) {
+			$content = signal_seed_render( 'pages/' . $slug, $links + $art + array(
+				'tee_guide' => form_edit_seed_size_guide( false ),
+				'cap_guide' => form_edit_seed_size_guide( true ),
+			) );
+			signal_seed_result( wp_update_post( array( 'ID' => $id, 'post_content' => wp_slash( $content ) ), true ) );
+		}
+	}
+	if ( ! get_theme_mod( '404_block' ) ) {
+		$block = get_page_by_path( 'form-edit-404', OBJECT, 'blocks' );
+		$block_id = $block ? $block->ID : signal_seed_post( 'blocks', 'form-edit-404', 'FORM / EDIT — 404', signal_seed_render( 'pages/404', $links ) );
+		set_theme_mod( '404_block', $block_id );
+	}
+	return array( $pages, $links );
 }
 
 $tees = array(
@@ -483,18 +528,22 @@ $links = array(
 	'product_url' => esc_url( $product_url ),
 	'account_url' => esc_url( wc_get_page_permalink( 'myaccount' ) ),
 	'cart_url'    => esc_url( wc_get_cart_url() ),
+	'home_url'    => esc_url( home_url( '/' ) ),
 );
-$home = signal_seed_post( 'page', 'signal-home', 'Home', signal_seed_render( 'homepage', $links + array(
+$art = array(
 	'hero_image'   => signal_seed_media( 'hero.webp', 'Block 01 Tee and Orbit 03 Cap arranged on a studio surface' ),
 	'lookbook_image'  => signal_seed_media( 'lookbook.webp', 'Grid 02 Tee in Stone paired with the Grid 02 Cap in Ink' ),
 	'process_layout'  => signal_seed_media( 'process-layout.webp', 'Four-square artwork drawn on a ruled layout sheet' ),
 	'process_print'   => signal_seed_media( 'process-print.webp', 'Close-up of the four-square print on a cotton tee' ),
 	'process_stitch'  => signal_seed_media( 'process-stitch.webp', 'Close-up of the four-square embroidery on a cap' ),
+);
+$home = signal_seed_post( 'page', 'signal-home', 'Home', signal_seed_render( 'homepage', $links + $art + array(
 	'featured_ids' => implode( ',', array( $products['carrier-wave'], $products['receiver-cap'], $products['night-grid'] ) ),
 ) ) );
 update_post_meta( $home, '_wp_page_template', 'page-blank.php' );
 update_option( 'show_on_front', 'page' );
 update_option( 'page_on_front', $home );
+list( $content_pages, $links ) = form_edit_seed_pages( $links, $art + array( 'about_image' => $art['process_layout'] ) );
 $footer = signal_seed_post( 'blocks', 'signal-footer', 'FORM / EDIT Footer', signal_seed_render( 'footer', $links ) );
 
 foreach ( array(
@@ -523,6 +572,13 @@ signal_seed_menu( array(
 	array( 'Edition 01', 'page', wc_get_page_id( 'shop' ) ),
 	array( 'Tees', 'product_cat', $tees_id ),
 	array( 'Caps', 'product_cat', $hats_id ),
+	array( 'About', 'page', $content_pages['about'] ),
+	array( 'Lookbook', 'page', $content_pages['lookbook'] ),
+	array( 'Contact', 'page', $content_pages['contact'] ),
+	array( 'FAQ', 'page', $content_pages['faq'], $content_pages['contact'] ),
+	array( 'Shipping & Returns', 'page', $content_pages['shipping-returns'], $content_pages['contact'] ),
+	array( 'Size Guide', 'page', $content_pages['size-guide'], $content_pages['contact'] ),
+	array( 'Care Guide', 'page', $content_pages['care-guide'], $content_pages['contact'] ),
 ) );
 
 $logo = signal_seed_media( 'wordmark.png', 'FORM / EDIT' );

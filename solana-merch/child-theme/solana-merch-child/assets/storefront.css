@@ -111,6 +111,36 @@ body :focus-visible { outline: 2px solid var(--edit-navy); outline-offset: 3px; 
 .edit-note { margin-bottom: clamp(66px, 9vw, 130px); }
 .edit-note .alt-font { color: var(--edit-text); font-size: clamp(38px, 6.4vw, 96px); line-height: .94; letter-spacing: -.07em; margin-bottom: 25px; }
 
+.edit-page {
+	padding-inline: var(--edit-gutter);
+	padding-block: clamp(42px, 7vw, 104px) !important;
+}
+.edit-page h1 {
+	font-size: clamp(44px, 6.1vw, 96px);
+	font-weight: 500;
+	line-height: .94;
+	letter-spacing: -.065em;
+}
+.edit-page h2 {
+	font-size: clamp(24px, 3vw, 42px);
+	font-weight: 500;
+	line-height: 1;
+	letter-spacing: -.045em;
+}
+.edit-page-lede { max-width: 31ch; font-size: clamp(17px, 1.55vw, 22px); }
+.edit-page .edit-page-rule { margin-top: clamp(18px, 4vw, 56px); padding-top: 24px; border-top: 1px solid var(--edit-rule); }
+.edit-page-panel > .col-inner {
+	padding: clamp(18px, 3vw, 44px);
+	border: 1px solid var(--edit-rule);
+	background: var(--edit-gallery);
+}
+.edit-page-panel hr { width: 100%; max-width: none; border-color: var(--edit-rule); opacity: 1; }
+.edit-page-panel .button { margin-bottom: 0; }
+.edit-page-caption { margin: 14px 0 0; color: var(--edit-muted); font-size: .85em; }
+.edit-page-accordion .accordion-title { border-color: var(--edit-rule); }
+.edit-page-size table { background: var(--edit-paper); }
+.edit-page-404 .edit-page-panel h2:last-child { margin-bottom: 0; }
+
 .edit-service, .edit-module { padding-inline: var(--edit-gutter); }
 .edit-service { margin-top: 26px; }
 .edit-service .section-content { border-block: 1px solid var(--edit-rule); }

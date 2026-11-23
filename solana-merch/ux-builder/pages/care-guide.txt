@@ -1,0 +1,17 @@
+[section class="edit-page" padding="0px"]
+[row]
+[col span="5" span__sm="12"]
+[ux_text]<p class="edit-label">07 / CARE NOTES</p><h1>Care <em>guide.</em></h1><p class="edit-page-lede">A few simple habits to preserve the print, thread and shape of your piece.</p>[/ux_text]
+[/col]
+[col span="7" span__sm="12" class="edit-page-panel"]
+[ux_text]
+<p class="edit-label">01 / COTTON JERSEY</p><h2>Printed tees.</h2>
+<p>Wash cold, inside out, with like colors. Hang dry and avoid ironing directly over the print.</p>
+<hr>
+<p class="edit-label">02 / COTTON TWILL</p><h2>Embroidered caps.</h2>
+<p>Spot clean with a damp cloth and air dry. Check the garment label before washing.</p>
+[/ux_text]
+[button text="See the size guide" link="{{size_guide_url}}"]
+[/col]
+[/row]
+[/section]

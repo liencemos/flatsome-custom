@@ -1,0 +1,27 @@
+[section class="edit-page edit-page-about" padding="0px"]
+[row v_align="middle"]
+[col span="5" span__sm="12"]
+[ux_text]
+<p class="edit-label">01 / THE STUDIO</p>
+<h1>Clothes for<br><em>everyday forms.</em></h1>
+<p class="edit-page-lede">FORM / EDIT is a studio for graphic tees and embroidered caps. Each edition starts with one question: how much can we say with one shape?</p>
+[/ux_text]
+[button text="See the lookbook" link="{{lookbook_url}}"]
+[/col]
+[col span="7" span__sm="12"]
+[ux_image id="{{about_image}}" image_size="original"]
+<p class="edit-caption edit-label">FIG. 01 / FROM THE STUDIO</p>
+[/col]
+[/row]
+[row class="edit-page-rule"]
+[col span="4" span__sm="12"]
+[ux_text]<p class="edit-label">METHOD / 001</p><h2>Start with a shape.</h2><p>A square, line or circle becomes a study in proportion and negative space.</p>[/ux_text]
+[/col]
+[col span="4" span__sm="12"]
+[ux_text]<p class="edit-label">METHOD / 002</p><h2>Choose the surface.</h2><p>Solid graphics are screen printed on cotton jersey; smaller marks are embroidered on cotton twill.</p>[/ux_text]
+[/col]
+[col span="4" span__sm="12"]
+[ux_text]<p class="edit-label">METHOD / 003</p><h2>Keep it wearable.</h2><p>Relaxed cuts, adjustable straps and an Ink and Stone palette let the graphics do the talking.</p>[/ux_text]
+[/col]
+[/row]
+[/section]

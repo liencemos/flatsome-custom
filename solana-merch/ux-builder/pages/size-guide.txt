@@ -1,0 +1,17 @@
+[section class="edit-page edit-page-size" padding="0px"]
+[row]
+[col span="5" span__sm="12"]
+[ux_text]<p class="edit-label">06 / FIT NOTES</p><h1>Size <em>guide.</em></h1><p class="edit-page-lede">Compare garment measurements with a piece you already wear. All measurements are for the demo collection.</p>[/ux_text]
+[/col]
+[col span="7" span__sm="12" class="edit-page-panel"]
+[ux_text]
+<p class="edit-label">01 / COTTON JERSEY</p><h2>Printed tees.</h2>
+{{tee_guide}}
+<hr>
+<p class="edit-label">02 / COTTON TWILL</p><h2>Embroidered caps.</h2>
+{{cap_guide}}
+[/ux_text]
+[button text="Shop Edition 01" link="{{shop_url}}"]
+[/col]
+[/row]
+[/section]

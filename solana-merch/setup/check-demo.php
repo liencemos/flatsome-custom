@@ -41,6 +41,29 @@ foreach ( array( 'woocommerce_layered_nav', 'woocommerce_price_filter' ) as $wid
 	signal_check( is_active_widget( false, false, $widget ), "Missing WooCommerce catalog widget {$widget}." );
 }
 signal_check( has_shortcode( get_theme_mod( 'html_shop_page', '' ), 'block' ) && 'blocks' === get_post_type( get_theme_mod( 'footer_block' ) ), 'Expected Flatsome UX Blocks on the shop header and footer.' );
+$footer = get_post( get_theme_mod( 'footer_block' ) );
+$locations = get_nav_menu_locations();
+signal_check( ! empty( $locations['primary'] ) && $locations['primary'] === ( $locations['primary_mobile'] ?? null ), 'Expected desktop and mobile demo navigation.' );
+$menu_items = wp_get_nav_menu_items( $locations['primary'] );
+foreach ( array( 'about', 'lookbook', 'contact', 'faq', 'shipping-returns', 'size-guide', 'care-guide' ) as $slug ) {
+	$page = get_page_by_path( $slug, OBJECT, 'page' );
+	signal_check( $page && 'publish' === $page->post_status, "Missing published page: {$slug}." );
+	signal_check( false !== strpos( $footer->post_content, esc_url( get_permalink( $page ) ) ), "Missing footer link: {$slug}." );
+	$matches = array_filter( $menu_items ?: array(), static function ( $item ) use ( $page ) {
+		return 'page' === $item->object && $page->ID === (int) $item->object_id;
+	} );
+	signal_check( 1 === count( $matches ), "Expected exactly one header menu entry: {$slug}." );
+	signal_check( 'page-blank.php' === get_page_template_slug( $page ) && has_shortcode( $page->post_content, 'section' ) && false === strpos( $page->post_content, '{{' ), "Expected seeded Flatsome layout: {$slug}." );
+}
+$faq = get_page_by_path( 'faq' );
+signal_check( has_shortcode( $faq->post_content, 'accordion' ), 'Expected a native Flatsome FAQ accordion.' );
+$size_page = get_page_by_path( 'size-guide' );
+$tee = get_page_by_path( 'carrier-wave', OBJECT, 'product' );
+preg_match( '~<table>.*?</table>~s', $size_page->post_content, $size_table );
+signal_check( $tee && ! empty( $size_table[0] ) && false !== strpos( get_post_meta( $tee->ID, '_form_edit_details', true ), $size_table[0] ), 'Expected the same tee size table on the Size Guide and product lightbox.' );
+$not_found = get_post( get_theme_mod( '404_block' ) );
+signal_check( $not_found && 'blocks' === $not_found->post_type && has_shortcode( $not_found->post_content, 'section' ) && false !== strpos( $not_found->post_content, 'edit-page-404' ), 'Expected Flatsome to use the demo 404 UX Block.' );
+WP_CLI::log( 'Editorial demo verified: seven Flatsome pages, desktop/mobile and footer links, FAQ accordion, shared size table and 404 UX Block.' );
 $cart = get_post( wc_get_page_id( 'cart' ) );
 signal_check( $cart && has_shortcode( $cart->post_content, 'woocommerce_cart' ) && ! has_block( 'woocommerce/cart', $cart ), 'Expected the classic WooCommerce cart so Flatsome can refresh its header bag count.' );
 if ( metadata_exists( 'post', $cart->ID, '_signal_original_cart_content' ) ) {
