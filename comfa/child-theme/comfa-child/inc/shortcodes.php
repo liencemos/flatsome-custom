@@ -77,7 +77,17 @@ add_shortcode(
 add_shortcode(
 	'cf_color_nav',
 	function () {
-		$terms = get_terms( array( 'taxonomy' => 'pa_color', 'hide_empty' => true ) );
+		// Term counts include products the shop hides (catalog visibility, out of stock), so list by visible products.
+		$ids   = get_posts(
+			array(
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'fields'         => 'ids',
+				'posts_per_page' => -1,
+				'tax_query'      => WC()->query->get_tax_query(),
+			)
+		);
+		$terms = $ids ? get_terms( array( 'taxonomy' => 'pa_color', 'object_ids' => $ids ) ) : array();
 		if ( is_wp_error( $terms ) || ! $terms ) {
 			return '';
 		}
