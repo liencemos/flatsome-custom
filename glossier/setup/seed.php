@@ -139,16 +139,17 @@ if ( '/%postname%/' !== get_option( 'permalink_structure' ) ) {
 
 WC_Install::create_pages();
 
-// Demo shipping, only on a store that has none: $5 flat rate, free from $40.
-if ( ! WC_Shipping_Zones::get_zones() ) {
+// Demo shipping, only on a store with no shipping methods in any zone: free
+// from $40 (listed first so it is the default once it applies), else $5.
+if ( ! WC_Shipping_Zones::get_zones() && ! WC_Shipping_Zones::get_zone( 0 )->get_shipping_methods() ) {
 	$dewier_zone = new WC_Shipping_Zone();
 	$dewier_zone->set_zone_name( 'United States' );
 	$dewier_zone->add_location( 'US', 'country' );
 	$dewier_zone->save();
-	$dewier_flat = $dewier_zone->add_shipping_method( 'flat_rate' );
-	update_option( 'woocommerce_flat_rate_' . $dewier_flat . '_settings', array( 'title' => 'Standard shipping', 'tax_status' => 'none', 'cost' => '5' ) );
 	$dewier_free = $dewier_zone->add_shipping_method( 'free_shipping' );
 	update_option( 'woocommerce_free_shipping_' . $dewier_free . '_settings', array( 'title' => 'Free shipping', 'requires' => 'min_amount', 'min_amount' => '40', 'ignore_discounts' => 'no' ) );
+	$dewier_flat = $dewier_zone->add_shipping_method( 'flat_rate' );
+	update_option( 'woocommerce_flat_rate_' . $dewier_flat . '_settings', array( 'title' => 'Standard shipping', 'tax_status' => 'none', 'cost' => '5' ) );
 }
 
 /* ---------- Attributes and categories ---------- */

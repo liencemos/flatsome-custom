@@ -36,7 +36,7 @@ licensed typeface is included.
 Both seed scripts can be run again. Products are matched by SKU and keep their stock
 settings, menus are rebuilt, and an existing home page layout is kept unless you run
 `wp eval-file seed-site.php reset-home`. `seed.php` adds a demo shipping zone ($5 flat
-rate, free from $40) only when the store has no shipping zones.
+rate, free from $40) only when the store has no shipping methods at all.
 
 ## Editing
 
