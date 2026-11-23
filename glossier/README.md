@@ -44,10 +44,12 @@ at all.
 
 - Home page sections are Elementor widgets in the **Dewier** category: Hero, Gift strip,
   Product carousel, Promo cards, Story and Image carousel.
-- The help page (`/help/`) uses two more widgets: Help Search and FAQ. Questions are
-  rows of the FAQ widget, grouped by their Topic field; the topic list, the mobile topic
-  menu and the search suggestions are built from them. The bundled questions and answers
-  are sample text, to be replaced with the shop's own policies.
+- The help page (`/help/`) uses three more widgets: Help Search, FAQ and Help Contact.
+  Questions are rows of the FAQ widget, grouped by their Topic field; the topic list with
+  its question counts, the mobile topic menu and the search suggestions are built from
+  them. The topic shortcuts under the search box are a list of topic names in the Help
+  Search widget; a name that matches no topic on the page is not shown. The bundled
+  questions and answers are sample text, to be replaced with the shop's own policies.
 - The header and footer live in the child theme because Elementor free has no theme
   builder. Menus are under Appearance > Menus (Primary plus five footer locations).
 - Announcement bar messages: filter `dewier_promo_messages`.

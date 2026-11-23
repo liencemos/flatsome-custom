@@ -460,6 +460,8 @@ class Dewier_Widget_Help_Search extends Dewier_Widget {
 			array( 'id' => 'title', 'label' => __( 'Title', 'dewier' ), 'type' => 'text', 'default' => __( 'How can we help?', 'dewier' ) ),
 			array( 'id' => 'placeholder', 'label' => __( 'Search placeholder', 'dewier' ), 'type' => 'text', 'default' => __( 'Search', 'dewier' ) ),
 			array( 'id' => 'empty', 'label' => __( 'No results text', 'dewier' ), 'type' => 'text', 'default' => __( 'No results found', 'dewier' ) ),
+			array( 'id' => 'topics_label', 'label' => __( 'Topic shortcuts label', 'dewier' ), 'type' => 'text', 'default' => __( 'Popular topics', 'dewier' ) ),
+			array( 'id' => 'topics', 'label' => __( 'Topic shortcuts (one FAQ topic per line)', 'dewier' ), 'type' => 'textarea', 'default' => implode( "\n", array( __( 'Shipping', 'dewier' ), __( 'Returns & Exchanges', 'dewier' ), __( 'Orders', 'dewier' ) ) ) ),
 			array( 'id' => 'background', 'label' => __( 'Background', 'dewier' ), 'type' => 'color', 'default' => '#f5dbdf' ),
 		);
 	}
@@ -468,8 +470,9 @@ class Dewier_Widget_Help_Search extends Dewier_Widget {
 	 * The search suggests the questions of the Dewier FAQ widgets on the same page.
 	 */
 	protected function render() {
-		$s  = $this->get_settings_for_display();
-		$id = 'dw-help-' . $this->get_id();
+		$s      = $this->get_settings_for_display();
+		$id     = 'dw-help-' . $this->get_id();
+		$topics = array_filter( array_map( 'trim', explode( "\n", (string) $s['topics'] ) ), 'strlen' );
 		?>
 		<section class="dw-help" style="background-color:<?php echo esc_attr( $s['background'] ); ?>">
 			<h1 class="dw-help__title"><?php echo esc_html( $s['title'] ); ?></h1>
@@ -481,6 +484,18 @@ class Dewier_Widget_Help_Search extends Dewier_Widget {
 				<ul class="dw-help__results" id="<?php echo esc_attr( $id ); ?>-results" role="listbox" aria-label="<?php esc_attr_e( 'Matching questions', 'dewier' ); ?>" hidden></ul>
 				<span class="screen-reader-text dw-help__status" role="status"></span>
 			</form>
+			<?php if ( $topics ) : ?>
+				<nav class="dw-help__topics" aria-label="<?php echo esc_attr( $s['topics_label'] ? $s['topics_label'] : __( 'Topics', 'dewier' ) ); ?>">
+					<?php if ( $s['topics_label'] ) : ?>
+						<span class="dw-help__topics-label"><?php echo esc_html( $s['topics_label'] ); ?></span>
+					<?php endif; ?>
+					<ul>
+						<?php foreach ( $topics as $topic ) : ?>
+							<li><a class="dw-help__chip" href="#topic-<?php echo esc_attr( sanitize_title( $topic ) ); ?>"><?php echo esc_html( $topic ); ?></a></li>
+						<?php endforeach; ?>
+					</ul>
+				</nav>
+			<?php endif; ?>
 		</section>
 		<?php
 	}
@@ -574,7 +589,14 @@ class Dewier_Widget_Faq extends Dewier_Widget {
 					<nav class="dw-faq__nav" aria-label="<?php esc_attr_e( 'FAQ topics', 'dewier' ); ?>">
 						<ul>
 							<?php foreach ( $named as $topic ) : ?>
-								<li><a href="#<?php echo esc_attr( $anchors[ $topic ] ); ?>"><?php echo esc_html( $topic ); ?></a></li>
+								<li>
+									<a href="#<?php echo esc_attr( $anchors[ $topic ] ); ?>">
+										<?php echo esc_html( $topic ); ?>
+										<span class="dw-faq__count" aria-hidden="true"><?php echo esc_html( count( $topics[ $topic ] ) ); ?></span>
+										<?php /* translators: %d: number of questions */ ?>
+										<span class="screen-reader-text"><?php echo esc_html( sprintf( _n( '%d question', '%d questions', count( $topics[ $topic ] ), 'dewier' ), count( $topics[ $topic ] ) ) ); ?></span>
+									</a>
+								</li>
 							<?php endforeach; ?>
 						</ul>
 					</nav>
@@ -616,6 +638,53 @@ class Dewier_Widget_Faq extends Dewier_Widget {
 				</div>
 			</div>
 			<noscript><style>.dw-faq .dw-faq__a{grid-template-rows:1fr;padding-top:1rem;visibility:visible}</style></noscript>
+		</section>
+		<?php
+	}
+}
+
+class Dewier_Widget_Help_Contact extends Dewier_Widget {
+
+	public function get_name() {
+		return 'dewier-help-contact';
+	}
+
+	public function get_title() {
+		return __( 'Dewier Help Contact', 'dewier' );
+	}
+
+	public function get_icon() {
+		return 'eicon-mail';
+	}
+
+	protected function fields() {
+		return array(
+			array( 'id' => 'title', 'label' => __( 'Title', 'dewier' ), 'type' => 'text', 'default' => __( 'Still need help?', 'dewier' ) ),
+			array( 'id' => 'text', 'label' => __( 'Text', 'dewier' ), 'type' => 'textarea', 'default' => __( 'Send us a message and a person will get back to you.', 'dewier' ) ),
+			array( 'id' => 'button', 'label' => __( 'Button label', 'dewier' ), 'type' => 'text', 'default' => __( 'Contact us', 'dewier' ) ),
+			array( 'id' => 'link', 'label' => __( 'Link', 'dewier' ), 'type' => 'url', 'default' => home_url( '/contact/' ) ),
+		);
+	}
+
+	protected function render() {
+		$s = $this->get_settings_for_display();
+		?>
+		<section class="dw-help-contact">
+			<div class="dw-help-contact__card">
+				<div class="dw-help-contact__copy">
+					<?php if ( $s['title'] ) : ?>
+						<h2 class="dw-help-contact__title"><?php echo esc_html( $s['title'] ); ?></h2>
+					<?php endif; ?>
+					<?php if ( $s['text'] ) : ?>
+						<p><?php echo esc_html( $s['text'] ); ?></p>
+					<?php endif; ?>
+				</div>
+				<?php
+				if ( $s['button'] ) {
+					echo dewier_button( $s['button'], self::url( $s['link'] ), 'dark' ); // phpcs:ignore WordPress.Security.EscapeOutput
+				}
+				?>
+			</div>
 		</section>
 		<?php
 	}

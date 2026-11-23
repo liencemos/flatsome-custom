@@ -16,7 +16,7 @@ add_action( 'elementor/elements/categories_registered', 'dewier_elementor_catego
 
 function dewier_elementor_widgets( $manager ) {
 	require_once DEWIER_DIR . '/inc/elementor/widgets.php';
-	foreach ( array( 'Hero', 'Gift', 'Products', 'Promo_Cards', 'Story', 'Carousel', 'Help_Search', 'Faq' ) as $name ) {
+	foreach ( array( 'Hero', 'Gift', 'Products', 'Promo_Cards', 'Story', 'Carousel', 'Help_Search', 'Faq', 'Help_Contact' ) as $name ) {
 		$class = 'Dewier_Widget_' . $name;
 		$manager->register( new $class() );
 	}

@@ -234,6 +234,7 @@ function dewier_site_export( $file, $title, $elements ) {
 $dewier_help = array(
 	dewier_site_element( 'dewier-help-search' ),
 	dewier_site_element( 'dewier-faq' ),
+	dewier_site_element( 'dewier-help-contact' ),
 );
 
 // Existing layouts are kept unless the script is run with "reset-home" or "reset-help".

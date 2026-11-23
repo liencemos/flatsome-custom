@@ -341,6 +341,63 @@
 			}
 		}
 
+		// Wraps each occurrence of a search word in the text in <mark>.
+		function highlight( target, text, words ) {
+			var lower = text.toLowerCase();
+			var from = 0;
+			while ( lower.length === text.length && from < text.length ) {
+				var start = -1;
+				var length = 0;
+				words.forEach( function ( word ) {
+					var at = lower.indexOf( word, from );
+					if ( at > -1 && ( -1 === start || at < start || ( at === start && word.length > length ) ) ) {
+						start = at;
+						length = word.length;
+					}
+				} );
+				if ( -1 === start ) {
+					break;
+				}
+				var mark = doc.createElement( 'mark' );
+				mark.textContent = text.slice( start, start + length );
+				target.appendChild( doc.createTextNode( text.slice( from, start ) ) );
+				target.appendChild( mark );
+				from = start + length;
+			}
+			target.appendChild( doc.createTextNode( text.slice( from ) ) );
+		}
+
+		// Marks the topic being read in the topic list.
+		function spy() {
+			spying = false;
+			all( '.dw-faq__nav' ).forEach( function ( nav ) {
+				var current = null;
+				var links = all( 'a', nav );
+				links.forEach( function ( link ) {
+					var topic = doc.getElementById( link.getAttribute( 'href' ).slice( 1 ) );
+					if ( topic && topic.getBoundingClientRect().top <= window.innerHeight * 0.35 ) {
+						current = link;
+					}
+				} );
+				links.forEach( function ( link ) {
+					if ( link === current ) {
+						link.setAttribute( 'aria-current', 'true' );
+					} else {
+						link.removeAttribute( 'aria-current' );
+					}
+				} );
+			} );
+		}
+
+		function requestSpy() {
+			if ( ! spying ) {
+				spying = true;
+				window.requestAnimationFrame( spy );
+			}
+		}
+
+		var spying = false;
+
 		function parts( target ) {
 			var form = target && target.closest ? target.closest( '.dw-help__search' ) : null;
 			return form ? {
@@ -395,7 +452,17 @@
 				option.setAttribute( 'role', 'option' );
 				option.setAttribute( 'aria-disabled', 'false' );
 				option.dataset.target = item.id;
-				option.textContent = item.querySelector( '.dw-faq__q' ).textContent.trim();
+				var hit = doc.createElement( 'span' );
+				hit.className = 'dw-help__hit';
+				highlight( hit, item.querySelector( '.dw-faq__q' ).textContent.trim(), words );
+				option.appendChild( hit );
+				var title = item.closest( '.dw-faq__topic' ).querySelector( '.dw-faq__topic-title' );
+				if ( title ) {
+					var topic = doc.createElement( 'span' );
+					topic.className = 'dw-help__hit-topic';
+					topic.textContent = title.textContent;
+					option.appendChild( topic );
+				}
 				s.list.appendChild( option );
 			} );
 			if ( ! hits.length ) {
@@ -512,6 +579,18 @@
 				choose( s, s.list.querySelector( '.is-active' ) || options( s )[0] );
 			}
 		} );
+
+		// Shortcuts to topics that are not on the page are left out.
+		all( '.dw-help__chip' ).forEach( function ( chip ) {
+			var topic = doc.getElementById( chip.getAttribute( 'href' ).slice( 1 ) );
+			chip.parentNode.hidden = ! topic || ! topic.getClientRects().length;
+		} );
+
+		if ( doc.querySelector( '.dw-faq__nav' ) ) {
+			window.addEventListener( 'scroll', requestSpy, { passive: true } );
+			window.addEventListener( 'resize', requestSpy );
+			spy();
+		}
 
 		window.addEventListener( 'hashchange', openFromHash );
 		openFromHash();
