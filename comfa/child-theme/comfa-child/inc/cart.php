@@ -150,14 +150,15 @@ add_filter(
 	3
 );
 
-// WooCommerce links its privacy notices to the Settings > Privacy page even while that page is a draft.
-add_filter(
-	'woocommerce_get_privacy_policy_text',
-	function ( $text ) {
-		$page_id = wc_privacy_policy_page_id();
-		if ( $page_id && 'publish' !== get_post_status( $page_id ) ) {
-			$text = str_replace( '[privacy_policy]', __( 'privacy policy', 'woocommerce' ), $text );
-		}
-		return $text;
+/**
+ * WooCommerce links [privacy_policy] to the Settings > Privacy page even while that page is a draft.
+ */
+function cf_unlink_unpublished_privacy_policy( $text ) {
+	$page_id = wc_privacy_policy_page_id();
+	if ( $page_id && 'publish' !== get_post_status( $page_id ) ) {
+		$text = str_replace( '[privacy_policy]', __( 'privacy policy', 'woocommerce' ), $text );
 	}
-);
+	return $text;
+}
+add_filter( 'woocommerce_get_privacy_policy_text', 'cf_unlink_unpublished_privacy_policy' );
+add_filter( 'woocommerce_get_terms_and_conditions_checkbox_text', 'cf_unlink_unpublished_privacy_policy' );
