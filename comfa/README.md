@@ -36,5 +36,5 @@ Script chép child theme, ảnh và nội dung UX Builder vào site, kích hoạ
 
 - Thay ảnh, mô tả, đánh giá mẫu và các trang chính sách bằng nội dung thật.
 - Số "250,000+ Items Given" và chương trình "One Bought = One Given" là nội dung mẫu; chỉ giữ nếu shop thật sự có chương trình này.
-- Form đăng ký nhận tin lưu email vào option `cf_subscribers` và gọi action `cf_newsletter_signup`; cần nối với dịch vụ email của bạn.
+- Form đăng ký nhận tin lưu mỗi email thành một mục trong menu Subscribers của wp-admin và gọi action `cf_newsletter_signup`; cần nối với dịch vụ email của bạn (kể cả bước xác nhận email nếu cần).
 - Cấu hình vận chuyển và cổng thanh toán thật. Dữ liệu mẫu bật COD, phí giao $6, freeship từ $75 và mã `HELLO10` giảm 10%.

@@ -2,11 +2,57 @@
 /**
  * Newsletter sign-up (footer form and welcome offer).
  *
- * Addresses are stored in the `cf_subscribers` option and passed to the
- * `cf_newsletter_signup` action so a mailing service can be connected.
+ * Each address is stored as a private `cf_subscriber` post (listed under
+ * "Subscribers" in wp-admin) and passed to the `cf_newsletter_signup` action
+ * so a mailing service can be connected.
  */
 
 defined( 'ABSPATH' ) || exit;
+
+add_action(
+	'init',
+	function () {
+		register_post_type(
+			'cf_subscriber',
+			array(
+				'labels'              => array(
+					'name'          => __( 'Subscribers', 'comfa' ),
+					'singular_name' => __( 'Subscriber', 'comfa' ),
+				),
+				'public'              => false,
+				'show_ui'             => true,
+				'menu_icon'           => 'dashicons-email',
+				'supports'            => array( 'title' ),
+				'capability_type'     => 'page',
+				'capabilities'        => array( 'create_posts' => 'do_not_allow' ),
+				'map_meta_cap'        => true,
+				'exclude_from_search' => true,
+				'rewrite'             => false,
+			)
+		);
+	}
+);
+
+/**
+ * Store one sign-up. Returns true when the address is new.
+ */
+function cf_newsletter_store( $email ) {
+	$email = strtolower( $email );
+	$slug  = md5( $email );
+	if ( get_posts( array( 'post_type' => 'cf_subscriber', 'name' => $slug, 'post_status' => 'private', 'posts_per_page' => 1, 'fields' => 'ids' ) ) ) {
+		return false;
+	}
+	$id = wp_insert_post(
+		array(
+			'post_type'   => 'cf_subscriber',
+			'post_status' => 'private',
+			'post_title'  => $email,
+			'post_name'   => $slug,
+		),
+		true
+	);
+	return ! is_wp_error( $id );
+}
 
 function cf_newsletter_form( $atts = array() ) {
 	$atts = shortcode_atts(
@@ -54,12 +100,7 @@ function cf_newsletter_submit() {
 	}
 	set_transient( $ip_key, $tries + 1, 10 * MINUTE_IN_SECONDS );
 
-	$list = get_option( 'cf_subscribers', array() );
-	$list = is_array( $list ) ? $list : array();
-	$key  = strtolower( $email );
-	if ( ! isset( $list[ $key ] ) && count( $list ) < 5000 ) {
-		$list[ $key ] = time();
-		update_option( 'cf_subscribers', $list, false );
+	if ( cf_newsletter_store( $email ) ) {
 		do_action( 'cf_newsletter_signup', $email );
 	}
 	wp_send_json_success( array( 'message' => $success ) );
