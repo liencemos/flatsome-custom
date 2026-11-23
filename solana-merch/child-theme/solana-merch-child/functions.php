@@ -273,7 +273,8 @@ add_shortcode( 'form_edit_contact', function () {
 } );
 
 function form_edit_contact_message( $message ) {
-	return trim( wp_strip_all_tags( wp_check_invalid_utf8( $message ) ) );
+	$message = str_replace( array( "\r\n", "\r" ), "\n", $message );
+	return preg_replace( '/(?![\n\t])\p{Cc}/u', '', $message ) ?? '';
 }
 
 function form_edit_contact_valid_phone( $phone ) {
@@ -305,9 +306,9 @@ function form_edit_request_contact() {
 	$sent = $honeypot_empty
 		&& '' !== $name && mb_strlen( $name ) <= 100
 		&& strlen( $email ) <= 254 && is_email( $email )
-		&& '' !== $message && mb_strlen( $message ) <= 3000
+		&& '' !== trim( $message ) && mb_strlen( $message ) <= 3000
 		&& form_edit_reserve_mail_request( 'contact', strtolower( $email ) . '|' . $message )
-		&& wp_mail( get_option( 'admin_email' ), 'FORM / EDIT: studio enquiry', "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\n\n{$message}", array( 'Reply-To: ' . $email ) );
+		&& wp_mail( get_option( 'admin_email' ), 'FORM / EDIT: studio enquiry', "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\n\n{$message}", array( 'Content-Type: text/plain', 'Reply-To: ' . $email ) );
 	wp_safe_redirect( add_query_arg( 'studio_contact', $sent ? 'sent' : 'error', get_permalink( get_queried_object_id() ) ) . '#studio-contact', 303 );
 	exit;
 }
