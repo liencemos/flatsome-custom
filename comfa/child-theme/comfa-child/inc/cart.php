@@ -150,10 +150,14 @@ add_filter(
 	3
 );
 
-// WooCommerce links its checkout privacy notice to the Settings > Privacy page even while that page is a draft.
+// WooCommerce links its privacy notices to the Settings > Privacy page even while that page is a draft.
 add_filter(
-	'woocommerce_privacy_policy_page_id',
-	function ( $page_id ) {
-		return $page_id && 'publish' === get_post_status( $page_id ) ? $page_id : 0;
+	'woocommerce_get_privacy_policy_text',
+	function ( $text ) {
+		$page_id = wc_privacy_policy_page_id();
+		if ( $page_id && 'publish' !== get_post_status( $page_id ) ) {
+			$text = str_replace( '[privacy_policy]', __( 'privacy policy', 'woocommerce' ), $text );
+		}
+		return $text;
 	}
 );
