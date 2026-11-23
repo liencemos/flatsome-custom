@@ -44,6 +44,8 @@ function cf_seed_asset( $filename ) {
 	$id = wp_insert_attachment(
 		array(
 			'post_title'     => ucwords( str_replace( '-', ' ', pathinfo( $filename, PATHINFO_FILENAME ) ) ),
+			// Prefixed so an image such as mission.webp cannot take the slug of the Mission page.
+			'post_name'      => 'comfa-image-' . sanitize_title( pathinfo( $filename, PATHINFO_FILENAME ) ),
 			'post_status'    => 'inherit',
 			'post_mime_type' => wp_check_filetype( $file )['type'],
 		),
