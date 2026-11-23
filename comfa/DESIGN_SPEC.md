@@ -7,13 +7,14 @@ Comfa is a Flatsome + WooCommerce storefront for printed tees, caps, hoodies and
 | Token | Value | Used for |
 | --- | --- | --- |
 | Page | `#fdfcf8` | body and header background |
-| Ink | `#030302` | text, dark buttons (`#1b1b1b`) |
-| Navy | `#213858` top bar, `#1a2235` hero, `#1f3557` Add to Bag and checkout |
+| Ink | `#000814` | text, dark buttons, button outlines |
+| Navy | `#213858` top bar, `#003566` secondary buttons, links, savings and badges |
 | Cream | `#ecebdc` | collection banner, mobile chips, story band |
 | Card | `#f3f3f1` | product image background |
 | Soft | `#f8f8f4` | Quick View button, size buttons, info card |
-| Yellow / Green | `#e9b94d` / `#b2c693` | giving bands |
-| Accents | blue `#3860be` savings and badges, red `#d4240d` promo line, orange `#f04e23` wavy underline, sky `#a0c7ff` sign-up button |
+| Yellow | `#ffc300`, hover `#ffd60a` | Add to Bag, checkout and hero buttons, hero sticker, headline underline |
+| Giving bands | `#e9b94d` / `#b2c693` | yellow and green home bands |
+| Accents | red `#d4240d` promo line, orange `#f04e23` wavy underline, sky `#a0c7ff` sign-up button |
 | Footer | `#1b1b1b`, tag chips `#312b2b` |
 | Radius | 12 px tiles and buttons, 8 px cards and chips |
 
@@ -31,7 +32,7 @@ Outfit and Fraunces are set in Flatsome > Theme Options > Typography; Bowlby One
 
 **Header:** two-line navy promo bar, cream sticky header with wordmark left, centred navigation, Login / search / bag right. T-Shirts and Caps open full-width mega menus (UX Blocks). Mobile: menu and search left, wordmark centre, account and bag right.
 
-**Home (UX Builder page):** category chips → navy split hero → four style tiles → "One Bought = One Given" statement → two product rails (intro column + four cards) → six shape tiles → yellow giving band with blob counter → green "Comfort Beyond Tees" tiles → dark footer with sign-up, link columns, guarantee and tag chips.
+**Home (UX Builder page):** category chips → cream hero (copy left, image right, round offer sticker) → four style tiles → scrolling ticker strip → product rail → "Shop by Colour" circles linking to the colour filter → product rail (intro column + four cards each) → six shape tiles → yellow giving band with blob counter → green "Comfort Beyond Tees" tiles → dark footer with sign-up, link columns, guarantee and tag chips.
 
 **Product card:** grey 3:4 image, badge pill, Flatsome colour swatches (swap the image on click), name, price with struck regular price and "10% Pack Savings", "Unisex · Midweight" line, full-width Quick View.
 

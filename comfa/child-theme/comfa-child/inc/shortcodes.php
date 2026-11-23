@@ -55,3 +55,37 @@ add_action(
 		$order->save();
 	}
 );
+
+// Scrolling strip: [cf_ticker text="First phrase|Second phrase"]. The second copy only fills the loop.
+add_shortcode(
+	'cf_ticker',
+	function ( $atts ) {
+		$atts  = shortcode_atts( array( 'text' => '' ), $atts, 'cf_ticker' );
+		$items = array_filter( array_map( 'trim', explode( '|', $atts['text'] ) ) );
+		if ( ! $items ) {
+			return '';
+		}
+		$group = '';
+		foreach ( $items as $item ) {
+			$group .= '<span class="cf-ticker__item">' . esc_html( $item ) . '</span>';
+		}
+		return '<div class="cf-ticker__track"><div class="cf-ticker__group">' . $group . '</div><div class="cf-ticker__group" aria-hidden="true">' . $group . '</div></div>';
+	}
+);
+
+// Colour circles linking to the shop filtered by that colour: [cf_color_nav].
+add_shortcode(
+	'cf_color_nav',
+	function () {
+		$terms = get_terms( array( 'taxonomy' => 'pa_color', 'hide_empty' => true ) );
+		if ( is_wp_error( $terms ) || ! $terms ) {
+			return '';
+		}
+		$html = '';
+		foreach ( $terms as $term ) {
+			$url   = add_query_arg( 'filter_color', $term->slug, wc_get_page_permalink( 'shop' ) );
+			$html .= '<li><a href="' . esc_url( $url ) . '"><span class="cf-color-nav__dot" style="background-color:' . esc_attr( sanitize_hex_color( get_term_meta( $term->term_id, 'ux_color', true ) ) ) . '"></span>' . esc_html( $term->name ) . '</a></li>';
+		}
+		return '<ul class="cf-color-nav">' . $html . '</ul>';
+	}
+);

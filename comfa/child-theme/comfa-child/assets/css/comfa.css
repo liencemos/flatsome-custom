@@ -1,18 +1,18 @@
 /* Comfa storefront. Colours, fonts and layout options live in Flatsome Theme Options; this file adds the brand layer. */
 :root {
-	--cf-ink: #030302;
+	--cf-ink: #000814;
 	--cf-page: #fdfcf8;
-	--cf-navy: #1f3557;
-	--cf-navy-deep: #1a2235;
+	--cf-navy: #003566;
 	--cf-cream: #ecebdc;
 	--cf-card: #f3f3f1;
 	--cf-soft: #f8f8f4;
 	--cf-line: #e2e1d8;
 	--cf-muted: #6b6b66;
-	--cf-yellow: #e9b94d;
+	--cf-yellow: #ffc300;
+	--cf-gold: #ffd60a;
 	--cf-green: #b2c693;
 	--cf-orange: #f04e23;
-	--cf-blue: #3860be;
+	--cf-blue: #003566;
 	--cf-sky: #a0c7ff;
 	--cf-red: #d4240d;
 	--cf-radius: 12px;
@@ -26,7 +26,7 @@
 .cf-serif { font-family: var(--cf-serif); font-weight: 300; letter-spacing: -.01em; }
 .cf-store .button, .cf-store button.button, .cf-store input[type="submit"] { border-radius: var(--cf-radius); font-weight: 800; letter-spacing: 0; text-transform: none; box-shadow: none; }
 .cf-store .button.cf-btn-light { background: #fff; color: var(--cf-ink); min-height: 48px; padding: 0 22px; font-size: 16px; line-height: 48px; margin: 0 4px 8px; }
-.cf-store .button.cf-btn-dark { background: #1b1b1b; color: #fff; min-height: 44px; padding: 0 20px; font-size: 14px; line-height: 44px; }
+.cf-store .button.cf-btn-dark { background: var(--cf-ink); color: #fff; min-height: 44px; padding: 0 20px; font-size: 14px; line-height: 44px; }
 .cf-store .button.cf-btn-light:hover { background: var(--cf-cream); }
 .cf-store .button.cf-btn-dark:hover { background: var(--cf-navy); }
 .cf-store .button.cf-btn-outline { border-width: 1px; font-size: 14px; }
@@ -62,10 +62,10 @@
 .cf-chips .col, .cf-styles .col, .cf-shapes .col { padding-bottom: 0; }
 .cf-hero__row { max-width: 100% !important; }
 .cf-hero__image img { border-radius: var(--cf-radius); width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
-.cf-hero__copy > .col-inner { padding: 24px 6%; }
-.cf-hero__eyebrow { font-size: 28px; margin-bottom: 14px; color: #fff; }
-.cf-hero__title { font-size: clamp(40px, 6.7vw, 96px); line-height: .82; color: #fff; margin-bottom: 22px; }
-.cf-hero__sub { font-size: clamp(17px, 1.7vw, 24px); color: #fff; margin-bottom: 22px; }
+.cf-hero__copy > .col-inner { padding: 24px 6% 24px 12%; }
+.cf-hero__eyebrow { display: flex; align-items: center; gap: 12px; font-size: 20px; margin-bottom: 18px; }
+.cf-hero__title { font-size: clamp(40px, 5vw, 76px); line-height: .9; color: var(--cf-ink); margin-bottom: 22px; }
+.cf-hero__sub { font-size: clamp(17px, 1.5vw, 22px); max-width: 30em; margin-bottom: 24px; }
 .cf-statement__title { font-size: clamp(34px, 4.5vw, 64px); margin-bottom: 10px; }
 .cf-statement__sub { font-size: clamp(17px, 1.6vw, 22px); margin: 0; }
 .cf-rail__label { font-size: 15px; margin-bottom: 4px; }
@@ -210,8 +210,8 @@
 .cf-size-note { display: block; font-size: 12px; font-weight: 400; color: var(--cf-muted); }
 .single_variation_wrap .woocommerce-variation-price { display: none; }
 .cf-store form.cart { margin-bottom: 10px; }
-.cf-store .single_add_to_cart_button { flex: 1; min-height: 56px; margin: 0; border-radius: var(--cf-radius); background: var(--cf-navy); color: #fff; font-size: 16px; }
-.cf-store .single_add_to_cart_button:hover { background: #162844; }
+.cf-store .single_add_to_cart_button { flex: 1; min-height: 56px; margin: 0; border-radius: var(--cf-radius); background: var(--cf-yellow); color: var(--cf-ink); font-size: 16px; }
+.cf-store .single_add_to_cart_button:hover { background: var(--cf-gold); }
 .cf-store form.cart .woocommerce-variation-add-to-cart, .cf-store form.cart:not(.variations_form) { display: flex; gap: 10px; align-items: stretch; }
 .cf-store form.cart .quantity { margin: 0; }
 .cf-store form.cart .quantity .qty, .cf-store form.cart .quantity .button { height: 56px; min-height: 56px; }
@@ -259,7 +259,7 @@
 .cf-bag-progress__bar { height: 8px; border-radius: 8px; background: #e4e3da; overflow: hidden; }
 .cf-bag-progress__bar span { display: block; height: 100%; border-radius: 8px; background: var(--cf-navy); transition: width .3s; }
 .cf-bag-progress p.cf-bag-progress__give { margin: 8px 0 0; font-family: var(--cf-serif); font-weight: 300; }
-.cf-store .checkout-button, .cf-store #place_order, .cf-store .widget_shopping_cart .button.checkout { background-color: var(--cf-navy) !important; color: #fff; min-height: 52px; font-size: 16px; }
+.cf-store .checkout-button, .cf-store #place_order, .cf-store .widget_shopping_cart .button.checkout { background-color: var(--cf-yellow) !important; color: var(--cf-ink); min-height: 52px; font-size: 16px; }
 .cf-store .widget_shopping_cart .button:not(.checkout) { background: var(--cf-soft); color: var(--cf-ink); border: 1px solid #ecebe3; }
 .cf-store .cart-sidebar .cart_totals, .cf-store .checkout-sidebar .col-inner, .cf-store .cart-collaterals .cart_totals { background: var(--cf-soft); border-radius: var(--cf-radius); }
 .cf-store input[type="text"], .cf-store input[type="email"], .cf-store input[type="tel"], .cf-store input[type="password"], .cf-store select, .cf-store textarea { border-radius: 8px; box-shadow: none; }
@@ -283,7 +283,7 @@
 .cf-price .woocommerce-Price-currencySymbol, .cf-card-price .woocommerce-Price-currencySymbol { font-size: inherit; vertical-align: baseline; margin: 0; }
 .variations_form .variations tr, .variations_form .variations th, .variations_form .variations td { border: 0 !important; }
 .variations_form .single_variation_wrap, .variations_form .woocommerce-variation { margin: 0; }
-.cf-store .single_add_to_cart_button.disabled, .cf-store .single_add_to_cart_button:disabled { background: var(--cf-navy); opacity: .55; }
+.cf-store .single_add_to_cart_button.disabled, .cf-store .single_add_to_cart_button:disabled { background: var(--cf-yellow); opacity: .55; }
 .cf-product-story .section > .section-content > .row { margin-left: auto !important; margin-right: auto !important; }
 #shop-sidebar .woocommerce-widget-layered-nav-list__item .ux-swatch-widget-layered-nav-list__graphic ~ a::before, #shop-sidebar li.wc-layered-nav-term a:has(.ux-swatch)::before { display: none; }
 
@@ -302,7 +302,7 @@
 .product-lightbox .product_meta, .product-lightbox .cf-size-guide-link, .product-lightbox .is-divider { display: none; }
 .product-lightbox .product-lightbox-inner { padding: 28px; }
 .product-lightbox .product-title, .product-lightbox h1 { font-family: var(--cf-serif); font-weight: 300; font-size: 30px; line-height: 1.15; margin-bottom: 8px; }
-.cf-store .single_add_to_cart_button.button { background-color: var(--cf-navy) !important; color: #fff; }
+.cf-store .single_add_to_cart_button.button { background-color: var(--cf-yellow) !important; color: var(--cf-ink); }
 .mfp-content .product-lightbox { border-radius: 16px; overflow: hidden; }
 
 .cf-mega > .section-content > .row { max-width: 1330px; margin-left: auto !important; margin-right: auto !important; }
@@ -334,4 +334,43 @@
 	.single-product .product-info .product-title { font-size: 28px; }
 	.cf-footer__col { margin-top: 8px; }
 	.cf-impact__text { max-width: none; margin-top: 18px; }
+}
+
+/* ---------- Comfa signatures: hero sticker, ticker, colour row ---------- */
+.cf-store .button.cf-btn-cta, .cf-store .button.cf-btn-ghost { min-height: 52px; padding: 0 26px; font-size: 16px; line-height: 48px; margin: 0 8px 8px 0; border: 2px solid var(--cf-ink); }
+.cf-store .button.cf-btn-cta { background: var(--cf-yellow); color: var(--cf-ink); box-shadow: 4px 4px 0 var(--cf-ink); }
+.cf-store .button.cf-btn-cta:hover { background: var(--cf-gold); }
+.cf-store .button.cf-btn-ghost { background: transparent; color: var(--cf-ink); }
+.cf-store .button.cf-btn-ghost:hover { background: var(--cf-ink); color: #fff; }
+.cf-mark { background: linear-gradient(transparent 58%, var(--cf-yellow) 58%, var(--cf-yellow) 92%, transparent 92%); }
+.cf-hero__media > .col-inner { position: relative; }
+.cf-hero__sticker { position: absolute; left: -44px; bottom: 9%; width: 148px; height: 148px; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 50%; border: 2px solid var(--cf-ink); background: var(--cf-yellow); color: var(--cf-ink); text-align: center; line-height: 1.1; transform: rotate(-10deg); }
+.cf-hero__sticker strong { font-family: var(--cf-display); font-weight: 400; font-size: 24px; text-transform: uppercase; }
+.cf-hero__sticker span { font-size: 13px; }
+.cf-hero__sticker em { font-style: normal; font-weight: 800; font-size: 13px; letter-spacing: .06em; }
+.cf-ticker { overflow: hidden; }
+.cf-ticker__track { display: flex; width: max-content; animation: cf-ticker 36s linear infinite; }
+.cf-ticker:hover .cf-ticker__track { animation-play-state: paused; }
+.cf-ticker__group { display: flex; flex-shrink: 0; }
+.cf-ticker__item { display: flex; align-items: center; padding: 13px 0; font-family: var(--cf-display); font-size: 17px; text-transform: uppercase; color: #fff; white-space: nowrap; }
+.cf-ticker__item::after { content: "\2726"; margin: 0 26px; color: var(--cf-yellow); font-size: 14px; }
+@keyframes cf-ticker { to { transform: translateX(-50%); } }
+.cf-colors__title { font-size: 32px; margin-bottom: 20px; }
+.cf-color-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px 26px; list-style: none; margin: 0; padding: 0; }
+.cf-color-nav li { margin: 0; }
+.cf-color-nav a { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--cf-ink); }
+.cf-color-nav__dot { width: 58px; height: 58px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .14); transition: transform .15s ease, box-shadow .15s ease; }
+.cf-color-nav a:hover .cf-color-nav__dot { transform: translateY(-3px); box-shadow: 0 0 0 2px var(--cf-page), 0 0 0 4px var(--cf-ink); }
+@media (prefers-reduced-motion: reduce) {
+	.cf-ticker__track { animation: none; width: auto; flex-wrap: wrap; }
+	.cf-ticker__group[aria-hidden] { display: none; }
+	.cf-ticker__group { flex-wrap: wrap; justify-content: center; }
+}
+@media (max-width: 849px) {
+	.cf-hero__sticker { left: auto; right: 10px; bottom: 10px; width: 112px; height: 112px; }
+	.cf-hero__sticker strong { font-size: 18px; }
+	.cf-hero__sticker span, .cf-hero__sticker em { font-size: 11px; }
+	.cf-ticker__item { font-size: 14px; padding: 10px 0; }
+	.cf-color-nav { gap: 14px 16px; }
+	.cf-color-nav__dot { width: 46px; height: 46px; }
 }

@@ -31,17 +31,18 @@
 [/row]
 [/section]
 
-[section class="cf-hero" bg_color="rgb(26, 34, 53)" dark="true" padding="24px" padding__sm="12px"]
+[section class="cf-hero" bg_color="rgb(236, 235, 220)" padding="28px" padding__sm="14px"]
 [row style="collapse" width="full-width" v_align="middle" class="cf-hero__row"]
+[col span="6" span__sm="12" class="cf-hero__copy"]
+<p class="cf-hero__eyebrow"><span class="cf-pill cf-pill--solid">New Season</span> <span class="cf-serif">Tees, caps &amp; more</span></p>
+<h1 class="cf-display cf-hero__title">Soft Tees.<br><span class="cf-mark">Bold Prints.</span></h1>
+<p class="cf-hero__sub">Combed-cotton tees and broken-in caps, plain or screen-printed in small batches.</p>
+[button text="Shop T-Shirts" radius="12" link="{{url:/product-category/t-shirts/}}" class="cf-btn-cta"]
+[button text="Shop Caps" style="outline" radius="12" link="{{url:/product-category/caps/}}" class="cf-btn-ghost"]
+[/col]
 [col span="6" span__sm="12" class="cf-hero__media"]
 [ux_image id="{{img:hero.webp}}" image_size="original" class="cf-hero__image"]
-[/col]
-[col span="6" span__sm="12" align="center" class="cf-hero__copy"]
-<p class="cf-serif cf-hero__eyebrow">The Welcome Offer</p>
-<h1 class="cf-display cf-hero__title">10% Off<br>Your First Order</h1>
-<p class="cf-hero__sub">Soft tees, broken-in caps and more. Use code HELLO10.</p>
-[button text="Shop T-Shirts" color="white" radius="12" link="{{url:/product-category/t-shirts/}}" class="cf-btn-light"]
-[button text="Shop Caps" color="white" radius="12" link="{{url:/product-category/caps/}}" class="cf-btn-light"]
+<p class="cf-hero__sticker"><strong>10% Off</strong><span>your first order</span><em>HELLO10</em></p>
 [/col]
 [/row]
 [/section]
@@ -79,13 +80,8 @@
 [/row]
 [/section]
 
-[section class="cf-statement" padding="34px" padding__sm="22px"]
-[row]
-[col span__sm="12" align="center"]
-<h2 class="cf-display cf-statement__title">One Bought = One Given</h2>
-<p class="cf-serif cf-statement__sub">For every item you buy, we give one to someone who needs it.</p>
-[/col]
-[/row]
+[section class="cf-ticker" bg_color="rgb(27, 27, 27)" dark="true" padding="0px"]
+[cf_ticker text="One Bought = One Given|Screen-Printed In Small Batches|Soft, Not Sorry|Made To Be Worn Every Day"]
 [/section]
 
 [section class="cf-rail" padding="18px"]
@@ -98,6 +94,16 @@
 [/col]
 [col span="10" span__sm="12"]
 [ux_products type="row" col_spacing="small" columns="4" columns__sm="2" columns__md="4" ids="{{ids:tees}}"]
+[/col]
+[/row]
+[/section]
+
+[section class="cf-colors" padding="30px" padding__sm="22px"]
+[row]
+[col span__sm="12" align="center"]
+<p class="cf-rail__label">Find Your Shade</p>
+<h2 class="cf-serif cf-colors__title">Shop by Colour</h2>
+[cf_color_nav]
 [/col]
 [/row]
 [/section]
