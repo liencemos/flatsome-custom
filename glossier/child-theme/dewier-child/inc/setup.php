@@ -80,6 +80,7 @@ function dewier_icon( $name ) {
 		'search' => '<circle cx="7" cy="7" r="5.2"/><path d="m11 11 4 4"/>',
 		'prev'   => '<path d="M10 3.5 5.5 8l4.5 4.5"/>',
 		'next'   => '<path d="M6 3.5 10.5 8 6 12.5"/>',
+		'down'   => '<path d="M3.5 6 8 10.5 12.5 6"/>',
 		'pause'  => '<path d="M5.5 3v10M10.5 3v10"/>',
 		'play'   => '<path d="M5 3v10l8-5z"/>',
 		'close'  => '<path d="m3.5 3.5 9 9m0-9-9 9"/>',

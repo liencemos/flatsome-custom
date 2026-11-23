@@ -17,9 +17,10 @@ licensed typeface is included.
 | --- | --- |
 | `child-theme/dewier-child/` | Child theme: header, footer, product card, product page, bag drawer, Elementor widgets, CSS and JS |
 | `elementor/home.json` | Home page template for Elementor > Templates > Import |
+| `elementor/help.json` | Help page template (search hero and FAQ) |
 | `setup/catalog.json` | 35 demo products and their categories |
 | `setup/seed.php` | Creates categories, products, variations, reviews and store settings |
-| `setup/seed-site.php` | Creates menus, content pages and the Elementor home page |
+| `setup/seed-site.php` | Creates menus, content pages and the Elementor home and help pages |
 | `setup/make-placeholders.py` | Regenerates the placeholder images (needs Pillow) |
 
 ## Install
@@ -34,14 +35,19 @@ licensed typeface is included.
    ```
 
 Both seed scripts can be run again. Products are matched by SKU and keep their stock
-settings, menus are rebuilt, and an existing home page layout is kept unless you run
-`wp eval-file seed-site.php reset-home`. `seed.php` adds a demo shipping zone ($5 flat
-rate, free from $40) only when the store has no shipping methods at all.
+settings, menus are rebuilt, and the existing home and help page layouts are kept unless
+you run `wp eval-file seed-site.php reset-home` or `reset-help`. `seed.php` adds a demo
+shipping zone ($5 flat rate, free from $40) only when the store has no shipping methods
+at all.
 
 ## Editing
 
 - Home page sections are Elementor widgets in the **Dewier** category: Hero, Gift strip,
   Product carousel, Promo cards, Story and Image carousel.
+- The help page (`/help/`) uses two more widgets: Help Search and FAQ. Questions are
+  rows of the FAQ widget, grouped by their Topic field; the topic list, the mobile topic
+  menu and the search suggestions are built from them. The bundled questions and answers
+  are sample text, to be replaced with the shop's own policies.
 - The header and footer live in the child theme because Elementor free has no theme
   builder. Menus are under Appearance > Menus (Primary plus five footer locations).
 - Announcement bar messages: filter `dewier_promo_messages`.

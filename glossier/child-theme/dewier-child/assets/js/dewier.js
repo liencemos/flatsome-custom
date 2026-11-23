@@ -314,6 +314,205 @@
 		}
 	}
 
+	/* Help page: FAQ accordion, topic menu and search suggestions. */
+	function initHelp() {
+		function setOpen( item, open ) {
+			item.classList.toggle( 'is-open', open );
+			item.querySelector( '.dw-faq__q' ).setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+		}
+
+		function jump( target ) {
+			target.scrollIntoView( { behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' } );
+		}
+
+		function reveal( item ) {
+			setOpen( item, true );
+			if ( window.history.replaceState ) {
+				window.history.replaceState( null, '', '#' + item.id );
+			}
+			jump( item );
+			item.querySelector( '.dw-faq__q' ).focus( { preventScroll: true } );
+		}
+
+		function openFromHash() {
+			var item = doc.getElementById( decodeURIComponent( window.location.hash.slice( 1 ) ) );
+			if ( item && item.classList.contains( 'dw-faq__item' ) ) {
+				setOpen( item, true );
+			}
+		}
+
+		function parts( target ) {
+			var form = target && target.closest ? target.closest( '.dw-help__search' ) : null;
+			return form ? {
+				form: form,
+				input: form.querySelector( '.dw-help__input' ),
+				list: form.querySelector( '.dw-help__results' ),
+				clear: form.querySelector( '.dw-help__clear' ),
+				status: form.querySelector( '.dw-help__status' )
+			} : null;
+		}
+
+		function closeList( s ) {
+			s.list.hidden = true;
+			s.input.setAttribute( 'aria-expanded', 'false' );
+			s.input.removeAttribute( 'aria-activedescendant' );
+		}
+
+		function search( s ) {
+			var words = s.input.value.toLowerCase().split( /\s+/ ).filter( Boolean );
+			var inQuestion = [];
+			var inAnswer = [];
+			s.clear.hidden = ! s.input.value;
+			s.list.textContent = '';
+			s.input.removeAttribute( 'aria-activedescendant' );
+			if ( ! words.length ) {
+				s.status.textContent = '';
+				closeList( s );
+				return;
+			}
+			all( '.dw-faq__item' ).forEach( function ( item ) {
+				var question = item.querySelector( '.dw-faq__q' ).textContent.toLowerCase();
+				var text = question + ' ' + item.querySelector( '.dw-faq__a' ).textContent.toLowerCase();
+				function within( haystack ) {
+					return words.every( function ( word ) {
+						return haystack.indexOf( word ) > -1;
+					} );
+				}
+				if ( within( question ) ) {
+					inQuestion.push( item );
+				} else if ( within( text ) ) {
+					inAnswer.push( item );
+				}
+			} );
+			var hits = inQuestion.concat( inAnswer );
+			hits.forEach( function ( item, i ) {
+				var option = doc.createElement( 'li' );
+				option.id = s.list.id + '-' + i;
+				option.setAttribute( 'role', 'option' );
+				option.setAttribute( 'aria-disabled', 'false' );
+				option.dataset.target = item.id;
+				option.textContent = item.querySelector( '.dw-faq__q' ).textContent.trim();
+				s.list.appendChild( option );
+			} );
+			if ( ! hits.length ) {
+				var none = doc.createElement( 'li' );
+				none.setAttribute( 'role', 'option' );
+				none.setAttribute( 'aria-disabled', 'true' );
+				none.textContent = s.form.dataset.empty;
+				s.list.appendChild( none );
+			}
+			s.status.textContent = hits.length ? s.form.dataset.count.replace( '%d', hits.length ) : s.form.dataset.empty;
+			s.list.hidden = false;
+			s.input.setAttribute( 'aria-expanded', 'true' );
+		}
+
+		function options( s ) {
+			return all( '[data-target]', s.list );
+		}
+
+		function activate( s, step ) {
+			var items = options( s );
+			var index = items.indexOf( s.list.querySelector( '.is-active' ) ) + step;
+			if ( ! items.length ) {
+				return;
+			}
+			index = index < 0 ? items.length - 1 : index % items.length;
+			items.forEach( function ( option, i ) {
+				option.classList.toggle( 'is-active', i === index );
+				option.setAttribute( 'aria-selected', i === index ? 'true' : 'false' );
+			} );
+			s.input.setAttribute( 'aria-activedescendant', items[ index ].id );
+			items[ index ].scrollIntoView( { block: 'nearest' } );
+		}
+
+		function choose( s, option ) {
+			var item = option ? doc.getElementById( option.dataset.target ) : null;
+			if ( item ) {
+				closeList( s );
+				reveal( item );
+			}
+		}
+
+		doc.addEventListener( 'click', function ( event ) {
+			var question = event.target.closest( '.dw-faq__q' );
+			var option = event.target.closest( '.dw-help__results [data-target]' );
+			var s = parts( event.target );
+			if ( question ) {
+				var item = question.closest( '.dw-faq__item' );
+				setOpen( item, ! item.classList.contains( 'is-open' ) );
+			} else if ( option ) {
+				choose( s, option );
+			} else if ( s && event.target.closest( '.dw-help__clear' ) ) {
+				s.input.value = '';
+				search( s );
+				s.input.focus();
+			}
+		} );
+
+		doc.addEventListener( 'change', function ( event ) {
+			var topic = event.target.matches( '.dw-faq__select' ) ? doc.getElementById( event.target.value ) : null;
+			if ( topic ) {
+				jump( topic );
+				event.target.value = '';
+			}
+		} );
+
+		doc.addEventListener( 'input', function ( event ) {
+			if ( event.target.matches( '.dw-help__input' ) ) {
+				search( parts( event.target ) );
+			}
+		} );
+
+		doc.addEventListener( 'focusin', function ( event ) {
+			if ( event.target.matches( '.dw-help__input' ) && event.target.value ) {
+				search( parts( event.target ) );
+			}
+		} );
+
+		doc.addEventListener( 'focusout', function ( event ) {
+			var s = parts( event.target );
+			if ( s && ! s.form.contains( event.relatedTarget ) ) {
+				closeList( s );
+			}
+		} );
+
+		doc.addEventListener( 'mousedown', function ( event ) {
+			if ( event.target.closest( '.dw-help__results' ) ) {
+				event.preventDefault();
+			}
+		} );
+
+		doc.addEventListener( 'keydown', function ( event ) {
+			var s = event.target.matches( '.dw-help__input' ) ? parts( event.target ) : null;
+			if ( ! s ) {
+				return;
+			}
+			if ( 'ArrowDown' === event.key || 'ArrowUp' === event.key ) {
+				event.preventDefault();
+				if ( s.list.hidden ) {
+					search( s );
+				}
+				activate( s, 'ArrowDown' === event.key ? 1 : -1 );
+			} else if ( 'Escape' === event.key && ! s.list.hidden ) {
+				closeList( s );
+			}
+		} );
+
+		doc.addEventListener( 'submit', function ( event ) {
+			var s = event.target.matches( '.dw-help__search' ) ? parts( event.target ) : null;
+			if ( s ) {
+				event.preventDefault();
+				if ( s.list.hidden ) {
+					search( s );
+				}
+				choose( s, s.list.querySelector( '.is-active' ) || options( s )[0] );
+			}
+		} );
+
+		window.addEventListener( 'hashchange', openFromHash );
+		openFromHash();
+	}
+
 	function init() {
 		initPromo();
 		initHeader();
@@ -321,6 +520,7 @@
 		initCardOptions();
 		initBag();
 		initProduct();
+		initHelp();
 	}
 
 	if ( 'loading' === doc.readyState ) {

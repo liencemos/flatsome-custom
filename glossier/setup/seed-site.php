@@ -1,6 +1,6 @@
 <?php
 /**
- * Seeds menus, content pages and the Elementor home page.
+ * Seeds menus, content pages and the Elementor home and help pages.
  *
  * Run after seed.php: wp eval-file seed-site.php
  *
@@ -197,20 +197,52 @@ $dewier_home = array(
 	dewier_site_element( 'dewier-carousel', array( 'eyebrow' => 'Get festive', 'size' => 'large', 'items' => $dewier_social ) ),
 );
 
-// An existing home layout is kept unless the script is run with "reset-home".
-$dewier_home_id  = dewier_site_page( 'home', 'Home' );
-$dewier_reset    = isset( $args ) && in_array( 'reset-home', (array) $args, true );
-$dewier_set_home = $dewier_reset || ! get_post_meta( $dewier_home_id, '_elementor_data', true );
-if ( $dewier_set_home ) {
-	update_post_meta( $dewier_home_id, '_wp_page_template', 'elementor_header_footer' );
-	update_post_meta( $dewier_home_id, '_elementor_edit_mode', 'builder' );
-	update_post_meta( $dewier_home_id, '_elementor_template_type', 'wp-page' );
-	update_post_meta( $dewier_home_id, '_elementor_data', wp_slash( wp_json_encode( $dewier_home ) ) );
-}
-if ( defined( 'ELEMENTOR_VERSION' ) ) {
-	if ( $dewier_set_home ) {
-		update_post_meta( $dewier_home_id, '_elementor_version', ELEMENTOR_VERSION );
+/**
+ * Gives a page its Elementor layout. A page that already has one, or text of
+ * its own, is left alone unless $reset is set. Returns whether it was written.
+ */
+function dewier_site_layout( $page_id, $elements, $reset, $placeholder = '' ) {
+	$content = trim( (string) get_post_field( 'post_content', $page_id ) );
+	if ( ! $reset && ( get_post_meta( $page_id, '_elementor_data', true ) || ( '' !== $content && $content !== $placeholder ) ) ) {
+		return false;
 	}
+	update_post_meta( $page_id, '_wp_page_template', 'elementor_header_footer' );
+	update_post_meta( $page_id, '_elementor_edit_mode', 'builder' );
+	update_post_meta( $page_id, '_elementor_template_type', 'wp-page' );
+	update_post_meta( $page_id, '_elementor_data', wp_slash( wp_json_encode( $elements ) ) );
+	if ( defined( 'ELEMENTOR_VERSION' ) ) {
+		update_post_meta( $page_id, '_elementor_version', ELEMENTOR_VERSION );
+	}
+	return true;
+}
+
+/**
+ * Writes a layout as a file for Elementor > Templates > Import.
+ */
+function dewier_site_export( $file, $title, $elements ) {
+	$export = array(
+		'version'       => '0.4',
+		'title'         => $title,
+		'type'          => 'page',
+		'content'       => $elements,
+		'page_settings' => array( 'template' => 'elementor_header_footer' ),
+	);
+	$export = str_replace( str_replace( '/', '\/', home_url() ), '', wp_json_encode( $export, JSON_PRETTY_PRINT ) );
+	file_put_contents( __DIR__ . '/' . $file, $export ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+}
+
+$dewier_help = array(
+	dewier_site_element( 'dewier-help-search' ),
+	dewier_site_element( 'dewier-faq' ),
+);
+
+// Existing layouts are kept unless the script is run with "reset-home" or "reset-help".
+$dewier_args     = isset( $args ) ? (array) $args : array();
+$dewier_home_id  = dewier_site_page( 'home', 'Home' );
+$dewier_help_id  = dewier_site_page( 'help', 'Help & FAQ', $dewier_copy );
+$dewier_set_home = dewier_site_layout( $dewier_home_id, $dewier_home, in_array( 'reset-home', $dewier_args, true ) );
+$dewier_set_help = dewier_site_layout( $dewier_help_id, $dewier_help, in_array( 'reset-help', $dewier_args, true ), $dewier_copy );
+if ( defined( 'ELEMENTOR_VERSION' ) ) {
 	update_option( 'elementor_experiment-container', 'active' );
 	update_option( 'elementor_disable_color_schemes', 'yes' );
 	update_option( 'elementor_disable_typography_schemes', 'yes' );
@@ -219,16 +251,9 @@ if ( defined( 'ELEMENTOR_VERSION' ) ) {
 update_option( 'show_on_front', 'page' );
 update_option( 'page_on_front', $dewier_home_id );
 
-// Importable copy of the home page for Elementor > Templates > Import.
-$dewier_export = array(
-	'version'       => '0.4',
-	'title'         => 'Dewier Home',
-	'type'          => 'page',
-	'content'       => $dewier_home,
-	'page_settings' => array( 'template' => 'elementor_header_footer' ),
-);
-$dewier_export = str_replace( str_replace( '/', '\/', home_url() ), '', wp_json_encode( $dewier_export, JSON_PRETTY_PRINT ) );
-file_put_contents( __DIR__ . '/home.json', $dewier_export ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+// Importable copies of both pages.
+dewier_site_export( 'home.json', 'Dewier Home', $dewier_home );
+dewier_site_export( 'help.json', 'Dewier Help', $dewier_help );
 
 flush_rewrite_rules();
-WP_CLI::log( 'Site seed complete. Home page ID: ' . $dewier_home_id . ( $dewier_set_home ? '' : ' (existing layout kept)' ) );
+WP_CLI::log( 'Site seed complete. Home page ID: ' . $dewier_home_id . ( $dewier_set_home ? '' : ' (existing layout kept)' ) . '. Help page ID: ' . $dewier_help_id . ( $dewier_set_help ? '' : ' (existing page kept)' ) );

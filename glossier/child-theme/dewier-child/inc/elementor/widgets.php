@@ -37,11 +37,12 @@ abstract class Dewier_Widget extends Widget_Base {
 			'color'    => Controls_Manager::COLOR,
 			'number'   => Controls_Manager::NUMBER,
 			'select'   => Controls_Manager::SELECT,
+			'wysiwyg'  => Controls_Manager::WYSIWYG,
 		);
 		$args  = array(
 			'label'       => $field['label'],
 			'type'        => $types[ $field['type'] ],
-			'label_block' => in_array( $field['type'], array( 'text', 'textarea', 'url' ), true ),
+			'label_block' => in_array( $field['type'], array( 'text', 'textarea', 'url', 'wysiwyg' ), true ),
 		);
 		if ( isset( $field['default'] ) ) {
 			$args['default'] = 'url' === $field['type'] ? array( 'url' => $field['default'] ) : ( 'image' === $field['type'] ? array( 'url' => $field['default'] ) : $field['default'] );
@@ -437,5 +438,162 @@ class Dewier_Widget_Carousel extends Dewier_Widget {
 		echo '</ul>';
 		dewier_carousel_close();
 		echo '</section>';
+	}
+}
+
+class Dewier_Widget_Help_Search extends Dewier_Widget {
+
+	public function get_name() {
+		return 'dewier-help-search';
+	}
+
+	public function get_title() {
+		return __( 'Dewier Help Search', 'dewier' );
+	}
+
+	public function get_icon() {
+		return 'eicon-search';
+	}
+
+	protected function fields() {
+		return array(
+			array( 'id' => 'title', 'label' => __( 'Title', 'dewier' ), 'type' => 'text', 'default' => __( 'How can we help?', 'dewier' ) ),
+			array( 'id' => 'placeholder', 'label' => __( 'Search placeholder', 'dewier' ), 'type' => 'text', 'default' => __( 'Search', 'dewier' ) ),
+			array( 'id' => 'empty', 'label' => __( 'No results text', 'dewier' ), 'type' => 'text', 'default' => __( 'No results found', 'dewier' ) ),
+			array( 'id' => 'background', 'label' => __( 'Background', 'dewier' ), 'type' => 'color', 'default' => '#f5dbdf' ),
+		);
+	}
+
+	/**
+	 * The search suggests the questions of the Dewier FAQ widgets on the same page.
+	 */
+	protected function render() {
+		$s  = $this->get_settings_for_display();
+		$id = 'dw-help-' . $this->get_id();
+		?>
+		<section class="dw-help" style="background-color:<?php echo esc_attr( $s['background'] ); ?>">
+			<h1 class="dw-help__title"><?php echo esc_html( $s['title'] ); ?></h1>
+			<?php /* translators: %d: number of questions */ ?>
+			<form class="dw-help__search" role="search" data-empty="<?php echo esc_attr( $s['empty'] ); ?>" data-count="<?php esc_attr_e( '%d matching questions', 'dewier' ); ?>">
+				<span class="dw-help__icon"><?php echo dewier_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+				<input class="dw-help__input" id="<?php echo esc_attr( $id ); ?>" type="text" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="<?php echo esc_attr( $id ); ?>-results" aria-label="<?php echo esc_attr( $s['placeholder'] ); ?>" placeholder="<?php echo esc_attr( $s['placeholder'] ); ?>">
+				<button type="button" class="dw-help__clear" aria-label="<?php esc_attr_e( 'Clear search', 'dewier' ); ?>" hidden><?php echo dewier_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+				<ul class="dw-help__results" id="<?php echo esc_attr( $id ); ?>-results" role="listbox" aria-label="<?php esc_attr_e( 'Matching questions', 'dewier' ); ?>" hidden></ul>
+				<span class="screen-reader-text dw-help__status" role="status"></span>
+			</form>
+		</section>
+		<?php
+	}
+}
+
+class Dewier_Widget_Faq extends Dewier_Widget {
+
+	public function get_name() {
+		return 'dewier-faq';
+	}
+
+	public function get_title() {
+		return __( 'Dewier FAQ', 'dewier' );
+	}
+
+	public function get_icon() {
+		return 'eicon-accordion';
+	}
+
+	protected function fields() {
+		$items = array();
+		foreach ( require DEWIER_DIR . '/inc/elementor/faq-defaults.php' as $item ) {
+			$items[] = array( 'topic' => $item[0], 'question' => $item[1], 'answer' => $item[2] );
+		}
+		return array(
+			array( 'id' => 'heading', 'label' => __( 'Heading', 'dewier' ), 'type' => 'text', 'default' => __( 'FAQs', 'dewier' ) ),
+			array( 'id' => 'jump', 'label' => __( 'Topic menu label (mobile)', 'dewier' ), 'type' => 'text', 'default' => __( 'Go to category...', 'dewier' ) ),
+			array(
+				'id'      => 'items',
+				'label'   => __( 'Questions', 'dewier' ),
+				'type'    => 'repeater',
+				'title'   => 'question',
+				'fields'  => array(
+					array( 'id' => 'topic', 'label' => __( 'Topic (questions with the same topic are grouped)', 'dewier' ), 'type' => 'text', 'default' => __( 'Shipping', 'dewier' ) ),
+					array( 'id' => 'question', 'label' => __( 'Question', 'dewier' ), 'type' => 'text', 'default' => '' ),
+					array( 'id' => 'answer', 'label' => __( 'Answer', 'dewier' ), 'type' => 'wysiwyg', 'default' => '' ),
+				),
+				'default' => $items,
+			),
+		);
+	}
+
+	protected function render() {
+		$s      = $this->get_settings_for_display();
+		$topics = array();
+		foreach ( (array) $s['items'] as $item ) {
+			if ( '' === trim( (string) $item['question'] ) ) {
+				continue;
+			}
+			$topics[ trim( (string) $item['topic'] ) ][] = $item;
+		}
+		if ( ! $topics ) {
+			return;
+		}
+		$anchors = array();
+		foreach ( array_keys( $topics ) as $topic ) {
+			$anchors[ $topic ] = 'topic-' . ( sanitize_title( $topic ) ? sanitize_title( $topic ) : count( $anchors ) + 1 );
+		}
+		$named = array_filter( array_keys( $topics ), 'strlen' );
+		$jump  = 'dw-faq-jump-' . $this->get_id();
+		?>
+		<section class="dw-faq">
+			<?php if ( $s['heading'] ) : ?>
+				<h2 class="dw-faq__heading"><?php echo esc_html( $s['heading'] ); ?></h2>
+			<?php endif; ?>
+			<div class="dw-faq__layout<?php echo $named ? '' : ' dw-faq__layout--plain'; ?>">
+				<?php if ( $named ) : ?>
+					<nav class="dw-faq__nav" aria-label="<?php esc_attr_e( 'FAQ topics', 'dewier' ); ?>">
+						<ul>
+							<?php foreach ( $named as $topic ) : ?>
+								<li><a href="#<?php echo esc_attr( $anchors[ $topic ] ); ?>"><?php echo esc_html( $topic ); ?></a></li>
+							<?php endforeach; ?>
+						</ul>
+					</nav>
+					<div class="dw-faq__jump">
+						<select class="dw-faq__select" id="<?php echo esc_attr( $jump ); ?>" aria-label="<?php echo esc_attr( $s['jump'] ); ?>">
+							<option value=""><?php echo esc_html( $s['jump'] ); ?></option>
+							<?php foreach ( $named as $topic ) : ?>
+								<option value="<?php echo esc_attr( $anchors[ $topic ] ); ?>"><?php echo esc_html( $topic ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				<?php endif; ?>
+				<div class="dw-faq__list">
+					<?php foreach ( $topics as $topic => $items ) : ?>
+						<section class="dw-faq__topic" id="<?php echo esc_attr( $anchors[ $topic ] ); ?>">
+							<?php if ( '' !== $topic ) : ?>
+								<h3 class="dw-faq__topic-title"><?php echo esc_html( $topic ); ?></h3>
+							<?php endif; ?>
+							<div class="dw-faq__items">
+								<?php
+								foreach ( $items as $item ) :
+									$id = 'faq-' . ( empty( $item['_id'] ) ? substr( md5( $topic . $item['question'] ), 0, 7 ) : $item['_id'] );
+									?>
+									<div class="dw-faq__item" id="<?php echo esc_attr( $id ); ?>">
+										<h4 class="dw-faq__question">
+											<button type="button" class="dw-faq__q" id="<?php echo esc_attr( $id ); ?>-q" aria-expanded="false" aria-controls="<?php echo esc_attr( $id ); ?>-a">
+												<span><?php echo esc_html( $item['question'] ); ?></span>
+												<?php echo dewier_icon( 'down' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+											</button>
+										</h4>
+										<div class="dw-faq__a" id="<?php echo esc_attr( $id ); ?>-a">
+											<div class="dw-faq__answer"><?php echo wp_kses_post( wpautop( $item['answer'] ) ); ?></div>
+										</div>
+									</div>
+								<?php endforeach; ?>
+							</div>
+						</section>
+					<?php endforeach; ?>
+				</div>
+			</div>
+			<noscript><style>.dw-faq .dw-faq__a{grid-template-rows:1fr;padding-top:1rem;visibility:visible}</style></noscript>
+		</section>
+		<?php
 	}
 }
