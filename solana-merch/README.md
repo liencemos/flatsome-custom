@@ -41,18 +41,19 @@ Seed tạo 2 danh mục và 12 sản phẩm biến thể (6 áo, 6 mũ); áo có
 | Category Page — Printed tees | `/product-category/t-shirts/` | [Ảnh](previews/category-desktop-light.webp) | [Ảnh](previews/category-mobile-light.webp) |
 | Product Page — Block 01 Tee | `/product/carrier-wave/` | [Ảnh](previews/product-desktop-light.webp) | [Ảnh](previews/product-mobile-light.webp) |
 | Shop | `/shop/` | [Ảnh](previews/shop-desktop-light.webp) | — |
-| Cart | `/cart/` | [Ảnh](previews/cart-desktop-light.webp) | — |
+| Cart | `/cart/` | [Ảnh](previews/cart-desktop-light.webp) | [Ảnh](previews/cart-mobile-light.webp) |
 | Mini-cart | Mở biểu tượng túi hàng | [Ảnh](previews/mini-cart-desktop-light.webp) | — |
 | Quick View | Mở Quick View trên lưới Shop | [Ảnh](previews/quick-view-desktop-light.webp) | — |
 | Wishlist | `/wishlist/` | [Ảnh](previews/wishlist-desktop-light.webp) | — |
 | Tìm kiếm trực tiếp | Mở biểu tượng tìm kiếm | [Ảnh](previews/live-search-desktop-light.webp) | — |
-| Checkout | `/checkout/` | [Ảnh](previews/checkout-desktop-light.webp) | — |
+| Checkout | `/checkout/` | [Ảnh](previews/checkout-desktop-light.webp) | [Ảnh](previews/checkout-mobile-light.webp) |
 | Xác nhận đơn hàng | Sau khi đặt hàng | [Ảnh](previews/order-received-desktop-light.webp) | — |
 
 - **Homepage:** Pages → Home → **Edit with UX Builder**. Dùng Section, Row, Column, Text, Image, Button và Products gốc cho dải thông tin mua hàng, lookbook, câu chuyện, quy trình in/thêu, nhận xét mẫu và lưới ảnh tĩnh (không kết nối Instagram). Shortcode `[form_edit_newsletter]` gửi yêu cầu qua `wp_mail` đến email quản trị; cấu hình SMTP hoặc thay bằng biểu mẫu của dịch vụ email marketing trước khi mở bán. Demo không tự gửi newsletter hoặc thêm người dùng vào một danh sách bên ngoài.
 - **Category/Shop:** lưới hiển thị ảnh thứ hai khi rê chuột bằng thiết lập **Back Image – Fade In** của Flatsome. Mở **FORM / EDIT — Printed tees / Embroidered caps / Edition 01** trong **UX Blocks** để sửa banner. Nút **Filter collection** mở Shop Sidebar gốc; chỉnh các widget WooCommerce lọc size, màu và giá trong **Appearance → Widgets**. Size/màu toàn cục dùng riêng cho bộ lọc, không thay thuộc tính của biến thể đã có. Mẫu đầu mỗi danh mục có nhãn **New**; Flatsome hiển thị nhãn hết hàng khi sản phẩm thực sự hết hàng và cấu hình WooCommerce cho phép hiện sản phẩm đó.
 - **Product:** giữ layout **Stacked Right** của Flatsome. Swatch dùng JS nhẹ đồng bộ với ô chọn biến thể WooCommerce; nếu JS không chạy, dropdown vẫn hoạt động. **Size guide** mở lightbox gốc, các mục chất liệu/giao hàng/bảo quản dùng accordion; nội dung mẫu nằm ở `ux-builder/product-details.txt`. **Complete the look** dùng mục Upsells trong **Products → Linked Products**. Widget **Recently viewed** dùng cookie phiên WooCommerce và xuất hiện sau khi khách xem sản phẩm khác. Thanh mua hàng gốc trên mobile đưa khách về vùng chọn biến thể.
 - **Cart:** seed chuyển block WooCommerce Cart cấp ngoài cùng sang shortcode gốc `[woocommerce_cart]` để bộ đếm giỏ của Flatsome cập nhật khi đổi số lượng hoặc xóa sản phẩm. Seed lưu toàn bộ nội dung trước lần chuyển đổi đầu tiên trong post meta `_signal_original_cart_content` (bao gồm các block con tùy chỉnh) để có thể khôi phục; các block bên ngoài block giỏ hàng và trang thanh toán không bị thay thế.
+- **Mini-cart và checkout:** nút `−`/`+` trong mini-cart dùng cập nhật giỏ hàng gốc của Flatsome ngay trong ngăn giỏ. Checkout giữ block WooCommerce với tóm tắt đơn nằm bên cạnh trên desktop và có thể mở/thu gọn phía trên biểu mẫu trên mobile.
 - **Header/Footer:** chỉnh bằng **Theme Options → Header** và **Footer**; menu nằm ở **Appearance → Menus**, chân trang nằm trong **UX Blocks → FORM / EDIT Footer**.
 - `ux-builder/*.txt` là bản mã nguồn shortcode; seed điền các token `{{…}}` bằng URL, ID và nội dung thực. Nếu dán thủ công, đổi token trước khi lưu. Không ghi đè mẫu Flatsome hay WooCommerce.
 
@@ -63,6 +64,6 @@ Seed tạo 2 danh mục và 12 sản phẩm biến thể (6 áo, 6 mũ); áo có
 - **Quick View, tìm kiếm trực tiếp và Buy Now** dùng chức năng gốc của Flatsome. Trên trang sản phẩm, chọn biến thể trước khi bấm Buy Now; sản phẩm được thêm vào giỏ rồi chuyển sang checkout.
 - **Wishlist** dùng YITH WooCommerce Wishlist bản miễn phí. Nút tim và bộ đếm dùng Header Builder và tích hợp gốc của Flatsome; không đóng gói mã plugin.
 - **Ưu đãi:** top bar hiển thị mã **FIRST10** (giảm 10%, một lần mỗi khách). Sửa nội dung từ Header Builder → Top Bar → HTML 1 hoặc `ux-builder/promo-topbar.txt`; quản lý mã trong WooCommerce.
-- **Giao hàng demo ở Hoa Kỳ:** tiêu chuẩn $6, miễn phí từ $75 sau giảm giá. Thanh tiến độ ở giỏ và mini-cart dùng ngưỡng của phương thức WooCommerce trong vùng demo. Ước tính mặc định 3–5 ngày làm việc (bỏ qua thứ Bảy và Chủ nhật); chỉnh bằng filter `form_edit_delivery_business_days`.
+- **Giao hàng demo ở Hoa Kỳ:** tiêu chuẩn $6, miễn phí từ $75 sau giảm giá. Seed ưu tiên vùng giao hàng demo khi địa chỉ khớp nhiều vùng; các vùng cũ giữ nguyên thứ tự tương đối và phương thức. Thanh tiến độ ở giỏ và mini-cart dùng ngưỡng của phương thức WooCommerce trong vùng demo. Ước tính mặc định 3–5 ngày làm việc (bỏ qua thứ Bảy và Chủ nhật); chỉnh bằng filter `form_edit_delivery_business_days`.
 - **Đánh giá và tồn kho:** mỗi sản phẩm có một đánh giá mẫu được ghi rõ là “Sample review”; không phải đánh giá của khách thật. Bốn biến thể Stone có 2 sản phẩm để hiện thông báo sắp hết hàng. Seed đặt lại tồn kho mẫu khi chạy lại.
 - **Thanh toán khi giao hàng (COD)** được bật để thử checkout mà không cần thẻ. Trước khi mở bán, thay cấu hình giao hàng và thanh toán demo, xóa đánh giá mẫu, và đặt lại tồn kho cho đúng hàng thật.

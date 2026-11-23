@@ -53,6 +53,20 @@ function form_edit_shipping_progress() {
 add_action( 'woocommerce_before_cart_table', 'form_edit_shipping_progress' );
 add_action( 'woocommerce_widget_shopping_cart_before_buttons', 'form_edit_shipping_progress' );
 
+function form_edit_checkout_notes() {
+	$policy = get_privacy_policy_url();
+	return '<p class="edit-checkout-notes"><span>' . esc_html( is_ssl() ? 'Secure checkout' : 'Checkout details' ) . '</span>' .
+		( $policy ? ' <a href="' . esc_url( $policy ) . '">Privacy policy</a>' : '' ) .
+		'<span>For returns, keep your order number.</span></p>';
+}
+
+add_filter( 'render_block_woocommerce/checkout-actions-block', function ( $content ) {
+	return $content . form_edit_checkout_notes();
+} );
+add_action( 'woocommerce_review_order_after_submit', function () {
+	echo form_edit_checkout_notes(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in the renderer.
+} );
+
 function form_edit_delivery_date( $date, $days ) {
 	while ( $days > 0 ) {
 		$date = $date->modify( '+1 day' );
