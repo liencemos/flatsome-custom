@@ -523,9 +523,32 @@ class Dewier_Widget_Faq extends Dewier_Widget {
 		);
 	}
 
+	/**
+	 * Element IDs already given out on this page, with the widget that owns them.
+	 *
+	 * @var array
+	 */
+	private static $owners = array();
+
+	/**
+	 * Returns $id, or $id with a number added when another topic or question
+	 * of this widget, or another FAQ widget on the page, already uses it.
+	 */
+	private function unique_id( $id, &$used ) {
+		$base = $id;
+		$n    = 1;
+		while ( isset( $used[ $id ] ) || ( isset( self::$owners[ $id ] ) && self::$owners[ $id ] !== $this->get_id() ) ) {
+			$id = $base . '-' . ( ++$n );
+		}
+		$used[ $id ]         = true;
+		self::$owners[ $id ] = $this->get_id();
+		return $id;
+	}
+
 	protected function render() {
 		$s      = $this->get_settings_for_display();
 		$topics = array();
+		$used   = array();
 		foreach ( (array) $s['items'] as $item ) {
 			if ( '' === trim( (string) $item['question'] ) ) {
 				continue;
@@ -537,7 +560,7 @@ class Dewier_Widget_Faq extends Dewier_Widget {
 		}
 		$anchors = array();
 		foreach ( array_keys( $topics ) as $topic ) {
-			$anchors[ $topic ] = 'topic-' . ( sanitize_title( $topic ) ? sanitize_title( $topic ) : count( $anchors ) + 1 );
+			$anchors[ $topic ] = $this->unique_id( 'topic-' . ( sanitize_title( $topic ) ? sanitize_title( $topic ) : count( $anchors ) + 1 ), $used );
 		}
 		$named = array_filter( array_keys( $topics ), 'strlen' );
 		$jump  = 'dw-faq-jump-' . $this->get_id();
@@ -573,7 +596,7 @@ class Dewier_Widget_Faq extends Dewier_Widget {
 							<div class="dw-faq__items">
 								<?php
 								foreach ( $items as $item ) :
-									$id = 'faq-' . ( empty( $item['_id'] ) ? substr( md5( $topic . $item['question'] ), 0, 7 ) : $item['_id'] );
+									$id = $this->unique_id( 'faq-' . ( empty( $item['_id'] ) ? substr( md5( $topic . $item['question'] ), 0, 7 ) : $item['_id'] ), $used );
 									?>
 									<div class="dw-faq__item" id="<?php echo esc_attr( $id ); ?>">
 										<h4 class="dw-faq__question">
