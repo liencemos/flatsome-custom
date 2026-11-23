@@ -20,18 +20,49 @@ function cf_cart_given_count() {
 	return $total;
 }
 
+/**
+ * Free-shipping rule for the customer's shipping zone, read from WooCommerce so the
+ * bag never promises what checkout does not offer.
+ *
+ * @return array|null { minimum, ignore_discounts } or null when the zone has no minimum-based free shipping.
+ */
+function cf_free_shipping_rule() {
+	$packages = WC()->cart->get_shipping_packages();
+	if ( ! $packages ) {
+		return null;
+	}
+	$zone = WC_Shipping_Zones::get_zone_matching_package( reset( $packages ) );
+	$rule = null;
+	foreach ( $zone->get_shipping_methods( true ) as $method ) {
+		if ( 'free_shipping' !== $method->id ) {
+			continue;
+		}
+		$requires = (string) $method->get_option( 'requires' );
+		if ( '' === $requires ) {
+			return array( 'minimum' => 0.0, 'ignore_discounts' => false );
+		}
+		if ( in_array( $requires, array( 'min_amount', 'either' ), true ) ) {
+			$minimum = (float) $method->get_option( 'min_amount' );
+			if ( null === $rule || $minimum < $rule['minimum'] ) {
+				$rule = array( 'minimum' => $minimum, 'ignore_discounts' => 'yes' === $method->get_option( 'ignore_discounts' ) );
+			}
+		}
+	}
+	return $rule;
+}
+
 function cf_bag_progress() {
-	if ( ! WC()->cart || WC()->cart->is_empty() ) {
+	if ( ! WC()->cart || WC()->cart->is_empty() || ! WC()->cart->needs_shipping() ) {
 		return;
 	}
-	$threshold = (float) cf_setting( 'free_shipping_threshold' );
-	if ( $threshold <= 0 ) {
+	$rule = cf_free_shipping_rule();
+	if ( ! $rule ) {
 		return;
 	}
-	// Same basis WooCommerce uses for free-shipping minimums: discounted subtotal.
-	$subtotal  = (float) WC()->cart->get_displayed_subtotal() - (float) WC()->cart->get_discount_total();
+	$threshold = $rule['minimum'];
+	$subtotal  = (float) WC()->cart->get_displayed_subtotal() - ( $rule['ignore_discounts'] ? 0 : (float) WC()->cart->get_discount_total() );
 	$remaining = max( 0, $threshold - $subtotal );
-	$percent   = min( 100, $threshold > 0 ? $subtotal / $threshold * 100 : 100 );
+	$percent   = $threshold > 0 ? min( 100, max( 0, $subtotal / $threshold * 100 ) ) : 100;
 	$message   = $remaining > 0
 		/* translators: %s: amount left. */
 		? sprintf( __( 'You are %s away from free shipping', 'comfa' ), wc_price( $remaining ) )
