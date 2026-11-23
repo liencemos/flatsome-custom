@@ -1,0 +1,44 @@
+[section class="cf-footer" bg_color="rgb(27, 27, 27)" dark="true" padding="56px" padding__sm="36px"]
+[row]
+[col span="5" span__sm="12" class="cf-footer__news"]
+<h2 class="cf-display cf-footer__heading">Get 10% Off Your First Order</h2>
+[cf_newsletter]
+<p class="cf-footer__small">By signing up you agree to receive emails from Comfa. Unsubscribe any time.</p>
+[/col]
+[col span="2" span__sm="6" class="cf-footer__col"]
+<h3 class="cf-serif">Shop</h3>
+<ul>
+<li><a href="{{url:/product-category/t-shirts/}}">T-Shirts</a></li>
+<li><a href="{{url:/product-category/caps/}}">Caps &amp; Hats</a></li>
+<li><a href="{{url:/product-category/hoodies/}}">Hoodies &amp; Sweats</a></li>
+<li><a href="{{url:/product-category/socks/}}">Socks</a></li>
+<li><a href="{{url:/shop/}}">Shop All</a></li>
+</ul>
+[/col]
+[col span="2" span__sm="6" class="cf-footer__col"]
+<h3 class="cf-serif">Company</h3>
+<ul>
+<li><a href="{{url:/mission/}}">Our Mission</a></li>
+<li><a href="{{url:/size-guide/}}">Size Guide</a></li>
+<li><a href="{{url:/shipping-returns/}}">Shipping &amp; Returns</a></li>
+<li><a href="{{url:/my-account/}}">My Account</a></li>
+</ul>
+[/col]
+[col span="3" span__sm="12" class="cf-footer__col"]
+<h3 class="cf-serif">Help</h3>
+<p class="cf-display cf-footer__guarantee">100% Happiness Guaranteed</p>
+<p>Not happy with your order? We will make it right with a refund or an exchange.</p>
+[button text="Get Help →" style="outline" color="white" radius="12" link="{{url:/help/}}" class="cf-btn-outline"]
+[/col]
+[/row]
+[row class="cf-footer__tags"]
+[col span__sm="12"]
+<p><a href="{{url:/product-category/t-shirts/crew-neck/}}">Crew Neck Tees</a><a href="{{url:/product-category/t-shirts/graphic-tees/}}">Graphic Tees</a><a href="{{url:/product-category/t-shirts/long-sleeve/}}">Long Sleeve Tees</a><a href="{{url:/product-category/t-shirts/v-neck/}}">V-Neck Tees</a><a href="{{url:/product-category/caps/dad-caps/}}">Dad Caps</a><a href="{{url:/product-category/caps/snapbacks/}}">Snapbacks</a><a href="{{url:/product-category/caps/camp-caps/}}">Camp Caps</a><a href="{{url:/product-category/caps/beanies/}}">Beanies</a><a href="{{url:/product-tag/sport/}}">Sport</a><a href="{{url:/product-tag/outdoor/}}">Outdoor</a></p>
+[/col]
+[/row]
+[row class="cf-footer__legal"]
+[col span__sm="12"]
+<p>© [cf_year] Comfa. Demo store. <a href="{{url:/shipping-returns/}}">Returns</a> <a href="{{url:/privacy-policy/}}">Privacy</a> <a href="{{url:/contact/}}">Contact</a></p>
+[/col]
+[/row]
+[/section]

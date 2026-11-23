@@ -1,0 +1,193 @@
+[section class="cf-chips" padding="14px" padding__sm="10px"]
+[row style="small" col_style="none" class="cf-chips__row"]
+[col span="3" span__sm="6"]
+[ux_banner height="110px" height__sm="44px" bg="{{img:chip-tees.webp}}" bg_overlay="rgba(0,0,0,0.28)" hover="zoom" link="{{url:/product-category/t-shirts/}}" class="cf-chip"]
+[text_box width="90" position_x="50" position_y="50"]
+<h3>T-Shirts</h3>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="3" span__sm="6"]
+[ux_banner height="110px" height__sm="44px" bg="{{img:chip-caps.webp}}" bg_overlay="rgba(0,0,0,0.28)" hover="zoom" link="{{url:/product-category/caps/}}" class="cf-chip"]
+[text_box width="90" position_x="50" position_y="50"]
+<h3>Caps &amp; Hats</h3>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="3" span__sm="6"]
+[ux_banner height="110px" height__sm="44px" bg="{{img:chip-hoodies.webp}}" bg_overlay="rgba(0,0,0,0.28)" hover="zoom" link="{{url:/product-category/hoodies/}}" class="cf-chip"]
+[text_box width="90" position_x="50" position_y="50"]
+<h3>Hoodies &amp; Sweats</h3>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="3" span__sm="6"]
+[ux_banner height="110px" height__sm="44px" bg="{{img:chip-socks.webp}}" bg_overlay="rgba(0,0,0,0.28)" hover="zoom" link="{{url:/product-category/socks/}}" class="cf-chip"]
+[text_box width="90" position_x="50" position_y="50"]
+<h3>Socks</h3>
+[/text_box]
+[/ux_banner]
+[/col]
+[/row]
+[/section]
+
+[section class="cf-hero" bg_color="rgb(26, 34, 53)" dark="true" padding="24px" padding__sm="12px"]
+[row style="collapse" width="full-width" v_align="middle" class="cf-hero__row"]
+[col span="6" span__sm="12" class="cf-hero__media"]
+[ux_image id="{{img:hero.webp}}" image_size="original" class="cf-hero__image"]
+[/col]
+[col span="6" span__sm="12" align="center" class="cf-hero__copy"]
+<p class="cf-serif cf-hero__eyebrow">The Welcome Offer</p>
+<h1 class="cf-display cf-hero__title">10% Off<br>Your First Order</h1>
+<p class="cf-hero__sub">Soft tees, broken-in caps and more. Use code HELLO10.</p>
+[button text="Shop T-Shirts" color="white" radius="12" link="{{url:/product-category/t-shirts/}}" class="cf-btn-light"]
+[button text="Shop Caps" color="white" radius="12" link="{{url:/product-category/caps/}}" class="cf-btn-light"]
+[/col]
+[/row]
+[/section]
+
+[section class="cf-styles" padding="14px" padding__sm="10px"]
+[row style="small" col_style="none"]
+[col span="3" span__sm="6"]
+[ux_banner height="99.9%" bg="{{img:tile-casual.webp}}" bg_overlay="rgba(0,0,0,0.16)" hover="zoom" link="{{url:/product-tag/casual/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h2 class="cf-display">Casual</h2>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="3" span__sm="6"]
+[ux_banner height="99.9%" bg="{{img:tile-sport.webp}}" bg_overlay="rgba(0,0,0,0.16)" hover="zoom" link="{{url:/product-tag/sport/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h2 class="cf-display">Sport</h2>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="3" span__sm="6"]
+[ux_banner height="99.9%" bg="{{img:tile-graphic.webp}}" bg_overlay="rgba(0,0,0,0.16)" hover="zoom" link="{{url:/product-tag/graphic/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h2 class="cf-display">Graphic</h2>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="3" span__sm="6"]
+[ux_banner height="99.9%" bg="{{img:tile-outdoor.webp}}" bg_overlay="rgba(0,0,0,0.16)" hover="zoom" link="{{url:/product-tag/outdoor/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h2 class="cf-display">Outdoor</h2>
+[/text_box]
+[/ux_banner]
+[/col]
+[/row]
+[/section]
+
+[section class="cf-statement" padding="34px" padding__sm="22px"]
+[row]
+[col span__sm="12" align="center"]
+<h2 class="cf-display cf-statement__title">One Bought = One Given</h2>
+<p class="cf-serif cf-statement__sub">For every item you buy, we give one to someone who needs it.</p>
+[/col]
+[/row]
+[/section]
+
+[section class="cf-rail" padding="18px"]
+[row]
+[col span="2" span__sm="12" class="cf-rail__intro"]
+<p class="cf-rail__label">T-Shirts</p>
+<h2 class="cf-serif cf-rail__title">New Releases</h2>
+[button text="Shop All Tees" color="secondary" radius="12" link="{{url:/product-category/t-shirts/}}" class="cf-btn-dark"]
+[button text="Shop Graphic Tees" color="secondary" radius="12" link="{{url:/product-category/t-shirts/graphic-tees/}}" class="cf-btn-dark"]
+[/col]
+[col span="10" span__sm="12"]
+[ux_products type="row" col_spacing="small" columns="4" columns__sm="2" columns__md="4" ids="{{ids:tees}}"]
+[/col]
+[/row]
+[/section]
+
+[section class="cf-rail" padding="18px"]
+[row]
+[col span="2" span__sm="12" class="cf-rail__intro"]
+<p class="cf-rail__label">Caps &amp; Hats</p>
+<h2 class="cf-serif cf-rail__title">Best Sellers</h2>
+[button text="Shop All Caps" color="secondary" radius="12" link="{{url:/product-category/caps/}}" class="cf-btn-dark"]
+[button text="Shop Beanies" color="secondary" radius="12" link="{{url:/product-category/caps/beanies/}}" class="cf-btn-dark"]
+[/col]
+[col span="10" span__sm="12"]
+[ux_products type="row" col_spacing="small" columns="4" columns__sm="2" columns__md="4" ids="{{ids:caps}}"]
+[/col]
+[/row]
+[/section]
+
+[section class="cf-shapes" padding="22px"]
+[row style="small" col_style="none"]
+[col span="2" span__sm="4"]
+[ux_image id="{{img:sub-crew-neck.webp}}" image_size="medium" link="{{url:/product-category/t-shirts/crew-neck/}}" class="cf-shape"]
+<p class="cf-shape__label"><a href="{{url:/product-category/t-shirts/crew-neck/}}">Crew Neck</a></p>
+[/col]
+[col span="2" span__sm="4"]
+[ux_image id="{{img:sub-v-neck.webp}}" image_size="medium" link="{{url:/product-category/t-shirts/v-neck/}}" class="cf-shape"]
+<p class="cf-shape__label"><a href="{{url:/product-category/t-shirts/v-neck/}}">V-Neck</a></p>
+[/col]
+[col span="2" span__sm="4"]
+[ux_image id="{{img:sub-long-sleeve.webp}}" image_size="medium" link="{{url:/product-category/t-shirts/long-sleeve/}}" class="cf-shape"]
+<p class="cf-shape__label"><a href="{{url:/product-category/t-shirts/long-sleeve/}}">Long Sleeve</a></p>
+[/col]
+[col span="2" span__sm="4"]
+[ux_image id="{{img:sub-dad-caps.webp}}" image_size="medium" link="{{url:/product-category/caps/dad-caps/}}" class="cf-shape"]
+<p class="cf-shape__label"><a href="{{url:/product-category/caps/dad-caps/}}">Dad Caps</a></p>
+[/col]
+[col span="2" span__sm="4"]
+[ux_image id="{{img:sub-snapbacks.webp}}" image_size="medium" link="{{url:/product-category/caps/snapbacks/}}" class="cf-shape"]
+<p class="cf-shape__label"><a href="{{url:/product-category/caps/snapbacks/}}">Snapbacks</a></p>
+[/col]
+[col span="2" span__sm="4"]
+[ux_image id="{{img:sub-beanies.webp}}" image_size="medium" link="{{url:/product-category/caps/beanies/}}" class="cf-shape"]
+<p class="cf-shape__label"><a href="{{url:/product-category/caps/beanies/}}">Beanies</a></p>
+[/col]
+[/row]
+[/section]
+
+[section class="cf-impact" bg_color="rgb(233, 185, 77)" padding="56px" padding__sm="32px"]
+[row v_align="middle"]
+[col span="7" span__sm="12" align="center"]
+<div class="cf-impact__blob">
+<h2 class="cf-display">250,000+<br>Items Given</h2>
+<p class="cf-serif">You did good. Really good.</p>
+</div>
+[/col]
+[col span="5" span__sm="12"]
+<p class="cf-impact__badges"><span class="cf-pill cf-pill--solid">One Bought</span><span class="cf-pill cf-pill--outline">One Given</span></p>
+<p class="cf-serif cf-impact__text">Tees, caps and socks are among the most requested items at shelters. Every order sends one to a community partner near you.</p>
+[button text="See Your Impact" color="secondary" radius="12" link="{{url:/mission/}}" class="cf-btn-dark"]
+[/col]
+[/row]
+[/section]
+
+[section class="cf-beyond" bg_color="rgb(178, 198, 147)" padding="44px" padding__sm="28px"]
+[row]
+[col span__sm="12"]
+<h2 class="cf-serif cf-beyond__title"><span class="cf-wavy">Comfort Beyond Tees</span></h2>
+[/col]
+[/row]
+[row style="small" col_style="none"]
+[col span="4" span__sm="12"]
+[ux_banner height="99.9%" height__sm="62%" bg="{{img:tile-caps.webp}}" bg_overlay="rgba(0,0,0,0.14)" hover="zoom" link="{{url:/product-category/caps/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h2 class="cf-display">Caps &amp; Hats</h2>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="4" span__sm="12"]
+[ux_banner height="99.9%" height__sm="62%" bg="{{img:tile-hoodies.webp}}" bg_overlay="rgba(0,0,0,0.14)" hover="zoom" link="{{url:/product-category/hoodies/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h2 class="cf-display">Hoodies</h2>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="4" span__sm="12"]
+[ux_banner height="99.9%" height__sm="62%" bg="{{img:tile-socks.webp}}" bg_overlay="rgba(0,0,0,0.14)" hover="zoom" link="{{url:/product-category/socks/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h2 class="cf-display">Socks</h2>
+[/text_box]
+[/ux_banner]
+[/col]
+[/row]
+[/section]

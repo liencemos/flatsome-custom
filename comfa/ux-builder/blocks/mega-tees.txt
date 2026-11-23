@@ -1,0 +1,37 @@
+[section class="cf-mega" padding="28px"]
+[row]
+[col span="2" span__sm="12" class="cf-mega__col"]
+<h4>Shop by Fit</h4>
+<ul>
+<li><a href="{{url:/product-category/t-shirts/}}">All T-Shirts</a></li>
+<li><a href="{{url:/product-category/t-shirts/crew-neck/}}">Crew Neck</a></li>
+<li><a href="{{url:/product-category/t-shirts/v-neck/}}">V-Neck</a></li>
+<li><a href="{{url:/product-category/t-shirts/long-sleeve/}}">Long Sleeve</a></li>
+<li><a href="{{url:/product-category/t-shirts/graphic-tees/}}">Graphic Tees</a></li>
+</ul>
+[/col]
+[col span="2" span__sm="12" class="cf-mega__col"]
+<h4>Shop by Style</h4>
+<ul>
+<li><a href="{{url:/product-tag/casual/}}">Casual</a></li>
+<li><a href="{{url:/product-tag/sport/}}">Sport</a></li>
+<li><a href="{{url:/product-tag/graphic/}}">Graphic</a></li>
+<li><a href="{{url:/product-tag/outdoor/}}">Outdoor</a></li>
+</ul>
+[/col]
+[col span="4" span__sm="12"]
+[ux_banner height="240px" bg="{{img:tile-graphic.webp}}" bg_overlay="rgba(0,0,0,0.16)" hover="zoom" link="{{url:/product-category/t-shirts/graphic-tees/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h3 class="cf-display">Graphic Tees</h3>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="4" span__sm="12"]
+[ux_banner height="240px" bg="{{img:tile-tees.webp}}" bg_overlay="rgba(0,0,0,0.16)" hover="zoom" link="{{url:/product-category/t-shirts/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h3 class="cf-display">Tee Packs</h3>
+[/text_box]
+[/ux_banner]
+[/col]
+[/row]
+[/section]

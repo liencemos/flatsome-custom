@@ -1,0 +1,36 @@
+[section class="cf-mega" padding="28px"]
+[row]
+[col span="2" span__sm="12" class="cf-mega__col"]
+<h4>Shop by Shape</h4>
+<ul>
+<li><a href="{{url:/product-category/caps/}}">All Caps &amp; Hats</a></li>
+<li><a href="{{url:/product-category/caps/dad-caps/}}">Dad Caps</a></li>
+<li><a href="{{url:/product-category/caps/snapbacks/}}">Snapbacks</a></li>
+<li><a href="{{url:/product-category/caps/camp-caps/}}">Camp Caps</a></li>
+<li><a href="{{url:/product-category/caps/beanies/}}">Beanies</a></li>
+</ul>
+[/col]
+[col span="2" span__sm="12" class="cf-mega__col"]
+<h4>More Comfort</h4>
+<ul>
+<li><a href="{{url:/product-category/hoodies/}}">Hoodies &amp; Sweats</a></li>
+<li><a href="{{url:/product-category/socks/}}">Socks</a></li>
+<li><a href="{{url:/size-guide/}}">Size Guide</a></li>
+</ul>
+[/col]
+[col span="4" span__sm="12"]
+[ux_banner height="240px" bg="{{img:tile-caps.webp}}" bg_overlay="rgba(0,0,0,0.16)" hover="zoom" link="{{url:/product-category/caps/dad-caps/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h3 class="cf-display">Dad Caps</h3>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="4" span__sm="12"]
+[ux_banner height="240px" bg="{{img:tile-outdoor.webp}}" bg_overlay="rgba(0,0,0,0.16)" hover="zoom" link="{{url:/product-category/caps/camp-caps/}}" class="cf-tile"]
+[text_box width="90" position_x="50" position_y="50"]
+<h3 class="cf-display">Camp Caps</h3>
+[/text_box]
+[/ux_banner]
+[/col]
+[/row]
+[/section]

@@ -1,0 +1,31 @@
+[section class="cf-story" bg_color="rgb(234, 234, 223)" padding="40px" padding__sm="24px"]
+[row v_align="middle"]
+[col span="4" span__sm="12"]
+[ux_banner height="110%" bg="{{img:fabric.webp}}" bg_overlay="rgba(0,0,0,0.12)" class="cf-tile"]
+[text_box width="80" position_x="50" position_y="50"]
+<h2 class="cf-display">Soft.<br>Not Sorry.</h2>
+[/text_box]
+[/ux_banner]
+[/col]
+[col span="4" span__sm="12" align="center" class="cf-story__copy"]
+<p class="cf-story__icon" aria-hidden="true">✦</p>
+<p>We comb every fibre before it is spun, then pre-wash the finished piece, so it starts soft and stays the size you bought.</p>
+[/col]
+[col span="4" span__sm="12"]
+[ux_image id="{{img:pdp-wear.webp}}" image_size="large" class="cf-rounded"]
+[/col]
+[/row]
+[/section]
+[section class="cf-give" bg_color="rgb(178, 198, 147)" padding="36px" padding__sm="24px"]
+[row v_align="middle"]
+[col span="6" span__sm="12" align="center"]
+[ux_image id="{{img:illus-give.webp}}" image_size="medium" width="56"]
+[/col]
+[col span="6" span__sm="12"]
+<p class="cf-impact__badges"><span class="cf-pill cf-pill--solid">One Bought</span><span class="cf-pill cf-pill--outline">One Given</span></p>
+<h3 class="cf-serif cf-give__title">Your Purchase Powers Real Impact</h3>
+<p>For every item you buy, an essential clothing item goes to someone experiencing homelessness.</p>
+[button text="Learn How" color="secondary" radius="12" link="{{url:/mission/}}" class="cf-btn-dark"]
+[/col]
+[/row]
+[/section]
