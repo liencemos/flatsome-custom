@@ -131,7 +131,8 @@ function cf_ip_claim_validate( $post ) {
 	if ( '' !== $values['email'] && ! is_email( $values['email'] ) ) {
 		$errors['email'] = __( 'Please enter a valid email address.', 'comfa' );
 	}
-	if ( '' !== $values['phone'] && strlen( preg_replace( '/\D/', '', $values['phone'] ) ) < 6 ) {
+	// Count digits in any script, for example Arabic-Indic numerals.
+	if ( '' !== $values['phone'] && (int) preg_match_all( '/\p{Nd}/u', $values['phone'] ) < 6 ) {
 		$errors['phone'] = __( 'Please enter a telephone number we can reach you on.', 'comfa' );
 	}
 	return array( $values, $errors );
