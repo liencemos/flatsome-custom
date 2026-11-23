@@ -71,7 +71,7 @@ function signal_seed_media( $file, $alt ) {
 	if ( ! $temp || ! copy( $source, $temp ) ) {
 		WP_CLI::error( "Could not stage {$file} for media import." );
 	}
-	$id = media_handle_sideload( array( 'name' => 'signal-' . $file, 'tmp_name' => $temp ), 0, $alt );
+	$id = media_handle_sideload( array( 'name' => 'form-edit-' . $file, 'tmp_name' => $temp ), 0, $alt );
 	if ( is_wp_error( $id ) && file_exists( $temp ) ) {
 		unlink( $temp );
 	}
@@ -113,14 +113,25 @@ function signal_seed_attribute( $name, $values ) {
 	return $attribute;
 }
 
-function signal_seed_product( $category, $hat, $record, $index ) {
-	list( $slug, $title, $price, $intro ) = $record;
-	$sku = 'SIG-' . strtoupper( $slug );
-	$id  = wc_get_product_id_by_sku( $sku );
-	if ( $id && ! get_post_meta( $id, '_signal_demo', true ) ) {
+function form_edit_seed_product_id( $slug, $sku ) {
+	$id         = wc_get_product_id_by_sku( $sku );
+	$legacy_sku = 'SIG-' . strtoupper( $slug );
+	$legacy_id  = wc_get_product_id_by_sku( $legacy_sku );
+
+	if ( $id && ( 'product' !== get_post_type( $id ) || ! get_post_meta( $id, '_signal_demo', true ) ) ) {
 		WP_CLI::error( "SKU {$sku} already belongs to non-demo content." );
 	}
+	if ( $legacy_id && ! $id && ( 'product' !== get_post_type( $legacy_id ) || ! get_post_meta( $legacy_id, '_signal_demo', true ) ) ) {
+		WP_CLI::error( "SKU {$legacy_sku} already belongs to non-demo content." );
+	}
+	if ( $id && $legacy_id && $id !== $legacy_id && get_post_meta( $legacy_id, '_signal_demo', true ) ) {
+		WP_CLI::error( "SKUs {$sku} and {$legacy_sku} belong to different demo records." );
+	}
+	return $id ?: $legacy_id;
+}
 
+function signal_seed_product( $id, $category, $hat, $record, $index ) {
+	list( $slug, $sku, $title, $price, $intro ) = $record;
 	$ink    = signal_seed_media( $slug . '-ink.webp', $title . ' in Ink, front view' );
 	$stone  = signal_seed_media( $slug . '-stone.webp', $title . ' in Stone, front view' );
 	$detail = signal_seed_media( $slug . '-detail.webp', $title . ' print detail' );
@@ -218,24 +229,28 @@ function signal_seed_menu( $items ) {
 }
 
 $tees = array(
-	array( 'carrier-wave', 'Block 01 Tee', '34.00', 'A solid form and its missing square. Screen printed just off center on heavyweight cotton jersey.' ),
-	array( 'night-grid', 'Grid 02 Tee', '32.00', 'Four squares in two weights. A modular print on a relaxed crew neck.' ),
-	array( 'orbital-index', 'Orbit 03 Tee', '36.00', 'A bisected circle, screen printed on heavyweight cotton jersey.' ),
-	array( 'relay-station', 'Angle 04 Tee', '34.00', 'A sharp triangular form interrupted by a smaller notch.' ),
-	array( 'static-field', 'Line 05 Tee', '32.00', 'Four horizontal forms, each shorter than the last.' ),
-	array( 'after-hours', 'Facet 06 Tee', '36.00', 'A diamond cut from a diamond, with a single point at its center.' ),
+	array( 'carrier-wave', 'FE-BLOCK-01-TEE', 'Block 01 Tee', '34.00', 'A solid form and its missing square. Screen printed just off center on heavyweight cotton jersey.' ),
+	array( 'night-grid', 'FE-GRID-02-TEE', 'Grid 02 Tee', '32.00', 'Four squares in two weights. A modular print on a relaxed crew neck.' ),
+	array( 'orbital-index', 'FE-ORBIT-03-TEE', 'Orbit 03 Tee', '36.00', 'A bisected circle, screen printed on heavyweight cotton jersey.' ),
+	array( 'relay-station', 'FE-ANGLE-04-TEE', 'Angle 04 Tee', '34.00', 'A sharp triangular form interrupted by a smaller notch.' ),
+	array( 'static-field', 'FE-LINE-05-TEE', 'Line 05 Tee', '32.00', 'Four horizontal forms, each shorter than the last.' ),
+	array( 'after-hours', 'FE-FACET-06-TEE', 'Facet 06 Tee', '36.00', 'A diamond cut from a diamond, with a single point at its center.' ),
 );
 $hats = array(
-	array( 'receiver-cap', 'Block 01 Cap', '28.00', 'A compact block embroidered on an adjustable six-panel cap.' ),
-	array( 'sideband-cap', 'Grid 02 Cap', '28.00', 'A four-square study in raised thread on soft cotton twill.' ),
-	array( 'orbit-cap', 'Orbit 03 Cap', '30.00', 'A bisected circle embroidered above the curved brim.' ),
-	array( 'uplink-cap', 'Angle 04 Cap', '30.00', 'An embroidered triangular mark and an adjustable back strap.' ),
-	array( 'field-cap', 'Line 05 Cap', '28.00', 'Four stepped bars embroidered on a low-profile cap.' ),
-	array( 'nightshift-cap', 'Facet 06 Cap', '30.00', 'Diamond-shaped embroidery on a six-panel cotton twill cap.' ),
+	array( 'receiver-cap', 'FE-BLOCK-01-CAP', 'Block 01 Cap', '28.00', 'A compact block embroidered on an adjustable six-panel cap.' ),
+	array( 'sideband-cap', 'FE-GRID-02-CAP', 'Grid 02 Cap', '28.00', 'A four-square study in raised thread on soft cotton twill.' ),
+	array( 'orbit-cap', 'FE-ORBIT-03-CAP', 'Orbit 03 Cap', '30.00', 'A bisected circle embroidered above the curved brim.' ),
+	array( 'uplink-cap', 'FE-ANGLE-04-CAP', 'Angle 04 Cap', '30.00', 'An embroidered triangular mark and an adjustable back strap.' ),
+	array( 'field-cap', 'FE-LINE-05-CAP', 'Line 05 Cap', '28.00', 'Four stepped bars embroidered on a low-profile cap.' ),
+	array( 'nightshift-cap', 'FE-FACET-06-CAP', 'Facet 06 Cap', '30.00', 'Diamond-shaped embroidery on a six-panel cotton twill cap.' ),
 );
 
 foreach ( array( 't-shirts', 'hats' ) as $slug ) {
 	signal_seed_existing_category( $slug );
+}
+$existing_products = array();
+foreach ( array_merge( $tees, $hats ) as list( $slug, $sku ) ) {
+	$existing_products[ $slug ] = form_edit_seed_product_id( $slug, $sku );
 }
 
 WC_Install::create_pages();
@@ -268,7 +283,7 @@ $hats_id    = signal_seed_category( 'hats', 'Hats', $hats_image );
 $products   = array();
 foreach ( array( array( $tees, $tees_id, false ), array( $hats, $hats_id, true ) ) as list( $records, $category, $hat ) ) {
 	foreach ( $records as $index => $record ) {
-		$products[ $record[0] ] = signal_seed_product( $category, $hat, $record, $index );
+		$products[ $record[0] ] = signal_seed_product( $existing_products[ $record[0] ], $category, $hat, $record, $index );
 	}
 }
 

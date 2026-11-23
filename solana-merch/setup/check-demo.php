@@ -43,6 +43,8 @@ $counts = array( 't-shirts' => 0, 'hats' => 0 );
 $total = 0;
 foreach ( $products as $product_id ) {
 	$product = wc_get_product( $product_id );
+	$sku = 'FE-' . strtoupper( sanitize_title( $product->get_name() ) );
+	signal_check( $sku === $product->get_sku() && $product_id === wc_get_product_id_by_sku( $sku ), "Expected the FORM / EDIT SKU {$sku} for product {$product_id}." );
 	$terms = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'slugs' ) );
 	signal_check( is_array( $terms ) && 1 === count( $terms ) && isset( $counts[ $terms[0] ] ), "Invalid demo category for product {$product_id}." );
 	++$counts[ $terms[0] ];

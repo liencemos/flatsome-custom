@@ -30,7 +30,7 @@ Yêu cầu: WordPress, WooCommerce, Flatsome có bản quyền, WP-CLI và thư 
 
    Có thể dùng `--path=/path/to/wordpress` nếu chạy nơi khác. Giữ `setup/` và `ux-builder/` trong cùng gói khi chạy seed. Nếu site dùng Apache và gặp 404, lưu lại **Settings → Permalinks** để WordPress cập nhật cấu hình rewrite.
 
-Seed tạo 2 danh mục và 12 sản phẩm biến thể (6 áo, 6 mũ); áo có S/M/L/XL, mũ có One size, cả hai có Ink/Stone. Mỗi sản phẩm có ảnh chính, ảnh chi tiết và ảnh màu thay thế. Nếu đang dùng bản demo trước, giữ nguyên thư mục theme và chạy lại seed trên staging: các URL và SKU cũ được giữ để cập nhật đúng sản phẩm. Seed giữ ảnh đã nhập trước đó trong Media Library để không làm hỏng các liên kết cũ. Seed không dành để đồng bộ nội dung đã chỉnh tay; script dừng nếu gặp slug trang, block, danh mục hoặc SKU trùng với dữ liệu không phải demo.
+Seed tạo 2 danh mục và 12 sản phẩm biến thể (6 áo, 6 mũ); áo có S/M/L/XL, mũ có One size, cả hai có Ink/Stone. Mỗi sản phẩm có ảnh chính, ảnh chi tiết và ảnh màu thay thế. Nếu đang dùng bản demo trước, giữ nguyên thư mục theme và chạy lại seed trên staging: SKU được đổi sang định dạng FORM / EDIT (ví dụ `FE-BLOCK-01-TEE`) mà không đổi ID hoặc URL sản phẩm. Seed giữ ảnh đã nhập trước đó trong Media Library để không làm hỏng các liên kết cũ. Seed không dành để đồng bộ nội dung đã chỉnh tay; script dừng nếu gặp slug trang, block, danh mục hoặc SKU trùng với dữ liệu không phải demo.
 
 ## Demo và vị trí chỉnh sửa
 
