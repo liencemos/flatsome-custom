@@ -20,6 +20,15 @@ add_shortcode(
 	}
 );
 
+// Footer link to the page chosen in Settings > Privacy; hidden until that page is published.
+add_shortcode(
+	'cf_privacy_link',
+	function () {
+		$url = get_privacy_policy_url();
+		return $url ? ' <a href="' . esc_url( $url ) . '">' . esc_html__( 'Privacy', 'comfa' ) . '</a>' : '';
+	}
+);
+
 // Product names and totals for the giving counter can be edited in UX Builder; this keeps one number in sync.
 add_shortcode(
 	'cf_given_total',
