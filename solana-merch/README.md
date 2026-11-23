@@ -31,7 +31,7 @@ Yêu cầu: WordPress, WooCommerce, Flatsome có bản quyền, WP-CLI và thư 
 
    Có thể dùng `--path=/path/to/wordpress` nếu chạy nơi khác. Giữ `setup/` và `ux-builder/` trong cùng gói khi chạy seed. Nếu site dùng Apache và gặp 404, lưu lại **Settings → Permalinks** để WordPress cập nhật cấu hình rewrite.
 
-   Kiểm thử xung đột slug trên demo có thể xóa bỏ: `wp eval-file /path/to/solana-merch/setup/check-seed-slug-conflict.php`. Lệnh tạm đổi slug của trang chủ và tạo một tệp đính kèm thử nghiệm; không chạy trên cửa hàng đang hoạt động.
+   Kiểm thử xung đột slug trên demo có thể xóa bỏ: `wp eval-file /path/to/solana-merch/setup/check-seed-slug-conflict.php`. Lệnh tạm đổi slug trang chủ, tạo tệp đính kèm thử nghiệm và chạy seed hai lần khi mục menu trùng slug trang About; không chạy trên cửa hàng đang hoạt động.
 
 Seed tạo 2 danh mục và 12 sản phẩm biến thể (6 áo, 6 mũ); áo có S/M/L/XL, mũ có One size, cả hai có Ink/Stone. Mỗi sản phẩm có ảnh chính, ảnh chi tiết và ảnh màu thay thế. Nếu đang dùng bản demo trước, giữ nguyên thư mục theme và chạy lại seed trên staging: SKU được đổi sang định dạng FORM / EDIT (ví dụ `FE-BLOCK-01-TEE`) mà không đổi ID hoặc URL sản phẩm. Seed giữ ảnh đã nhập trước đó trong Media Library để không làm hỏng các liên kết cũ. Seed không dành để đồng bộ nội dung đã chỉnh tay; script dừng khi gặp dữ liệu không phải demo trùng với slug Home, các UX Block cũ, danh mục hoặc SKU. Bảy trang nội dung bên dưới chỉ được tạo nếu chưa có trang cùng slug.
 
