@@ -109,12 +109,13 @@ function cf_seed_post( $type, $slug, $title, $content, $extra = array() ) {
 		wp_update_post( wp_slash( array( 'ID' => $existing->ID, 'post_content' => $content ) ) );
 		$id = (int) $existing->ID;
 	} else {
+		// Stop before inserting when other content (e.g. a media file) owns the slug; WordPress would publish "slug-2".
+		if ( wp_unique_post_slug( $slug, 0, 'publish', $type, 0 ) !== $slug ) {
+			WP_CLI::error( "$type $slug: the slug is already used by other content." );
+		}
 		$id = wp_insert_post( wp_slash( array( 'post_type' => $type, 'post_name' => $slug, 'post_title' => $title, 'post_content' => $content, 'post_status' => 'publish' ) ), true );
 		if ( is_wp_error( $id ) ) {
 			WP_CLI::error( "$type $slug: " . $id->get_error_message() );
-		}
-		if ( get_post_field( 'post_name', $id ) !== $slug ) {
-			WP_CLI::error( "$type $slug: the slug is already used by other content." );
 		}
 		if ( 'page' === $type ) {
 			update_post_meta( $id, '_wp_page_template', isset( $extra['template'] ) ? $extra['template'] : 'page-blank.php' );
