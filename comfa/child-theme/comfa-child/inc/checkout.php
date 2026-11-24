@@ -101,6 +101,7 @@ function cf_checkout_shipping_panel() {
 	<section id="cf-checkout-delivery" class="cf-checkout-panel" aria-labelledby="cf-checkout-delivery-title" hidden>
 		<h2 id="cf-checkout-delivery-title"><?php esc_html_e( 'Shipping method', 'comfa' ); ?></h2>
 		<table class="cf-checkout-rates"><tbody></tbody></table>
+		<p class="cf-checkout-shipping-error" role="alert" tabindex="-1" hidden><?php esc_html_e( 'Choose an available shipping method before continuing. If none is shown, check your delivery address under Information.', 'comfa' ); ?></p>
 		<?php cf_checkout_continue( __( 'Continue to payment', 'comfa' ) ); ?>
 	</section>
 	<?php

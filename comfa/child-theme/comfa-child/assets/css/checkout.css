@@ -53,7 +53,7 @@
 }
 .cf-checkout-panel .select2-container .select2-selection--single .select2-selection__rendered { line-height: 46px; }
 .cf-checkout-panel .input-text:focus, .cf-checkout-panel select:focus { border-color: var(--cf-navy); }
-.cf-checkout-field-error { display: block; font-size: .8125rem; color: #9e1708; margin-bottom: 8px; }
+.cf-checkout-field-error, .cf-checkout-shipping-error { display: block; font-size: .8125rem; color: #9e1708; margin-bottom: 8px; }
 .cf-checkout-panel [aria-invalid="true"] { border-color: #9e1708; }
 .cf-store form.checkout .cf-checkout-next, .cf-store form.checkout #place_order {
 	background: var(--cf-yellow);

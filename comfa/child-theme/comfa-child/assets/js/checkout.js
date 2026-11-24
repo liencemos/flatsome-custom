@@ -12,6 +12,7 @@
 		const stages = buttons.map(button => form.querySelector('#cf-checkout-' + button.dataset.cfStage));
 		const mobile = window.matchMedia('(max-width: 849px)');
 		const rates = form.querySelector('.cf-checkout-rates tbody');
+		const shippingError = form.querySelector('.cf-checkout-shipping-error');
 		let active = 0;
 		let unlocked = 0;
 		let expanded = false;
@@ -43,6 +44,21 @@
 			return row.querySelector('input.shipping_method:checked, input.shipping_method[type="hidden"], select.shipping_method');
 		}
 
+		function canShip() {
+			return !rates || (rates.rows.length > 0 && [...rates.rows].every(row => {
+				const method = selectedRate(row);
+				return method?.value && !method.disabled;
+			}));
+		}
+
+		function requireShipping() {
+			if (canShip()) return true;
+			show(stages.indexOf(rates.closest('section')), false);
+			shippingError.hidden = false;
+			shippingError.focus();
+			return false;
+		}
+
 		function updateSummaryShipping(table) {
 			const footer = table?.tFoot;
 			if (!footer || !rates) return;
@@ -72,6 +88,7 @@
 			}
 			updateSummaryShipping(table);
 			updateSummary();
+			if (shippingError && canShip()) shippingError.hidden = true;
 		}
 
 		function clearError(field) {
@@ -116,6 +133,7 @@
 
 		buttons.forEach((button, i) => button.addEventListener('click', () => {
 			if (active === 0 && i > active && !validateDetails()) return;
+			if (i === stages.length - 1 && !requireShipping()) return;
 			show(i, true);
 		}));
 		form.addEventListener('input', event => clearError(event.target));
@@ -123,6 +141,7 @@
 		form.addEventListener('click', event => {
 			if (!event.target.closest('.cf-checkout-next')) return;
 			if (active === 0 && !validateDetails()) return;
+			if (active + 1 === stages.length - 1 && !requireShipping()) return;
 			unlocked = Math.max(unlocked, active + 1);
 			show(active + 1, true);
 		});
@@ -139,6 +158,7 @@
 			const field = error && document.getElementById(error.dataset.id);
 			const index = stages.findIndex(panel => panel.contains(field));
 			if (index >= 0) show(index, false);
+			else requireShipping();
 		});
 	});
 }(jQuery));
