@@ -136,9 +136,13 @@ function cf_seed_render( $text, $context ) {
 				case 'src':
 					return esc_url( (string) wp_get_attachment_url( cf_seed_asset( $value ) ) );
 				case 'url':
-					// "Shop" links follow the page chosen under WooCommerce > Settings > Products.
+					// "Shop" links follow the page chosen under WooCommerce > Settings > Products. Built from its
+					// path, not its permalink: that is the site root while the shop is still the front page.
 					if ( '/shop/' === $value && function_exists( 'wc_get_page_id' ) && wc_get_page_id( 'shop' ) > 0 ) {
-						return esc_url( wc_get_page_permalink( 'shop' ) );
+						$shop_uri = get_page_uri( wc_get_page_id( 'shop' ) );
+						if ( $shop_uri ) {
+							return esc_url( home_url( '/' . $shop_uri . '/' ) );
+						}
 					}
 					return esc_url( home_url( $value ) );
 				case 'block':
