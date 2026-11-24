@@ -199,13 +199,15 @@ add_action(
 		if ( ! cf_checkout_layout() ) {
 			return;
 		}
-		$links = array(
-			get_privacy_policy_url() => __( 'Privacy Policy', 'comfa' ),
-			wc_get_page_permalink( 'terms', '' ) => __( 'Terms of Service', 'comfa' ),
-			home_url( '/contact/' ) => __( 'Contact', 'comfa' ),
+		$return_policy = get_page_by_path( 'return-refund-policy', OBJECT, array( 'page' ) );
+		$links         = array(
+			__( 'Privacy Policy', 'comfa' ) => get_privacy_policy_url(),
+			__( 'Terms of Service', 'comfa' ) => wc_get_page_permalink( 'terms', '' ),
+			__( 'Return & Refund Policy', 'comfa' ) => $return_policy && 'publish' === $return_policy->post_status ? get_permalink( $return_policy ) : '',
+			__( 'Contact', 'comfa' ) => home_url( '/contact/' ),
 		);
 		echo '<nav class="cf-checkout-legal" aria-label="' . esc_attr__( 'Checkout policies', 'comfa' ) . '">';
-		foreach ( $links as $url => $label ) {
+		foreach ( $links as $label => $url ) {
 			if ( $url ) {
 				printf( '<a href="%1$s">%2$s</a>', esc_url( $url ), esc_html( $label ) );
 			}

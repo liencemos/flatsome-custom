@@ -109,6 +109,8 @@ $cf_expect( (bool) get_theme_mod( 'smof_init' ), 'Flatsome Advanced options are 
 $cf_expect( (bool) get_theme_mod( 'cart_auto_refresh' ) && (bool) get_theme_mod( 'cart_sticky_sidebar' ), 'Flatsome cart options are not set.' );
 $cf_checkout_page = get_post( wc_get_page_id( 'checkout' ) );
 $cf_expect( $cf_checkout_page && 'publish' === $cf_checkout_page->post_status && has_shortcode( $cf_checkout_page->post_content, 'woocommerce_checkout' ), 'Classic WooCommerce checkout is not configured.' );
+$cf_terms_page_id = wc_terms_and_conditions_page_id();
+$cf_expect( $cf_terms_page_id && 'page' === get_post_type( $cf_terms_page_id ) && 'publish' === get_post_status( $cf_terms_page_id ), 'WooCommerce is not configured with a published terms page.' );
 $cf_expect( (bool) get_theme_mod( 'swatches' ) && wc_get_attribute( get_theme_mod( 'swatches_box_attribute' ) ), 'Flatsome swatches are not configured.' );
 foreach ( array( 'pa_pack' => 'ux_label', 'pa_color' => 'ux_color', 'pa_size' => 'ux_label', 'pa_style' => 'ux_image' ) as $cf_taxonomy => $cf_type ) {
 	$cf_swatch = get_option( 'flatsome_product_attribute-' . wc_attribute_taxonomy_id_by_name( $cf_taxonomy ) );
