@@ -77,6 +77,13 @@ body.dewier {
 	background: #fff;
 }
 
+/* Pages not built with Elementor: cart, account, text pages. */
+.dewier.page:not(.elementor-page) .site-content .col-full {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem 1.5rem 4rem;
+}
+
 .dewier .site-content,
 .dewier .content-area,
 .dewier .site-main {
