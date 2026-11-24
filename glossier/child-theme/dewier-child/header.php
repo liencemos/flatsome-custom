@@ -42,6 +42,7 @@
 						'fallback_cb'    => 'dewier_nav_fallback',
 					)
 				);
+				do_action( 'dewier_nav_after' );
 				?>
 			</nav>
 			<div class="dw-utils">

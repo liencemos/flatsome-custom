@@ -3429,9 +3429,23 @@ body.dewier {
 	position: static;
 }
 
+.dw-nav__extra {
+	display: none;
+}
+
 @media (max-width: 640px) {
 	.dewier .dw-utils__link--wishlist {
 		display: none;
+	}
+
+	.dewier .dw-nav__extra {
+		display: block;
+		margin-top: 1rem;
+		padding: 1rem 0 0;
+		border-top: 1px solid #e8e8e8;
+		color: #000;
+		font-size: 1rem;
+		text-decoration: none;
 	}
 }
 

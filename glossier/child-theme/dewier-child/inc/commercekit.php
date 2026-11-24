@@ -18,6 +18,7 @@ function dewier_commercekit_setup() {
 		add_action( 'dewier_card_media', 'commercekit_after_shop_loop_item_wishlist' );
 		add_action( 'dewier_pdp_after_buy', 'commercekit_single_product_wishlist', 20 );
 		add_action( 'dewier_header_utils', 'dewier_commercekit_wishlist_link' );
+		add_action( 'dewier_nav_after', 'dewier_commercekit_wishlist_link' );
 	}
 	if ( function_exists( 'commercekit_display_inventory_counter' ) ) {
 		add_action( 'dewier_pdp_after_buy', 'commercekit_display_inventory_counter', 10 );
@@ -56,5 +57,7 @@ function dewier_commercekit_wishlist_link() {
 	if ( ! $page || 'publish' !== get_post_status( $page ) ) {
 		return;
 	}
-	printf( '<a class="dw-utils__link dw-utils__link--wishlist" href="%s">%s</a>', esc_url( get_permalink( $page ) ), esc_html__( 'Wishlist', 'dewier' ) );
+	// The menu drawer copy replaces the header link on phones, where the header has no room for it.
+	$class = doing_action( 'dewier_nav_after' ) ? 'dw-nav__extra' : 'dw-utils__link dw-utils__link--wishlist';
+	printf( '<a class="%s" href="%s">%s</a>', esc_attr( $class ), esc_url( get_permalink( $page ) ), esc_html__( 'Wishlist', 'dewier' ) );
 }
