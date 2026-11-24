@@ -48,7 +48,11 @@
 		}
 
 		function rateLabel(method) {
-			return (method?.tagName === 'SELECT' ? method.selectedOptions[0]?.textContent : method?.labels?.[0]?.textContent)?.trim();
+			if (!method) return '';
+			if (method.tagName === 'SELECT') return method.selectedOptions[0]?.textContent.trim();
+			const item = method.type === 'hidden' ? method.closest('li') : null;
+			const label = method.labels?.[0] ?? item?.querySelector('label') ?? item;
+			return label?.textContent.trim();
 		}
 
 		function fieldValue(id) {
