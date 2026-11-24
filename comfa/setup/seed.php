@@ -420,9 +420,11 @@ foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
 	foreach ( $wpdb->get_results( $wpdb->prepare( "SELECT p.ID, m.meta_value AS sku FROM {$wpdb->posts} p JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_sku' WHERE p.post_parent = %d AND p.post_type = 'product_variation'", $cf_id ) ) as $cf_row ) {
 		$cf_existing[ $cf_row->sku ] = (int) $cf_row->ID;
 	}
+	$cf_wanted = array();
 	foreach ( $cf_rows as $cf_order => $cf_row ) {
 		$cf_sku       = 'CF-' . strtoupper( $cf_item['slug'] . '-' . $cf_row[0] . '-' . $cf_row[1] . '-' . $cf_row[2] );
-		$cf_variation = isset( $cf_existing[ $cf_sku ] ) ? wc_get_product( $cf_existing[ $cf_sku ] ) : new WC_Product_Variation();
+		$cf_wanted[ $cf_sku ] = true;
+		$cf_variation         = isset( $cf_existing[ $cf_sku ] ) ? wc_get_product( $cf_existing[ $cf_sku ] ) : new WC_Product_Variation();
 		$cf_variation->set_parent_id( $cf_id );
 		$cf_variation->set_sku( $cf_sku );
 		$cf_variation->set_attributes( array( $cf_tax['style'] => $cf_row[0], $cf_tax['color'] => $cf_row[1], $cf_tax['size'] => $cf_row[2] ) );
@@ -434,7 +436,15 @@ foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
 		$cf_variation->set_menu_order( $cf_order );
 		$cf_variation->save();
 	}
+	// Combinations dropped from the catalog must stop being sold; variations added by hand (other SKUs) are left alone.
+	$cf_prefix = 'CF-' . strtoupper( $cf_item['slug'] ) . '-';
+	foreach ( array_diff_key( $cf_existing, $cf_wanted ) as $cf_sku => $cf_stale ) {
+		if ( 0 === strpos( (string) $cf_sku, $cf_prefix ) ) {
+			wp_delete_post( $cf_stale, true );
+		}
+	}
 	WC_Product_Variable::sync( $cf_id );
+	wc_delete_product_transients( $cf_id );
 	WP_CLI::log( sprintf( '%s: %d variations', $cf_item['name'], count( $cf_rows ) ) );
 
 	if ( ! get_comments( array( 'post_id' => $cf_id, 'count' => true, 'meta_key' => '_cf_seed', 'meta_value' => 1 ) ) ) {
