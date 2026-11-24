@@ -107,6 +107,8 @@ $cf_expect( (int) get_theme_mod( 'footer_block' ) === (int) get_page_by_path( 'f
 $cf_expect( (int) get_theme_mod( '404_block' ) === (int) get_page_by_path( 'page-404', OBJECT, 'blocks' )->ID, '404 UX Block is not assigned.' );
 $cf_expect( (bool) get_theme_mod( 'smof_init' ), 'Flatsome Advanced options are not initialised; the first wp-admin visit would switch swatches and the 404 block off.' );
 $cf_expect( (bool) get_theme_mod( 'cart_auto_refresh' ) && (bool) get_theme_mod( 'cart_sticky_sidebar' ), 'Flatsome cart options are not set.' );
+$cf_checkout_page = get_post( wc_get_page_id( 'checkout' ) );
+$cf_expect( $cf_checkout_page && 'publish' === $cf_checkout_page->post_status && has_shortcode( $cf_checkout_page->post_content, 'woocommerce_checkout' ), 'Classic WooCommerce checkout is not configured.' );
 $cf_expect( (bool) get_theme_mod( 'swatches' ) && wc_get_attribute( get_theme_mod( 'swatches_box_attribute' ) ), 'Flatsome swatches are not configured.' );
 foreach ( array( 'pa_pack' => 'ux_label', 'pa_color' => 'ux_color', 'pa_size' => 'ux_label', 'pa_style' => 'ux_image' ) as $cf_taxonomy => $cf_type ) {
 	$cf_swatch = get_option( 'flatsome_product_attribute-' . wc_attribute_taxonomy_id_by_name( $cf_taxonomy ) );
