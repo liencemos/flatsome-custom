@@ -21,6 +21,52 @@ add_action(
 add_filter( 'woocommerce_sale_flash', '__return_empty_string', 20 );
 add_filter( 'flatsome_product_labels', '__return_empty_string', 20 );
 
+add_action(
+	'wp',
+	function () {
+		if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {
+			remove_action( 'flatsome_woocommerce_shop_loop_images', 'woocommerce_template_loop_product_thumbnail', 10 );
+			add_action( 'flatsome_woocommerce_shop_loop_images', 'cf_archive_thumbnail', 10 );
+		}
+	}
+);
+
+function cf_archive_thumbnail() {
+	if ( ! in_the_loop() || wc_get_loop_prop( 'is_shortcode' ) ) {
+		woocommerce_template_loop_product_thumbnail();
+		return;
+	}
+
+	$columns = max( 1, (int) wc_get_loop_prop( 'columns', 3 ) );
+	$tablet  = max( 1, (int) get_theme_mod( 'category_row_count_tablet', 3 ) );
+	$mobile  = max( 1, (int) get_theme_mod( 'category_row_count_mobile', 2 ) );
+	$width   = (float) get_theme_mod( 'site_width', 1080 );
+	$width   = $width > 0 ? $width : 1080;
+	$index   = (int) wc_get_loop_prop( 'loop', 1 );
+	$sidebar = ! in_array( get_theme_mod( 'category_sidebar', 'left-sidebar' ), array( 'none', 'off-canvas' ), true );
+	$share   = ( $sidebar ? 0.75 : 1 ) / $columns;
+	$gutter  = $sidebar ? 30 : 20;
+	$attrs   = array(
+		'sizes' => sprintf(
+			'(max-width: 549px) calc(%svw - 20px), (max-width: 849px) calc(%svw - 20px), (max-width: %dpx) calc(%svw - %dpx), %dpx',
+			100 / $mobile,
+			100 / $tablet,
+			(int) $width,
+			$share * 100,
+			$gutter,
+			max( 1, (int) ( $width * $share - $gutter ) )
+		),
+	);
+	if ( $index <= max( $columns, $tablet, $mobile ) ) {
+		$attrs['loading'] = 'eager';
+		$attrs['class']   = 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail ux-skip-lazy skip-lazy';
+	}
+	if ( 1 === $index ) {
+		$attrs['fetchpriority'] = 'high';
+	}
+	echo woocommerce_get_product_thumbnail( 'woocommerce_thumbnail', $attrs ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
 function cf_badge_markup( $product ) {
 	$badge = trim( (string) $product->get_meta( '_cf_badge' ) );
 	if ( '' === $badge ) {

@@ -20,6 +20,14 @@
 	--cf-serif: "Fraunces", Georgia, serif;
 }
 
+@font-face {
+	font-family: "Bowlby One";
+	src: url("../fonts/bowlby-one.woff2") format("woff2");
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
 /* ---------- Type and buttons ---------- */
 .cf-store { color: var(--cf-ink); -webkit-font-smoothing: antialiased; }
 .cf-display { font-family: var(--cf-display); font-weight: 400; text-transform: uppercase; line-height: .92; letter-spacing: -.01em; }
