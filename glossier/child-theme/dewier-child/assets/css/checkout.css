@@ -390,9 +390,6 @@
 	border-color: #c4001a;
 }
 
-.dw-co .form-row.woocommerce-invalid label:not(.checkbox) {
-	color: #c4001a;
-}
 
 .dw-co .checkout-inline-error-message {
 	margin: 0.3rem 0 0;
@@ -1035,4 +1032,21 @@ body.dw-checkout .dw-co #payment ul.payment_methods > li > input[type="radio"] {
 	border-right: 0 !important;
 	border-left: 0 !important;
 	box-shadow: none !important;
+}
+
+/* WooPayments styles its card fields from the first checkout label, so labels keep one colour. */
+
+.dw-co .woopay-save-new-user-container,
+.dw-co .woopay-save-new-user-container * {
+	font-family: var(--dw-font);
+}
+
+.dw-co .woopay-save-new-user-container .save-details-checkbox {
+	font-size: 0.9375rem;
+}
+
+/* WooCommerce adds its coupon notice before the hidden coupon form; the summary shows its own. */
+.dw-checkout .woocommerce-message:has(+ form.checkout_coupon),
+.dw-checkout .woocommerce-info:has(+ form.checkout_coupon) {
+	display: none;
 }
