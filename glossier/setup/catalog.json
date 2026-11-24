@@ -13,7 +13,7 @@
     {"slug": "treatments", "name": "Treatments", "parent": "skincare"},
     {"slug": "balms", "name": "Balms"},
     {"slug": "body", "name": "Body"},
-    {"slug": "goods", "name": "Dewier Goods"},
+    {"slug": "goods", "name": "Meredithzone Goods"},
     {"slug": "sets", "name": "Save with Sets"}
   ],
   "products": [
@@ -55,7 +55,7 @@
     {"slug": "daily-body-wash", "name": "Daily Body Wash", "subtitle": "Creamy oil-to-foam wash", "cats": ["body"], "shape": "pump", "color": "#e9eef7", "accent": "#ffffff", "price": 22, "badges": ["promo:Up to 30% off"], "rating": 4.4, "reviews": 1204},
 
     {"slug": "beauty-bag", "name": "The Beauty Bag", "subtitle": "Roomy zip pouch", "cats": ["goods"], "shape": "bag", "color": "#f3c9cf", "accent": "#c8102e", "price": 30, "badges": ["promo:Up to 30% off"], "rating": 4.7, "reviews": 890},
-    {"slug": "logo-hoodie", "name": "Dewier Hoodie", "subtitle": "Heavyweight fleece", "cats": ["goods"], "shape": "bag", "color": "#e3e3e3", "accent": "#0600ff", "sizes": {"S": 68, "M": 68, "L": 68, "XL": 68}, "badges": ["value:Limited edition"], "rating": 4.6, "reviews": 143},
+    {"slug": "logo-hoodie", "name": "Meredithzone Hoodie", "subtitle": "Heavyweight fleece", "cats": ["goods"], "shape": "bag", "color": "#e3e3e3", "accent": "#0600ff", "sizes": {"S": 68, "M": 68, "L": 68, "XL": 68}, "badges": ["value:Limited edition"], "rating": 4.6, "reviews": 143},
     {"slug": "claw-clip", "name": "Claw Clip", "subtitle": "Hair accessory", "cats": ["goods"], "shape": "compact", "color": "#f6d5dc", "accent": "#e8758a", "price": 14, "badges": ["promo:Up to 30% off"], "rating": 4.5, "reviews": 377}
   ]
 }

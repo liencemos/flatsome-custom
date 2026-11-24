@@ -1,4 +1,4 @@
-/* Dewier storefront styles for Shoptimizer + Elementor + WooCommerce. */
+/* Meredithzone storefront styles for Shoptimizer + Elementor + WooCommerce. */
 
 @font-face {
 	font-family: "DM Sans";
@@ -3431,7 +3431,7 @@ body.dewier {
 	font-weight: 400;
 }
 
-/* CommerceKit pins .summary for Shoptimizer's layout; the Dewier grid pins the gallery instead. */
+/* CommerceKit pins .summary for Shoptimizer's layout; the Meredithzone grid pins the gallery instead. */
 .dewier.single-product #page div.product.dw-pdp div.dw-pdp__info.summary {
 	position: static;
 }

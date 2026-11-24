@@ -1,6 +1,6 @@
 <?php
 /**
- * Seeds the Dewier demo storefront. Run with: wp eval-file seed.php
+ * Seeds the Meredithzone demo storefront. Run with: wp eval-file seed.php
  * Safe to re-run: every object is looked up by slug or meta before it is created.
  */
 
@@ -112,7 +112,7 @@ function dewier_seed_term( $name, $taxonomy, $args = array() ) {
 
 /* ---------- Store settings ---------- */
 
-update_option( 'blogname', 'Dewier' );
+update_option( 'blogname', 'Meredithzone' );
 update_option( 'blogdescription', 'Skin first. Makeup second.' );
 update_option( 'woocommerce_default_country', 'US:NY' );
 update_option( 'woocommerce_currency', 'USD' );
@@ -123,26 +123,28 @@ update_option( 'woocommerce_dimension_unit', 'in' );
 update_option( 'woocommerce_enable_ajax_add_to_cart', 'yes' );
 update_option( 'woocommerce_cart_redirect_after_add', 'no' );
 
-// The child theme styles the shortcode cart, so swap WooCommerce's Cart block for it and keep the rest of the page.
-function dewier_seed_cart_shortcode( $blocks ) {
+// The child theme styles the shortcode Cart and Checkout, so swap WooCommerce's blocks for them and keep the rest of each page.
+function dewier_seed_page_shortcode( $blocks, $block_name, $shortcode ) {
 	foreach ( $blocks as $i => $block ) {
-		if ( 'woocommerce/cart' === $block['blockName'] ) {
-			$blocks[ $i ] = current( parse_blocks( '<!-- wp:shortcode -->[woocommerce_cart]<!-- /wp:shortcode -->' ) );
+		if ( $block_name === $block['blockName'] ) {
+			$blocks[ $i ] = current( parse_blocks( '<!-- wp:shortcode -->[' . $shortcode . ']<!-- /wp:shortcode -->' ) );
 		} elseif ( $block['innerBlocks'] ) {
-			$blocks[ $i ]['innerBlocks'] = dewier_seed_cart_shortcode( $block['innerBlocks'] );
+			$blocks[ $i ]['innerBlocks'] = dewier_seed_page_shortcode( $block['innerBlocks'], $block_name, $shortcode );
 		}
 	}
 	return $blocks;
 }
 
-$dewier_cart_page = get_post( wc_get_page_id( 'cart' ) );
-if ( $dewier_cart_page && has_block( 'woocommerce/cart', $dewier_cart_page ) ) {
-	wp_update_post(
-		array(
-			'ID'           => $dewier_cart_page->ID,
-			'post_content' => wp_slash( serialize_blocks( dewier_seed_cart_shortcode( parse_blocks( $dewier_cart_page->post_content ) ) ) ),
-		)
-	);
+foreach ( array( 'cart', 'checkout' ) as $dewier_wc_page ) {
+	$dewier_page = get_post( wc_get_page_id( $dewier_wc_page ) );
+	if ( $dewier_page && has_block( 'woocommerce/' . $dewier_wc_page, $dewier_page ) ) {
+		wp_update_post(
+			array(
+				'ID'           => $dewier_page->ID,
+				'post_content' => wp_slash( serialize_blocks( dewier_seed_page_shortcode( parse_blocks( $dewier_page->post_content ), 'woocommerce/' . $dewier_wc_page, 'woocommerce_' . $dewier_wc_page ) ) ),
+			)
+		);
+	}
 }
 
 update_option( 'woocommerce_enable_reviews', 'yes' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * CommerceKit wishlist item, rendered as a Dewier product card.
+ * CommerceKit wishlist item, rendered as a Meredithzone product card.
  *
  * @package dewier
  */

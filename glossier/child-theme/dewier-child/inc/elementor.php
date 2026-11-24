@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function dewier_elementor_category( $manager ) {
-	$manager->add_category( 'dewier', array( 'title' => __( 'Dewier', 'dewier' ) ) );
+	$manager->add_category( 'dewier', array( 'title' => __( 'Meredithzone', 'dewier' ) ) );
 }
 add_action( 'elementor/elements/categories_registered', 'dewier_elementor_category' );
 

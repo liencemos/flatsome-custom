@@ -1,6 +1,6 @@
 <?php
 /**
- * Dewier child theme for Shoptimizer.
+ * Meredithzone child theme for Shoptimizer.
  *
  * @package dewier
  */
@@ -16,5 +16,6 @@ define( 'DEWIER_URI', get_stylesheet_directory_uri() );
 require_once DEWIER_DIR . '/inc/setup.php';
 require_once DEWIER_DIR . '/inc/layout.php';
 require_once DEWIER_DIR . '/inc/woocommerce.php';
+require_once DEWIER_DIR . '/inc/checkout.php';
 require_once DEWIER_DIR . '/inc/commercekit.php';
 require_once DEWIER_DIR . '/inc/elementor.php';

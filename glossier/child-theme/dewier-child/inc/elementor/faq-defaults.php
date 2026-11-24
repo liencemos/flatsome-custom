@@ -1,6 +1,6 @@
 <?php
 /**
- * Sample questions for the Dewier FAQ widget: array( topic, question, answer ).
+ * Sample questions for the Meredithzone FAQ widget: array( topic, question, answer ).
  * They are placeholders for the shop's own policies.
  *
  * @package dewier
@@ -49,5 +49,5 @@ return array(
 	array( __( 'Contact', 'dewier' ), __( 'I have a question that is not listed here. How do I reach you?', 'dewier' ), '<p>' . sprintf( /* translators: %s: contact link */ __( 'We are happy to help. Please %s and a person will get back to you.', 'dewier' ), $dewier_contact ) . '</p>' ),
 	array( __( 'Contact', 'dewier' ), __( 'How quickly will I get a reply?', 'dewier' ), '<p>' . __( 'We reply to most messages within 2 business days.', 'dewier' ) . '</p>' ),
 
-	array( __( 'Code Of Conduct', 'dewier' ), __( 'What is the Dewier Code of Conduct?', 'dewier' ), '<p>' . __( 'We treat every customer with respect and ask for the same in return. We may end a conversation or decline service when messages to our team are abusive or threatening.', 'dewier' ) . '</p>' ),
+	array( __( 'Code Of Conduct', 'dewier' ), __( 'What is the Meredithzone Code of Conduct?', 'dewier' ), '<p>' . __( 'We treat every customer with respect and ask for the same in return. We may end a conversation or decline service when messages to our team are abusive or threatening.', 'dewier' ) . '</p>' ),
 );

@@ -126,7 +126,7 @@ dewier_site_menu(
 	)
 );
 dewier_site_menu(
-	'About Dewier',
+	'About Meredithzone',
 	'dewier_footer_about',
 	array(
 		array( 'About us', $dewier_pages['about'] ),
@@ -252,7 +252,7 @@ if ( defined( 'ELEMENTOR_VERSION' ) ) {
 update_option( 'show_on_front', 'page' );
 update_option( 'page_on_front', $dewier_home_id );
 
-// CommerceKit: a wishlist page, plus the modules the Dewier templates are wired to.
+// CommerceKit: a wishlist page, plus the modules the Meredithzone templates are wired to.
 // The page is saved first: each activate command writes the option in its own process.
 if ( function_exists( 'commercekit_get_options' ) ) {
 	$dewier_kit = get_option( 'commercekit', array() );
@@ -266,8 +266,8 @@ if ( function_exists( 'commercekit_get_options' ) ) {
 }
 
 // Importable copies of both pages.
-dewier_site_export( 'home.json', 'Dewier Home', $dewier_home );
-dewier_site_export( 'help.json', 'Dewier Help', $dewier_help );
+dewier_site_export( 'home.json', 'Meredithzone Home', $dewier_home );
+dewier_site_export( 'help.json', 'Meredithzone Help', $dewier_help );
 
 flush_rewrite_rules();
 WP_CLI::log( 'Site seed complete. Home page ID: ' . $dewier_home_id . ( $dewier_set_home ? '' : ' (existing layout kept)' ) . '. Help page ID: ' . $dewier_help_id . ( $dewier_set_help ? '' : ' (existing page kept)' ) );

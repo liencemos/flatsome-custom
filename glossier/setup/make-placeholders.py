@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate neutral product and lifestyle placeholders for the Dewier demo."""
+"""Generate neutral product and lifestyle placeholders for the Meredithzone demo."""
 
 import json
 import random

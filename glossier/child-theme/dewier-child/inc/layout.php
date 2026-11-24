@@ -193,6 +193,10 @@ function dewier_footer_column( $location, $fallback_title ) {
 
 function dewier_footer() {
 	$name = get_bloginfo( 'name' );
+	if ( dewier_is_checkout_flow() ) {
+		dewier_checkout_footer( $name );
+		return;
+	}
 	?>
 	<footer class="dw-footer">
 		<div class="dw-footer__top">
@@ -233,6 +237,31 @@ function dewier_footer() {
 				<path d="M50 104c20 26 56 22 76-6"/>
 				<path d="M200 96c-8-18 12-26 20-8l10 22-8-58c-2-16 18-18 22-2l8 42 2-56c0-16 20-16 22 0l2 58 12-44c4-14 22-10 20 6l-12 62c-6 32-22 42-50 40-26-2-38-22-48-62Z"/>
 			</svg>
+		</div>
+	</footer>
+	<?php
+}
+
+/**
+ * Checkout keeps only the legal line so nothing pulls shoppers away from paying.
+ */
+function dewier_checkout_footer( $name ) {
+	?>
+	<footer class="dw-footer dw-footer--checkout">
+		<div class="dw-footer__legal">
+			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) . ' ' . $name ); ?>. <?php esc_html_e( 'All rights reserved.', 'dewier' ); ?></span>
+			<?php
+			if ( has_nav_menu( 'dewier_footer_legal' ) ) {
+				wp_nav_menu(
+					array(
+						'theme_location' => 'dewier_footer_legal',
+						'container'      => false,
+						'menu_class'     => 'dw-footer__legal-list',
+						'depth'          => 1,
+					)
+				);
+			}
+			?>
 		</div>
 	</footer>
 	<?php

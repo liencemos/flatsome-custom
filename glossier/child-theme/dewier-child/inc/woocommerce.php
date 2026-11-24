@@ -415,7 +415,7 @@ function dewier_accordions( $product ) {
 }
 
 /**
- * Cart page: Dewier heading and free-shipping progress instead of Shoptimizer's step bar.
+ * Cart page: Meredithzone heading and free-shipping progress instead of Shoptimizer's step bar.
  */
 function dewier_cart_page_setup() {
 	remove_action( 'woocommerce_before_cart', 'shoptimizer_cart_progress' );

@@ -110,7 +110,7 @@ class Dewier_Widget_Hero extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier Hero', 'dewier' );
+		return __( 'Meredithzone Hero', 'dewier' );
 	}
 
 	protected function fields() {
@@ -163,7 +163,7 @@ class Dewier_Widget_Gift extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier Gift Strip', 'dewier' );
+		return __( 'Meredithzone Gift Strip', 'dewier' );
 	}
 
 	protected function fields() {
@@ -197,7 +197,7 @@ class Dewier_Widget_Products extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier Product Carousel', 'dewier' );
+		return __( 'Meredithzone Product Carousel', 'dewier' );
 	}
 
 	protected function fields() {
@@ -288,7 +288,7 @@ class Dewier_Widget_Promo_Cards extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier Promo Cards', 'dewier' );
+		return __( 'Meredithzone Promo Cards', 'dewier' );
 	}
 
 	protected function fields() {
@@ -338,7 +338,7 @@ class Dewier_Widget_Story extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier Story', 'dewier' );
+		return __( 'Meredithzone Story', 'dewier' );
 	}
 
 	protected function fields() {
@@ -383,7 +383,7 @@ class Dewier_Widget_Carousel extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier Image Carousel', 'dewier' );
+		return __( 'Meredithzone Image Carousel', 'dewier' );
 	}
 
 	protected function fields() {
@@ -448,7 +448,7 @@ class Dewier_Widget_Help_Search extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier Help Search', 'dewier' );
+		return __( 'Meredithzone Help Search', 'dewier' );
 	}
 
 	public function get_icon() {
@@ -467,7 +467,7 @@ class Dewier_Widget_Help_Search extends Dewier_Widget {
 	}
 
 	/**
-	 * The search suggests the questions of the Dewier FAQ widgets on the same page.
+	 * The search suggests the questions of the Meredithzone FAQ widgets on the same page.
 	 */
 	protected function render() {
 		$s      = $this->get_settings_for_display();
@@ -508,7 +508,7 @@ class Dewier_Widget_Faq extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier FAQ', 'dewier' );
+		return __( 'Meredithzone FAQ', 'dewier' );
 	}
 
 	public function get_icon() {
@@ -650,7 +650,7 @@ class Dewier_Widget_Help_Contact extends Dewier_Widget {
 	}
 
 	public function get_title() {
-		return __( 'Dewier Help Contact', 'dewier' );
+		return __( 'Meredithzone Help Contact', 'dewier' );
 	}
 
 	public function get_icon() {

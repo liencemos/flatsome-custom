@@ -1,7 +1,7 @@
-# Dewier: Shoptimizer + Elementor + WooCommerce storefront
+# Meredithzone: Shoptimizer + Elementor + WooCommerce storefront
 
 A beauty storefront modelled on the layout and motion of glossier.com, built as a
-Shoptimizer child theme. It ships its own brand name (Dewier), generated placeholder
+Shoptimizer child theme. It ships its own brand name (Meredithzone), generated placeholder
 artwork and free fonts (DM Sans, DM Mono), so no third-party logo, photography or
 licensed typeface is included.
 
@@ -21,6 +21,7 @@ licensed typeface is included.
 | `setup/catalog.json` | 35 demo products and their categories |
 | `setup/seed.php` | Creates categories, products, variations, reviews and store settings |
 | `setup/seed-site.php` | Creates menus, content pages and the Elementor home and help pages |
+| `setup/rebrand.php` | Renames the visible brand of a site seeded before it was called Meredithzone |
 | `setup/make-placeholders.py` | Regenerates the placeholder images (needs Pillow) |
 
 ## Install
@@ -36,13 +37,16 @@ licensed typeface is included.
 
 Both seed scripts can be run again. Products are matched by SKU and keep their stock
 settings, menus are rebuilt, and the existing home and help page layouts are kept unless
-you run `wp eval-file seed-site.php reset-home` or `reset-help`. `seed.php` adds a demo
+you run `wp eval-file seed-site.php reset-home` or `reset-help`. On a site seeded while
+the brand was still Dewier, `wp eval-file rebrand.php` renames the site title, products,
+categories, menus and Elementor text (`rebrand.php dry-run` lists them first); slugs,
+file names and the `dewier-child` folder are kept. `seed.php` adds a demo
 shipping zone ($5 flat rate, free from $40) only when the store has no shipping methods
 at all.
 
 ## Editing
 
-- Home page sections are Elementor widgets in the **Dewier** category: Hero, Gift strip,
+- Home page sections are Elementor widgets in the **Meredithzone** category: Hero, Gift strip,
   Product carousel, Promo cards, Story and Image carousel.
 - The help page (`/help/`) uses three more widgets: Help Search, FAQ and Help Contact.
   Questions are rows of the FAQ widget, grouped by their Topic field; the topic list with
@@ -58,11 +62,17 @@ at all.
 - The cart page (`/cart/`) is styled for the `[woocommerce_cart]` shortcode; `seed.php`
   replaces WooCommerce's default Cart block with it. Quantities update the totals
   without an Update button.
+- The checkout page (`/checkout/`) is styled for the `[woocommerce_checkout]` shortcode;
+  `seed.php` replaces the Checkout block the same way. It is split into Information,
+  Shipping (only when the cart needs shipping) and Payment steps beside an order summary,
+  which folds behind a "Show order summary" bar on phones. Fields, shipping rates,
+  coupons and payment gateways are still WooCommerce's own, so gateway plugins render
+  inside the Payment step.
 - CommerceKit (optional, ships with Shoptimizer): `inc/commercekit.php` wires Ajax Search,
-  Wishlist, Waitlist, Stock Meter and Sticky Add to Cart into the Dewier header, cards and
+  Wishlist, Waitlist, Stock Meter and Sticky Add to Cart into the Meredithzone header, cards and
   product page; `seed-site.php` switches those modules on and creates the `/wishlist/` page
   when the plugin is active. Each one can be turned off again under CommerceKit in wp-admin.
-  Its free-shipping bar, swatches, badges and gallery stay off, as Dewier has its own.
+  Its free-shipping bar, swatches, badges and gallery stay off, as Meredithzone has its own.
 - Product badges: one per line in the `_dewier_badges` product meta, as `promo:Text`
   (blue) or `value:Text` (pink). Card subtitle: `_dewier_subtitle`.
 

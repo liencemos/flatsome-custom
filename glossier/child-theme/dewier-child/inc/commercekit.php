@@ -1,9 +1,9 @@
 <?php
 /**
- * CommerceKit modules wired into the Dewier templates.
+ * CommerceKit modules wired into the Meredithzone templates.
  *
- * The Dewier card and product templates skip the WooCommerce hooks CommerceKit
- * attaches to, so its output is called from the Dewier action points instead.
+ * The Meredithzone card and product templates skip the WooCommerce hooks CommerceKit
+ * attaches to, so its output is called from the Meredithzone action points instead.
  * Each module still switches on and off in CommerceKit's own settings.
  *
  * @package dewier
@@ -32,7 +32,7 @@ add_action( 'after_setup_theme', 'dewier_commercekit_setup' );
 
 /**
  * CommerceKit's sticky bar, with the product name in place of the WooCommerce
- * tab links (the Dewier product page has no tabs) and the Dewier button label.
+ * tab links (the Meredithzone product page has no tabs) and the Meredithzone button label.
  */
 function dewier_commercekit_sticky_bar( $product ) {
 	add_filter( 'gettext_woocommerce', 'dewier_commercekit_bag_label', 10, 2 );

@@ -20,6 +20,17 @@
 <div id="page" class="hfeed site">
 	<?php do_action( 'shoptimizer_before_site' ); ?>
 
+	<?php if ( dewier_is_checkout_flow() ) : ?>
+	<header id="masthead" class="dw-header dw-header--checkout">
+		<div class="dw-header__inner">
+			<a class="dw-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?><span aria-hidden="true">.</span>
+			</a>
+			<p class="dw-header__secure"><?php echo dewier_icon( 'lock' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php esc_html_e( 'Secure checkout', 'dewier' ); ?></span></p>
+			<a class="dw-header__bag" href="<?php echo esc_url( wc_get_cart_url() ); ?>"><?php esc_html_e( 'Bag', 'dewier' ); ?></a>
+		</div>
+	</header>
+	<?php else : ?>
 	<?php dewier_promo_bar(); ?>
 
 	<header id="masthead" class="dw-header">
@@ -68,6 +79,7 @@
 		</div>
 	</header>
 	<div class="dw-overlay" hidden></div>
+	<?php endif; ?>
 
 	<?php do_action( 'shoptimizer_before_content' ); ?>
 

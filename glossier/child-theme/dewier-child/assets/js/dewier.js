@@ -1,4 +1,4 @@
-/* Dewier storefront interactions. */
+/* Meredithzone storefront interactions. */
 ( function () {
 	'use strict';
 
@@ -79,6 +79,11 @@
 		}
 		window.addEventListener( 'scroll', onScroll, { passive: true } );
 		onScroll();
+
+		// The checkout header has only the logo.
+		if ( ! nav || ! toggle ) {
+			return;
+		}
 
 		function setMenu( open ) {
 			nav.classList.toggle( 'is-open', open );

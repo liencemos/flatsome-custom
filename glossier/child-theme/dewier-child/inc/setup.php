@@ -89,6 +89,7 @@ function dewier_icon( $name ) {
 		'minus'  => '<path d="M3 8h10"/>',
 		'menu'   => '<path d="M2 4.5h12M2 8h12M2 11.5h12"/>',
 		'globe'  => '<circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c2 2 2 10 0 12M8 2c-2 2-2 10 0 12"/>',
+		'lock'   => '<rect x="3.5" y="7" width="9" height="6.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/>',
 	);
 	if ( ! isset( $icons[ $name ] ) ) {
 		return '';
