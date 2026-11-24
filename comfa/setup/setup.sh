@@ -48,7 +48,9 @@ copy_to_wp "$SEED_TMP" "$DEMO_DIR/seed"
 rm -rf "$SEED_TMP"
 
 wp_cli theme activate comfa-child
-wp_cli eval "update_option( 'permalink_structure', '/%postname%/' );"
+# Without plugins: WP-Optimize ends the command from its permalink hook, before the option is saved.
+wp_cli --skip-plugins --skip-themes eval "update_option( 'permalink_structure', '/%postname%/' );"
+[[ "$(wp_cli option get permalink_structure)" == "/%postname%/" ]] || { echo "Could not switch permalinks to /%postname%/." >&2; exit 1; }
 wp_cli eval-file "$DEMO_DIR/seed/seed.php"
 wp_cli rewrite flush
 wp_cli eval-file "$DEMO_DIR/seed/check-demo.php"
