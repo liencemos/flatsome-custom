@@ -10,13 +10,15 @@
 
 		const buttons = [...nav.querySelectorAll('[data-cf-stage]')];
 		const stages = buttons.map(button => form.querySelector('#cf-checkout-' + button.dataset.cfStage));
-		const mobile = window.matchMedia('(max-width: 849px)');
+		const mobile = window.matchMedia('(max-width: 999px)');
 		const rates = form.querySelector('.cf-checkout-rates tbody');
 		const shippingError = form.querySelector('.cf-checkout-shipping-error');
 		let active = 0;
 		let unlocked = 0;
 		let expanded = false;
 		let reviewTable;
+		const email = form.querySelector('#billing_email_field');
+		if (email) stages[0].querySelector('h2').after(email);
 
 		function show(index, focus) {
 			active = index;
@@ -26,6 +28,7 @@
 				if (i === index) buttons[i].setAttribute('aria-current', 'step');
 				else buttons[i].removeAttribute('aria-current');
 			});
+			updateRecaps();
 			if (focus) {
 				const heading = stages[index].querySelector('h2');
 				heading.tabIndex = -1;
@@ -42,6 +45,44 @@
 
 		function selectedRate(row) {
 			return row.querySelector('input.shipping_method:checked, input.shipping_method[type="hidden"], select.shipping_method');
+		}
+
+		function rateLabel(method) {
+			return (method?.tagName === 'SELECT' ? method.selectedOptions[0]?.textContent : method?.labels?.[0]?.textContent)?.trim();
+		}
+
+		function fieldValue(id) {
+			const field = document.getElementById(id);
+			if (!field?.value) return '';
+			return (field.tagName === 'SELECT' ? field.selectedOptions[0]?.textContent : field.value)?.trim();
+		}
+
+		function updateRecaps() {
+			const contact = fieldValue('billing_email');
+			const prefix = form.querySelector('#ship-to-different-address-checkbox')?.checked ? 'shipping_' : 'billing_';
+			const address = ['address_1', 'address_2', 'city', 'state', 'postcode', 'country'].map(key => fieldValue(prefix + key)).filter(Boolean).join(', ');
+			const methods = rates ? [...rates.rows].map(row => rateLabel(selectedRate(row))).filter(Boolean).join(' · ') : '';
+			for (const box of form.querySelectorAll('.cf-checkout-recap')) {
+				box.replaceChildren();
+				const lines = [[cfCheckout.contact, contact, 'details']];
+				if (rates) lines.push([cfCheckout.shipTo, address, 'details']);
+				if (box.closest('#cf-checkout-payment')) lines.push([cfCheckout.method, methods, 'delivery']);
+				for (const [label, content, stage] of lines) {
+					if (!content) continue;
+					const row = document.createElement('div');
+					const heading = document.createElement('span');
+					const value = document.createElement('span');
+					const change = document.createElement('button');
+					heading.textContent = label;
+					value.textContent = content;
+					change.type = 'button';
+					change.dataset.cfGo = stage;
+					change.textContent = cfCheckout.change;
+					change.setAttribute('aria-label', cfCheckout.change + ' — ' + label);
+					row.append(heading, value, change);
+					box.append(row);
+				}
+			}
 		}
 
 		function canShip() {
@@ -67,7 +108,7 @@
 			if (!anchor) return;
 			for (const row of rates.rows) {
 				const method = selectedRate(row);
-				const label = method?.tagName === 'SELECT' ? method.selectedOptions[0]?.textContent : method?.labels?.[0]?.textContent;
+				const label = rateLabel(method);
 				if (!label || !method.value) continue;
 				const summaryRow = document.createElement('tr');
 				summaryRow.className = 'cf-checkout-shipping-summary';
@@ -88,6 +129,7 @@
 			}
 			updateSummaryShipping(table);
 			updateSummary();
+			updateRecaps();
 			if (shippingError && canShip()) shippingError.hidden = true;
 		}
 
@@ -139,6 +181,12 @@
 		form.addEventListener('input', event => clearError(event.target));
 		form.addEventListener('change', event => clearError(event.target));
 		form.addEventListener('click', event => {
+			const back = event.target.closest('[data-cf-go]');
+			if (back) {
+				const index = buttons.findIndex(button => button.dataset.cfStage === back.dataset.cfGo);
+				if (index >= 0) show(index, true);
+				return;
+			}
 			if (!event.target.closest('.cf-checkout-next')) return;
 			if (active === 0 && !validateDetails()) return;
 			if (active + 1 === stages.length - 1 && !requireShipping()) return;
@@ -153,6 +201,39 @@
 		}, true);
 		toggle.addEventListener('click', () => { expanded = !expanded; updateSummary(); });
 		mobile.addEventListener('change', updateSummary);
+		const coupon = summary.querySelector('.cf-checkout-coupon');
+		const nativeCoupon = document.querySelector('form.checkout_coupon');
+		if (coupon && nativeCoupon) {
+			const code = coupon.querySelector('input');
+			const note = summary.querySelector('.cf-checkout-coupon-note');
+			let failed;
+			coupon.hidden = false;
+			document.querySelector('.woocommerce-form-coupon-toggle')?.setAttribute('hidden', '');
+			function couponNote(message, isError) {
+				note.textContent = message;
+				note.hidden = !message;
+				note.classList.toggle('is-error', Boolean(isError));
+			}
+			function applyCoupon() {
+				if (!code.value.trim()) { code.focus(); return; }
+				failed = false;
+				couponNote('');
+				$(nativeCoupon).find('[name="coupon_code"]').val(code.value.trim());
+				$(nativeCoupon).trigger('submit');
+			}
+			coupon.querySelector('button').addEventListener('click', applyCoupon);
+			code.addEventListener('keydown', event => {
+				if (event.key !== 'Enter' || event.isComposing) return;
+				event.preventDefault();
+				applyCoupon();
+			});
+			$(document.body).on('errored_coupon_in_checkout', (_event, _code, response) => {
+				failed = true;
+				couponNote(new DOMParser().parseFromString(response, 'text/html').body.textContent.trim(), true);
+			}).on('applied_coupon_in_checkout', () => {
+				if (!failed) { code.value = ''; couponNote(cfCheckout.applied); }
+			}).on('removed_coupon_in_checkout', () => couponNote(''));
+		}
 		$(document.body).on('updated_checkout', refresh).on('checkout_error', () => {
 			const error = form.querySelector('.woocommerce-error [data-id]');
 			const field = error && document.getElementById(error.dataset.id);
