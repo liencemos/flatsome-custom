@@ -70,6 +70,7 @@
 	<?php do_action( 'shoptimizer_before_content' ); ?>
 
 	<div id="content" class="site-content" tabindex="-1">
+		<div class="shoptimizer-archive">
 		<?php do_action( 'shoptimizer_before_col_full' ); ?>
 		<div class="col-full">
 		<?php do_action( 'shoptimizer_after_col_full_open' ); ?>

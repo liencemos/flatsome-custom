@@ -150,6 +150,14 @@ function dewier_cart_progress() {
 add_action( 'woocommerce_before_mini_cart', 'dewier_cart_progress', 5 );
 
 /**
+ * The child header.php has no header-4 wrappers, so their closing tags must not print.
+ */
+function dewier_header_setup() {
+	remove_action( 'shoptimizer_before_content', 'shoptimizer_header_wrapper_close', 0 );
+}
+add_action( 'wp', 'dewier_header_setup' );
+
+/**
  * Footer.
  */
 function dewier_footer_setup() {
