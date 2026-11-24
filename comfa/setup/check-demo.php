@@ -94,7 +94,7 @@ foreach ( $cf_catalog['styles'] as $cf_slug => $cf_style ) {
 		$cf_expect( $cf_term && '' !== (string) get_term_meta( $cf_term->term_id, 'ux_color', true ), 'Colour term missing or has no swatch: ' . $cf_color );
 	}
 }
-foreach ( array( 'footer', 'mega-tees', 'mega-caps', 'pdp-story', 'page-404' ) as $cf_slug ) {
+foreach ( array( 'footer', 'mega-tees', 'mega-caps', 'pdp-story', 'page-404', 'bag-empty' ) as $cf_slug ) {
 	$cf_block = get_page_by_path( $cf_slug, OBJECT, 'blocks' );
 	$cf_expect( $cf_block && 'publish' === $cf_block->post_status && false === strpos( $cf_block->post_content, '{{' ), 'UX Block missing or has unresolved placeholders: ' . $cf_slug );
 }
@@ -121,4 +121,4 @@ if ( $cf_failures ) {
 	}
 	WP_CLI::error( count( $cf_failures ) . ' check(s) failed.' );
 }
-WP_CLI::success( sprintf( 'Comfa demo verified: %d products with %d variations, %d print-to-order designs with %d variations, 5 UX Blocks, 11 pages, swatches, coupon and classic cart.', count( $cf_catalog['products'] ), $cf_variations, count( $cf_catalog['designs'] ), $cf_design_variations ) );
+WP_CLI::success( sprintf( 'Comfa demo verified: %d products with %d variations, %d print-to-order designs with %d variations, 6 UX Blocks, 11 pages, swatches, coupon and classic cart.', count( $cf_catalog['products'] ), $cf_variations, count( $cf_catalog['designs'] ), $cf_design_variations ) );

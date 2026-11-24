@@ -1,6 +1,6 @@
 <?php
 /**
- * Bag: free-shipping progress and giving line in the mini cart and cart page.
+ * Bag: page heading, free-shipping progress and giving line, empty state, cross-sells.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -77,6 +77,44 @@ function cf_bag_progress() {
 add_action( 'woocommerce_before_mini_cart_contents', 'cf_bag_progress', 5 );
 add_action( 'woocommerce_before_cart_table', 'cf_bag_progress', 5 );
 
+/**
+ * Bag page heading with the item count. It sits inside the cart form, the part WooCommerce re-renders after every update.
+ */
+function cf_bag_heading() {
+	$count = WC()->cart->get_cart_contents_count();
+	printf(
+		'<header class="cf-bag-head"><h1 class="cf-bag-head__title">%1$s</h1><p class="cf-bag-head__count">%2$s</p></header>',
+		esc_html__( 'Your Bag', 'comfa' ),
+		/* translators: %s: number of items. */
+		esc_html( sprintf( _n( '%s item', '%s items', $count, 'comfa' ), number_format_i18n( $count ) ) )
+	);
+}
+add_action( 'woocommerce_before_cart_table', 'cf_bag_heading', 1 );
+
+/**
+ * Editable empty-bag content: UX Block "bag-empty" (Flatsome > UX Blocks), shown under WooCommerce's own message.
+ */
+function cf_bag_empty() {
+	$block = get_page_by_path( 'bag-empty', OBJECT, 'blocks' );
+	if ( $block && 'publish' === $block->post_status ) {
+		echo '<div class="cf-bag-empty">' . do_shortcode( '[block id="' . (int) $block->ID . '"]' ) . '</div>';
+	}
+}
+add_action( 'woocommerce_cart_is_empty', 'cf_bag_empty', 20 );
+
+// Cross-sells stay where Flatsome prints them, under the items; three fit that column.
+add_filter( 'woocommerce_cross_sells_columns', function () { return 3; } );
+add_filter( 'woocommerce_cross_sells_total', function () { return 3; } );
+
+add_filter(
+	'woocommerce_shipping_package_name',
+	function ( $name, $index ) {
+		return 0 === (int) $index && count( WC()->shipping()->get_packages() ) < 2 ? __( 'Shipping', 'woocommerce' ) : $name;
+	},
+	10,
+	2
+);
+
 add_filter(
 	'woocommerce_product_add_to_cart_text',
 	function ( $text, $product ) {
@@ -89,14 +127,20 @@ add_filter(
 add_filter(
 	'gettext',
 	function ( $translation, $text, $domain ) {
+		if ( 'flatsome' === $domain ) {
+			return 'Shopping Cart' === $text && $translation === $text ? 'Bag' : $translation;
+		}
 		if ( 'woocommerce' !== $domain ) {
 			return $translation;
 		}
 		$map = array(
-			'View cart'           => 'View Bag',
-			'Cart totals'         => 'Order Summary',
-			'Proceed to checkout' => 'Checkout',
-			'Add to cart'         => 'Add to Bag',
+			'View cart'                         => 'View Bag',
+			'Cart totals'                       => 'Order Summary',
+			'Proceed to checkout'               => 'Checkout',
+			'Add to cart'                       => 'Add to Bag',
+			'Update cart'                       => 'Update Bag',
+			'Your cart is currently empty.'     => 'Your bag is empty.',
+			'You may be interested in&hellip;'  => 'Goes well with',
 		);
 		return isset( $map[ $text ] ) && $translation === $text ? $map[ $text ] : $translation;
 	},

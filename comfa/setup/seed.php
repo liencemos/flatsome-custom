@@ -481,6 +481,18 @@ foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
 	$cf_ids['all'][] = $cf_id;
 }
 $cf_ids['caps'] = array_slice( $cf_ids['caps'], 0, 4 );
+
+// Cross-sells for the bag page ("Goes well with"): three other products per product.
+$cf_total = count( $cf_ids['all'] );
+foreach ( $cf_ids['all'] as $cf_index => $cf_id ) {
+	$cf_cross = array();
+	foreach ( array( 3, 7, 11 ) as $cf_step ) {
+		$cf_cross[] = $cf_ids['all'][ ( $cf_index + $cf_step ) % $cf_total ];
+	}
+	$cf_product = wc_get_product( $cf_id );
+	$cf_product->set_cross_sell_ids( array_values( array_diff( array_unique( $cf_cross ), array( $cf_id ) ) ) );
+	$cf_product->save();
+}
 wc_delete_product_transients();
 if ( function_exists( 'swatches' ) ) {
 	swatches()->cache_clear();
@@ -489,7 +501,7 @@ if ( function_exists( 'swatches' ) ) {
 // ---------------------------------------------------------------- UX Blocks and pages.
 $cf_ux      = CF_SEED_DIR . 'ux-builder/';
 $cf_context = array( 'ids' => $cf_ids, 'blocks' => array() );
-$cf_blocks  = array( 'footer' => 'Footer', 'mega-tees' => 'Mega Menu: T-Shirts', 'mega-caps' => 'Mega Menu: Caps', 'pdp-story' => 'Product Story', 'page-404' => '404 Page' );
+$cf_blocks  = array( 'footer' => 'Footer', 'mega-tees' => 'Mega Menu: T-Shirts', 'mega-caps' => 'Mega Menu: Caps', 'pdp-story' => 'Product Story', 'page-404' => '404 Page', 'bag-empty' => 'Empty Bag' );
 foreach ( $cf_blocks as $cf_slug => $cf_title ) {
 	$cf_context['blocks'][ $cf_slug ] = cf_seed_post( 'blocks', $cf_slug, $cf_title, cf_seed_render( (string) file_get_contents( $cf_ux . 'blocks/' . $cf_slug . '.txt' ), $cf_context ) );
 }
@@ -658,6 +670,12 @@ $cf_mods = array(
 	'related_products_pr_row'     => 4,
 	'max_related_products'        => 8,
 	'404_block'                   => $cf_context['blocks']['page-404'],
+	'cart_auto_refresh'           => 1,
+	'cart_sticky_sidebar'         => 1,
+	'cart_steps_numbers'          => 1,
+	'cart_steps_size'             => 'h4',
+	'cart_steps_case'             => 'none',
+	'html_cart_sidebar'           => '<ul class="cf-bag-perks"><li><strong>100% Happiness Guarantee.</strong> Not happy? We refund or exchange.</li><li><strong>One bought = one given.</strong> Every item gives one to someone in need.</li><li><strong>Need a hand?</strong> <a href="' . esc_url( home_url( '/help/' ) ) . '">Visit Help &amp; FAQ</a></li></ul>',
 	'html_scripts_header'         => '',
 	'flatsome_lightbox'           => 1,
 	'lazy_load_images'            => 0,
