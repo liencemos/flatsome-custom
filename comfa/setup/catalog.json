@@ -134,15 +134,15 @@
   "size_order": ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "S/M", "L/XL", "11oz", "15oz"],
   "designs": [
     {"slug": "snow-day-club", "name": "Snow Day Club", "print": "snow-day-club", "cats": ["hoodies", "t-shirts", "graphic-tees"], "tag": "graphic", "badge": "Made to Order", "featured": true,
-     "styles": "all", "default": ["sweatshirt", "forest-green"],
+     "styles": "all", "default": ["sweatshirt", "black", "M"],
      "short": "A cabin, three pines and nowhere to be. Our winter badge, printed to order on the style, colour and size you pick.",
      "highlight": "Printed one at a time when you order, so nothing sits in a warehouse."},
     {"slug": "sunrise-trail", "name": "Sunrise Trail", "print": "sunrise-trail", "cats": ["t-shirts", "graphic-tees", "hoodies"], "tag": "outdoor", "badge": "Made to Order",
-     "styles": ["unisex-t-shirt", "long-sleeve-tee", "hoodie", "tank-top", "youth-t-shirt"], "colors": ["navy", "black", "forest-green", "charcoal", "gold", "orange", "royal", "kiwi"], "default": ["unisex-t-shirt", "navy"],
+     "styles": ["unisex-t-shirt", "long-sleeve-tee", "hoodie", "tank-top", "youth-t-shirt"], "colors": ["navy", "black", "forest-green", "charcoal", "gold", "orange", "royal", "kiwi"], "default": ["unisex-t-shirt", "navy", "M"],
      "short": "For the ones who are up before the light is. A trail badge printed to order on tees, long sleeves, hoodies and tanks.",
      "highlight": "Pick the style first: colours and sizes follow what that style comes in."},
     {"slug": "good-dog-walking-club", "name": "Good Dog Walking Club", "print": "good-dog", "cats": ["t-shirts", "graphic-tees", "hoodies"], "tag": "graphic", "badge": "Made to Order",
-     "styles": ["unisex-t-shirt", "womens-t-shirt", "sweatshirt", "baby-onesie", "ceramic-mug"], "colors": ["black", "charcoal", "safety-pink", "light-pink", "red", "purple", "irish-green"], "default": ["unisex-t-shirt", "black"],
+     "styles": ["unisex-t-shirt", "womens-t-shirt", "sweatshirt", "baby-onesie", "ceramic-mug"], "colors": ["black", "charcoal", "safety-pink", "light-pink", "red", "purple", "irish-green"], "default": ["unisex-t-shirt", "black", "M"],
      "short": "Membership is open to anyone holding a lead. Printed to order for the whole pack, mug included.",
      "highlight": "One design across tees, sweatshirts, baby onesies and a mug."}
   ]

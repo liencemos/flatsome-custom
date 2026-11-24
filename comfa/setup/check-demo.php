@@ -76,16 +76,10 @@ foreach ( $cf_catalog['designs'] as $cf_item ) {
 	foreach ( array_intersect_key( $cf_expected, $cf_found ) as $cf_key => $cf_price ) {
 		$cf_expect( abs( $cf_found[ $cf_key ] - $cf_price ) < 0.005, $cf_item['slug'] . ': ' . $cf_key . ' costs ' . $cf_found[ $cf_key ] . ', expected ' . $cf_price );
 	}
-	// The pickers and the card read this map; it must list each style with exactly its own colours and sizes.
-	$cf_map = function_exists( 'cf_style_map' ) ? cf_style_map( $cf_product ) : array();
-	$cf_expect( array_keys( $cf_map ) === array_values( $cf_styles ), $cf_item['slug'] . ': style map does not list the expected products.' );
-	foreach ( $cf_map as $cf_style_slug => $cf_style ) {
-		$cf_spec   = $cf_catalog['styles'][ $cf_style_slug ];
-		$cf_colors = isset( $cf_item['colors'] ) ? array_values( array_intersect( $cf_spec['colors'], $cf_item['colors'] ) ) : $cf_spec['colors'];
-		$cf_expect( $cf_style['colors'] === $cf_colors && $cf_style['sizes'] === array_map( 'sanitize_title', $cf_spec['sizes'] ) && ! $cf_style['pairs'] && abs( $cf_style['price'] - $cf_spec['price'] ) < 0.005, $cf_item['slug'] . ': style map is wrong for ' . $cf_style_slug );
-	}
+	$cf_expect( function_exists( 'cf_style_count' ) && count( $cf_styles ) === cf_style_count( $cf_product ), $cf_item['slug'] . ': product count is wrong.' );
+	// The default selection must be a real variation, so the page opens with a price and photo.
 	$cf_default = $cf_product->get_default_attributes();
-	$cf_expect( isset( $cf_default['pa_style'], $cf_default['pa_color'], $cf_map[ $cf_default['pa_style'] ] ) && in_array( $cf_default['pa_color'], $cf_map[ $cf_default['pa_style'] ]['colors'], true ), $cf_item['slug'] . ': default product and colour are not a real combination.' );
+	$cf_expect( isset( $cf_default['pa_style'], $cf_default['pa_color'], $cf_default['pa_size'] ) && isset( $cf_expected[ $cf_default['pa_style'] . '/' . $cf_default['pa_color'] . '/' . $cf_default['pa_size'] ] ), $cf_item['slug'] . ': default product, colour and size are not a real combination.' );
 	$cf_expect( $cf_product->get_image_id() && $cf_product->get_gallery_image_ids(), $cf_item['slug'] . ': images missing.' );
 	$cf_expect( abs( (float) $cf_product->get_variation_price( 'min' ) - min( $cf_expected ) ) < 0.005 && abs( (float) $cf_product->get_variation_price( 'max' ) - max( $cf_expected ) ) < 0.005, $cf_item['slug'] . ': price range is wrong.' );
 }
@@ -113,6 +107,8 @@ $cf_expect( (int) get_theme_mod( 'footer_block' ) === (int) get_page_by_path( 'f
 $cf_expect( (int) get_theme_mod( '404_block' ) === (int) get_page_by_path( 'page-404', OBJECT, 'blocks' )->ID, '404 UX Block is not assigned.' );
 $cf_expect( (bool) get_theme_mod( 'swatches' ) && wc_get_attribute( get_theme_mod( 'swatches_box_attribute' ) ), 'Flatsome swatches are not configured.' );
 foreach ( array( 'pa_pack' => 'ux_label', 'pa_color' => 'ux_color', 'pa_size' => 'ux_label', 'pa_style' => 'ux_image' ) as $cf_taxonomy => $cf_type ) {
+	$cf_swatch = get_option( 'flatsome_product_attribute-' . wc_attribute_taxonomy_id_by_name( $cf_taxonomy ) );
+	$cf_expect( 'pa_pack' === $cf_taxonomy || ! empty( $cf_swatch['swatch_size'] ), 'Flatsome swatch size is not set for ' . $cf_taxonomy );
 	$cf_attribute = wc_get_attribute( wc_attribute_taxonomy_id_by_name( $cf_taxonomy ) );
 	$cf_expect( $cf_attribute && $cf_type === $cf_attribute->type, $cf_taxonomy . ' is not a ' . $cf_type . ' swatch attribute.' );
 }

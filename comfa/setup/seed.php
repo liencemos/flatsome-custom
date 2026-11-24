@@ -184,6 +184,10 @@ $cf_tax = array(
 );
 delete_transient( 'wc_attribute_taxonomies' );
 WC_Cache_Helper::invalidate_cache_group( 'woocommerce-attributes' );
+// Flatsome's own per-attribute swatch settings (Products > Attributes > Edit): size and shape of each picker.
+foreach ( array( 'style' => array( 'x-large', 'rounded' ), 'color' => array( 'large', 'circle' ), 'size' => array( 'large', 'rounded' ) ) as $cf_key => $cf_swatch ) {
+	update_option( 'flatsome_product_attribute-' . wc_attribute_taxonomy_id_by_name( $cf_tax[ $cf_key ] ), array( 'swatch_size' => $cf_swatch[0], 'swatch_shape' => $cf_swatch[1], 'swatch_variation_images' => '' ) );
+}
 
 $cf_order = 0;
 foreach ( $cf_catalog['colors'] as $cf_slug => $cf_color ) {
@@ -403,7 +407,8 @@ foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
 	$cf_product->set_short_description( $cf_item['short'] );
 	$cf_product->set_description( '<ul><li>Printed to order: allow 2–4 business days before it ships</li><li>Pick a product first; colours and sizes follow what that product comes in</li><li>Sizes 2XL and up carry a small surcharge, shown in the price</li><li>Machine wash cold inside out, tumble dry low</li></ul>' );
 	$cf_product->set_attributes( $cf_attributes );
-	$cf_product->set_default_attributes( array( $cf_tax['style'] => $cf_item['default'][0], $cf_tax['color'] => $cf_item['default'][1] ) );
+	// A complete default (product, colour and size) shows a real price and photo as soon as the page opens.
+	$cf_product->set_default_attributes( array( $cf_tax['style'] => $cf_item['default'][0], $cf_tax['color'] => $cf_item['default'][1], $cf_tax['size'] => sanitize_title( $cf_item['default'][2] ) ) );
 	$cf_product->set_category_ids( array_map( function ( $slug ) use ( $cf_cats ) { return $cf_cats[ $slug ]; }, $cf_item['cats'] ) );
 	$cf_product->set_tag_ids( array( (int) get_term_by( 'slug', $cf_item['tag'], 'product_tag' )->term_id ) );
 	$cf_product->set_image_id( cf_seed_asset( $cf_default ) );
@@ -618,7 +623,8 @@ $cf_mods = array(
 	'footer_right_text'           => '',
 	'back_to_top'                 => 0,
 	'swatches'                    => 1,
-	'swatches_layout'             => '',
+	'swatches_layout'             => 'stacked',
+	'swatches_color_selected'     => '#000814',
 	'swatches_box_attribute'      => (string) wc_attribute_taxonomy_id_by_name( $cf_tax['color'] ),
 	'swatches_box_layout'         => 'limit',
 	'swatches_box_limit'          => 6,

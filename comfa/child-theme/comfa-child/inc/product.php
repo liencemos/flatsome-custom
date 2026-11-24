@@ -89,7 +89,7 @@ function cf_product_gallery_badge() {
 	}
 }
 
-// Size label gets the selected value and a Size Guide link; other labels get the selected value.
+// The Size label gets a Size Guide link. Flatsome's stacked swatch layout prints the selected value next to each label.
 add_action(
 	'woocommerce_before_variations_form',
 	function () {
@@ -100,15 +100,6 @@ add_action(
 		if ( is_array( $notes ) && $notes ) {
 			echo '<script type="application/json" class="cf-size-notes">' . wp_json_encode( $notes ) . '</script>';
 		}
-		// What each product (style) comes in, so the pickers only offer real combinations.
-		$styles = $product instanceof WC_Product ? cf_style_map( $product ) : array();
-		if ( $styles ) {
-			foreach ( $styles as $slug => $style ) {
-				$styles[ $slug ]['price_html'] = wc_price( wc_get_price_to_display( $product, array( 'price' => $style['price'] ) ) );
-				unset( $styles[ $slug ]['price'] );
-			}
-			echo '<script type="application/json" class="cf-style-map">' . wp_json_encode( array( 'product' => $product->get_id(), 'styles' => $styles ), JSON_HEX_TAG | JSON_HEX_AMP ) . '</script>';
-		}
 	}
 );
 add_action(
@@ -118,12 +109,20 @@ add_action(
 	}
 );
 
-function cf_variation_label( $label, $name ) {
-	$html = '<span class="cf-attr-name">' . esc_html( $label ) . ':</span> <span class="cf-attr-value" data-cf-attr="' . esc_attr( sanitize_title( $name ) ) . '"></span>';
-	if ( 'pa_size' === $name && cf_size_guide_page() ) {
-		$html .= '<a class="cf-size-guide-link" href="#cf-size-guide">' . esc_html__( 'Size Guide', 'comfa' ) . '</a>';
+// WooCommerce stops narrowing the pickers to real combinations above 30 variations (it looks the variation up by AJAX instead).
+// Print-to-order designs have hundreds, so keep the variations in the page and let WooCommerce and Flatsome's swatches do it.
+add_filter(
+	'woocommerce_ajax_variation_threshold',
+	function ( $threshold ) {
+		return max( (int) $threshold, 1000 );
 	}
-	return $html;
+);
+
+function cf_variation_label( $label, $name ) {
+	if ( 'pa_size' === $name && cf_size_guide_page() ) {
+		return esc_html( $label ) . '<a class="cf-size-guide-link" href="#cf-size-guide">' . esc_html__( 'Size Guide', 'comfa' ) . '</a>';
+	}
+	return $label;
 }
 
 /**
