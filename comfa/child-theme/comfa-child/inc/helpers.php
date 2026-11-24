@@ -158,6 +158,7 @@ add_action(
 		if ( $product_id ) {
 			delete_transient( 'cf_style_map_' . $product_id );
 			delete_transient( 'cf_card_variations_' . $product_id );
+			wp_cache_delete( 'cf_default_variation_' . $product_id, 'comfa' );
 		}
 	}
 );
