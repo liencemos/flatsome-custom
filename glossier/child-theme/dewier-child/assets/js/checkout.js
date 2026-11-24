@@ -118,7 +118,7 @@
 
 	// Enter in a field moves on a step; before Payment it would otherwise place the order.
 	$root.on( 'keydown', 'form.checkout input:not(#dw-co-coupon):not([type="submit"])', function ( event ) {
-		if ( 'Enter' !== event.key || 'payment' === current ) {
+		if ( 'Enter' !== event.key || event.originalEvent.isComposing || 'payment' === current ) {
 			return;
 		}
 		event.preventDefault();
