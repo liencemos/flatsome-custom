@@ -4,7 +4,8 @@
  * Run with: wp eval-file rebrand.php [dry-run]
  *
  * Only display text changes: titles, content, Elementor data, term names and options.
- * Slugs, file names and the dewier-child theme folder stay as they are.
+ * Slugs, file names and the dewier-child theme folder stay as they are, and so does
+ * WooPayments' cached account data (the business name is set in the payment account).
  *
  * @package dewier
  */
@@ -77,7 +78,7 @@ foreach ( $dewier_terms as $dewier_term ) {
 	}
 }
 
-$dewier_options = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE BINARY option_value LIKE '%Dewier%' AND option_name NOT LIKE '%transient%' AND option_name NOT IN ( 'stylesheet', 'template', 'recently_edited' )" );
+$dewier_options = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE BINARY option_value LIKE '%Dewier%' AND option_name NOT LIKE '%transient%' AND option_name NOT LIKE 'wcpay%' AND option_name NOT IN ( 'stylesheet', 'template', 'recently_edited' )" );
 foreach ( $dewier_options as $dewier_option ) {
 	dewier_rebrand_log( "option {$dewier_option}" );
 	if ( ! $dewier_dry ) {
