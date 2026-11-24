@@ -252,15 +252,16 @@ if ( defined( 'ELEMENTOR_VERSION' ) ) {
 update_option( 'show_on_front', 'page' );
 update_option( 'page_on_front', $dewier_home_id );
 
-// CommerceKit: the modules the Dewier templates are wired to, plus a wishlist page.
+// CommerceKit: a wishlist page, plus the modules the Dewier templates are wired to.
+// The page is saved first: each activate command writes the option in its own process.
 if ( function_exists( 'commercekit_get_options' ) ) {
-	foreach ( array( 'activate ajax-search', 'activate wishlist', 'activate waitlist', 'activate stock-meter', 'sticky-atc activate sticky-atc-desktop', 'sticky-atc activate sticky-atc-mobile' ) as $dewier_module ) {
-		WP_CLI::runcommand( 'cg-commercekit ' . $dewier_module, array( 'exit_error' => false ) );
-	}
 	$dewier_kit = get_option( 'commercekit', array() );
 	if ( empty( $dewier_kit['wsl_page'] ) || 'publish' !== get_post_status( (int) $dewier_kit['wsl_page'] ) ) {
 		$dewier_kit['wsl_page'] = dewier_site_page( 'wishlist', 'Wishlist', '<!-- wp:shortcode -->[commercegurus_wishlist]<!-- /wp:shortcode -->' );
 		update_option( 'commercekit', $dewier_kit );
+	}
+	foreach ( array( 'activate ajax-search', 'activate wishlist', 'activate waitlist', 'activate stock-meter', 'sticky-atc activate sticky-atc-desktop', 'sticky-atc activate sticky-atc-mobile' ) as $dewier_module ) {
+		WP_CLI::runcommand( 'cg-commercekit ' . $dewier_module, array( 'exit_error' => false ) );
 	}
 }
 
