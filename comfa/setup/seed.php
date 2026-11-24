@@ -434,7 +434,11 @@ foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
 		$cf_variation->set_manage_stock( false );
 		$cf_variation->set_stock_status( 'instock' );
 		$cf_variation->set_menu_order( $cf_order );
-		$cf_variation->set_status( 'publish' );
+		// Back in the catalog: re-enable what this script retired, not what was disabled by hand.
+		if ( $cf_variation->get_meta( '_cf_retired' ) ) {
+			$cf_variation->set_status( 'publish' );
+			$cf_variation->delete_meta_data( '_cf_retired' );
+		}
 		$cf_variation->update_meta_data( '_cf_seed', 1 );
 		$cf_variation->save();
 	}
@@ -443,6 +447,7 @@ foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
 	foreach ( array_diff_key( $cf_existing, $cf_wanted ) as $cf_stale ) {
 		if ( get_post_meta( $cf_stale, '_cf_seed', true ) && 'private' !== get_post_status( $cf_stale ) ) {
 			wp_update_post( array( 'ID' => $cf_stale, 'post_status' => 'private' ) );
+			update_post_meta( $cf_stale, '_cf_retired', 1 );
 		}
 	}
 	WC_Product_Variable::sync( $cf_id );
