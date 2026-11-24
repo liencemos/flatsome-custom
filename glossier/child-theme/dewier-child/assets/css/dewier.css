@@ -194,6 +194,7 @@ body.dewier {
 .dewier .shoptimizer-mini-cart-wrap .buttons a,
 .dewier .woocommerce-message .button,
 .dewier #cgkit-waitlist-trigger,
+.dewier .wsl-no-products .button.wsl-no-shop,
 .dewier .commercekit-waitlist #cgkit-waitlist-submit,
 .dewier .commercekit-sticky-add-to-cart .sticky-atc_button.button,
 .dewier #respond input#submit,
@@ -243,6 +244,9 @@ body.dewier {
 
 .dewier .dw-btn--dark,
 .dewier #cgkit-waitlist-trigger,
+.dewier form.cart #cgkit-waitlist-button,
+.dewier form.cart button.cgkit-sticky-waitlist-button,
+.dewier .wsl-no-products .button.wsl-no-shop,
 .dewier .commercekit-waitlist #cgkit-waitlist-submit,
 .dewier .commercekit-sticky-add-to-cart .sticky-atc_button.button,
 .dewier .shoptimizer-mini-cart-wrap .buttons a.checkout,
@@ -285,6 +289,9 @@ body.dewier {
 	.dewier .shoptimizer-mini-cart-wrap .buttons a,
 	.dewier .woocommerce-message .button,
 	.dewier #cgkit-waitlist-trigger,
+	.dewier form.cart #cgkit-waitlist-button,
+	.dewier form.cart button.cgkit-sticky-waitlist-button,
+	.dewier .wsl-no-products .button.wsl-no-shop,
 	.dewier .commercekit-waitlist #cgkit-waitlist-submit,
 	.dewier .commercekit-sticky-add-to-cart .sticky-atc_button.button,
 	.dewier #respond input#submit,
@@ -300,6 +307,9 @@ body.dewier {
 	.dewier .shoptimizer-mini-cart-wrap .buttons a:hover,
 	.dewier .woocommerce-message .button:hover,
 	.dewier #cgkit-waitlist-trigger:hover,
+	.dewier form.cart #cgkit-waitlist-button:hover,
+	.dewier form.cart button.cgkit-sticky-waitlist-button:hover,
+	.dewier .wsl-no-products .button.wsl-no-shop:hover,
 	.dewier .commercekit-waitlist #cgkit-waitlist-submit:hover,
 	.dewier .commercekit-sticky-add-to-cart .sticky-atc_button.button:hover,
 	.dewier #respond input#submit:hover,
@@ -319,6 +329,9 @@ body.dewier {
 
 	.dewier .dw-btn--dark:hover,
 	.dewier #cgkit-waitlist-trigger:hover,
+	.dewier form.cart #cgkit-waitlist-button:hover,
+	.dewier form.cart button.cgkit-sticky-waitlist-button:hover,
+	.dewier .wsl-no-products .button.wsl-no-shop:hover,
 	.dewier .commercekit-waitlist #cgkit-waitlist-submit:hover,
 	.dewier .commercekit-sticky-add-to-cart .sticky-atc_button.button:hover,
 	.dewier .shoptimizer-mini-cart-wrap .buttons a.checkout:hover,
@@ -837,6 +850,7 @@ body.dewier {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 2.5rem 1rem;
+	width: auto;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -3178,8 +3192,10 @@ body.dewier {
 	color: var(--dw-muted);
 }
 
-.dewier .commercekit-ajs-view-all-holder > a {
+.dewier .commercekit-ajs-view-all-holder > a,
+.dewier .commercekit-ajs-view-all-holder > a:hover {
 	background: #000;
+	color: #fff;
 	font-family: var(--dw-mono);
 	font-weight: 400;
 	letter-spacing: 0.08em;
@@ -3255,9 +3271,76 @@ body.dewier {
 	color: var(--dw-muted);
 }
 
-.dewier .dw-pdp #cgkit-waitlist-trigger {
+.dewier .dw-pdp__buy > #cgkit-waitlist-trigger {
 	display: flex;
 	width: 100%;
+}
+
+/* CommerceKit toggles these two with inline display, so display is left alone. */
+.dewier form.cart #cgkit-waitlist-button,
+.dewier form.cart button.cgkit-sticky-waitlist-button {
+	--dw-ant: #fff;
+	float: none;
+	width: 100%;
+	height: auto;
+	min-height: 2.75rem;
+	margin: 0;
+	padding: 0.375rem 1rem 0.5rem;
+	border: 0;
+	border-radius: 0;
+	background-image: none, linear-gradient(to right, var(--dw-ant) 50%, var(--dw-ant) 50%), none, linear-gradient(to bottom, var(--dw-ant) 50%, var(--dw-ant) 50%);
+	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+	background-position: 0 0, 0 100%, 0 0, 100% 0;
+	background-size: 0 0, 100% 1px, 0 0, 1px 100%;
+	font-family: var(--dw-font);
+	font-size: 0.875rem;
+	font-weight: 400;
+	line-height: 1.2;
+	letter-spacing: 0.01em;
+	transition: none;
+}
+
+.dewier #commercekit-flash-popup {
+	border: 1px solid #000;
+	border-radius: 0;
+	box-shadow: none;
+	color: #000;
+	font-size: 0.875rem;
+	font-weight: 400;
+}
+
+.dewier #commercekit-wishlist-shortcode {
+	padding-bottom: 3rem;
+}
+
+.dewier ul.commercekit-wishlist-list.products li.product {
+	width: auto;
+}
+
+.dewier .commercekit-wishlist a.commercekit-remove-wishlist2.wsl-remove::before {
+	background: #000;
+}
+
+.dewier .commercekit-wishlist-pages {
+	margin: 1.5rem 0 0;
+	color: var(--dw-muted);
+	font-size: 0.8125rem;
+}
+
+.dewier ul.commercekit-wishlist-list.products .wsl-no-products {
+	grid-column: 1 / -1;
+	min-height: 0;
+	padding: 2rem 0 3rem;
+}
+
+.dewier ul.commercekit-wishlist-list.products .wsl-no-products .wsl-no-title {
+	color: #000;
+	font-size: 1.5rem;
+	font-weight: 400;
+}
+
+.dewier ul.commercekit-wishlist-list.products .wsl-no-products .wsl-no-icon svg {
+	width: 6rem;
 }
 
 .dewier #commercekit-waitlist-popup {
@@ -3330,9 +3413,26 @@ body.dewier {
 	font-size: 0.875rem;
 }
 
+.dewier .commercekit-pdp-sticky-inner__close-button {
+	border-radius: 0;
+	background: #000;
+	color: #fff;
+}
+
 .dewier .commercekit-pdp-sticky-inner .content-title {
 	font-size: 1rem;
 	font-weight: 400;
+}
+
+/* CommerceKit pins .summary for Shoptimizer's layout; the Dewier grid pins the gallery instead. */
+.dewier.single-product #page div.product.dw-pdp div.dw-pdp__info.summary {
+	position: static;
+}
+
+@media (max-width: 640px) {
+	.dewier .dw-utils__link--wishlist {
+		display: none;
+	}
 }
 
 @media (min-width: 993px) {

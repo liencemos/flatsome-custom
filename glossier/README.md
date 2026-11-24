@@ -58,6 +58,11 @@ at all.
 - The cart page (`/cart/`) is styled for the `[woocommerce_cart]` shortcode; `seed.php`
   replaces WooCommerce's default Cart block with it. Quantities update the totals
   without an Update button.
+- CommerceKit (optional, ships with Shoptimizer): `inc/commercekit.php` wires Ajax Search,
+  Wishlist, Waitlist, Stock Meter and Sticky Add to Cart into the Dewier header, cards and
+  product page; `seed-site.php` switches those modules on and creates the `/wishlist/` page
+  when the plugin is active. Each one can be turned off again under CommerceKit in wp-admin.
+  Its free-shipping bar, swatches, badges and gallery stay off, as Dewier has its own.
 - Product badges: one per line in the `_dewier_badges` product meta, as `promo:Text`
   (blue) or `value:Text` (pink). Card subtitle: `_dewier_subtitle`.
 
