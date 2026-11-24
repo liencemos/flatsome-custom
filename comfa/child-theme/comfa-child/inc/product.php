@@ -100,6 +100,15 @@ add_action(
 		if ( is_array( $notes ) && $notes ) {
 			echo '<script type="application/json" class="cf-size-notes">' . wp_json_encode( $notes ) . '</script>';
 		}
+		// What each product (style) comes in, so the pickers only offer real combinations.
+		$styles = $product instanceof WC_Product ? cf_style_map( $product ) : array();
+		if ( $styles ) {
+			foreach ( $styles as $slug => $style ) {
+				$styles[ $slug ]['price_html'] = wc_price( wc_get_price_to_display( $product, array( 'price' => $style['price'] ) ) );
+				unset( $styles[ $slug ]['price'] );
+			}
+			echo '<script type="application/json" class="cf-style-map">' . wp_json_encode( array( 'product' => $product->get_id(), 'styles' => $styles ), JSON_HEX_TAG | JSON_HEX_AMP ) . '</script>';
+		}
 	}
 );
 add_action(

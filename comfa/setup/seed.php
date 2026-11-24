@@ -177,6 +177,8 @@ $cf_tax = array(
 	'pack'   => cf_seed_attribute( 'Pack', 'pack', 'ux_label' ),
 	'color'  => cf_seed_attribute( 'Color', 'color', 'ux_color' ),
 	'size'   => cf_seed_attribute( 'Size', 'size', 'ux_label' ),
+	// Garment a design is printed on (T-Shirt, Hoodie, Mug ...), shown as a row of thumbnails.
+	'style'  => cf_seed_attribute( 'Product', 'style', 'ux_image' ),
 	'fit'    => cf_seed_attribute( 'Fit', 'fit', 'select' ),
 	'weight' => cf_seed_attribute( 'Weight', 'weight', 'select' ),
 );
@@ -204,6 +206,22 @@ foreach ( $cf_catalog['size_sets'] as $cf_set ) {
 	}
 }
 cf_seed_term( $cf_tax['fit'], 'Unisex' );
+$cf_order = 0;
+foreach ( $cf_catalog['styles'] as $cf_slug => $cf_style ) {
+	$cf_id = cf_seed_term( $cf_tax['style'], $cf_style['name'], $cf_slug );
+	update_term_meta( $cf_id, 'ux_image', cf_seed_asset( 'style-' . $cf_slug . '.webp' ) );
+	update_term_meta( $cf_id, 'order', $cf_order++ );
+	foreach ( $cf_style['sizes'] as $cf_size ) {
+		cf_seed_term( $cf_tax['size'], $cf_size );
+	}
+}
+// One running order for every size, so XS sorts before S and 2XL after XL.
+foreach ( $cf_catalog['size_order'] as $cf_order => $cf_size ) {
+	$cf_term = get_term_by( 'name', $cf_size, $cf_tax['size'] );
+	if ( $cf_term ) {
+		update_term_meta( $cf_term->term_id, 'order', $cf_order );
+	}
+}
 
 // ---------------------------------------------------------------- Categories and tags.
 $cf_cats = array();
@@ -339,6 +357,107 @@ foreach ( $cf_catalog['products'] as $cf_index => $cf_item ) {
 	}
 }
 $cf_ids['tees'] = array_slice( $cf_ids['t-shirts'], 0, 4 );
+
+// Print-to-order designs: one product per design, sold as Product (style) x Color x Size.
+// A variation exists only for the colours and sizes its style comes in, priced at the style price plus the size surcharge.
+foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
+	$cf_id      = wc_get_product_id_by_sku( 'CF-' . strtoupper( $cf_item['slug'] ) );
+	$cf_product = $cf_id ? wc_get_product( $cf_id ) : new WC_Product_Variable();
+	if ( ! $cf_product instanceof WC_Product_Variable ) {
+		WP_CLI::error( 'SKU CF-' . strtoupper( $cf_item['slug'] ) . ' belongs to a non-variable product.' );
+	}
+	$cf_style_slugs = 'all' === $cf_item['styles'] ? array_keys( $cf_catalog['styles'] ) : $cf_item['styles'];
+	$cf_options     = array( 'style' => array(), 'color' => array(), 'size' => array() );
+	$cf_rows        = array();
+	foreach ( $cf_style_slugs as $cf_style_slug ) {
+		$cf_style  = $cf_catalog['styles'][ $cf_style_slug ];
+		$cf_colors = isset( $cf_item['colors'] ) ? array_values( array_intersect( $cf_style['colors'], $cf_item['colors'] ) ) : $cf_style['colors'];
+		$cf_options['style'][] = $cf_style_slug;
+		foreach ( $cf_colors as $cf_color ) {
+			$cf_options['color'][] = $cf_color;
+			foreach ( $cf_style['sizes'] as $cf_size ) {
+				$cf_options['size'][] = sanitize_title( $cf_size );
+				$cf_extra             = isset( $cf_catalog['size_extra'][ $cf_size ] ) ? $cf_catalog['size_extra'][ $cf_size ] : 0;
+				$cf_rows[]            = array( $cf_style_slug, $cf_color, sanitize_title( $cf_size ), $cf_style['price'] + $cf_extra );
+			}
+		}
+	}
+	$cf_attributes = array();
+	foreach ( array( 'style', 'color', 'size' ) as $cf_position => $cf_key ) {
+		$cf_attribute = new WC_Product_Attribute();
+		$cf_attribute->set_id( wc_attribute_taxonomy_id_by_name( $cf_tax[ $cf_key ] ) );
+		$cf_attribute->set_name( $cf_tax[ $cf_key ] );
+		$cf_attribute->set_options( array_map( function ( $slug ) use ( $cf_tax, $cf_key ) { return (int) get_term_by( 'slug', $slug, $cf_tax[ $cf_key ] )->term_id; }, array_values( array_unique( $cf_options[ $cf_key ] ) ) ) );
+		$cf_attribute->set_position( $cf_position );
+		$cf_attribute->set_visible( true );
+		$cf_attribute->set_variation( true );
+		$cf_attributes[] = $cf_attribute;
+	}
+	$cf_default = $cf_item['slug'] . '-' . $cf_item['default'][0] . '-' . $cf_item['default'][1] . '.webp';
+	$cf_product->set_name( $cf_item['name'] );
+	$cf_product->set_slug( $cf_item['slug'] );
+	$cf_product->set_sku( 'CF-' . strtoupper( $cf_item['slug'] ) );
+	$cf_product->set_status( 'publish' );
+	$cf_product->set_catalog_visibility( 'visible' );
+	$cf_product->set_featured( ! empty( $cf_item['featured'] ) );
+	$cf_product->set_short_description( $cf_item['short'] );
+	$cf_product->set_description( '<ul><li>Printed to order: allow 2–4 business days before it ships</li><li>Pick a product first; colours and sizes follow what that product comes in</li><li>Sizes 2XL and up carry a small surcharge, shown in the price</li><li>Machine wash cold inside out, tumble dry low</li></ul>' );
+	$cf_product->set_attributes( $cf_attributes );
+	$cf_product->set_default_attributes( array( $cf_tax['style'] => $cf_item['default'][0], $cf_tax['color'] => $cf_item['default'][1] ) );
+	$cf_product->set_category_ids( array_map( function ( $slug ) use ( $cf_cats ) { return $cf_cats[ $slug ]; }, $cf_item['cats'] ) );
+	$cf_product->set_tag_ids( array( (int) get_term_by( 'slug', $cf_item['tag'], 'product_tag' )->term_id ) );
+	$cf_product->set_image_id( cf_seed_asset( $cf_default ) );
+	$cf_product->set_gallery_image_ids( array_values( array_filter( array( cf_seed_asset( $cf_item['slug'] . '-art.webp' ), cf_seed_asset( 'fabric.webp' ) ) ) ) );
+	$cf_product->set_menu_order( count( $cf_catalog['products'] ) + $cf_index );
+	$cf_product->set_reviews_allowed( true );
+	$cf_product->update_meta_data( '_cf_badge', $cf_item['badge'] );
+	$cf_product->update_meta_data( '_cf_highlight', $cf_item['highlight'] );
+	$cf_product->update_meta_data( '_cf_seed', 1 );
+	$cf_id = $cf_product->save();
+
+	// Look existing variations up by SKU without loading several hundred product objects.
+	$cf_existing = array();
+	foreach ( $wpdb->get_results( $wpdb->prepare( "SELECT p.ID, m.meta_value AS sku FROM {$wpdb->posts} p JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_sku' WHERE p.post_parent = %d AND p.post_type = 'product_variation'", $cf_id ) ) as $cf_row ) {
+		$cf_existing[ $cf_row->sku ] = (int) $cf_row->ID;
+	}
+	foreach ( $cf_rows as $cf_order => $cf_row ) {
+		$cf_sku       = 'CF-' . strtoupper( $cf_item['slug'] . '-' . $cf_row[0] . '-' . $cf_row[1] . '-' . $cf_row[2] );
+		$cf_variation = isset( $cf_existing[ $cf_sku ] ) ? wc_get_product( $cf_existing[ $cf_sku ] ) : new WC_Product_Variation();
+		$cf_variation->set_parent_id( $cf_id );
+		$cf_variation->set_sku( $cf_sku );
+		$cf_variation->set_attributes( array( $cf_tax['style'] => $cf_row[0], $cf_tax['color'] => $cf_row[1], $cf_tax['size'] => $cf_row[2] ) );
+		$cf_variation->set_regular_price( wc_format_decimal( $cf_row[3], 2 ) );
+		$cf_variation->set_sale_price( '' );
+		$cf_variation->set_image_id( cf_seed_asset( $cf_item['slug'] . '-' . $cf_row[0] . '-' . $cf_row[1] . '.webp' ) );
+		$cf_variation->set_manage_stock( false );
+		$cf_variation->set_stock_status( 'instock' );
+		$cf_variation->set_menu_order( $cf_order );
+		$cf_variation->save();
+	}
+	WC_Product_Variable::sync( $cf_id );
+	WP_CLI::log( sprintf( '%s: %d variations', $cf_item['name'], count( $cf_rows ) ) );
+
+	if ( ! get_comments( array( 'post_id' => $cf_id, 'count' => true, 'meta_key' => '_cf_seed', 'meta_value' => 1 ) ) ) {
+		foreach ( array_slice( $cf_reviews, 0, 3 ) as $cf_review_index => $cf_review ) {
+			$cf_comment = wp_insert_comment(
+				array(
+					'comment_post_ID'      => $cf_id,
+					'comment_author'       => $cf_review[0],
+					'comment_author_email' => sanitize_title( $cf_review[0] ) . '@example.com',
+					'comment_content'      => '<strong>' . $cf_review[2] . '</strong> ' . $cf_review[3],
+					'comment_type'         => 'review',
+					'comment_approved'     => 1,
+					'comment_date'         => gmdate( 'Y-m-d H:i:s', time() - DAY_IN_SECONDS * ( 4 + $cf_review_index * 8 + $cf_index ) ),
+				)
+			);
+			update_comment_meta( $cf_comment, 'rating', $cf_review[1] );
+			update_comment_meta( $cf_comment, 'verified', 1 );
+			update_comment_meta( $cf_comment, '_cf_seed', 1 );
+		}
+		WC_Comments::clear_transients( $cf_id );
+	}
+	$cf_ids['all'][] = $cf_id;
+}
 $cf_ids['caps'] = array_slice( $cf_ids['caps'], 0, 4 );
 wc_delete_product_transients();
 if ( function_exists( 'swatches' ) ) {
@@ -484,6 +603,7 @@ $cf_mods = array(
 	'swatches'                    => 1,
 	'swatches_layout'             => '',
 	'swatches_box_attribute'      => (string) wc_attribute_taxonomy_id_by_name( $cf_tax['color'] ),
+	'swatches_box_layout'         => 'limit',
 	'swatches_box_limit'          => 6,
 	'swatches_box_shape'          => 'circle',
 	'swatches_box_size'           => '',
@@ -526,14 +646,14 @@ foreach ( $cf_mods as $cf_key => $cf_value ) {
 // ---------------------------------------------------------------- Shop sidebar filters.
 $cf_layered = array();
 $cf_number  = 2;
-foreach ( array( 'weight' => array( 'Weight', 'list' ), 'size' => array( 'Size', 'list' ), 'color' => array( 'Color', 'list' ), 'pack' => array( 'Pack Size', 'list' ) ) as $cf_slug => $cf_widget ) {
+foreach ( array( 'style' => array( 'Product', 'list' ), 'weight' => array( 'Weight', 'list' ), 'size' => array( 'Size', 'list' ), 'color' => array( 'Color', 'list' ), 'pack' => array( 'Pack Size', 'list' ) ) as $cf_slug => $cf_widget ) {
 	$cf_layered[ $cf_number++ ] = array( 'title' => $cf_widget[0], 'attribute' => $cf_slug, 'display_type' => $cf_widget[1], 'query_type' => 'or' );
 }
 $cf_layered['_multiwidget'] = 1;
 update_option( 'widget_woocommerce_layered_nav', $cf_layered );
 update_option( 'widget_woocommerce_price_filter', array( 2 => array( 'title' => 'Price' ), '_multiwidget' => 1 ) );
 $cf_sidebars = get_option( 'sidebars_widgets', array() );
-$cf_sidebars['shop-sidebar'] = array( 'woocommerce_layered_nav-2', 'woocommerce_layered_nav-3', 'woocommerce_layered_nav-4', 'woocommerce_layered_nav-5', 'woocommerce_price_filter-2' );
+$cf_sidebars['shop-sidebar'] = array( 'woocommerce_layered_nav-2', 'woocommerce_layered_nav-3', 'woocommerce_layered_nav-4', 'woocommerce_layered_nav-5', 'woocommerce_layered_nav-6', 'woocommerce_price_filter-2' );
 update_option( 'sidebars_widgets', $cf_sidebars );
 
 // ---------------------------------------------------------------- Shipping, coupon, demo payment.

@@ -97,7 +97,119 @@
 			$price.html($price.data('cfOriginal'));
 		}
 	});
+	// Designs sold as Product (style) x Color x Size: only offer the colours and sizes the chosen product comes in.
+	function styleMap($form) {
+		var data = $form.data('cfStyleMap');
+		if (data === undefined) {
+			data = null;
+			try { data = JSON.parse($form.find('.cf-style-map').first().text()); } catch (e) {}
+			$form.data('cfStyleMap', data && data.styles ? data : null);
+		}
+		return $form.data('cfStyleMap');
+	}
+	function applyStyle($form) {
+		var data = styleMap($form);
+		if (!data) {
+			return;
+		}
+		var spec = data.styles[$form.find('select[name="attribute_pa_style"]').val()] || null;
+		var changed = false;
+		$.each({ pa_color: 'colors', pa_size: 'sizes' }, function (attribute, key) {
+			var select = $form.find('select[name="attribute_' + attribute + '"]')[0];
+			var allowed = spec ? spec[key] : null;
+			if (!select) {
+				return;
+			}
+			$.each(select.options, function () {
+				this.disabled = !!this.value && !!allowed && allowed.indexOf(this.value) === -1;
+			});
+			if (select.value && allowed && allowed.indexOf(select.value) === -1) {
+				// Keep a colour picked so the photo always shows the chosen product; a size has to be chosen again.
+				select.value = attribute === 'pa_color' && allowed.length ? allowed[0] : '';
+				changed = true;
+			}
+		});
+		$form.addClass('cf-has-styles').trigger('woocommerce_update_variation_values');
+		if (changed) {
+			$form.find('select[name="attribute_pa_color"]').trigger('change');
+		}
+	}
+	// Until a size is picked WooCommerce has no variation to show, so preview the product and colour.
+	function previewStyle($form) {
+		var data = styleMap($form);
+		var style = $form.find('select[name="attribute_pa_style"]').val();
+		var spec = data && data.styles[style];
+		if (!spec || $form.find('select[name="attribute_pa_size"]').val()) {
+			return;
+		}
+		var $price = mainPrice($form);
+		if ($price.length) {
+			if ($price.data('cfOriginal') === undefined) {
+				$price.data('cfOriginal', $price.html());
+			}
+			$price.html('<span class="cf-price"><span class="cf-price__now">' + spec.price_html + '</span></span>');
+		}
+		var color = $form.find('select[name="attribute_pa_color"]').val();
+		var params = window.wc_add_to_cart_variation_params;
+		if (!color || !spec.sizes || !spec.sizes.length || !params || !$.fn.wc_variations_image_update) {
+			return;
+		}
+		var key = style + '|' + color;
+		var cache = $form.data('cfPreviews') || {};
+		$form.data('cfPreviews', cache).data('cfPreviewKey', key);
+		var show = function (variation) {
+			if (!variation || $form.data('cfPreviewKey') !== key || $form.find('select[name="attribute_pa_size"]').val()) {
+				return;
+			}
+			// Quick View shows the photo in a Flatsome slider rather than the WooCommerce gallery.
+			var $slider = $form.closest('.product-lightbox').find('.product-gallery-slider');
+			if ($slider.length) {
+				if (variation.image && variation.image.src) {
+					$slider.find('.slide.first img').attr('src', variation.image.src).attr('srcset', '');
+					if ($slider.data('flickity')) {
+						$slider.flickity('select', 0);
+					}
+				}
+				return;
+			}
+			$form.wc_variations_image_update(variation);
+		};
+		if (cache[key]) {
+			show(cache[key]);
+			return;
+		}
+		$.post(params.wc_ajax_url.toString().replace('%%endpoint%%', 'get_variation'), {
+			product_id: data.product,
+			attribute_pa_style: style,
+			attribute_pa_color: color,
+			attribute_pa_size: spec.sizes[0]
+		}).done(function (variation) {
+			if (variation && variation.variation_id) {
+				cache[key] = variation;
+				show(variation);
+			}
+		});
+	}
+	$(document).on('change', '.variations_form select[name="attribute_pa_style"]', function () {
+		applyStyle($(this).closest('.variations_form'));
+	});
+	$(document).on('wc_variation_form', '.variations_form', function () {
+		applyStyle($(this));
+		previewStyle($(this));
+	});
+	$(document).on('reset_data', '.variations_form', function () {
+		var $form = $(this);
+		// "Clear" empties the product picker after this event, so read the pickers once it has.
+		window.setTimeout(function () {
+			applyStyle($form);
+			previewStyle($form);
+		}, 0);
+	});
 	$(function () {
-		$('.variations_form').each(function () { decorate($(this)); });
+		$('.variations_form').each(function () {
+			decorate($(this));
+			applyStyle($(this));
+			previewStyle($(this));
+		});
 	});
 })(jQuery);

@@ -59,3 +59,47 @@ function cf_loop_details() {
 		esc_html__( 'Quick View', 'comfa' )
 	);
 }
+
+/**
+ * Flatsome builds the colour dots on a card from every variation of the product.
+ * A design with hundreds of variations gets a short list instead: one variation per colour of its default product (style).
+ */
+add_action(
+	'woocommerce_before_shop_loop_item',
+	function () {
+		global $product;
+		if ( ! $product instanceof WC_Product || ! $product->is_type( 'variable' ) || ! cf_style_map( $product ) ) {
+			return;
+		}
+		$hook = 'pre_transient_flatsome_swatches_cache_' . $product->get_id();
+		if ( ! has_filter( $hook, 'cf_card_variations' ) ) {
+			add_filter( $hook, 'cf_card_variations', 10, 2 );
+		}
+	},
+	1
+);
+
+function cf_card_variations( $value, $transient ) {
+	$product_id = (int) substr( $transient, strlen( 'flatsome_swatches_cache_' ) );
+	$cached     = get_transient( 'cf_card_variations_' . $product_id );
+	if ( is_array( $cached ) ) {
+		return $cached ? $cached : $value;
+	}
+	$product = wc_get_product( $product_id );
+	$map     = cf_style_map( $product );
+	$default = $product ? $product->get_default_attributes() : array();
+	$style   = isset( $default['pa_style'], $map[ $default['pa_style'] ] ) ? $default['pa_style'] : (string) key( $map );
+	$list    = array();
+	if ( $map && is_array( $map[ $style ]['colors'] ) && is_array( $map[ $style ]['sizes'] ) && $map[ $style ]['sizes'] ) {
+		$store = new WC_Product_Data_Store_CPT();
+		foreach ( $map[ $style ]['colors'] as $color ) {
+			$id        = $store->find_matching_product_variation( $product, array( 'attribute_pa_style' => $style, 'attribute_pa_color' => $color, 'attribute_pa_size' => $map[ $style ]['sizes'][0] ) );
+			$variation = $id ? $product->get_available_variation( $id ) : false;
+			if ( $variation ) {
+				$list[] = $variation;
+			}
+		}
+	}
+	set_transient( 'cf_card_variations_' . $product_id, $list, WEEK_IN_SECONDS );
+	return $list ? $list : $value;
+}

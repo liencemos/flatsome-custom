@@ -167,6 +167,9 @@
 #shop-sidebar .widget ul li a { color: var(--cf-ink); padding: 4px 0; }
 #shop-sidebar .widget ul li .count { display: none; }
 #shop-sidebar .woocommerce-widget-layered-nav-list__item > a::before { content: ""; display: inline-block; width: 14px; height: 14px; margin-right: 10px; border: 1px solid var(--cf-ink); border-radius: 2px; vertical-align: -2px; }
+/* Long swatch lists (colours, products) run in two columns. */
+#shop-sidebar .woocommerce-widget-layered-nav-list:has(.ux-swatch-widget-layered-nav-list__graphic) { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10px; }
+#shop-sidebar .woocommerce-widget-layered-nav-list:has(.ux-swatch-widget-layered-nav-list__graphic) li { min-width: 0; font-size: 13px; }
 #shop-sidebar .woocommerce-widget-layered-nav-list__item--chosen > a::before { background: var(--cf-ink); box-shadow: inset 0 0 0 2px #fff; }
 
 /* ---------- Product page ---------- */
@@ -204,6 +207,13 @@
 .variations_form .ux-swatches[data-attribute_name="attribute_pa_color"] .ux-swatch.selected { box-shadow: inset 0 0 0 2px var(--cf-ink); }
 .variations_form .ux-swatches[data-attribute_name="attribute_pa_color"] .ux-swatch__color { border-radius: 50%; }
 /* Size: two-line buttons */
+/* Product (style) picker: a row of garment thumbnails. */
+.variations_form .ux-swatches[data-attribute_name="attribute_pa_style"] .ux-swatch { width: 62px; height: 62px; padding: 3px; border-radius: 10px; background: var(--cf-card); box-shadow: inset 0 0 0 1px var(--cf-line); overflow: hidden; }
+.variations_form .ux-swatches[data-attribute_name="attribute_pa_style"] .ux-swatch.selected { box-shadow: inset 0 0 0 2px var(--cf-ink); }
+.variations_form .ux-swatches[data-attribute_name="attribute_pa_style"] .ux-swatch__img { width: 100%; height: 100%; object-fit: cover; border-radius: 7px; }
+/* Colours and sizes the chosen product does not come in are not offered at all. */
+.variations_form.cf-has-styles .ux-swatch.disabled { display: none; }
+.cf-price__from { font-size: .62em; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--cf-muted); }
 .variations_form .ux-swatches[data-attribute_name="attribute_pa_size"] { display: grid; grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); }
 .variations_form .ux-swatches[data-attribute_name="attribute_pa_size"] .ux-swatch { flex-direction: column; min-height: 50px; padding: 6px 4px; border-radius: 8px; background: var(--cf-soft); box-shadow: inset 0 0 0 1px #ecebe3; font-size: 14px; font-weight: 700; line-height: 1.2; color: var(--cf-ink); }
 .variations_form .ux-swatches[data-attribute_name="attribute_pa_size"] .ux-swatch.selected { box-shadow: inset 0 0 0 2px var(--cf-ink); background: #fff; }

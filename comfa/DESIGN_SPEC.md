@@ -43,3 +43,15 @@ Outfit and Fraunces are set in Flatsome > Theme Options > Typography; Bowlby One
 **Bag and checkout:** off-canvas mini bag and cart page show free-shipping progress and the giving count; classic WooCommerce cart and checkout styled to match.
 
 **Policy and FAQ pages (UX Builder pages):** one rounded white card. Cream left column with serif title, subtitle and a numbered contents list that stays in view while scrolling; right column with the document, sub-headings marked by a yellow bar. The FAQ groups questions in Flatsome accordions with a yellow +/− marker. The DMCA page adds a white "Trademark & IP reports" card with an outline button under the contents list; the card stays visible on mobile. Its button opens the Intellectual Property Claim Form: the same card with a "Before you start" box on the left and a four-group form on the right (two columns on desktop, one on mobile, yellow submit button). Main sections are separated by a thin rule. Below 850 px the columns stack and the contents list is hidden, leaving the title band above the document.
+
+## Print-to-order designs
+
+One product per design, sold as Product (style) × Color × Size with native WooCommerce variations and Flatsome swatches.
+
+- **Product** (`pa_style`, `ux_image` swatch): a row of 62px garment thumbnails above Color. 14 styles.
+- **Color** (`pa_color`, `ux_color`): 40px dots. Only the colours the selected style comes in are shown.
+- **Size** (`pa_size`, `ux_label`): only the sizes of the selected style. Size surcharges are part of the variation price.
+- Until a size is picked, the price is the style's base price and the photo shows the selected style and colour.
+- Cards: "From" + lowest price, "N products · N colours", and the colours of the default style (6 dots, then "+N").
+- Sidebar: a Product filter above Weight; swatch filters run in two columns.
+

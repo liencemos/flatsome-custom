@@ -15,6 +15,7 @@ SRC = ROOT / "art-src"
 OUT = ROOT.parent / "demo-images"
 CARD_BG = (243, 243, 241)
 CARD = (1200, 1600)
+POD_CARD = (900, 1200)
 TILE_BGS = ["#f0d9a6", "#c9d6b8", "#f2c6b4", "#bcd0ea", "#e9cfd6", "#d8d2c2"]
 
 
@@ -44,6 +45,24 @@ def tint(cutout, colour, has_print):
         out = out * (1 - coloured) + rgb * coloured
     out = np.dstack([np.clip(out, 0, 1), alpha])
     return Image.fromarray((out * 255).astype(np.uint8), "RGBA")
+
+
+def printed(garment, art, colour, box):
+    """Screen-print a one-colour artwork (greyscale = ink coverage) onto a tinted cut-out."""
+    cx, cy, width, height = box
+    scale = min(garment.width * width / art.width, garment.height * height / art.height)
+    art = art.resize((round(art.width * scale), round(art.height * scale)), Image.LANCZOS)
+    left, top = round(garment.width * cx - art.width / 2), round(garment.height * cy - art.height / 2)
+    rgba = np.asarray(garment).astype(np.float32) / 255
+    area = rgba[top:top + art.height, left:left + art.width]
+    light = np.array(colour, dtype=np.float32) @ np.array([0.299, 0.587, 0.114], dtype=np.float32) / 255 > 0.66
+    ink = np.array([0.1, 0.1, 0.11] if light else [0.96, 0.94, 0.89], dtype=np.float32)
+    # Let the fabric folds show through the ink a little.
+    target = np.array(colour, dtype=np.float32) / 255
+    fold = np.clip(area[..., :3].mean(axis=2) / max(float(target.mean()), 0.08), 0.75, 1.1)[..., None]
+    cover = (np.asarray(art).astype(np.float32) / 255 * 0.95 * area[..., 3])[..., None]
+    area[..., :3] = area[..., :3] * (1 - cover) + np.clip(ink * (0.8 + 0.2 * fold), 0, 1) * cover
+    return Image.fromarray((np.clip(rgba, 0, 1) * 255).astype(np.uint8), "RGBA")
 
 
 def place(garment, size, bg, fill=0.8, shadow=True):
@@ -88,6 +107,27 @@ def main():
                 zoom = place(garment, (CARD[0] * 2, CARD[1] * 2), CARD_BG, fill, shadow=False)
                 box = (CARD[0] // 2, round(CARD[1] * 0.42), CARD[0] // 2 + CARD[0], round(CARD[1] * 0.42) + CARD[1])
                 save(zoom.crop(box), f"{product['slug']}-detail.webp")
+
+    # Print-to-order designs: one mock-up per style and colour, plus the artwork on its own.
+    prints = {p.stem: Image.open(p).convert("L") for p in (SRC / "print").glob("*.webp")}
+    for design in catalog["designs"]:
+        art = prints[design["print"]]
+        for style in (list(catalog["styles"]) if design["styles"] == "all" else design["styles"]):
+            spec = catalog["styles"][style]
+            for colour in spec["colors"]:
+                if "colors" in design and colour not in design["colors"]:
+                    continue
+                rgb = hex_rgb(catalog["colors"][colour][1])
+                garment = printed(tint(bases[spec["base"]], rgb, False), art, rgb, spec["print_box"])
+                save(place(garment, POD_CARD, CARD_BG, 0.6 if spec["base"] == "mug" else 0.84), f"{design['slug']}-{style}-{colour}.webp", 80)
+        sheet = Image.new("RGB", (1000, 1000), hex_rgb("#ecebdc"))
+        scale = 620 / max(art.size)
+        mask = art.resize((round(art.width * scale), round(art.height * scale)), Image.LANCZOS)
+        sheet.paste(hex_rgb("#000814"), ((1000 - mask.width) // 2, (1000 - mask.height) // 2), mask)
+        save(sheet, f"{design['slug']}-art.webp")
+    # Thumbnails for the "Product" (style) picker.
+    for style, spec in catalog["styles"].items():
+        save(place(tint(bases[spec["base"]], hex_rgb("#36454f"), False), (300, 300), CARD_BG, 0.6 if spec["base"] == "mug" else 0.8), f"style-{style}.webp")
 
     # Sub-category tiles: product cut-out on a soft colour field.
     tiles = [("crew-neck", "tee-crew", "navy"), ("v-neck", "tee-vneck", "pink"), ("long-sleeve", "tee-long", "burgundy"),
