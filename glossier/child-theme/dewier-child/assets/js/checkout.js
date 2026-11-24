@@ -116,6 +116,15 @@
 		go( this.dataset.go );
 	} );
 
+	// Enter in a field moves on a step; before Payment it would otherwise place the order.
+	$root.on( 'keydown', 'form.checkout input:not(#dw-co-coupon):not([type="submit"])', function ( event ) {
+		if ( 'Enter' !== event.key || 'payment' === current ) {
+			return;
+		}
+		event.preventDefault();
+		go( steps[ steps.indexOf( current ) + 1 ] );
+	} );
+
 	$( document.body ).on( 'updated_checkout', recap );
 
 	// Server-side errors: return to the step that holds the first invalid field.
