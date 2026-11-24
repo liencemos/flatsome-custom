@@ -108,6 +108,11 @@ body.dewier {
 	outline-offset: 2px;
 }
 
+/* WooCommerce moves focus to the first notice for screen readers; it is not a control. */
+.dewier [role="alert"][tabindex="-1"]:focus-visible {
+	outline: 0;
+}
+
 .dw-icon {
 	display: block;
 	width: 1rem;
