@@ -51,6 +51,7 @@ function dewier_theme_options() {
 		'shoptimizer_layout_woocommerce_display_breadcrumbs'  => false,
 		'shoptimizer_layout_woocommerce_sidebar'              => 'no-woocommerce-sidebar',
 		'shoptimizer_layout_shop_title'                       => false,
+		'shoptimizer_ajaxcart_quantity'                       => true,
 	);
 }
 

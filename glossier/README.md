@@ -55,6 +55,9 @@ at all.
 - Announcement bar messages: filter `dewier_promo_messages`.
 - The bag's free-shipping bar reads the minimum amount of the WooCommerce free shipping
   method in the shopper's zone, and is hidden when the zone has none.
+- The cart page (`/cart/`) is styled for the `[woocommerce_cart]` shortcode; `seed.php`
+  replaces WooCommerce's default Cart block with it. Quantities update the totals
+  without an Update button.
 - Product badges: one per line in the `_dewier_badges` product meta, as `promo:Text`
   (blue) or `value:Text` (pink). Card subtitle: `_dewier_subtitle`.
 

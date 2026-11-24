@@ -122,6 +122,18 @@ update_option( 'woocommerce_weight_unit', 'oz' );
 update_option( 'woocommerce_dimension_unit', 'in' );
 update_option( 'woocommerce_enable_ajax_add_to_cart', 'yes' );
 update_option( 'woocommerce_cart_redirect_after_add', 'no' );
+
+// The child theme styles the shortcode cart, so swap out WooCommerce's default Cart block.
+$dewier_cart_page = get_post( wc_get_page_id( 'cart' ) );
+if ( $dewier_cart_page && has_block( 'woocommerce/cart', $dewier_cart_page ) ) {
+	wp_update_post(
+		array(
+			'ID'           => $dewier_cart_page->ID,
+			'post_content' => '<!-- wp:shortcode -->[woocommerce_cart]<!-- /wp:shortcode -->',
+		)
+	);
+}
+
 update_option( 'woocommerce_enable_reviews', 'yes' );
 update_option( 'woocommerce_enable_review_rating', 'yes' );
 update_option( 'woocommerce_catalog_columns', 4 );

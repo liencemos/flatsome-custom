@@ -413,3 +413,18 @@ function dewier_accordions( $product ) {
 	}
 	echo '</div>';
 }
+
+/**
+ * Cart page: Dewier heading and free-shipping progress instead of Shoptimizer's step bar.
+ */
+function dewier_cart_page_setup() {
+	remove_action( 'woocommerce_before_cart', 'shoptimizer_cart_progress' );
+}
+add_action( 'wp', 'dewier_cart_page_setup' );
+
+function dewier_cart_heading() {
+	echo '<h1 class="dw-cart__title">' . esc_html__( 'Your bag', 'dewier' ) . '</h1>';
+}
+add_action( 'woocommerce_before_cart', 'dewier_cart_heading', 5 );
+add_action( 'woocommerce_before_cart_totals', 'dewier_cart_progress', 5 );
+
