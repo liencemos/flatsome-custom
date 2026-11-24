@@ -111,7 +111,16 @@
 				return !variation.attributes[pick[0]] || variation.attributes[pick[0]] === pick[1];
 			});
 			if (fits && variation.image && variation.image.src) {
-				$form.wc_variations_image_update(variation);
+				// Quick View shows the photo in a Flatsome slider rather than the WooCommerce gallery.
+				var $slider = $form.closest('.product-lightbox').find('.product-gallery-slider');
+				if ($slider.length) {
+					$slider.find('.slide.first img').attr('src', variation.image.src).attr('srcset', '');
+					if ($slider.data('flickity')) {
+						$slider.flickity('select', 0);
+					}
+				} else {
+					$form.wc_variations_image_update(variation);
+				}
 				return false;
 			}
 		});
