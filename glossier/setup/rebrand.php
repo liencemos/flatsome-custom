@@ -3,7 +3,8 @@
  * Renames the visible "Dewier" brand to "Meredithzone" on a site seeded before the rename.
  * Run with: wp eval-file rebrand.php [dry-run]
  *
- * Only display text changes: titles, content, Elementor data, term names and options.
+ * Only display text changes: titles, content, Elementor data, term names and options;
+ * "Dewier" inside a path or file name (/Dewier/, Dewier.jpg) is left alone.
  * Slugs, file names and the dewier-child theme folder stay as they are, and so does
  * WooPayments' cached account data (the business name is set in the payment account).
  *
@@ -16,7 +17,7 @@ $dewier_dry = in_array( 'dry-run', isset( $args ) ? (array) $args : array(), tru
 
 function dewier_rebrand_value( $value ) {
 	if ( is_string( $value ) ) {
-		return preg_replace( '/Dewier(?![_A-Za-z])/', 'Meredithzone', $value );
+		return preg_replace( '#(?<![/\w-])Dewier(?![\w/-]|\.\w)#', 'Meredithzone', $value );
 	}
 	if ( is_array( $value ) ) {
 		return array_map( 'dewier_rebrand_value', $value );
