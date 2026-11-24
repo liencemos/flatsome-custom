@@ -123,13 +123,24 @@ update_option( 'woocommerce_dimension_unit', 'in' );
 update_option( 'woocommerce_enable_ajax_add_to_cart', 'yes' );
 update_option( 'woocommerce_cart_redirect_after_add', 'no' );
 
-// The child theme styles the shortcode cart, so swap out WooCommerce's default Cart block.
+// The child theme styles the shortcode cart, so swap WooCommerce's Cart block for it and keep the rest of the page.
+function dewier_seed_cart_shortcode( $blocks ) {
+	foreach ( $blocks as $i => $block ) {
+		if ( 'woocommerce/cart' === $block['blockName'] ) {
+			$blocks[ $i ] = current( parse_blocks( '<!-- wp:shortcode -->[woocommerce_cart]<!-- /wp:shortcode -->' ) );
+		} elseif ( $block['innerBlocks'] ) {
+			$blocks[ $i ]['innerBlocks'] = dewier_seed_cart_shortcode( $block['innerBlocks'] );
+		}
+	}
+	return $blocks;
+}
+
 $dewier_cart_page = get_post( wc_get_page_id( 'cart' ) );
 if ( $dewier_cart_page && has_block( 'woocommerce/cart', $dewier_cart_page ) ) {
 	wp_update_post(
 		array(
 			'ID'           => $dewier_cart_page->ID,
-			'post_content' => '<!-- wp:shortcode -->[woocommerce_cart]<!-- /wp:shortcode -->',
+			'post_content' => wp_slash( serialize_blocks( dewier_seed_cart_shortcode( parse_blocks( $dewier_cart_page->post_content ) ) ) ),
 		)
 	);
 }
