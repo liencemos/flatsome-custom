@@ -9,6 +9,7 @@ fi
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SETUP_DIR="$ROOT_DIR/setup"
 CHILD_DIR="$ROOT_DIR/child-theme/blueland-child"
+PLUGIN_DIR="$(dirname "$ROOT_DIR")/plugins/modern-checkout-for-woocommerce"
 FLATSOME_ZIP="$(realpath "$1")"
 WP_DIR="${WP_LOCAL_DIR:-$HOME/wp-local}"
 WP_CLI="$WP_DIR/wp.sh"
@@ -42,7 +43,7 @@ else
 		docker cp "$source"/. "$CONTAINER:/var/www/html/$destination/"
 	}
 	SEED_PATH="/var/www/html/wp-content/uploads/blueland-seed/seed.php"
-	docker exec "$CONTAINER" mkdir -p /var/www/html/wp-content/uploads/blueland-seed /var/www/html/wp-content/uploads/ux-builder/blocks /var/www/html/wp-content/themes/blueland-child /var/www/html/wp-content/uploads/blueland
+	docker exec "$CONTAINER" mkdir -p /var/www/html/wp-content/uploads/blueland-seed /var/www/html/wp-content/uploads/ux-builder/blocks /var/www/html/wp-content/themes/blueland-child /var/www/html/wp-content/plugins/modern-checkout-for-woocommerce /var/www/html/wp-content/uploads/blueland
 fi
 
 python3 "$SETUP_DIR/make-placeholders.py"
@@ -76,6 +77,7 @@ if ! wp_cli theme is-installed flatsome >/dev/null 2>&1; then
 fi
 
 copy_to_wp "$CHILD_DIR" wp-content/themes/blueland-child
+copy_to_wp "$PLUGIN_DIR" wp-content/plugins/modern-checkout-for-woocommerce
 copy_to_wp "$CHILD_DIR/assets/images" wp-content/uploads/blueland
 if [[ -n "${WP_CLI_CMD:-}" ]]; then
 	mkdir -p "$(dirname "$SEED_PATH")"
@@ -85,9 +87,12 @@ else
 fi
 copy_to_wp "$ROOT_DIR/ux-builder" wp-content/uploads/ux-builder
 if [[ -z "${WP_CLI_CMD:-}" ]]; then
-	docker exec "$CONTAINER" chown -R www-data:www-data /var/www/html/wp-content/themes/blueland-child /var/www/html/wp-content/uploads/blueland
+	docker exec "$CONTAINER" chown -R www-data:www-data /var/www/html/wp-content/themes/blueland-child /var/www/html/wp-content/plugins/modern-checkout-for-woocommerce /var/www/html/wp-content/uploads/blueland
 fi
 
+if ! wp_cli plugin is-active modern-checkout-for-woocommerce >/dev/null 2>&1; then
+	wp_cli plugin activate modern-checkout-for-woocommerce
+fi
 wp_cli theme activate blueland-child
 wp_cli language core install en_US --activate
 wp_cli eval-file "$SEED_PATH"

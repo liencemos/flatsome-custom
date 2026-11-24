@@ -86,3 +86,19 @@ Seed dùng đơn vị ngày `F j, Y`, giờ `g:i a`, tuần bắt đầu Chủ N
 5. **Tình trạng kho:** huy hiệu số lượng thấp/hết hàng/hàng về, form đăng ký email và thông báo khi chuyển sang còn hàng; nên bổ sung xử lý unsubscribe và dịch vụ email production.
 6. **Hiệu năng ảnh/tài nguyên:** ảnh lớn được chuyển sang WebP, có preload hero, preconnect font, defer JavaScript và tắt emoji khi hệ thống hỗ trợ.
 7. **Quà tặng và Holiday Shop:** Gift Card demo tạo coupon cố định một lần cho mỗi đơn vị; mã dùng một lần nên mọi số dư chưa dùng sẽ mất. Với production, nên dùng plugin gift-card chuyên dụng để hỗ trợ số dư còn lại, hoàn tiền, gửi lại mã và theo dõi bảo mật. Gift wrap cộng $4.95 và lưu lời nhắn trong đơn hàng; trang Holiday Shop có thể chỉnh sửa bằng UX Builder.
+
+## Checkout nhiều bước
+
+Trang checkout dùng shortcode WooCommerce cổ điển và bố cục ba bước Information, Shipping, Payment; nội dung nhập liệu, phí giao hàng, mã giảm giá và phương thức thanh toán vẫn do WooCommerce xử lý. Thanh tiến độ giao hàng miễn phí chỉ tính sản phẩm vật lý. Kiểm tra địa chỉ/ZIP và luồng đặt hàng trước khi triển khai production; thanh toán mẫu hiện không thu tiền.
+
+### Plugin Modern Checkout for WooCommerce
+
+Checkout được tách thành plugin độc lập `modern-checkout-for-woocommerce`, không phụ thuộc giao diện Flatsome. Để cài thủ công, vào **Plugins → Add New Plugin → Upload Plugin**, chọn tệp ZIP `modern-checkout-for-woocommerce.zip`, nhấn **Install Now** rồi **Activate Plugin**. Tệp ZIP được tạo bằng `plugins/modern-checkout-for-woocommerce/bin/build-zip.sh /đường/dẫn/modern-checkout-for-woocommerce.zip`. Script `blueland/setup/setup.sh` cũng tự sao chép plugin vào `wp-content/plugins/` và kích hoạt plugin ở cả chế độ cài từ host lẫn Docker.
+
+Mở **WooCommerce → Settings → Modern Checkout** để bật/tắt checkout, chọn logo (nếu để trống plugin dùng logo của giao diện rồi đến tên website), chỉnh chiều cao logo, màu sắc, font, bán kính bo góc, nhãn bảo mật, ba mục tin cậy, thanh giao hàng miễn phí, coupon và ghi chú đơn hàng. Ngưỡng giao hàng để trống sẽ tự lấy từ phương thức Free shipping đang bật; có thể nhập ngưỡng riêng hoặc loại sản phẩm ảo khỏi phép tính. Plugin dùng trang chứa `[woocommerce_checkout]`; nếu lưu thiết lập khi trang còn Checkout block, nội dung cũ được sao lưu và đổi sang shortcode cổ điển. Khi tắt plugin, nội dung cũ chỉ được khôi phục nếu trang vẫn chính xác là `[woocommerce_checkout]`.
+
+Các hook mở rộng:
+
+- Action: `mcwc_information_after_fields`, `mcwc_shipping_after_methods`, `mcwc_shipping_step_end`, `mcwc_payment_step_before`, `mcwc_summary_before_items`, `mcwc_summary_after_totals`, `mcwc_header_end`.
+- Filter: `mcwc_is_active`, `mcwc_trust_items`, `mcwc_steps`, `mcwc_free_shipping_threshold`, `mcwc_free_shipping_eligible_subtotal`.
+- Có thể ghi đè template tại `yourtheme/modern-checkout-for-woocommerce/checkout/form-checkout.php` và `yourtheme/modern-checkout-for-woocommerce/checkout/review-order.php`.

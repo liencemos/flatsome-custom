@@ -1,0 +1,408 @@
+# Copyright (C) 2026 
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Modern Checkout for WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/modern-checkout-for-woocommerce\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-22T14:37:59+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: modern-checkout-for-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: modern-checkout-for-woocommerce.php
+msgid "Modern Checkout for WooCommerce"
+msgstr ""
+
+#. Description of the plugin
+#: modern-checkout-for-woocommerce.php
+msgid "A theme-independent, three-step WooCommerce checkout."
+msgstr ""
+
+#: includes/admin-notices.php:42
+msgid "You do not have permission to update checkout settings."
+msgstr ""
+
+#: includes/admin-notices.php:58
+msgid "Modern Checkout requires the classic WooCommerce checkout shortcode. The checkout page still contains the Checkout block."
+msgstr ""
+
+#: includes/admin-notices.php:59
+msgid "Switch to classic checkout"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:95
+#: includes/class-mcwc-checkout.php:284
+msgid "Add your email address"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:96
+#: includes/class-mcwc-checkout.php:286
+msgid "Add your shipping address"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:97
+#: includes/class-mcwc-checkout.php:258
+#: includes/class-mcwc-checkout.php:266
+msgid "Calculated at next step"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:98
+msgid "This field is required."
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:99
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:100
+msgid "Enter a valid 5-digit ZIP code."
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:101
+msgid "We could not apply that code. Please try again."
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:155
+#: includes/class-mcwc-checkout.php:284
+msgid "Contact"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:161
+msgid "Shipping address"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:173
+msgid "Create an account?"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:194
+msgid "Ship to a different address?"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:213
+msgid "Order notes (optional)"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:272
+msgid "Free"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:284
+#: includes/class-mcwc-checkout.php:286
+#: includes/class-mcwc-checkout.php:288
+msgid "Change"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:286
+msgid "Ship to"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:288
+msgid "Method"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:311
+#: includes/class-mcwc-checkout.php:329
+msgid "There are no shipping options available for this address."
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:311
+#: includes/class-mcwc-checkout.php:327
+msgid "Enter your address to view shipping options."
+msgstr ""
+
+#. translators: %s: Amount remaining until free shipping.
+#: includes/class-mcwc-checkout.php:398
+#, php-format
+msgid "You’re %s away from free shipping"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:400
+msgid "You’ve unlocked free shipping!"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:406
+msgid "Free shipping progress"
+msgstr ""
+
+#. translators: %s: Free-shipping threshold amount.
+#: includes/class-mcwc-checkout.php:409
+#, php-format
+msgid "Free shipping at %s"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:418
+#: includes/class-mcwc-settings.php:137
+msgid "Free shipping on $50+"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:419
+#: includes/class-mcwc-settings.php:138
+msgid "100-day returns"
+msgstr ""
+
+#: includes/class-mcwc-checkout.php:420
+#: includes/class-mcwc-settings.php:139
+msgid "Secure checkout"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:13
+#: includes/class-mcwc-settings.php:42
+msgid "Modern Checkout"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:31
+msgid "Truck"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:32
+msgid "Return"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:33
+msgid "Lock"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:34
+msgid "Shield"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:35
+msgid "Gift"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:36
+msgid "Leaf"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:37
+msgid "Star"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:47
+msgid "Enable modern checkout"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:53
+msgid "Logo"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:59
+msgid "Logo max height (px)"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:66
+msgid "Primary color"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:72
+msgid "Text color"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:78
+msgid "Muted color"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:84
+msgid "Summary background"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:90
+msgid "Border color"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:96
+msgid "Font"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:101
+msgid "Inherit"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:110
+msgid "Input radius (px)"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:117
+msgid "Button radius (px)"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:124
+msgid "Header right text"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:127
+#: templates/page-checkout.php:25
+msgid "Secure Checkout"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:130
+msgid "Trust item 1"
+msgstr ""
+
+#. translators: %d: Trust item number.
+#: includes/class-mcwc-settings.php:145
+#, php-format
+msgid "Trust item %d text"
+msgstr ""
+
+#. translators: %d: Trust item number.
+#: includes/class-mcwc-settings.php:152
+#, php-format
+msgid "Trust item %d icon"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:161
+msgid "Checkout features"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:167
+msgid "Show free-shipping progress bar"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:168
+msgid "Show coupon field"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:169
+msgid "Show order notes"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:170
+msgid "Exclude virtual products from the free-shipping bar"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:181
+msgid "Free-shipping threshold override"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:182
+msgid "Leave blank to detect the threshold from an enabled free-shipping method."
+msgstr ""
+
+#: includes/class-mcwc-settings.php:204
+msgid "Choose image"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:205
+msgid "Remove"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:269
+msgid "Select checkout logo"
+msgstr ""
+
+#: includes/class-mcwc-settings.php:270
+msgid "Use this logo"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:25
+msgid "You must be logged in to checkout."
+msgstr ""
+
+#: templates/checkout/form-checkout.php:30
+#: templates/checkout/form-checkout.php:54
+msgid "Information"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:32
+#: templates/checkout/form-checkout.php:71
+#: templates/checkout/review-order.php:71
+msgid "Shipping"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:34
+#: templates/checkout/form-checkout.php:87
+#: templates/checkout/form-checkout.php:89
+msgid "Payment"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:38
+msgid "Checkout"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:45
+msgid "Checkout progress"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:46
+msgid "Cart"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:64
+msgid "Continue to shipping"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:64
+#: templates/checkout/form-checkout.php:79
+msgid "Continue to payment"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:65
+msgid "‹ Return to cart"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:73
+msgid "Shipping method"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:80
+#: templates/checkout/form-checkout.php:93
+msgid "‹ Return to information"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:90
+msgid "All transactions are secure and encrypted."
+msgstr ""
+
+#: templates/checkout/form-checkout.php:93
+msgid "‹ Return to shipping"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:101
+msgid "Order summary"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:103
+#: templates/checkout/form-checkout.php:115
+msgid "Your Order"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:103
+msgid "Close order summary"
+msgstr ""
+
+#: templates/checkout/form-checkout.php:105
+msgid "Your order"
+msgstr ""
+
+#: templates/checkout/review-order.php:54
+msgid "Have a coupon code?"
+msgstr ""
+
+#: templates/checkout/review-order.php:54
+msgid "Add"
+msgstr ""
+
+#: templates/checkout/review-order.php:56
+#: templates/checkout/review-order.php:57
+msgid "Coupon code"
+msgstr ""
+
+#: templates/checkout/review-order.php:58
+msgid "Apply"
+msgstr ""
+
+#: templates/checkout/review-order.php:65
+msgid "Subtotal"
+msgstr ""
+
+#: templates/checkout/review-order.php:87
+msgid "Total"
+msgstr ""
