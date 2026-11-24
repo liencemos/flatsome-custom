@@ -206,19 +206,21 @@
 		if (coupon && nativeCoupon) {
 			const code = coupon.querySelector('input');
 			const note = summary.querySelector('.cf-checkout-coupon-note');
-			let failed;
+			const endpoint = wc_checkout_params.wc_ajax_url.toString().replace('%%endpoint%%', 'apply_coupon');
+			let pendingCode;
 			coupon.hidden = false;
 			document.querySelector('.woocommerce-form-coupon-toggle')?.setAttribute('hidden', '');
 			function couponNote(message, isError) {
 				note.textContent = message;
 				note.hidden = !message;
-				note.classList.toggle('is-error', Boolean(isError));
+				note.classList.toggle('cf-checkout-coupon-error', Boolean(isError));
 			}
 			function applyCoupon() {
 				if (!code.value.trim()) { code.focus(); return; }
-				failed = false;
+				if (pendingCode) return;
+				pendingCode = code.value.trim();
 				couponNote('');
-				$(nativeCoupon).find('[name="coupon_code"]').val(code.value.trim());
+				$(nativeCoupon).find('[name="coupon_code"]').val(pendingCode);
 				$(nativeCoupon).trigger('submit');
 			}
 			coupon.querySelector('button').addEventListener('click', applyCoupon);
@@ -227,12 +229,20 @@
 				event.preventDefault();
 				applyCoupon();
 			});
-			$(document.body).on('errored_coupon_in_checkout', (_event, _code, response) => {
-				failed = true;
-				couponNote(new DOMParser().parseFromString(response, 'text/html').body.textContent.trim(), true);
-			}).on('applied_coupon_in_checkout', () => {
-				if (!failed) { code.value = ''; couponNote(cfCheckout.applied); }
-			}).on('removed_coupon_in_checkout', () => couponNote(''));
+			$(document).on('ajaxComplete', (_event, xhr, settings) => {
+				if (!pendingCode || settings.url !== endpoint) return;
+				const submittedCode = pendingCode;
+				pendingCode = undefined;
+				const response = new DOMParser().parseFromString(xhr.responseText || '', 'text/html');
+				const error = response.querySelector('.woocommerce-error, .is-error');
+				if (error || !response.querySelector('.woocommerce-message, .is-success')) {
+					couponNote(error?.textContent.trim() || cfCheckout.couponError, true);
+					return;
+				}
+				if (code.value.trim() === submittedCode) code.value = '';
+				couponNote(cfCheckout.applied);
+			});
+			$(document.body).on('removed_coupon_in_checkout', () => couponNote(''));
 		}
 		$(document.body).on('updated_checkout', refresh).on('checkout_error', () => {
 			const error = form.querySelector('.woocommerce-error [data-id]');

@@ -109,7 +109,7 @@
 .cf-checkout-coupon .input-text { min-width: 0; min-height: 44px; margin: 0; border: 1px solid var(--cf-line); border-radius: 8px; box-shadow: none; }
 .cf-store .cf-checkout-coupon .button { min-height: 44px; margin: 0; padding-inline: 16px; background: var(--cf-navy); color: #fff; }
 .cf-checkout-coupon-note { margin: 6px 0 0; font-size: .8125rem; }
-.cf-checkout-coupon-note.is-error { color: #9e1708; }
+.cf-checkout-coupon-note.cf-checkout-coupon-error { color: #9e1708; }
 .cf-checkout-progress:not(:empty) { margin-top: 14px; }
 .cf-checkout-note { margin: 16px 0 0; font-size: .8125rem; color: var(--cf-muted); }
 .cf-store.woocommerce-checkout .woocommerce-form-coupon-toggle .message-container { font-size: .875rem; }

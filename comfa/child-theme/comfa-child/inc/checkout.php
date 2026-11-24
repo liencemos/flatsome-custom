@@ -41,6 +41,7 @@ add_action(
 				'method'   => __( 'Method', 'comfa' ),
 				'change'   => __( 'Change', 'comfa' ),
 				'applied'  => __( 'Discount applied.', 'comfa' ),
+				'couponError' => __( 'Unable to apply this discount code.', 'comfa' ),
 			)
 		);
 	},
