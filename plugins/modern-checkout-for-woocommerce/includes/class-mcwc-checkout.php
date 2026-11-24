@@ -61,6 +61,9 @@ function mcwc_prepare_checkout() {
 	if ( function_exists( 'flatsome_html_checkout_sidebar' ) ) {
 		remove_action( 'woocommerce_checkout_after_order_review', 'flatsome_html_checkout_sidebar', 10 );
 	}
+	if ( function_exists( 'shoptimizer_cart_progress' ) ) {
+		remove_action( 'woocommerce_before_checkout_form', 'shoptimizer_cart_progress', 5 );
+	}
 	remove_action( 'woocommerce_checkout_billing', array( $checkout, 'checkout_form_billing' ), 10 );
 	remove_action( 'woocommerce_checkout_billing', array( $checkout, 'checkout_form_shipping' ), 10 );
 	remove_action( 'woocommerce_checkout_shipping', array( $checkout, 'checkout_form_shipping' ), 10 );
