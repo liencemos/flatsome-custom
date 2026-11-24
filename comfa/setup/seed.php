@@ -434,13 +434,15 @@ foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
 		$cf_variation->set_manage_stock( false );
 		$cf_variation->set_stock_status( 'instock' );
 		$cf_variation->set_menu_order( $cf_order );
+		$cf_variation->set_status( 'publish' );
+		$cf_variation->update_meta_data( '_cf_seed', 1 );
 		$cf_variation->save();
 	}
-	// Combinations dropped from the catalog must stop being sold; variations added by hand (other SKUs) are left alone.
-	$cf_prefix = 'CF-' . strtoupper( $cf_item['slug'] ) . '-';
-	foreach ( array_diff_key( $cf_existing, $cf_wanted ) as $cf_sku => $cf_stale ) {
-		if ( 0 === strpos( (string) $cf_sku, $cf_prefix ) ) {
-			wp_delete_post( $cf_stale, true );
+	// Combinations dropped from the catalog stop being sold: the variations this script created are disabled, not deleted,
+	// so past orders keep their SKU and photo. Variations added by hand are left alone.
+	foreach ( array_diff_key( $cf_existing, $cf_wanted ) as $cf_stale ) {
+		if ( get_post_meta( $cf_stale, '_cf_seed', true ) && 'private' !== get_post_status( $cf_stale ) ) {
+			wp_update_post( array( 'ID' => $cf_stale, 'post_status' => 'private' ) );
 		}
 	}
 	WC_Product_Variable::sync( $cf_id );
