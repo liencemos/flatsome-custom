@@ -693,6 +693,13 @@ body.dewier {
 	--column-gap: 0;
 }
 
+/* Elementor wraps containers on phones and sizes a wrapped widget's height before its width, which cuts aspect-ratio blocks short. */
+@media (max-width: 767px) {
+	.dewier .e-con > .elementor-widget[class*="elementor-widget-dewier-"] {
+		width: 100%;
+	}
+}
+
 /* Hero */
 
 .dw-hero {
