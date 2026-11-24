@@ -105,6 +105,8 @@ foreach ( array( 'home', 'mission', 'help', 'shipping-returns', 'size-guide', 'c
 $cf_expect( (int) get_option( 'page_on_front' ) === (int) get_page_by_path( 'home' )->ID, 'Home is not the front page.' );
 $cf_expect( (int) get_theme_mod( 'footer_block' ) === (int) get_page_by_path( 'footer', OBJECT, 'blocks' )->ID, 'Footer UX Block is not assigned.' );
 $cf_expect( (int) get_theme_mod( '404_block' ) === (int) get_page_by_path( 'page-404', OBJECT, 'blocks' )->ID, '404 UX Block is not assigned.' );
+$cf_expect( (bool) get_theme_mod( 'smof_init' ), 'Flatsome Advanced options are not initialised; the first wp-admin visit would switch swatches and the 404 block off.' );
+$cf_expect( (bool) get_theme_mod( 'cart_auto_refresh' ) && (bool) get_theme_mod( 'cart_sticky_sidebar' ), 'Flatsome cart options are not set.' );
 $cf_expect( (bool) get_theme_mod( 'swatches' ) && wc_get_attribute( get_theme_mod( 'swatches_box_attribute' ) ), 'Flatsome swatches are not configured.' );
 foreach ( array( 'pa_pack' => 'ux_label', 'pa_color' => 'ux_color', 'pa_size' => 'ux_label', 'pa_style' => 'ux_image' ) as $cf_taxonomy => $cf_type ) {
 	$cf_swatch = get_option( 'flatsome_product_attribute-' . wc_attribute_taxonomy_id_by_name( $cf_taxonomy ) );

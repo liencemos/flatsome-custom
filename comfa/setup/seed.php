@@ -166,6 +166,23 @@ foreach ( array( 'woocommerce_thumbnail_cropping' => 'custom', 'woocommerce_thum
 // ---------------------------------------------------------------- Attributes.
 // Flatsome only registers its swatch attribute types once swatches are switched on, and WooCommerce
 // falls back to "select" for unknown types. Enable them for this run before creating attributes.
+// On the first wp-admin visit Flatsome writes the defaults of its Advanced panel over the theme mods,
+// which switches swatches and the 404 block back off. Let it do that now, before the Comfa settings are applied.
+if ( ! get_theme_mod( 'smof_init' ) ) {
+	$cf_advanced = get_template_directory() . '/inc/admin/advanced/index.php';
+	if ( ! function_exists( 'of_save_options' ) && file_exists( $cf_advanced ) ) {
+		require_once $cf_advanced;
+	}
+	if ( function_exists( 'of_options' ) && function_exists( 'of_save_options' ) && class_exists( 'Options_Machine' ) ) {
+		of_options();
+		$cf_machine = new Options_Machine( $GLOBALS['of_options'] );
+		of_get_options();
+		of_save_options( $cf_machine->Defaults );
+		of_save_options( gmdate( 'r' ), 'smof_init' );
+	} else {
+		WP_CLI::warning( 'Flatsome Advanced options could not be initialised; re-run this script after the first wp-admin visit.' );
+	}
+}
 set_theme_mod( 'swatches', 1 );
 add_filter(
 	'product_attributes_type_selector',
