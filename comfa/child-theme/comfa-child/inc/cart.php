@@ -60,7 +60,15 @@ function cf_bag_progress() {
 		return;
 	}
 	$threshold = $rule['minimum'];
-	$subtotal  = (float) WC()->cart->get_displayed_subtotal() - ( $rule['ignore_discounts'] ? 0 : (float) WC()->cart->get_discount_total() );
+	$cart      = WC()->cart;
+	$subtotal  = $cart->get_displayed_subtotal();
+	if ( ! $rule['ignore_discounts'] ) {
+		$subtotal -= $cart->get_discount_total();
+		if ( $cart->display_prices_including_tax() ) {
+			$subtotal -= $cart->get_discount_tax();
+		}
+	}
+	$subtotal  = \Automattic\WooCommerce\Utilities\NumberUtil::round( $subtotal, wc_get_price_decimals() );
 	$remaining = max( 0, $threshold - $subtotal );
 	$percent   = $threshold > 0 ? min( 100, max( 0, $subtotal / $threshold * 100 ) ) : 100;
 	$message   = $remaining > 0
