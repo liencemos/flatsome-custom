@@ -136,6 +136,10 @@ function cf_seed_render( $text, $context ) {
 				case 'src':
 					return esc_url( (string) wp_get_attachment_url( cf_seed_asset( $value ) ) );
 				case 'url':
+					// "Shop" links follow the page chosen under WooCommerce > Settings > Products.
+					if ( '/shop/' === $value && function_exists( 'wc_get_page_id' ) && wc_get_page_id( 'shop' ) > 0 ) {
+						return esc_url( wc_get_page_permalink( 'shop' ) );
+					}
 					return esc_url( home_url( $value ) );
 				case 'block':
 					return isset( $context['blocks'][ $value ] ) ? (string) $context['blocks'][ $value ] : '0';
