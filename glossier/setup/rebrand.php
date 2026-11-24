@@ -18,8 +18,8 @@ $dewier_dry = in_array( 'dry-run', isset( $args ) ? (array) $args : array(), tru
 function dewier_rebrand_value( $value ) {
 	if ( is_string( $value ) ) {
 		// Elementor data is JSON: rename inside the decoded text, not around its \n escapes.
-		$json = '[' === substr( $value, 0, 1 ) || '{' === substr( $value, 0, 1 ) ? json_decode( $value, true ) : null;
-		if ( is_array( $json ) ) {
+		$json = '[' === substr( $value, 0, 1 ) || '{' === substr( $value, 0, 1 ) ? json_decode( $value ) : null;
+		if ( is_array( $json ) || is_object( $json ) ) {
 			return wp_json_encode( dewier_rebrand_value( $json ) );
 		}
 		return preg_replace( '#(?<![/\w-])Dewier(?![\w/-]|\.\w)#', 'Meredithzone', $value );
