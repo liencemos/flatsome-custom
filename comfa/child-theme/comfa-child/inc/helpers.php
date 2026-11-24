@@ -101,7 +101,8 @@ function cf_price_line( $product ) {
 /**
  * For products sold as Product (pa_style) x Color x Size: what each style comes in.
  *
- * Returns style slug => array( 'colors' => slugs, 'sizes' => slugs, 'price' => lowest price ),
+ * Returns style slug => array( 'colors' => slugs, 'sizes' => slugs, 'pairs' => colour => sizes, 'price' => lowest price ),
+ * where 'pairs' only lists the colours that do not come in every size of the style,
  * read from the variations themselves, or an empty array for any other product.
  */
 function cf_style_map( $product ) {
@@ -138,7 +139,7 @@ function cf_style_map( $product ) {
 			continue;
 		}
 		if ( ! isset( $map[ $row->style ] ) ) {
-			$map[ $row->style ] = array( 'colors' => array(), 'sizes' => array(), 'price' => (float) $row->price );
+			$map[ $row->style ] = array( 'colors' => array(), 'sizes' => array(), 'pairs' => array(), 'price' => (float) $row->price );
 		}
 		foreach ( array( 'colors' => $row->color, 'sizes' => $row->size ) as $list => $value ) {
 			if ( null === $value || '' === $value ) {
@@ -147,7 +148,24 @@ function cf_style_map( $product ) {
 				$map[ $row->style ][ $list ][] = $value;
 			}
 		}
+		if ( null !== $row->color && '' !== $row->color && null !== $row->size && '' !== $row->size ) {
+			$map[ $row->style ]['pairs'][ $row->color ][] = $row->size;
+		}
 		$map[ $row->style ]['price'] = min( $map[ $row->style ]['price'], (float) $row->price );
+	}
+	foreach ( $map as $slug => $style ) {
+		if ( ! is_array( $style['colors'] ) || ! is_array( $style['sizes'] ) ) {
+			$map[ $slug ]['pairs'] = array();
+			continue;
+		}
+		foreach ( $style['pairs'] as $color => $sizes ) {
+			$sizes = array_values( array_unique( $sizes ) );
+			if ( count( $sizes ) === count( $style['sizes'] ) ) {
+				unset( $map[ $slug ]['pairs'][ $color ] );
+			} else {
+				$map[ $slug ]['pairs'][ $color ] = $sizes;
+			}
+		}
 	}
 	set_transient( $key, $map, WEEK_IN_SECONDS );
 	return $map;

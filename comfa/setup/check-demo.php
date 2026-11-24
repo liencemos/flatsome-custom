@@ -82,7 +82,7 @@ foreach ( $cf_catalog['designs'] as $cf_item ) {
 	foreach ( $cf_map as $cf_style_slug => $cf_style ) {
 		$cf_spec   = $cf_catalog['styles'][ $cf_style_slug ];
 		$cf_colors = isset( $cf_item['colors'] ) ? array_values( array_intersect( $cf_spec['colors'], $cf_item['colors'] ) ) : $cf_spec['colors'];
-		$cf_expect( $cf_style['colors'] === $cf_colors && $cf_style['sizes'] === array_map( 'sanitize_title', $cf_spec['sizes'] ) && abs( $cf_style['price'] - $cf_spec['price'] ) < 0.005, $cf_item['slug'] . ': style map is wrong for ' . $cf_style_slug );
+		$cf_expect( $cf_style['colors'] === $cf_colors && $cf_style['sizes'] === array_map( 'sanitize_title', $cf_spec['sizes'] ) && ! $cf_style['pairs'] && abs( $cf_style['price'] - $cf_spec['price'] ) < 0.005, $cf_item['slug'] . ': style map is wrong for ' . $cf_style_slug );
 	}
 	$cf_default = $cf_product->get_default_attributes();
 	$cf_expect( isset( $cf_default['pa_style'], $cf_default['pa_color'], $cf_map[ $cf_default['pa_style'] ] ) && in_array( $cf_default['pa_color'], $cf_map[ $cf_default['pa_style'] ]['colors'], true ), $cf_item['slug'] . ': default product and colour are not a real combination.' );

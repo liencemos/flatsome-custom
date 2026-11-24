@@ -93,7 +93,8 @@ function cf_card_variations( $value, $transient ) {
 	if ( $map && is_array( $map[ $style ]['colors'] ) && is_array( $map[ $style ]['sizes'] ) && $map[ $style ]['sizes'] ) {
 		$store = new WC_Product_Data_Store_CPT();
 		foreach ( $map[ $style ]['colors'] as $color ) {
-			$id        = $store->find_matching_product_variation( $product, array( 'attribute_pa_style' => $style, 'attribute_pa_color' => $color, 'attribute_pa_size' => $map[ $style ]['sizes'][0] ) );
+			$size      = isset( $map[ $style ]['pairs'][ $color ] ) ? $map[ $style ]['pairs'][ $color ][0] : $map[ $style ]['sizes'][0];
+			$id        = $store->find_matching_product_variation( $product, array( 'attribute_pa_style' => $style, 'attribute_pa_color' => $color, 'attribute_pa_size' => $size ) );
 			$variation = $id ? $product->get_available_variation( $id ) : false;
 			if ( $variation ) {
 				$list[] = $variation;

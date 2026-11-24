@@ -107,6 +107,9 @@
 		}
 		return $form.data('cfStyleMap');
 	}
+	function colorSizes(spec, color) {
+		return spec.pairs && color && spec.pairs[color] && spec.pairs[color].length ? spec.pairs[color] : null;
+	}
 	function applyStyle($form) {
 		var data = styleMap($form);
 		if (!data) {
@@ -119,6 +122,10 @@
 			var allowed = spec ? spec[key] : null;
 			if (!select) {
 				return;
+			}
+			// A colour may be missing some of the style's sizes.
+			if (key === 'sizes' && spec) {
+				allowed = colorSizes(spec, $form.find('select[name="attribute_pa_color"]').val()) || allowed;
 			}
 			$.each(select.options, function () {
 				this.disabled = !!this.value && !!allowed && allowed.indexOf(this.value) === -1;
@@ -151,7 +158,8 @@
 		}
 		var color = $form.find('select[name="attribute_pa_color"]').val();
 		var params = window.wc_add_to_cart_variation_params;
-		if (!color || !spec.sizes || !spec.sizes.length || !params || !$.fn.wc_variations_image_update) {
+		var sizes = colorSizes(spec, color) || spec.sizes;
+		if (!color || !sizes || !sizes.length || !params || !$.fn.wc_variations_image_update) {
 			return;
 		}
 		var key = style + '|' + color;
@@ -182,7 +190,7 @@
 			product_id: data.product,
 			attribute_pa_style: style,
 			attribute_pa_color: color,
-			attribute_pa_size: spec.sizes[0]
+			attribute_pa_size: sizes[0]
 		}).done(function (variation) {
 			if (variation && variation.variation_id) {
 				cache[key] = variation;
@@ -190,7 +198,7 @@
 			}
 		});
 	}
-	$(document).on('change', '.variations_form select[name="attribute_pa_style"]', function () {
+	$(document).on('change', '.variations_form select[name="attribute_pa_style"], .variations_form select[name="attribute_pa_color"]', function () {
 		applyStyle($(this).closest('.variations_form'));
 	});
 	$(document).on('wc_variation_form', '.variations_form', function () {
