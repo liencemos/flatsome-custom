@@ -48,6 +48,9 @@ add_filter(
 		$count      = isset( $attributes['pa_pack'] ) && $attributes['pa_pack'] ? cf_pack_count( get_term_by( 'slug', $attributes['pa_pack'], 'pa_pack' ) ) : 1;
 		$data['cf_pack_count'] = $count;
 		$data['price_html']    = '<span class="price"><span class="cf-price">' . cf_variation_price_line( $variation, $count ) . '</span></span>';
+		if ( ! empty( $data['image']['srcset'] ) && is_product() && $product->get_id() === get_queried_object_id() ) {
+			$data['image']['sizes'] = cf_product_main_image_sizes();
+		}
 		return $data;
 	},
 	20,
@@ -116,6 +119,56 @@ add_filter(
 	function ( $threshold ) {
 		return max( (int) $threshold, 1000 );
 	}
+);
+
+add_action(
+	'woocommerce_variable_add_to_cart',
+	function () {
+		global $product;
+		if ( $product instanceof WC_Product_Variable && isset( $product->get_attributes()['pa_style'] ) && count( $product->get_children() ) > 30 ) {
+			add_filter( 'woocommerce_available_variation', 'cf_compact_variation_fields', PHP_INT_MAX );
+		}
+	},
+	29
+);
+add_action(
+	'woocommerce_variable_add_to_cart',
+	function () {
+		remove_filter( 'woocommerce_available_variation', 'cf_compact_variation_fields', PHP_INT_MAX );
+		cf_compact_variation_fields();
+	},
+	31
+);
+
+function cf_compact_variation_fields( $variation = null ) {
+	static $references = array();
+	if ( null === $variation ) {
+		$references = array();
+		return;
+	}
+	foreach ( array( 'image', 'price_html' ) as $field ) {
+		if ( empty( $variation[ $field ] ) ) {
+			continue;
+		}
+		$key = serialize( $variation[ $field ] );
+		if ( isset( $references[ $field ][ $key ] ) ) {
+			$variation[ $field ] = $references[ $field ][ $key ];
+		} else {
+			$references[ $field ][ $key ] = (int) $variation['variation_id'];
+		}
+	}
+	return $variation;
+}
+
+add_action(
+	'wp_print_footer_scripts',
+	function () {
+		if ( wp_script_is( 'wc-add-to-cart-variation', 'enqueued' ) ) {
+			$script = '/assets/js/variation-payload.js';
+			wp_enqueue_script( 'comfa-variation-payload', CF_URL . $script, array( 'wc-add-to-cart-variation' ), (string) filemtime( CF_DIR . $script ), true );
+		}
+	},
+	5
 );
 
 function cf_variation_label( $label, $name ) {

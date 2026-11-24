@@ -121,6 +121,31 @@ foreach ( array( 'pa_pack' => 'ux_label', 'pa_color' => 'ux_color', 'pa_size' =>
 $cf_expect( (bool) wc_get_coupon_id_by_code( 'HELLO10' ), 'Coupon HELLO10 is missing.' );
 $cf_expect( false !== strpos( get_post_field( 'post_content', wc_get_page_id( 'cart' ) ), '[woocommerce_cart]' ), 'Cart page does not use the classic shortcode.' );
 
+$cf_snow_day = wc_get_product( wc_get_product_id_by_sku( 'CF-SNOW-DAY-CLUB' ) );
+if ( $cf_snow_day instanceof WC_Product_Variable && function_exists( 'cf_compact_variation_fields' ) ) {
+	$cf_compacted = array();
+	$cf_repeated  = 0;
+	foreach ( array_slice( $cf_snow_day->get_children(), 0, 30 ) as $cf_child_id ) {
+		$cf_full = $cf_snow_day->get_available_variation( $cf_child_id );
+		if ( ! $cf_full ) {
+			continue;
+		}
+		$cf_entry = cf_compact_variation_fields( $cf_full );
+		foreach ( array( 'image', 'price_html' ) as $cf_field ) {
+			if ( is_int( $cf_entry[ $cf_field ] ) ) {
+				++$cf_repeated;
+				$cf_entry[ $cf_field ] = $cf_compacted[ $cf_entry[ $cf_field ] ][ $cf_field ] ?? null;
+			}
+		}
+		$cf_expect( $cf_entry === $cf_full, 'Compacted variation did not preserve the WooCommerce record: ' . $cf_child_id );
+		$cf_compacted[ $cf_child_id ] = $cf_entry;
+	}
+	$cf_expect( $cf_repeated > 0, 'Snow Day Club did not compact any recurring image or price fields.' );
+	cf_compact_variation_fields();
+	$cf_expect( cf_compact_variation_fields( $cf_full ) === $cf_full, 'Variation references were not reset for the next form.' );
+	cf_compact_variation_fields();
+}
+
 if ( $cf_failures ) {
 	foreach ( $cf_failures as $cf_failure ) {
 		WP_CLI::warning( $cf_failure );

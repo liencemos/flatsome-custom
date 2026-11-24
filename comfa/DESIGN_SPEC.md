@@ -26,7 +26,7 @@ Comfa is a Flatsome + WooCommerce storefront for printed tees, caps, hoodies and
 | Body / UI | Outfit 400, 700, 800 | nav 14 px / 800, product name 16 px / 700 |
 | Accent serif | Fraunces 300 | section titles 32–36 px, product title 34 px, giving lines |
 
-Outfit and Fraunces are set in Flatsome > Theme Options > Typography; Bowlby One is loaded by the child theme.
+Outfit and Fraunces are set in Flatsome > Theme Options > Typography; the child theme ships Bowlby One as a local WOFF2.
 
 ## Page structure
 
@@ -51,7 +51,7 @@ One product per design, sold as Product (style) × Color × Size with native Woo
 - **Product** (`pa_style`, Flatsome `ux_image` swatch, size x-large, shape rounded): garment thumbnails above Color. 14 styles.
 - **Color** (`pa_color`, `ux_color`, large, circle) and **Size** (`pa_size`, `ux_label`, large, rounded). Size surcharges are part of the variation price.
 - Swatch type, size and shape are Flatsome's per-attribute settings (Products > Attributes). Label layout (`stacked`: label, then the selected value) and the selected ring colour are Theme Options > Product Page > Swatches. The CSS skins swatches by Flatsome type class (`.ux-swatches-attribute-ux_*`), not by attribute slug; Pack keeps its segmented-control skin.
-- Availability is WooCommerce's own: options that do not go with the other picks are disabled and Flatsome strikes them through. `woocommerce_ajax_variation_threshold` is raised to 1000 so this also runs for designs with hundreds of variations. Clicking a struck-through swatch switches to it and keeps the other picks that still fit; "Clear" is shown.
+- Availability is WooCommerce's own: options that do not go with the other picks are disabled and Flatsome strikes them through. `woocommerce_ajax_variation_threshold` is raised to 1000 so this also runs for designs with hundreds of variations. Repeated image and price markup is stored once per form and restored before the native variation picker runs. Clicking a struck-through swatch switches to it and keeps the other picks that still fit; "Clear" is shown.
 - The default selection is a complete variation (product, colour, size), so the page opens with its price and photo. While a pick is missing, the price is "From" + lowest price and the photo is the first variation matching the picks so far.
 - Cards: "From" + lowest price, "N products · N colours", and Flatsome's own colour dots built from the product's variations (6 dots, then "+N").
 - Sidebar: a Product filter above Weight; swatch filters run in two columns.
