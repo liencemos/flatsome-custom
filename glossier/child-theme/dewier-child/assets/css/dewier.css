@@ -2207,7 +2207,8 @@ body.dewier {
 	padding-top: 0;
 }
 
-.dewier.woocommerce-cart #shipping_method > li > input[type="radio"]:checked + label::before {
+.dewier.woocommerce-cart #shipping_method > li > input[type="radio"]:checked + label::before,
+.dewier.woocommerce-cart ul#shipping_method li:only-child label::before {
 	background-color: #000;
 }
 
