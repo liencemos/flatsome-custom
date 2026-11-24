@@ -39,12 +39,38 @@
 			toggle.querySelector('strong').textContent = summary.querySelector('.order-total td')?.textContent.trim() ?? '';
 		}
 
+		function selectedRate(row) {
+			return row.querySelector('input.shipping_method:checked, input.shipping_method[type="hidden"], select.shipping_method');
+		}
+
+		function updateSummaryShipping(table) {
+			const footer = table?.tFoot;
+			if (!footer || !rates) return;
+			footer.querySelectorAll('.cf-checkout-shipping-summary').forEach(row => row.remove());
+			const anchor = footer.querySelector('.order-total');
+			if (!anchor) return;
+			for (const row of rates.rows) {
+				const method = selectedRate(row);
+				const label = method?.tagName === 'SELECT' ? method.selectedOptions[0]?.textContent : method?.labels?.[0]?.textContent;
+				if (!label || !method.value) continue;
+				const summaryRow = document.createElement('tr');
+				summaryRow.className = 'cf-checkout-shipping-summary';
+				const heading = document.createElement('th');
+				heading.scope = 'row';
+				heading.textContent = row.cells[0]?.textContent;
+				summaryRow.append(heading);
+				summaryRow.insertCell().textContent = label;
+				anchor.before(summaryRow);
+			}
+		}
+
 		function refresh() {
 			const table = summary.querySelector('.woocommerce-checkout-review-order-table');
 			if (rates && table !== reviewTable) {
 				reviewTable = table;
 				rates.replaceChildren(...(table?.querySelectorAll('tr.woocommerce-shipping-totals') ?? []));
 			}
+			updateSummaryShipping(table);
 			updateSummary();
 		}
 
