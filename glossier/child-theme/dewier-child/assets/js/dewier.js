@@ -231,7 +231,7 @@
 		}
 
 		all( '.dw-options--pdp', page ).forEach( function ( group ) {
-			var select = form.querySelector( 'select[name="' + group.dataset.attribute + '"]' );
+			var select = ( group.closest( 'form' ) || form ).querySelector( 'select[name="' + group.dataset.attribute + '"]' );
 			var note = group.parentNode.querySelector( '.dw-option-note' );
 			if ( ! select ) {
 				return;
@@ -266,7 +266,12 @@
 				sync();
 			} );
 
-			select.addEventListener( 'change', sync );
+			// jQuery-triggered changes (WooCommerce, CommerceKit's sticky copy) skip native listeners.
+			if ( window.jQuery ) {
+				window.jQuery( select ).on( 'change', sync );
+			} else {
+				select.addEventListener( 'change', sync );
+			}
 			sync();
 		} );
 
