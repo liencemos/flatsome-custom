@@ -73,7 +73,7 @@
 				summaryRow.className = 'cf-checkout-shipping-summary';
 				const heading = document.createElement('th');
 				heading.scope = 'row';
-				heading.textContent = row.cells[0]?.textContent;
+				heading.textContent = row.querySelector('th')?.textContent ?? '';
 				summaryRow.append(heading);
 				summaryRow.insertCell().textContent = label;
 				anchor.before(summaryRow);
