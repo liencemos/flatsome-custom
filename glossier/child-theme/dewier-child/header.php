@@ -48,6 +48,7 @@
 				<button class="dw-utils__search" type="button" aria-controls="dw-search" aria-expanded="false" aria-label="<?php esc_attr_e( 'Search', 'dewier' ); ?>">
 					<?php echo dewier_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</button>
+				<?php do_action( 'dewier_header_utils' ); ?>
 				<?php if ( function_exists( 'wc_get_page_permalink' ) ) : ?>
 					<a class="dw-utils__link dw-utils__link--account" href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>">
 						<?php echo is_user_logged_in() ? esc_html__( 'Account', 'dewier' ) : esc_html__( 'Log in', 'dewier' ); ?>

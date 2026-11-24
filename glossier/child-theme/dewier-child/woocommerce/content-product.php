@@ -22,6 +22,7 @@ $dewier_link    = $product->get_permalink();
 <li <?php wc_product_class( 'dw-card', $product ); ?>>
 	<div class="dw-card__media">
 		<?php dewier_badges( $product ); ?>
+		<?php do_action( 'dewier_card_media', $product ); ?>
 		<a class="dw-card__link" href="<?php echo esc_url( $dewier_link ); ?>" tabindex="-1" aria-hidden="true">
 			<?php
 			echo $product->get_image( 'woocommerce_single', array( 'class' => 'dw-card__img' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
