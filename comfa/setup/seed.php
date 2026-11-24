@@ -507,7 +507,12 @@ foreach ( $cf_ids['all'] as $cf_index => $cf_id ) {
 		$cf_cross[] = $cf_ids['all'][ ( $cf_index + $cf_step ) % $cf_total ];
 	}
 	$cf_product = wc_get_product( $cf_id );
+	// Seeded once: cross-sells the merchant set or cleared under Linked Products are kept on a re-run.
+	if ( $cf_product->get_cross_sell_ids() || $cf_product->get_meta( '_cf_cross_sells_seeded' ) ) {
+		continue;
+	}
 	$cf_product->set_cross_sell_ids( array_values( array_diff( array_unique( $cf_cross ), array( $cf_id ) ) ) );
+	$cf_product->update_meta_data( '_cf_cross_sells_seeded', 1 );
 	$cf_product->save();
 }
 wc_delete_product_transients();
