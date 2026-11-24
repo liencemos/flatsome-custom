@@ -554,7 +554,9 @@ update_option( 'show_on_front', 'page' );
 if ( 'publish' === get_post_status( $cf_page_ids['privacy-policy'] ) && 'publish' !== get_post_status( (int) get_option( 'wp_page_for_privacy_policy' ) ) ) {
 	update_option( 'wp_page_for_privacy_policy', $cf_page_ids['privacy-policy'] );
 }
-if ( ! get_option( 'woocommerce_terms_page_id' ) && 'publish' === get_post_status( $cf_page_ids['terms-of-service'] ) ) {
+$cf_terms_page_id = (int) get_option( 'woocommerce_terms_page_id' );
+$cf_has_terms_page = $cf_terms_page_id > 0 && 'page' === get_post_type( $cf_terms_page_id ) && 'publish' === get_post_status( $cf_terms_page_id );
+if ( ! $cf_has_terms_page && 'publish' === get_post_status( $cf_page_ids['terms-of-service'] ) ) {
 	update_option( 'woocommerce_terms_page_id', $cf_page_ids['terms-of-service'] );
 }
 update_option( 'page_on_front', $cf_page_ids['home'] );
