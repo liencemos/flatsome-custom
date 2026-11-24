@@ -253,7 +253,7 @@
 .cf-story__copy p { font-size: 15px; max-width: 300px; margin-left: auto; margin-right: auto; }
 .cf-give__title { font-size: 26px; margin-bottom: 8px; }
 .cf-give h3.cf-display { font-size: 24px; margin-bottom: 10px; }
-.cf-reviews { max-width: 780px; margin: 56px auto 40px; padding: 0 15px; }
+.cf-reviews { max-width: 1330px; margin: 56px auto 40px; padding: 0 15px; }
 .cf-reviews__summary { text-align: center; padding-bottom: 22px; border-bottom: 1px solid var(--cf-line); margin-bottom: 22px; }
 .cf-reviews__summary h2 { font-size: 24px; margin-bottom: 6px; }
 .cf-reviews__score { display: inline-flex; align-items: center; gap: 12px; text-align: left; }
@@ -262,6 +262,7 @@
 .cf-reviews .woocommerce-Reviews-title { display: none; }
 .cf-store .star-rating span::before, .cf-store .stars a.active::after, .cf-store .stars a:hover::after { color: var(--cf-navy); }
 .cf-reviews .commentlist > li, .cf-reviews .comment-list > li { border-bottom: 1px solid var(--cf-line); padding: 18px 0; }
+.cf-reviews .commentlist > li + li, .cf-reviews .comment-list > li + li { border-top: 0; margin-top: 0; }
 .single-product .related { max-width: 1330px; margin: 0 auto; padding: 20px 15px 40px; border: 0; }
 .single-product .related .product-section-title { font-family: var(--cf-serif); font-weight: 300; font-size: 32px; text-transform: none; letter-spacing: 0; }
 
@@ -381,8 +382,13 @@
 .cf-badge { white-space: nowrap; }
 .single-product .product-info .price .woocommerce-Price-currencySymbol, .product-lightbox .price .woocommerce-Price-currencySymbol { font-size: inherit; vertical-align: baseline; margin: 0; }
 .variations_form .variations tr:last-child { margin-bottom: 6px; }
-.cf-reviews #review_form_wrapper, .cf-reviews .review-form-inner { border: 1px solid var(--cf-line) !important; border-radius: var(--cf-radius); }
-.cf-reviews #review_form_wrapper .review-form-inner { border: 0 !important; }
+/* The border sits on the form itself, not its column, so the card ends with the form and keeps the column gutter. */
+.cf-reviews .review-form-inner { border: 1px solid var(--cf-line) !important; border-radius: var(--cf-radius); }
+/* Keeps the five rating choices on one row when the form column is at its narrowest (tablet landscape). */
+.cf-reviews p.stars span { gap: 6px; }
+@media (min-width: 850px) and (max-width: 1023px) {
+	.cf-reviews .review-form-inner { padding: 22px 16px; }
+}
 .cf-reviews .description, .cf-reviews .description p, .cf-reviews .comment-text em { font-style: normal; }
 .cf-reviews .description strong { display: block; font-size: 17px; margin-bottom: 4px; }
 .cf-footer .cf-footer__col ul li, .cf-mega .cf-mega__col ul li { margin-left: 0 !important; }
