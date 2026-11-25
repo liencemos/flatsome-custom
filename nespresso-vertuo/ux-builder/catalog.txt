@@ -1,14 +1,13 @@
-<p class="vertuo-promo">Vertuo coffee pods · Find your next favorite cup</p>
-
-[section class="vertuo-hero-section" padding="0px"]
-[ux_banner height="390px" height__sm="310px" class="vertuo-hero"]
-[text_box position_x="7" position_x__sm="50" position_y="50" width="58" width__sm="86" text_align="left"]
+[section class="vertuo-hero-section" dark="true" padding="0px"]
+[row]
+[col span="12" class="vertuo-hero"]
 <p class="vertuo-eyebrow">EXPLORE THE COLLECTION</p>
 <h1>Vertuo Coffee Pods</h1>
 <p>From bold espresso to a full mug of coffee, find a pod for the way you brew.</p>
-[button text="Explore coffees" link="#vertuo-catalog" radius="99" class="vertuo-hero-button"]
-[/text_box]
-[/ux_banner]
+<a class="vertuo-hero-button" href="#vertuo-catalog">Explore coffees</a>
+[vertuo_hero_products]
+[/col]
+[/row]
 [/section]
 
 [section class="vertuo-products" padding="48px 0px"]

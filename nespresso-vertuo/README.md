@@ -1,6 +1,6 @@
 # Cửa hàng cà phê Vertuo · Flatsome + WooCommerce
 
-Bản dựng cửa hàng tiếng Anh dựa trên bố cục danh mục Vertuo của Nespresso Mỹ: dải giới thiệu, banner lớn, bộ lọc bộ sưu tập, sắp xếp và lưới sản phẩm WooCommerce. Thông số và lời mô tả sản phẩm hiển thị theo nguồn tiếng Anh; bảng tra cứu vẫn bằng tiếng Việt. Đây là demo, không phải website chính thức của Nespresso. Banner được viết mới, không sao chép logo hoặc chương trình ưu đãi đang chạy.
+Bản dựng cửa hàng tiếng Anh dùng danh mục Vertuo của Nespresso Mỹ và giao diện lấy cảm hứng từ Keurig: thanh thông báo vàng, đầu trang màu kem, khu vực giới thiệu xanh đậm, danh mục dạng thẻ và trang chi tiết có nút chọn cỡ gói. Thông số và lời mô tả sản phẩm hiển thị theo nguồn tiếng Anh; bảng tra cứu vẫn bằng tiếng Việt. Đây là demo không chính thức; không dùng logo, ảnh hoặc chương trình khuyến mãi của Keurig.
 
 | Tệp | Công dụng |
 |---|---|
@@ -24,7 +24,9 @@ bash nespresso-vertuo/setup/setup.sh /path/to/flatsome.zip
 
 Đường dẫn ZIP có thể bỏ qua khi Flatsome đã cài. Đặt `WP_ADMIN` thành tên người dùng quản trị WordPress nếu khác `admin`. Dùng ngôn ngữ trang WordPress **English (United States)** cho chuỗi giao diện mặc định của Flatsome và WooCommerce. Sau cài đặt, script in URL trang **Vertuo Coffee Pods**. Chạy lại sẽ cập nhật thứ tự theo từng bộ sưu tập và tự đổi thông số tiếng Việt của gói cũ sang tiếng Anh mà không thay đổi giá hoặc tồn kho hiện có. Trang danh mục tiếng Việt chỉ tự chuyển sang bản tiếng Anh nếu chưa chỉnh sửa. Những SKU và trang đã nâng cấp không bị ghi đè mặc định. Để ghi đè toàn bộ các trường có trong CSV và nội dung trang danh mục, đặt `VERTUO_REFRESH=1` trước lệnh setup; hãy sao lưu trước.
 
-**Cài thủ công:** kích hoạt child theme; nhập CSV tại **Products → Import** với các cột mặc định; tạo trang **Vertuo Coffee Pods** với mẫu **Page - Full Width** và dán `ux-builder/catalog.txt` trong trình soạn thảo mã trước khi chỉnh sửa bằng UX Builder. Để tạo biến thể Pack Size và lấy đúng thứ tự riêng theo từng bộ sưu tập, chạy `setup/setup.sh`; chỉ nhập CSV không tạo biến thể.
+Lệnh setup áp dụng cấu hình giao diện Flatsome mới một lần và cập nhật bố cục danh mục cũ nếu nội dung chưa được chỉnh sửa. Dùng URL trang được in ra để xem trang giới thiệu; mở mục **Coffee Pods** trên thanh điều hướng để vào chế độ danh mục.
+
+**Cài thủ công:** kích hoạt child theme; nhập CSV tại **Products → Import** với các cột mặc định; tạo trang **Vertuo Coffee Pods** với mẫu **Page - Full Width** và dán `ux-builder/catalog.txt` trong trình soạn thảo mã trước khi chỉnh sửa bằng UX Builder. Để áp dụng cấu hình Flatsome, tạo biến thể Pack Size và lấy đúng thứ tự riêng theo từng bộ sưu tập, chạy `setup/setup.sh`; chỉ nhập CSV không tạo biến thể.
 
 ## Giá, ảnh và dữ liệu chưa công bố
 

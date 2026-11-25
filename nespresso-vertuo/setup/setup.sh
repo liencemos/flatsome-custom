@@ -64,6 +64,7 @@ if [[ -z "${WP_PATH:-}" ]]; then
 fi
 
 wp_cli theme activate vertuo-child
+wp_cli eval 'vertuo_apply_storefront_design();'
 
 if [[ -n "${WP_PATH:-}" ]]; then
 	wp_cli eval-file "$ROOT_DIR/setup/import-products.php" "$REFRESH" "$SKIP_IMAGES" --user="$WP_ADMIN"
@@ -83,8 +84,14 @@ fi
 page_id="$(wp_cli post list --post_type=page --post_status=publish --name=vertuo-coffee-pods --format=ids)"
 if [[ -z "$page_id" ]]; then
 	page_id="$(wp_cli post create --post_type=page --post_status=publish --post_title='Vertuo Coffee Pods' --post_name=vertuo-coffee-pods --page_template=page-blank.php --porcelain - < "$ROOT_DIR/ux-builder/catalog.txt")"
-elif [[ "$REFRESH" == 1 ]] || [[ "$(wp_cli post get "$page_id" --field=post_title)" == 'Cà phê Vertuo' && "$(wp_cli eval "echo hash( 'sha256', rtrim( get_post_field( 'post_content', (int) '$page_id', 'raw' ), \"\\r\\n\" ) );")" == 'e782272439ea19d9058332cdd8b061138b1c2852fcade4ff5d8005fbbcdb8efc' ]]; then
-	wp_cli post update "$page_id" --post_title='Vertuo Coffee Pods' --page_template=page-blank.php --post_content="$(< "$ROOT_DIR/ux-builder/catalog.txt")"
+else
+	page_title="$(wp_cli post get "$page_id" --field=post_title)"
+	page_hash="$(wp_cli eval "echo hash( 'sha256', rtrim( get_post_field( 'post_content', (int) '$page_id', 'raw' ), \"\\r\\n\" ) );")"
+	if [[ "$REFRESH" == 1 ]] ||
+		[[ "$page_title" == 'Cà phê Vertuo' && "$page_hash" == 'e782272439ea19d9058332cdd8b061138b1c2852fcade4ff5d8005fbbcdb8efc' ]] ||
+		[[ "$page_title" == 'Vertuo Coffee Pods' && "$page_hash" == '69f7b2c8289e74ef62fd31da0f0095127766435f84b17cc9e8ada27c22885a05' ]]; then
+		wp_cli post update "$page_id" --post_title='Vertuo Coffee Pods' --page_template=page-blank.php --post_content="$(< "$ROOT_DIR/ux-builder/catalog.txt")"
+	fi
 fi
 
 wp_cli eval "echo get_permalink( (int) '$page_id' ) . PHP_EOL;"

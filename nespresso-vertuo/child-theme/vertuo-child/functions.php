@@ -2,6 +2,8 @@
 
 add_filter( 'theme_mod_swatches', '__return_true' );
 
+require_once __DIR__ . '/storefront.php';
+
 add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'vertuo-child', get_stylesheet_uri(), array( 'flatsome-main' ), wp_get_theme()->get( 'Version' ) );
 }, 20 );
@@ -128,11 +130,16 @@ function vertuo_catalog_shortcode() {
 	$page_url = get_permalink();
 	$form_args = array();
 	parse_str( (string) wp_parse_url( $page_url, PHP_URL_QUERY ), $form_args );
+	if ( vertuo_storefront_is_shop() ) {
+		$form_args['vertuo_shop'] = '1';
+	}
 
 	ob_start();
 	?>
 	<div class="vertuo-catalog" id="vertuo-catalog">
-		<h2>Shop Vertuo</h2>
+		<div class="vertuo-catalog-heading">
+			<h2>Shop Vertuo</h2>
+		</div>
 		<form class="vertuo-catalog-form" method="get" action="<?php echo esc_url( $page_url . '#vertuo-catalog' ); ?>">
 			<?php foreach ( $form_args as $key => $value ) : ?>
 				<?php if ( is_scalar( $value ) ) : ?>
@@ -165,7 +172,7 @@ function vertuo_catalog_shortcode() {
 			$ids = 'featured' === $sort ? vertuo_collection_product_ids( $group ) : array();
 			echo '<h3>' . esc_html( $group->name ) . '</h3>';
 			echo do_shortcode( sprintf(
-				'[products category="%s" columns="5" limit="-1" ids="%s" orderby="%s" order="%s"]',
+				'[products category="%s" columns="4" limit="-1" ids="%s" orderby="%s" order="%s"]',
 				sanitize_title( $group->slug ),
 				implode( ',', array_map( 'absint', $ids ) ),
 				$ids ? 'post__in' : $orders[ $sort ][0],
