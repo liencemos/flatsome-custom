@@ -797,8 +797,8 @@
 				var total = files.reduce( function ( sum, item ) {
 					return sum + item.size;
 				}, 0 );
-				bad = bad || ( Number( file.dataset.total ) > 0 && total > Number( file.dataset.total ) );
-				error.textContent = files.length > Number( file.dataset.max ) ? file.dataset.errorCount : ( bad ? file.dataset.errorFile : '' );
+				var tooBig = Number( file.dataset.total ) > 0 && total > Number( file.dataset.total );
+				error.textContent = files.length > Number( file.dataset.max ) ? file.dataset.errorCount : ( bad ? file.dataset.errorFile : ( tooBig ? file.dataset.errorTotal : '' ) );
 				preview.innerHTML = '';
 				if ( error.textContent ) {
 					file.value = '';

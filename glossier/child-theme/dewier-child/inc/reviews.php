@@ -15,7 +15,14 @@ define( 'DEWIER_REVIEW_PHOTOS', 3 );
  * Per-photo limit: 5 MB, or less when PHP accepts less.
  */
 function dewier_review_photo_bytes() {
-	return min( 5 * MB_IN_BYTES, wp_max_upload_size() );
+	$limits = array( 5 * MB_IN_BYTES );
+	foreach ( array( 'upload_max_filesize', 'post_max_size' ) as $key ) {
+		$bytes = wp_convert_hr_to_bytes( ini_get( $key ) );
+		if ( $bytes > 0 ) {
+			$limits[] = $bytes;
+		}
+	}
+	return min( $limits );
 }
 
 /**
@@ -23,7 +30,7 @@ function dewier_review_photo_bytes() {
  */
 function dewier_review_post_bytes() {
 	$post = wp_convert_hr_to_bytes( ini_get( 'post_max_size' ) );
-	return $post > 0 ? (int) ( $post * 0.9 ) : 0;
+	return $post > 0 ? max( 0, $post - 64 * KB_IN_BYTES ) : 0;
 }
 
 function dewier_review_photo_types() {
@@ -39,7 +46,7 @@ function dewier_review_photo_types() {
  */
 function dewier_review_photo_field( $args ) {
 	$args['comment_field'] .= sprintf(
-		'<p class="comment-form-photos dw-review-upload" hidden><label for="dw-review-photos">%1$s <span class="dw-review-upload__hint">%2$s</span></label><input type="file" id="dw-review-photos" name="dw_review_photos[]" accept="image/jpeg,image/png,image/webp" multiple data-max="%3$d" data-bytes="%4$d" data-total="%7$d" data-error-count="%5$s" data-error-file="%6$s"><span class="dw-review-upload__preview"></span><span class="dw-review-upload__error" role="alert"></span></p>',
+		'<p class="comment-form-photos dw-review-upload" hidden><label for="dw-review-photos">%1$s <span class="dw-review-upload__hint">%2$s</span></label><input type="file" id="dw-review-photos" name="dw_review_photos[]" accept="image/jpeg,image/png,image/webp" multiple data-max="%3$d" data-bytes="%4$d" data-total="%7$d" data-error-total="%8$s" data-error-count="%5$s" data-error-file="%6$s"><span class="dw-review-upload__preview"></span><span class="dw-review-upload__error" role="alert"></span></p>',
 		esc_html__( 'Add photos', 'dewier' ),
 		/* translators: 1: number of photos, 2: size in MB */
 		esc_html( sprintf( __( '(optional, up to %1$d JPG, PNG or WebP, %2$d MB each)', 'dewier' ), DEWIER_REVIEW_PHOTOS, max( 1, floor( dewier_review_photo_bytes() / MB_IN_BYTES ) ) ) ),
@@ -49,7 +56,9 @@ function dewier_review_photo_field( $args ) {
 		esc_attr( sprintf( __( 'You can add up to %d photos.', 'dewier' ), DEWIER_REVIEW_PHOTOS ) ),
 		/* translators: %d: size in MB */
 		esc_attr( sprintf( __( 'Photos must be JPG, PNG or WebP and under %d MB.', 'dewier' ), max( 1, floor( dewier_review_photo_bytes() / MB_IN_BYTES ) ) ) ),
-		dewier_review_post_bytes()
+		dewier_review_post_bytes(),
+		/* translators: %d: size in MB */
+		esc_attr( sprintf( __( 'Together, the photos must be under %d MB.', 'dewier' ), max( 1, floor( dewier_review_post_bytes() / MB_IN_BYTES ) ) ) )
 	);
 	return $args;
 }
