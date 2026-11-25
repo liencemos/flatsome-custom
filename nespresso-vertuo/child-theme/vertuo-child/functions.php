@@ -1,5 +1,7 @@
 <?php
 
+add_filter( 'theme_mod_swatches', '__return_true' );
+
 add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'vertuo-child', get_stylesheet_uri(), array( 'flatsome-main' ), wp_get_theme()->get( 'Version' ) );
 }, 20 );
@@ -59,6 +61,26 @@ function vertuo_catalog_cart_button() {
 	if ( 'button' !== get_theme_mod( 'add_to_cart_icon' ) ) {
 		woocommerce_template_loop_add_to_cart();
 	}
+}
+
+function vertuo_catalog_pack_sizes() {
+	global $product;
+	if ( ! $product || ! $product->is_type( 'variable' ) ) {
+		return;
+	}
+	$options = $product->get_variation_attributes()['pa_pack-size'] ?? array();
+	if ( ! $options ) {
+		return;
+	}
+
+	echo '<div class="vertuo-card-packs"><span>Pack Size</span><div class="vertuo-card-pack-options">';
+	foreach ( wc_get_product_terms( $product->get_id(), 'pa_pack-size', array( 'fields' => 'all' ) ) as $term ) {
+		if ( in_array( $term->slug, $options, true ) ) {
+			$url = add_query_arg( 'attribute_pa_pack-size', $term->slug, $product->get_permalink() );
+			printf( '<a href="%s" aria-label="%s">%s</a>', esc_url( $url ), esc_attr( $product->get_name() . ' – ' . $term->name ), esc_html( $term->name ) );
+		}
+	}
+	echo '</div></div>';
 }
 
 function vertuo_collection_product_ids( $collection ) {
@@ -136,6 +158,7 @@ function vertuo_catalog_shortcode() {
 		</form>
 		<?php
 		add_action( 'woocommerce_after_shop_loop_item_title', 'vertuo_card_spec', 7 );
+		add_action( 'woocommerce_after_shop_loop_item_title', 'vertuo_catalog_pack_sizes', 8 );
 		add_action( 'flatsome_product_box_after', 'vertuo_catalog_cart_button', 100 );
 		add_filter( 'shortcode_atts_products', 'vertuo_catalog_shortcode_limit', 20 );
 		foreach ( $groups as $group ) {
@@ -150,6 +173,7 @@ function vertuo_catalog_shortcode() {
 			) );
 		}
 		remove_action( 'woocommerce_after_shop_loop_item_title', 'vertuo_card_spec', 7 );
+		remove_action( 'woocommerce_after_shop_loop_item_title', 'vertuo_catalog_pack_sizes', 8 );
 		remove_action( 'flatsome_product_box_after', 'vertuo_catalog_cart_button', 100 );
 		remove_filter( 'shortcode_atts_products', 'vertuo_catalog_shortcode_limit', 20 );
 		?>

@@ -1,7 +1,7 @@
 /*
 Theme Name: Vertuo Storefront
 Template: flatsome
-Version: 1.1.0
+Version: 1.2.0
 Text Domain: vertuo-child
 */
 
@@ -74,6 +74,17 @@ Text Domain: vertuo-child
 .vertuo-catalog .product-small.box .category { display: none; }
 .vertuo-catalog .product-small.box .price-wrapper { padding-bottom: .5rem; }
 .vertuo-card-spec { color: #5c4d44; font-size: .82rem; margin: .35rem 0 .5rem; }
+.vertuo-card-packs { color: #402725; font-size: .75rem; font-weight: 700; margin-bottom: .5rem; }
+.vertuo-card-pack-options { display: grid; gap: .25rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: .25rem; }
+.vertuo-card-pack-options a {
+  border: 1px solid #9d857b;
+  border-radius: 99px;
+  color: #402725;
+  line-height: 1.2;
+  padding: .35rem .15rem;
+  text-align: center;
+}
+.vertuo-card-pack-options a:hover, .vertuo-card-pack-options a:focus-visible { background: #402725; color: #fff; }
 .vertuo-catalog .product-small.box .add-to-cart-button { margin: auto 0 0; }
 .vertuo-catalog .product-small.box .box-text .button {
   background: #402725;

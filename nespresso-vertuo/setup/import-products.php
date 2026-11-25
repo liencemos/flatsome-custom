@@ -53,7 +53,7 @@ $mapping = array(
 	'Meta: vertuo_machine_compatibility' => 'meta:vertuo_machine_compatibility',
 );
 
-for ( $i = 1; $i <= 7; $i++ ) {
+for ( $i = 1; $i <= 6; $i++ ) {
 	$mapping[ "Attribute $i name" ] = "attributes:name$i";
 	$mapping[ "Attribute $i value(s)" ] = "attributes:value$i";
 	$mapping[ "Attribute $i visible" ] = "attributes:visible$i";
@@ -80,8 +80,11 @@ $preserve_attributes = static function ( $product ) use ( $legacy_skus ) {
 };
 foreach ( $refresh || $legacy_skus ? array( false, true ) : array( false ) as $update_existing ) {
 	$import_mapping = $mapping;
+	if ( $update_existing ) {
+		$import_mapping['Type'] = '';
+	}
 	if ( $update_existing && ! $refresh ) {
-		foreach ( array( 'Type', 'Name', 'Published', 'Visibility in catalog', 'In stock?', 'Regular price', 'Categories', 'Position' ) as $column ) {
+		foreach ( array( 'Name', 'Published', 'Visibility in catalog', 'In stock?', 'Regular price', 'Categories', 'Position' ) as $column ) {
 			$import_mapping[ $column ] = '';
 		}
 	}
@@ -105,17 +108,6 @@ foreach ( $refresh || $legacy_skus ? array( false, true ) : array( false ) as $u
 		? sprintf( 'Updated %d products from the English storefront CSV.', count( $results['updated'] ) )
 		: sprintf( 'Imported %d products; skipped %d existing products.', count( $results['imported'] ), count( $results['skipped'] ) )
 	);
-}
-
-$pack_size_id = wc_attribute_taxonomy_id_by_name( 'pack-size' );
-if ( ! $pack_size_id ) {
-	WP_CLI::error( 'The Pack Size attribute was not imported.' );
-}
-if ( 'name_num' !== wc_attribute_orderby( 'pa_pack-size' ) ) {
-	$saved = wc_update_attribute( $pack_size_id, array( 'order_by' => 'name_num' ) );
-	if ( is_wp_error( $saved ) ) {
-		WP_CLI::error( $saved );
-	}
 }
 
 $product_ids = array();
@@ -155,6 +147,9 @@ foreach ( $collection_terms as $term_id => $skus ) {
 }
 
 WP_CLI::success( sprintf( 'Saved source order for %d collections.', count( $collection_terms ) ) );
+
+require_once __DIR__ . '/import-pack-sizes.php';
+vertuo_import_pack_sizes( $catalog['products'], $product_ids, $refresh );
 
 if ( '1' !== ( $args[1] ?? '' ) ) {
 	require_once __DIR__ . '/import-images.php';

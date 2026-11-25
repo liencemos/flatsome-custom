@@ -63,6 +63,8 @@ if [[ -z "${WP_PATH:-}" ]]; then
 	docker exec "$CONTAINER" chown -R www-data:www-data "$WP_ROOT/wp-content/themes/vertuo-child"
 fi
 
+wp_cli theme activate vertuo-child
+
 if [[ -n "${WP_PATH:-}" ]]; then
 	wp_cli eval-file "$ROOT_DIR/setup/import-products.php" "$REFRESH" "$SKIP_IMAGES" --user="$WP_ADMIN"
 else
@@ -71,13 +73,13 @@ else
 	docker exec "$CONTAINER" chmod a+rx "$stage"
 	docker exec "$CONTAINER" mkdir "$stage/setup" "$stage/data"
 	docker cp "$ROOT_DIR/setup/import-products.php" "$CONTAINER:$stage/setup/import-products.php"
+	docker cp "$ROOT_DIR/setup/import-pack-sizes.php" "$CONTAINER:$stage/setup/import-pack-sizes.php"
 	docker cp "$ROOT_DIR/setup/import-images.php" "$CONTAINER:$stage/setup/import-images.php"
 	docker cp "$ROOT_DIR/data/woocommerce-products.csv" "$CONTAINER:$stage/data/woocommerce-products.csv"
 	docker cp "$ROOT_DIR/data/catalog.json" "$CONTAINER:$stage/data/catalog.json"
 	wp_cli eval-file "$stage/setup/import-products.php" "$REFRESH" "$SKIP_IMAGES" --user="$WP_ADMIN"
 fi
 
-wp_cli theme activate vertuo-child
 page_id="$(wp_cli post list --post_type=page --post_status=publish --name=vertuo-coffee-pods --format=ids)"
 if [[ -z "$page_id" ]]; then
 	page_id="$(wp_cli post create --post_type=page --post_status=publish --post_title='Vertuo Coffee Pods' --post_name=vertuo-coffee-pods --page_template=page-blank.php --porcelain - < "$ROOT_DIR/ux-builder/catalog.txt")"
