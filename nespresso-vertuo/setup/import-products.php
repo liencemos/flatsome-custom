@@ -125,10 +125,19 @@ foreach ( $catalog['products'] as $row ) {
 		WP_CLI::error( 'Missing imported SKU: ' . $row['sku'] );
 	}
 	$product_ids[ $row['sku'] ] = $id;
-	if ( $refresh || isset( $legacy_skus[ 'VERTUO-' . $row['sku'] ] ) ) {
+	$replace_legacy = $refresh || isset( $legacy_skus[ 'VERTUO-' . $row['sku'] ] );
+	if ( $replace_legacy || ( 'bundle' === $row['kind'] && $row['pack_capsules'] ) ) {
 		$product = wc_get_product( $id );
 		$attributes = $product->get_attributes( 'edit' );
-		$remaining = array_diff_key( $attributes, $legacy_attributes + array( 'source-pack-price' => true ) );
+		$remaining = $replace_legacy ? array_diff_key( $attributes, $legacy_attributes + array( 'source-pack-price' => true ) ) : $attributes;
+		if ( 'bundle' === $row['kind'] && $row['pack_capsules'] && ! isset( $remaining['pods-per-pack'] ) ) {
+			$pack_count = new WC_Product_Attribute();
+			$pack_count->set_name( 'Pods per Pack' );
+			$pack_count->set_options( array( (string) $row['pack_capsules'] ) );
+			$pack_count->set_position( count( $remaining ) );
+			$pack_count->set_visible( true );
+			$remaining['pods-per-pack'] = $pack_count;
+		}
 		if ( $attributes !== $remaining ) {
 			$product->set_attributes( $remaining );
 			$product->save();
