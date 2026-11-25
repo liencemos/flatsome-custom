@@ -60,7 +60,7 @@ for ( $i = 1; $i <= 7; $i++ ) {
 }
 
 $refresh = '1' === ( $args[0] ?? '' );
-$legacy_attributes = array_flip( array_map( 'sanitize_title', array( 'Dung tích', 'Cường độ', 'Hương vị', 'Quy cách', 'Mức rang', 'Xuất xứ', 'Ghi chú' ) ) );
+$legacy_attributes = array_flip( array_map( 'sanitize_title', array( 'Dung tích', 'Cường độ', 'Hương vị', 'Quy cách', 'Mức rang', 'Xuất xứ', 'Ghi chú', 'Source Pack Price' ) ) );
 $legacy_skus = array();
 foreach ( $catalog['products'] as $row ) {
 	$sku = 'VERTUO-' . $row['sku'];

@@ -332,7 +332,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Explore our best-selling medium and dark roast coffees and find your favorite. Featuring medium roasts Melozio and Colombia, alongside the darker roasts, Odacio, Stormio and Mexico, this selection offers a distinctive range to match every taste and preference.<br/><br/> This limited edition assortment includes:<br/> 1 Sleeve of Melozio (7.77 fl oz) - With honeylike sweetness notes<br/> 1 Sleeve of Odacio (7.77 fl oz) - With full-bodied notes<br/> 1 Sleeve of Colombia (7.77 fl oz) - With winey, candied apple notes<br/> 1 Sleeve of Stormio (7.77 fl oz) - With rich, strong notes<br/> 1 Sleeve of Mexico (7.77 fl oz) - With intense, spiced notes<br/> <br/> *10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "50"
+        }
       }
     },
     {
@@ -419,7 +421,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Create your coffee drinks with our Double Espresso favorites that pair perfectly over ice or with milk. Featuring a strong aroma and an intense taste, these double espressos can make refreshingly bold iced coffees and serve as a great base for indulgent, milk-based coffee drinks such as lattes and double espresso cappuccinos.<br/><br/>Double Espresso brews 2.7 fl oz (80 mL) compared to a regular Espresso, which brews 1.35 fl oz (40 mL). Double Espresso does not contain double coffee or caffeine.<br/><br/> This limited edition assortment includes:<br/> 2 Sleeves of Double Espresso Dolce (2.7 fl oz) - With caramel, malted cereal notes<br/> 1 Sleeve of Double Espresso Chiaro (2.7 fl oz) - With woody, toasted cereal notes<br/> 1 Sleeve of Double Espresso Scuro (2.7 fl oz) - With cocoa, intense roasted notes<br/> 1 Sleeve of NOLA Style Blend (2.7 fl oz) - With chicory flavor<br/> <br/> *10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "50"
+        }
       }
     },
     {
@@ -502,7 +506,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Discover the Melozio collection and enjoy its smooth, balanced taste throughout your day. Start your morning with best-selling Melozio, unwind with Melozio Decaffeinato, or reach for Melozio Boost with added caffeine to support focus. However you choose to enjoy it, there’s a Melozio for every moment.<br/><br/> This limited edition assortment includes:<br/> 1 Sleeve of Melozio (7.77 fl oz)<br/> 1 Sleeve of Melozio Decaffeinato (7.77 fl oz)<br/> 1 Sleeve of Melozio Boost (7.77 fl oz)<br/> <br/> *10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "30"
+        }
       }
     },
     {
@@ -585,7 +591,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Start your morning with a curated collection of everyday favorites. Featuring the smooth, balanced character of Melozio, the creamy flavor of Sweet Vanilla, and the classic flavor of Golden Caramel, this collection turns your daily coffee into a moment to savor.<br/><br/> This limited edition assortment includes:<br/> 1 Sleeve of Melozio (7.77 fl oz)<br/> 1 Sleeve of Golden Caramel (7.77 fl oz)<br/> 1 Sleeve of Sweet Vanilla (7.77 fl oz)<br/> <br/> *10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "30"
+        }
       }
     },
     {
@@ -682,7 +690,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Coconut",
-          "Source Pack Price": "($16.00/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee · Iced Recipe"
         }
       }
@@ -779,7 +787,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Maple Syrup · Pecan Nut · Flavored",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Coffee · Iced Recipe"
         }
@@ -882,7 +890,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "5",
           "Aromatic Notes": "Red Fruit · Fruity",
-          "Source Pack Price": "($15.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -979,7 +987,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "7",
           "Aromatic Notes": "Woody & Earthy",
-          "Source Pack Price": "($15.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3"
         }
       }
@@ -1081,7 +1089,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "6",
           "Aromatic Notes": "Cereal · Nutty & Balanced",
-          "Source Pack Price": "($15.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Coffee"
         }
@@ -1182,7 +1190,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "8",
           "Aromatic Notes": "Spicy · Woody & Earthy",
-          "Source Pack Price": "($15.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "4",
           "Best Served As": "Coffee"
         }
@@ -1283,7 +1291,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "6",
           "Aromatic Notes": "Cereal · Biscuity",
-          "Source Pack Price": "($15.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Coffee"
         }
@@ -1384,7 +1392,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "5",
           "Aromatic Notes": "Caramel · Cereal",
-          "Source Pack Price": "($15.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -1471,7 +1479,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "5",
           "Aromatic Notes": "Biscuity · Fruity",
-          "Source Pack Price": "($15.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -1574,7 +1582,7 @@
           "Cup Size": "5.07 fl. oz",
           "Intensity": "7",
           "Aromatic Notes": "Malted Cereal · Nutty & Balanced",
-          "Source Pack Price": "($14.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "4",
           "Best Served As": "Gran Lungo"
         }
@@ -1680,7 +1688,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Flavored · Spicy · Cardamom · Pumpkin",
-          "Source Pack Price": "($16.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -1781,7 +1789,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Baked apple flavors",
-          "Source Pack Price": "($16.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee · Reverso"
         }
@@ -1882,7 +1890,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Aromatic Notes": "Caramel · Ginseng",
-          "Source Pack Price": "($15.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Double Espresso · Iced Coffee"
         }
@@ -1985,7 +1993,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Aromatic Notes": "Vanilla and Almond",
-          "Source Pack Price": "($15.00/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
       }
@@ -2067,7 +2075,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "6",
           "Aromatic Notes": "Fruity · Biscuity",
-          "Source Pack Price": "($16.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2"
         }
       }
@@ -2169,7 +2177,7 @@
           "Cup Size": "2.7 fl oz",
           "Intensity": "10",
           "Aromatic Notes": "Roasted & Chocolatey · Intense",
-          "Source Pack Price": "($20.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "5",
           "Best Served As": "Double Espresso"
         }
@@ -2271,7 +2279,7 @@
           "Cup Size": "2.7 fl oz",
           "Intensity": "7",
           "Aromatic Notes": "Woody & Earthy",
-          "Source Pack Price": "($14.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
@@ -2371,7 +2379,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Peppermint · Cocoa",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee · Iced Recipe"
         }
       }
@@ -2468,7 +2476,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Herbal",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee · Iced Recipe"
         }
       }
@@ -2554,7 +2562,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Intensity": "6",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
       }
@@ -2639,7 +2647,7 @@
         "product_description_html": "<p>Expertly crafted to enjoy over ice, this double espresso is smooth and sweet with unique vibrant and citrusy notes.</p><h3>Origin</h3><p>Arabica from Latin America</p><h3>Roasting</h3><p>Lighter-bodied and mellow, this coffee awakens the senses gently and deliver an approachable and flavourful cup with slight hints of roast​.</p><h3>Ingredients &amp; Allergens</h3><p>10 capsules of roast and ground coffee for the Nespresso system.<br/><br/>  100% Arabica.<br/><br/>  Packaged in a protective atmosphere</p><p>Net Weight (10 capsules)</p><p>4.40 OZ (125 g)</p>",
         "attributes": {
           "Cup Size": "2.7 fl oz",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
       }
@@ -2731,7 +2739,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "7",
           "Aromatic Notes": "Roasted & Chocolatey · Roasted",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee"
         }
       }
@@ -2823,7 +2831,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "10",
           "Aromatic Notes": "Roasted · Caramel",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee"
         }
       }
@@ -2915,7 +2923,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "6",
           "Aromatic Notes": "Roasted & Chocolatey · Nutty",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee · Iced Recipe"
         }
       }
@@ -3010,7 +3018,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "5",
           "Aromatic Notes": "Caramel",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee · Iced Recipe"
         }
       }
@@ -3105,7 +3113,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "5",
           "Aromatic Notes": "Biscuity",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee · Iced Recipe"
         }
       }
@@ -3191,7 +3199,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Intensity": "6",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
       }
@@ -3277,7 +3285,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Intensity": "6",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
       }
@@ -3369,7 +3377,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "7",
           "Aromatic Notes": "Nutty · Herbal",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee · Iced Recipe"
         }
       }
@@ -3458,7 +3466,7 @@
         "product_description_html": "<p>Strikingly bold and full-bodied with rich herbals, rustic spice notes and a muted acidity.</p><h3>Origin</h3><p>Arabica from Indonesia (Sumatra)​</p><h3>Roasting</h3><p>Fuller-bodied and bold, these coffees feature robust flavours ​ and the characteristic essence of an intense roast.​</p><h3>Ingredients &amp; Allergens</h3><p>10 capsules of roast and ground coffee for the Nespresso system.</p><p>100% Arabica</p><p>Net Weight (for 10 capsules):</p><p>4.23 OZ (120 g)</p><p>Packaged in a protective atmosphere.</p><p>Made in Switzerland</p>",
         "attributes": {
           "Cup Size": "7.77 fl oz",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee"
         }
       }
@@ -3543,7 +3551,7 @@
         "product_description_html": "<p>With a soft, mellow flavor, this is the lightest espresso roast.</p><h3>Origin</h3><p>Arabica from Latin America</p><h3>Roasting</h3><p>Lighter-bodied and mellow, this coffee awakens the senses gently and deliver an approachable and flavourful cup with slight hints of roast​.</p><h3>Ingredients &amp; Allergens</h3><p>10 capsules of roast and ground coffee for the Nespresso system.<br/><br/>  100% Arabica.<br/><br/>  Packaged in a protective atmosphere</p><p>Net Weight (10 capsules)</p><p>3.59 oz (102g)</p>",
         "attributes": {
           "Cup Size": "2.7 fl oz",
-          "Source Pack Price": "($13.70/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
       }
@@ -3634,7 +3642,7 @@
           "Cup Size": "1.35 fl oz",
           "Intensity": "6",
           "Aromatic Notes": "Roasted",
-          "Source Pack Price": "($11.00/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Espresso · Iced Recipe"
         }
       }
@@ -3724,7 +3732,7 @@
           "Cup Size": "1.35 fl oz",
           "Intensity": "11",
           "Aromatic Notes": "Caramel",
-          "Source Pack Price": "($11.00/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Espresso · Iced Recipe"
         }
       }
@@ -3814,7 +3822,7 @@
         "product_description_html": "<p>A delicious cup with rich brownie fudge, warm nutty and roasted hazelnut flavors.</p><h3>Origin</h3><p>A smooth, 100% arabica base blend made primarily with beans from Brazil and Colombia.</p><h3>Roasting</h3><p>The Brazilian beans are roasted separately to preserve their smooth profile and malted cereal notes, while the other beans undergo a light roast to retain their finer aromatics.</p><h3>Ingredients &amp; Allergens</h3><p>10 capsules of naturally and artificially flavored roast and ground coffee for the Nespresso system</p><p>Ingredients &amp; Allergens</p><p>Roast and ground coffee, Natural flavor.</p><p>Net weight (for 10 capsules)</p><p>3.80 OZ (108 g)</p><p>Packaged in a protective atmosphere.</p><p>Made in Switzerland</p>",
         "attributes": {
           "Cup Size": "7.77 fl oz",
-          "Source Pack Price": "($16.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -3905,7 +3913,7 @@
         "product_description_html": "<p>A delicious cup with jammy blueberries, rich cheesecake and smooth caramel notes.</p><h3>Origin</h3><p>A smooth, 100% arabica base blend made primarily with beans from Brazil and Colombia.</p><h3>Roasting</h3><p>The Brazilian beans are roasted separately to preserve their smooth profile and malted cereal notes, while the other beans undergo a light roast to retain their finer aromatics.</p><h3>Ingredients &amp; Allergens</h3><p>10 capsules of naturally and artificially flavored roast and ground coffee for the Nespresso system</p><p>Ingredients &amp; Allergens</p><p>Roast and ground coffee, Natural flavor.</p><p>Net weight (for 10 capsules)</p><p>3.80 OZ (108 g)</p><p>Packaged in a protective atmosphere.</p><p>Made in Switzerland</p>",
         "attributes": {
           "Cup Size": "7.77 fl oz",
-          "Source Pack Price": "($16.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -4004,7 +4012,7 @@
           "Cup Size": "2.7 fl oz",
           "Intensity": "6",
           "Aromatic Notes": "Biscuity",
-          "Source Pack Price": "($15.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Double Espresso"
         }
@@ -4071,7 +4079,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Explore more ways to celebrate the season</p><p><br/> This holiday season make every coffee moment shine with the Nespresso x Swarovski collection, featuring a delicious selection of coffee flavors, bold accessories, and shining décor.</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "24"
+        }
       }
     },
     {
@@ -4156,7 +4166,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Celebrate the season with the exclusive <strong>Nespresso x Swarovski</strong> festive collection. Discover the indulgent flavors of Hazelnut Brownie and Blueberry Cheesecake. Complete with premium milk chocolates and the limited-edition Nespresso x Swarovski Travel Mug, this festive bundle is designed for memorable gifting and magical moments all season long. <br/><br/>This assortment includes:<br/> 2 Sleeves of Hazelnut Brownie<br/> 2 Sleeves of Blueberry Cheesecake<br/> 1 Milk Chocolate Cubes<br/> 1 Nespresso x Swarovski Travel Mug, Large <br/><br/>*10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "40"
+        }
       }
     },
     {
@@ -4237,7 +4249,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Coffee this good deserves to come with. Enjoy exclusive Nespresso x Swarovski festive collection products including three sleeves of Crystal Spark double espresso paired with a limited-edition travel mug and matching travel holder. This pack makes it easy to enjoy rich, smooth coffee anywhere you go. <br/><br/>This assortment includes:<br/> 3 Sleeves of Crystal Spark Double Espresso<br/> 1 Nespresso x Swarovski Travel Mug, Large<br/> 1 Nespresso x Swarovski Travel Mug Holder <br/><br/>*10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "30"
+        }
       }
     },
     {
@@ -4433,7 +4447,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p><em>There's something special about fall mornings.</em><br/>Celebrate the season with Pumpkin Spice Cake, Cinnamon Apple Crisp coffees complimented by limited-edition Cinnamon Roll and Toffee Nut flavored syrups, and a travel mug made for crisp autumn mornings. Curated to bring warmth, comfort, and a touch of fall indulgence to every cup.<br/><br/> This assortment includes:<br/> 2 Sleeves of Pumpkin Spice Cake (7.77 fl oz)<br/> 2 Sleeves of Cinnamon Apple Crisp (7.77 fl oz)<br/> 1 Travel Mug Large, Pumpkin Spice<br/> 1 Cinnamon Roll and Toffee Nut Flavored Monin® Syrup Kit</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "40"
+        }
       }
     },
     {
@@ -4573,7 +4589,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "9",
           "Aromatic Notes": "Roasted & Chocolatey",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee"
         }
       }
@@ -4669,7 +4685,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "8",
           "Aromatic Notes": "Intense · Woody & Earthy",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "4",
           "Best Served As": "Coffee"
         }
@@ -4764,7 +4780,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "7",
           "Aromatic Notes": "Intense",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -4861,7 +4877,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "6",
           "Aromatic Notes": "Cereal · Biscuity",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Coffee"
         }
@@ -4958,7 +4974,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "6",
           "Aromatic Notes": "Cereal · Biscuity",
-          "Source Pack Price": "($14.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Coffee"
         }
@@ -5055,7 +5071,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "2",
           "Aromatic Notes": "Mild · Cereal · Fruity",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee"
         }
       }
@@ -5147,7 +5163,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "5",
           "Aromatic Notes": "Mild",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee"
         }
       }
@@ -5304,7 +5320,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Aromatic Notes": "Cereal",
-          "Source Pack Price": "($15.50/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso"
         }
       }
@@ -5400,7 +5416,7 @@
           "Cup Size": "2.7 fl oz",
           "Intensity": "8",
           "Aromatic Notes": "Woody & Earthy",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Double Espresso"
         }
@@ -5500,7 +5516,7 @@
           "Cup Size": "2.7 fl oz",
           "Intensity": "5",
           "Aromatic Notes": "Cereal · Nutty & Balanced",
-          "Source Pack Price": "($13.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
@@ -5598,7 +5614,7 @@
           "Cup Size": "2.7 fl oz",
           "Intensity": "11",
           "Aromatic Notes": "Roasted & Chocolatey",
-          "Source Pack Price": "($13.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "4",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
@@ -5696,7 +5712,7 @@
           "Cup Size": "2.7 fl oz",
           "Intensity": "8",
           "Aromatic Notes": "Woody & Earthy",
-          "Source Pack Price": "($13.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
@@ -5866,7 +5882,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Cereal · Spicy · Ginger · Flavored · Cardamom",
-          "Source Pack Price": "($16.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee · Reverso"
         }
@@ -5967,7 +5983,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Peppermint · Sweet candy · Flavored",
-          "Source Pack Price": "($16.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee · Reverso"
         }
@@ -6063,7 +6079,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Flavored",
-          "Source Pack Price": "($14.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee · Reverso · Iced Recipe"
         }
@@ -6142,7 +6158,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Roasted",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Coffee · Iced Recipe"
         }
       }
@@ -6222,7 +6238,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Aromatic Notes": "Cereal · Biscuity",
-          "Source Pack Price": "($13.50/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
       }
@@ -6315,7 +6331,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Flavored",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -6411,7 +6427,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Caramel · Flavored",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -6489,7 +6505,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Flavored",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -6567,7 +6583,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Flavored",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Coffee"
         }
@@ -6659,7 +6675,7 @@
         "attributes": {
           "Cup Size": "7.77 fl oz",
           "Aromatic Notes": "Intense",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "5",
           "Best Served As": "Coffee"
         }
@@ -6737,7 +6753,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Aromatic Notes": "Milky",
-          "Source Pack Price": "($13.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "1",
           "Best Served As": "Double Espresso"
         }
@@ -6837,7 +6853,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Discover a world of flavor, one cup at a time. Featuring favorites like Sweet Vanilla, Roasted Hazelnut, Maple Pecan, and Starbucks® Smooth Caramel and Iced Double Espresso Brown Sugar, this bundle makes coffee exploration easy and delicious. Complete with our Signature Collection Mugs, it's everything you need to enjoy new flavors and find your next favorite. <br/><br/>This assortment includes:<br/> 1 Sleeve of Sweet Vanilla<br/> 1 Sleeve of Starbucks® Smooth Caramel<br/> 1 Sleeve of Roasted Hazelnut<br/> 1 Sleeve of Starbucks® Iced Double Espresso Brown Sugar Cinnamon<br/> 1 Sleeve of Maple Pecan<br/> 1 set of Signature Mugs, Small<br/><br/>*10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "50"
+        }
       }
     },
     {
@@ -6933,7 +6951,7 @@
           "Cup Size": "0.85 fl. oz",
           "Intensity": "12",
           "Aromatic Notes": "Spicy · Woody & Earthy",
-          "Source Pack Price": "($10.80/10)",
+          "Pods per Pack": "10",
           "Roast Level": "4",
           "Best Served As": "Ristretto"
         }
@@ -7030,7 +7048,7 @@
           "Cup Size": "1.35 oz",
           "Intensity": "11",
           "Aromatic Notes": "Cereal · Woody & Earthy · Roasted & Chocolatey",
-          "Source Pack Price": "($10.80/10)",
+          "Pods per Pack": "10",
           "Roast Level": "5",
           "Best Served As": "Espresso"
         }
@@ -7111,7 +7129,7 @@
           "Cup Size": "1.35 oz",
           "Intensity": "11",
           "Aromatic Notes": "Intense · Roasted & Chocolatey",
-          "Source Pack Price": "($10.80/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Espresso"
         }
       }
@@ -7191,7 +7209,7 @@
           "Cup Size": "1.35 oz",
           "Intensity": "9",
           "Aromatic Notes": "Intense · Roasted & Chocolatey",
-          "Source Pack Price": "($10.80/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Espresso"
         }
       }
@@ -7330,7 +7348,7 @@
           "Cup Size": "1.35 oz",
           "Intensity": "9",
           "Aromatic Notes": "Roasted & Chocolatey",
-          "Source Pack Price": "($11.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Espresso"
         }
@@ -7423,7 +7441,7 @@
           "Cup Size": "1.35 oz",
           "Intensity": "6",
           "Aromatic Notes": "Caramel",
-          "Source Pack Price": "($10.80/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Espresso"
         }
@@ -7504,7 +7522,7 @@
           "Cup Size": "1.35 oz",
           "Intensity": "4",
           "Aromatic Notes": "Mild · Nutty & Balanced",
-          "Source Pack Price": "($10.80/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Espresso"
         }
       }
@@ -7574,7 +7592,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Experience iced coffee, Nespresso style. This curated collection combines refreshing coffee favorites with the tools to craft café-quality iced recipes at home. Featuring Starbucks® Iced Double Espresso, NOLA Style, Double Espresso Dolce, a Nano Foamer, and NOLA Blue Tumbler, it's everything you need to elevate your iced coffee ritual.<br/><br/>This assortment includes:<br/> 1 Sleeve of Starbucks® Iced Double Espresso<br/> 1 Sleeve of NOLA Style Blend<br/> 1 Sleeve of Double Espresso Dolce<br/> 1 Iced Tumbler, NOLA Blue<br/> 1 NanoFoamer <br/><br/> *10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "30"
+        }
       }
     },
     {
@@ -7641,7 +7661,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Everything you need to create your perfect coffee corner. Enjoy a trio of Vertuo favorites, including Melozio, Stormio, and Intenso, alongside a Lume Mia Capsule Dispenser and Vanilla Ice Travel Mug. Whether you're starting your Nespresso journey or refreshing your daily routine, this bundle helps turn every coffee moment into a ritual worth savoring.<br/><br/>This assortment includes:<br/> 1 Sleeve of Melozio<br/> 1 Sleeve of Stormio<br/> 1 Sleeve of Intenso<br/> 1 Lume Mia Dispenser, Medium<br/> 1 Travel Mug Medium, Vanilla Ice<br/><br/>*10 capsules per sleeve<br/>*Dispenser supplied without capsules</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "30"
+        }
       }
     },
     {
@@ -7736,7 +7758,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Discover the coffees our customers love most. Featuring Vertuo favorites including Melozio, Stormio, Intenso, Double Espresso Dolce, Double Espresso Scuro, and Starbucks® Pike Place® Roast, this collection takes the guesswork out of coffee discovery and makes finding your next favorite cup easier than ever.<br/><br/> This assortment includes:<br/> 1 Sleeve of Melozio<br/> 1 Sleeve of Double Espresso Dolce<br/> 1 Sleeve of Stomio<br/> 1 Sleeve of Starbucks® Pike Place® Roast<br/> 1 Sleeve of Intenso<br/> 1 Sleeve of Double Espresso Scuro <br/><br/> *10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "60"
+        }
       }
     },
     {
@@ -7823,7 +7847,9 @@
         "roasting": null,
         "ingredients": [],
         "product_description_html": "<p>Embark on a journey through some of the world's most celebrated coffee-growing regions. Featuring coffees inspired by or sourced from Colombia, Mexico, Costa Rica, and Sumatra, this collection showcases the distinct flavors, aromas, and stories that make every coffee unique.<br/><br/> This assortment includes:<br/> 1 Sleeve of Colombia<br/> 1 Sleeve of Starbucks® ​Single Origin Sumatra​<br/> 1 Sleeve of Mexico<br/> 1 Sleeve of Costa Rica <br/><br/> *10 capsules per sleeve</p>",
-        "attributes": {}
+        "attributes": {
+          "Pods per Pack": "40"
+        }
       }
     },
     {
@@ -7917,7 +7943,7 @@
           "Cup Size": "7.77 fl oz",
           "Intensity": "5",
           "Aromatic Notes": "Caramel · Biscuity",
-          "Source Pack Price": "($17.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "1",
           "Best Served As": "Coffee"
         }
@@ -8012,7 +8038,7 @@
         "attributes": {
           "Cup Size": "2.7 fl oz",
           "Aromatic Notes": "Cereal",
-          "Source Pack Price": "($15.50/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Double Espresso · Iced Recipe"
         }
       }
@@ -8218,7 +8244,7 @@
           "Cup Size": "5.07 fl. oz",
           "Intensity": "4",
           "Aromatic Notes": "Fruity",
-          "Source Pack Price": "($14.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Gran Lungo"
         }
@@ -8311,7 +8337,7 @@
           "Cup Size": "5.07 fl. oz",
           "Intensity": "4",
           "Aromatic Notes": "Floral & Herbal",
-          "Source Pack Price": "($13.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "2",
           "Best Served As": "Gran Lungo"
         }
@@ -8406,7 +8432,7 @@
           "Cup Size": "5.07 fl. oz",
           "Intensity": "8",
           "Aromatic Notes": "Roasted & Chocolatey",
-          "Source Pack Price": "($13.50/10)",
+          "Pods per Pack": "10",
           "Best Served As": "Gran Lungo"
         }
       }
@@ -8484,7 +8510,7 @@
           "Cup Size": "5.07 fl. oz",
           "Intensity": "8",
           "Aromatic Notes": "Woody & Earthy",
-          "Source Pack Price": "($14.00/10)",
+          "Pods per Pack": "10",
           "Roast Level": "4",
           "Best Served As": "Gran Lungo"
         }
@@ -8581,7 +8607,7 @@
           "Cup Size": "5.07 fl. oz",
           "Intensity": "6",
           "Aromatic Notes": "Roasted · Cereal",
-          "Source Pack Price": "($13.50/10)",
+          "Pods per Pack": "10",
           "Roast Level": "3",
           "Best Served As": "Gran Lungo"
         }
@@ -8666,7 +8692,7 @@
         "attributes": {
           "Cup Size": "12 fl oz/355 ml · 355ml",
           "Aromatic Notes": "Caramel · Cereal",
-          "Source Pack Price": "($11.55/7)",
+          "Pods per Pack": "7",
           "Roast Level": "3",
           "Best Served As": "XL · Cold Brew"
         }
@@ -8752,7 +8778,7 @@
           "Cup Size": "12 fl.oz / 355ml · 12 fl oz/355 ml",
           "Intensity": "4",
           "Aromatic Notes": "Caramel · Balanced & Fruity",
-          "Source Pack Price": "($11.20/7)",
+          "Pods per Pack": "7",
           "Roast Level": "2",
           "Best Served As": "Alto · XL"
         }
@@ -8838,7 +8864,7 @@
           "Cup Size": "12 fl.oz / 355ml · 12 fl oz/355 ml",
           "Intensity": "7",
           "Aromatic Notes": "Roasted · Woody & Earthy",
-          "Source Pack Price": "($11.20/7)",
+          "Pods per Pack": "7",
           "Roast Level": "3",
           "Best Served As": "Alto · XL"
         }
@@ -8920,7 +8946,7 @@
         "attributes": {
           "Cup Size": "18 oz · 12 fl oz/355 ml",
           "Aromatic Notes": "Smoky notes · Woody & Earthy",
-          "Source Pack Price": "($12.25/7)",
+          "Pods per Pack": "7",
           "Roast Level": "3",
           "Best Served As": "Carafe · XL"
         }

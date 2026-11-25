@@ -25,7 +25,8 @@ foreach ( $catalog['products'] as $row ) {
 	$pack_size = $product->get_attributes()['pa_pack-size'] ?? null;
 	vertuo_check( 'coffee' === $row['kind']
 		? $pack_size && $pack_size->is_taxonomy() && '50, 100, 150, 200' === $product->get_attribute( 'pa_pack-size' )
-		: ! $pack_size, "$sku has incorrect Pack Size attributes." );
+		: ! $pack_size && $product->is_type( 'simple' ), "$sku has incorrect Pack Size attributes or product type." );
+	vertuo_check( ! $product->get_attribute( 'Source Pack Price' ), "$sku still displays an archived listing price." );
 	vertuo_check( ! $product->get_attribute( 'Hương vị' ), "$sku still has a translated flavor attribute." );
 	vertuo_check( $row['image_url'] === $product->get_meta( 'vertuo_image_source' ) && ! $product->get_image_id(), "$sku has incorrect image handling." );
 
