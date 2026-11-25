@@ -15,9 +15,12 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 }
 
 $dewier_options  = dewier_get_options( $product );
-$dewier_selected = dewier_selected_option( $product, array_slice( $dewier_options, 0, dewier_card_limit( $dewier_options ) ) );
+$dewier_selected = dewier_selected_option( $product, $dewier_options );
 $dewier_gallery = $product->get_gallery_image_ids();
 $dewier_link    = $product->get_permalink();
+if ( $dewier_selected && $dewier_selected !== $dewier_options[0] ) {
+	$dewier_link = add_query_arg( 'attribute_' . sanitize_title( $dewier_selected['taxonomy'] ), $dewier_selected['slug'], $dewier_link );
+}
 ?>
 <li <?php wc_product_class( 'dw-card', $product ); ?>>
 	<div class="dw-card__media">

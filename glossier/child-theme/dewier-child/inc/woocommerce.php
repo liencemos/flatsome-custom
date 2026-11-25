@@ -114,8 +114,18 @@ function dewier_card_options( $product, $options, $selected ) {
 	$limit    = dewier_card_limit( $options );
 	$label    = wc_attribute_label( $options[0]['taxonomy'] );
 
+	$visible  = array_slice( $options, 0, $limit );
+	// A selection past the cut-off takes the last visible slot, so it stays on screen.
+	if ( $selected && ! in_array( $selected, wp_list_pluck( $visible, 'slug' ), true ) ) {
+		foreach ( $options as $option ) {
+			if ( $option['slug'] === $selected ) {
+				$visible[ $limit - 1 ] = $option;
+			}
+		}
+	}
+
 	printf( '<div class="dw-options dw-options--%s" role="radiogroup" aria-label="%s">', $is_color ? 'color' : 'size', esc_attr( $label ) );
-	foreach ( array_slice( $options, 0, $limit ) as $option ) {
+	foreach ( $visible as $option ) {
 		$variation = $option['variation'];
 		printf(
 			'<button type="button" class="dw-option%1$s" role="radio" aria-checked="%2$s" data-variation="%3$d" data-price="%4$s"%5$s%6$s>%7$s</button>',
