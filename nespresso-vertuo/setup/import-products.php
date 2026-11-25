@@ -41,6 +41,7 @@ $mapping = array(
 	'Meta: vertuo_source_url' => 'meta:vertuo_source_url',
 	'Meta: vertuo_image_source' => 'meta:vertuo_image_source',
 	'Meta: vertuo_listing_current_usd' => 'meta:vertuo_listing_current_usd',
+	'Meta: vertuo_listing_cup' => 'meta:vertuo_listing_cup',
 );
 
 for ( $i = 1; $i <= 7; $i++ ) {
@@ -50,18 +51,37 @@ for ( $i = 1; $i <= 7; $i++ ) {
 	$mapping[ "Attribute $i global" ] = "attributes:taxonomy$i";
 }
 
-$importer = new WC_Product_CSV_Importer(
-	$data_dir . '/woocommerce-products.csv',
-	array( 'mapping' => $mapping, 'parse' => true, 'prevent_timeouts' => false )
-);
-$results = $importer->import();
-foreach ( $results['failed'] as $error ) {
-	WP_CLI::warning( $error->get_error_message() );
-}
-if ( $results['failed'] ) {
-	WP_CLI::error( 'One or more rows failed to import.' );
+$refresh = '1' === ( $args[0] ?? '' );
+foreach ( $refresh ? array( false, true ) : array( false ) as $update_existing ) {
+	$importer = new WC_Product_CSV_Importer(
+		$data_dir . '/woocommerce-products.csv',
+		array( 'mapping' => $mapping, 'parse' => true, 'prevent_timeouts' => false, 'update_existing' => $update_existing )
+	);
+	$results = $importer->import();
+	foreach ( $results['failed'] as $error ) {
+		WP_CLI::warning( $error->get_error_message() );
+	}
+	if ( $results['failed'] ) {
+		WP_CLI::error( 'One or more rows failed to import.' );
+	}
+	WP_CLI::success( $update_existing
+		? sprintf( 'Updated %d products from the English storefront CSV.', count( $results['updated'] ) )
+		: sprintf( 'Imported %d products; skipped %d existing products.', count( $results['imported'] ), count( $results['skipped'] ) )
+	);
 }
 
+$pack_size_id = wc_attribute_taxonomy_id_by_name( 'pack-size' );
+if ( ! $pack_size_id ) {
+	WP_CLI::error( 'The Pack Size attribute was not imported.' );
+}
+if ( 'name_num' !== wc_attribute_orderby( 'pa_pack-size' ) ) {
+	$saved = wc_update_attribute( $pack_size_id, array( 'order_by' => 'name_num' ) );
+	if ( is_wp_error( $saved ) ) {
+		WP_CLI::error( $saved );
+	}
+}
+
+$legacy_attributes = array_map( 'sanitize_title', array( 'Dung tích', 'Cường độ', 'Hương vị', 'Quy cách', 'Mức rang', 'Xuất xứ', 'Ghi chú' ) );
 $product_ids = array();
 foreach ( $catalog['products'] as $row ) {
 	$id = wc_get_product_id_by_sku( 'VERTUO-' . $row['sku'] );
@@ -69,6 +89,15 @@ foreach ( $catalog['products'] as $row ) {
 		WP_CLI::error( 'Missing imported SKU: ' . $row['sku'] );
 	}
 	$product_ids[ $row['sku'] ] = $id;
+	if ( $refresh ) {
+		$product = wc_get_product( $id );
+		$attributes = $product->get_attributes( 'edit' );
+		$remaining = array_diff_key( $attributes, array_flip( $legacy_attributes ) );
+		if ( $attributes !== $remaining ) {
+			$product->set_attributes( $remaining );
+			$product->save();
+		}
+	}
 }
 foreach ( $collection_terms as $term_id => $skus ) {
 	$ordered_ids = array_map( static function ( $sku ) use ( $product_ids ) {
@@ -80,4 +109,4 @@ foreach ( $collection_terms as $term_id => $skus ) {
 	}
 }
 
-WP_CLI::success( sprintf( 'Imported %d products; skipped %d existing products.', count( $results['imported'] ), count( $results['skipped'] ) ) );
+WP_CLI::success( sprintf( 'Saved source order for %d collections.', count( $collection_terms ) ) );

@@ -1,16 +1,12 @@
-[section class="vertuo-promo" padding="12px 0px"]
-[ux_text text_align="center"]
-<p>Viên cà phê Vertuo · Chọn theo dung tích, cường độ và hương vị</p>
-[/ux_text]
-[/section]
+<p class="vertuo-promo">Vertuo coffee pods · Find your next favorite cup</p>
 
 [section class="vertuo-hero-section" padding="0px"]
-[ux_banner height="510px" height__sm="420px" class="vertuo-hero"]
-[text_box position_x="10" position_x__sm="50" position_y="50" width="55" width__sm="88" text_align="left"]
-<p class="vertuo-eyebrow">KHÁM PHÁ BỘ SƯU TẬP</p>
-<h1>Cà phê Vertuo</h1>
-<p>Từ espresso đậm đà đến ly cà phê lớn: tìm viên cà phê phù hợp với cách bạn pha mỗi ngày.</p>
-[button text="Khám phá danh mục" link="#vertuo-catalog" radius="99" class="vertuo-hero-button"]
+[ux_banner height="390px" height__sm="310px" class="vertuo-hero"]
+[text_box position_x="7" position_x__sm="50" position_y="50" width="58" width__sm="86" text_align="left"]
+<p class="vertuo-eyebrow">EXPLORE THE COLLECTION</p>
+<h1>Vertuo Coffee Pods</h1>
+<p>From bold espresso to a full mug of coffee, find a pod for the way you brew.</p>
+[button text="Explore coffees" link="#vertuo-catalog" radius="99" class="vertuo-hero-button"]
 [/text_box]
 [/ux_banner]
 [/section]

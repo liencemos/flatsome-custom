@@ -1,26 +1,36 @@
 /*
 Theme Name: Vertuo Storefront
 Template: flatsome
-Version: 1.0.0
+Version: 1.1.0
 Text Domain: vertuo-child
 */
 
 .vertuo-promo {
   background: #201819;
   color: #fff;
+  margin: 0;
+  padding: .7rem 1rem;
+  text-align: center;
 }
 
-.vertuo-promo p { margin: 0; padding: 0 1rem; }
+.vertuo-hero-section {
+  margin: 1.25rem auto 0;
+  max-width: 1320px;
+  width: calc(100% - 2rem);
+}
+
+.vertuo-hero { border-radius: .8rem; overflow: hidden; }
 
 .vertuo-hero .banner-bg {
   background: radial-gradient(ellipse at 84% 42%, #bc7e58 0%, #704036 27%, #2c1718 63%, #170f13 100%);
 }
 
 .vertuo-hero .text-box { color: #fff; }
-.vertuo-hero .text-box h1 { color: inherit; font-size: clamp(3rem, 7vw, 6rem); line-height: .98; }
+.vertuo-hero .text-box h1 { color: inherit; font-size: clamp(2.35rem, 5vw, 4.5rem); line-height: 1; }
 .vertuo-eyebrow { color: #f8c795; font-size: .85rem; font-weight: 700; letter-spacing: .16em; }
 .vertuo-hero .vertuo-hero-button { background: #f7e8d6; color: #301b1a; }
-.vertuo-products { background: #f7f2eb; }
+.vertuo-products { background: #fffaf5; margin-top: 1.25rem; }
+.vertuo-products > .section-content > .row { max-width: 1350px; }
 .vertuo-catalog { color: #271d1a; scroll-margin-top: 6rem; }
 .vertuo-catalog h2, .vertuo-catalog h3 { color: inherit; }
 .vertuo-catalog h2 { font-size: clamp(2rem, 4vw, 3rem); }
@@ -39,20 +49,51 @@ Text Domain: vertuo-child
 
 .vertuo-catalog-form select, .vertuo-catalog-form .button { margin: 0; }
 .vertuo-catalog-form .button { background: #402725; color: #fff; }
-.vertuo-catalog .products > .product { padding-bottom: 1.25rem; }
+.vertuo-catalog .products { max-width: none; }
+.vertuo-catalog .products > .product { display: flex; padding-bottom: 1.25rem; }
+.vertuo-catalog .products > .product > .col-inner { display: flex; }
 
 .vertuo-catalog .product-small.box {
   background: #fff;
   border: 1px solid #e1d5c8;
   border-radius: .8rem;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .vertuo-catalog .product-small.box .box-image { background: #f1e6dc; }
-.vertuo-catalog .product-small.box .box-text { padding: 1rem; }
+.vertuo-catalog .woocommerce-placeholder { aspect-ratio: 4 / 3; object-fit: cover; }
+.vertuo-catalog .product-small.box .box-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: .85rem;
+}
 .vertuo-catalog .product-small.box .name a { color: #271d1a; font-weight: 700; }
+.vertuo-catalog .product-small.box .category { display: none; }
+.vertuo-catalog .product-small.box .price-wrapper { padding-bottom: .5rem; }
 .vertuo-card-spec { color: #5c4d44; font-size: .82rem; margin: .35rem 0 .5rem; }
+.vertuo-catalog .product-small.box .add-to-cart-button { margin: auto 0 0; }
+.vertuo-catalog .product-small.box .box-text .button {
+  background: #402725;
+  border: 0;
+  border-radius: 99px;
+  color: #fff;
+  font-size: .78rem;
+  margin: .75rem 0 0;
+  width: 100%;
+}
+.vertuo-catalog .product-small.box .box-text > .button { margin-top: auto; }
+
+@media (max-width: 849px) {
+  #top-bar:not(:has(.show-for-medium li)) { display: none; }
+}
 
 @media (max-width: 549px) {
-  .vertuo-catalog-form { grid-template-columns: 1fr; }
+  .vertuo-catalog-form { gap: .6rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: .75rem; }
+  .vertuo-catalog-form .button { grid-column: 1 / -1; }
+  .vertuo-catalog .products { margin-left: -.35rem; margin-right: -.35rem; }
+  .vertuo-catalog .products > .product { padding: 0 .35rem .7rem; }
+  .vertuo-catalog .product-small.box .box-text { padding: .65rem; }
 }

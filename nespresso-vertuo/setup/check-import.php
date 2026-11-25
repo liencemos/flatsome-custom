@@ -15,7 +15,18 @@ foreach ( $catalog['products'] as $row ) {
 	vertuo_check( $product && 'publish' === $product->get_status(), "$sku is not published." );
 	$product_ids[ $row['sku'] ] = $product->get_id();
 	vertuo_check( $row['pricing']['regular'] === wc_format_decimal( $product->get_regular_price(), 2 ), "$sku has the wrong price." );
-	vertuo_check( $row['profile_vi'] === $product->get_attribute( 'Hương vị' ), "$sku has the wrong flavor attribute." );
+	$specs = $row['source_specs'];
+	vertuo_check( $specs['headline'] === $product->get_short_description(), "$sku has the wrong source headline." );
+	vertuo_check( $specs['product_description_html'] === $product->get_description(), "$sku has the wrong source description." );
+	vertuo_check( $specs['listing_cup'] === $product->get_meta( 'vertuo_listing_cup' ), "$sku has the wrong listing cup size." );
+	foreach ( $specs['attributes'] as $name => $expected ) {
+		vertuo_check( $expected === $product->get_attribute( $name ), "$sku has the wrong $name attribute." );
+	}
+	$pack_size = $product->get_attributes()['pa_pack-size'] ?? null;
+	vertuo_check( 'coffee' === $row['kind']
+		? $pack_size && $pack_size->is_taxonomy() && '50, 100, 150, 200' === $product->get_attribute( 'pa_pack-size' )
+		: ! $pack_size, "$sku has incorrect Pack Size attributes." );
+	vertuo_check( ! $product->get_attribute( 'Hương vị' ), "$sku still has a translated flavor attribute." );
 	vertuo_check( $row['image_url'] === $product->get_meta( 'vertuo_image_source' ) && ! $product->get_image_id(), "$sku has incorrect image handling." );
 
 	$terms = wp_get_post_terms( $product->get_id(), 'product_cat', array( 'fields' => 'names' ) );
@@ -23,7 +34,7 @@ foreach ( $catalog['products'] as $row ) {
 	vertuo_check( ! array_diff( array_merge( array( 'Vertuo' ), $row['collections'] ), array_map( 'html_entity_decode', $terms ) ), "$sku is missing collections." );
 }
 
-WP_CLI::success( sprintf( 'Validated %d published products: USD prices, flavor attributes, image metadata and collections.', count( $catalog['products'] ) ) );
+WP_CLI::success( sprintf( 'Validated %d published products: source descriptions, USD prices, attributes, image metadata and collections.', count( $catalog['products'] ) ) );
 
 $root = get_term_by( 'slug', 'vertuo', 'product_cat' );
 vertuo_check( $root, 'Vertuo catalog category is missing.' );

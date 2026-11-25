@@ -4,6 +4,20 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'vertuo-child', get_stylesheet_uri(), array( 'flatsome-main' ), wp_get_theme()->get( 'Version' ) );
 }, 20 );
 
+add_filter( 'theme_mod_site_logo', function ( $logo ) {
+	return get_template_directory_uri() . '/assets/img/logo.png' === $logo ? '' : $logo;
+} );
+
+add_filter( 'theme_mod_topbar_left', function ( $text ) {
+	return '<strong class="uppercase">Add anything here or just remove it...</strong>' === $text ? '' : $text;
+} );
+
+add_filter( 'theme_mod_footer_left_text', function ( $text ) {
+	return 'Copyright [ux_current_year] &copy; <strong>Flatsome Theme</strong>' === $text
+		? '&copy; [ux_current_year] ' . esc_html( get_bloginfo( 'name' ) )
+		: $text;
+} );
+
 function vertuo_catalog_input( $key ) {
 	return isset( $_GET[ $key ] ) && is_string( $_GET[ $key ] ) ? sanitize_key( wp_unslash( $_GET[ $key ] ) ) : '';
 }
@@ -14,14 +28,31 @@ function vertuo_card_spec() {
 		return;
 	}
 	$specs = array();
-	foreach ( array( 'Dung tích', 'Cường độ', 'Hương vị', 'Quy cách' ) as $name ) {
+	foreach ( array( 'Aromatic Notes', 'Cup Size', 'Intensity', 'Source Pack Price' ) as $name ) {
 		$value = $product->get_attribute( $name );
+		if ( 'Cup Size' === $name ) {
+			$value = $product->get_meta( 'vertuo_listing_cup' ) ?: $value;
+		}
 		if ( '' !== $value ) {
+			if ( 'Intensity' === $name ) {
+				$value = 'Intensity ' . $value;
+			}
 			$specs[] = $value;
 		}
 	}
 	if ( $specs ) {
 		echo '<p class="vertuo-card-spec">' . esc_html( implode( ' · ', $specs ) ) . '</p>';
+	}
+}
+
+function vertuo_catalog_shortcode_limit( $attributes ) {
+	$attributes['limit'] = '-1';
+	return $attributes;
+}
+
+function vertuo_catalog_cart_button() {
+	if ( 'button' !== get_theme_mod( 'add_to_cart_icon' ) ) {
+		woocommerce_template_loop_add_to_cart();
 	}
 }
 
@@ -59,10 +90,10 @@ function vertuo_catalog_shortcode() {
 	$category = vertuo_catalog_input( 'vertuo_collection' );
 	$category = isset( $by_slug[ $category ] ) ? $category : '';
 	$orders = array(
-		'featured' => array( 'menu_order', 'ASC', 'Thứ tự danh mục' ),
-		'price-asc' => array( 'price', 'ASC', 'Giá tăng dần' ),
-		'price-desc' => array( 'price', 'DESC', 'Giá giảm dần' ),
-		'name' => array( 'title', 'ASC', 'Tên A–Z' ),
+		'featured' => array( 'menu_order', 'ASC', 'Featured' ),
+		'price-asc' => array( 'price', 'ASC', 'Price: Low to high' ),
+		'price-desc' => array( 'price', 'DESC', 'Price: High to low' ),
+		'name' => array( 'title', 'ASC', 'Name: A–Z' ),
 	);
 	$sort = vertuo_catalog_input( 'vertuo_sort' );
 	$sort = isset( $orders[ $sort ] ) ? $sort : 'featured';
@@ -74,37 +105,39 @@ function vertuo_catalog_shortcode() {
 	ob_start();
 	?>
 	<div class="vertuo-catalog" id="vertuo-catalog">
-		<h2>Danh mục Vertuo</h2>
+		<h2>Shop Vertuo</h2>
 		<form class="vertuo-catalog-form" method="get" action="<?php echo esc_url( $page_url . '#vertuo-catalog' ); ?>">
 			<?php foreach ( $form_args as $key => $value ) : ?>
 				<?php if ( is_scalar( $value ) ) : ?>
 					<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>">
 				<?php endif; ?>
 			<?php endforeach; ?>
-			<label>Bộ sưu tập
+			<label>Collection
 				<select name="vertuo_collection">
-					<option value="">Tất cả</option>
+					<option value="">All collections</option>
 					<?php foreach ( $collections as $collection ) : ?>
 						<option value="<?php echo esc_attr( $collection->slug ); ?>" <?php selected( $category, $collection->slug ); ?>><?php echo esc_html( $collection->name ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>
-			<label>Sắp xếp
+			<label>Sort by
 				<select name="vertuo_sort">
 					<?php foreach ( $orders as $key => $options ) : ?>
 						<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $sort, $key ); ?>><?php echo esc_html( $options[2] ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>
-			<button class="button" type="submit">Áp dụng</button>
+			<button class="button" type="submit">Apply</button>
 		</form>
 		<?php
 		add_action( 'woocommerce_after_shop_loop_item_title', 'vertuo_card_spec', 7 );
+		add_action( 'flatsome_product_box_after', 'vertuo_catalog_cart_button', 100 );
+		add_filter( 'shortcode_atts_products', 'vertuo_catalog_shortcode_limit', 20 );
 		foreach ( $groups as $group ) {
 			$ids = 'featured' === $sort ? vertuo_collection_product_ids( $group ) : array();
 			echo '<h3>' . esc_html( $group->name ) . '</h3>';
 			echo do_shortcode( sprintf(
-				'[products category="%s" columns="4" limit="-1" ids="%s" orderby="%s" order="%s"]',
+				'[products category="%s" columns="5" limit="-1" ids="%s" orderby="%s" order="%s"]',
 				sanitize_title( $group->slug ),
 				implode( ',', array_map( 'absint', $ids ) ),
 				$ids ? 'post__in' : $orders[ $sort ][0],
@@ -112,6 +145,8 @@ function vertuo_catalog_shortcode() {
 			) );
 		}
 		remove_action( 'woocommerce_after_shop_loop_item_title', 'vertuo_card_spec', 7 );
+		remove_action( 'flatsome_product_box_after', 'vertuo_catalog_cart_button', 100 );
+		remove_filter( 'shortcode_atts_products', 'vertuo_catalog_shortcode_limit', 20 );
 		?>
 	</div>
 	<?php
