@@ -79,7 +79,7 @@ wp_cli theme activate vertuo-child
 page_id="$(wp_cli post list --post_type=page --post_status=publish --name=vertuo-coffee-pods --format=ids)"
 if [[ -z "$page_id" ]]; then
 	page_id="$(wp_cli post create --post_type=page --post_status=publish --post_title='Vertuo Coffee Pods' --post_name=vertuo-coffee-pods --page_template=page-blank.php --porcelain - < "$ROOT_DIR/ux-builder/catalog.txt")"
-elif [[ "$REFRESH" == 1 ]] || [[ "$(wp_cli post get "$page_id" --field=post_title)" == 'Cà phê Vertuo' && "$(wp_cli post get "$page_id" --field=post_content)" == *'[vertuo_catalog]'* ]]; then
+elif [[ "$REFRESH" == 1 ]] || [[ "$(wp_cli post get "$page_id" --field=post_title)" == 'Cà phê Vertuo' && "$(wp_cli eval "echo hash( 'sha256', rtrim( get_post_field( 'post_content', (int) '$page_id', 'raw' ), \"\\r\\n\" ) );")" == 'e782272439ea19d9058332cdd8b061138b1c2852fcade4ff5d8005fbbcdb8efc' ]]; then
 	wp_cli post update "$page_id" --post_title='Vertuo Coffee Pods' --page_template=page-blank.php --post_content="$(< "$ROOT_DIR/ux-builder/catalog.txt")"
 fi
 
