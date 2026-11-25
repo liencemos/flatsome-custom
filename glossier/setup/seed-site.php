@@ -243,6 +243,8 @@ $dewier_home_id  = dewier_site_page( 'home', 'Home' );
 $dewier_help_id  = dewier_site_page( 'help', 'Help & FAQ', $dewier_copy );
 $dewier_set_home = dewier_site_layout( $dewier_home_id, $dewier_home, in_array( 'reset-home', $dewier_args, true ) );
 $dewier_set_help = dewier_site_layout( $dewier_help_id, $dewier_help, in_array( 'reset-help', $dewier_args, true ), $dewier_copy );
+$dewier_quiz_id  = dewier_site_page( 'quiz', 'Find your routine' );
+dewier_site_layout( $dewier_quiz_id, array( dewier_site_element( 'dewier-quiz' ) ), in_array( 'reset-quiz', $dewier_args, true ) );
 if ( defined( 'ELEMENTOR_VERSION' ) ) {
 	update_option( 'elementor_experiment-container', 'active' );
 	update_option( 'elementor_disable_color_schemes', 'yes' );

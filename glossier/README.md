@@ -73,6 +73,21 @@ at all.
   product page; `seed-site.php` switches those modules on and creates the `/wishlist/` page
   when the plugin is active. Each one can be turned off again under CommerceKit in wp-admin.
   Its free-shipping bar, swatches, badges and gallery stay off, as Meredithzone has its own.
+- Email popup (`inc/newsletter.php`): shows once, 8 seconds in or when the pointer leaves
+  the window, never on Cart, Checkout or My account; any `#newsletter` link opens it too.
+  Each new email gets a single-use, non-stacking 10% WooCommerce coupon (`MZ10-XXXXXX`),
+  shown in the popup and emailed. Emails are listed under WooCommerce > Subscribers with
+  an Export CSV link. Filters: `dewier_newsletter_discount`, `dewier_newsletter_popup`.
+- Review photos (`inc/reviews.php`): the review form takes up to 3 JPG, PNG or WebP photos
+  of 5 MB each; the server checks the real file type. Photos show only once the review is
+  approved, and are deleted with it. The product page adds a rating summary with star
+  bars and a customer photo strip; photos open in a lightbox.
+- Recently viewed (`inc/recent.php`): the browser keeps the last 9 product IDs in
+  localStorage, so cached pages stay shared. The strip shows on product pages and Cart.
+- Quiz (`/quiz/`, widget Routine Quiz or shortcode `[dewier_quiz]`): four questions,
+  then up to four products with Add to bag. Shade products open on the shade nearest the
+  chosen skin tone. Questions and product rules: filters `dewier_quiz_questions` and
+  `dewier_quiz_rules` in `inc/quiz.php`. `seed-site.php` creates the page.
 - Product badges: one per line in the `_dewier_badges` product meta, as `promo:Text`
   (blue) or `value:Text` (pink). Card subtitle: `_dewier_subtitle`.
 

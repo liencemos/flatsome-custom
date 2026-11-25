@@ -3789,6 +3789,10 @@ body.dewier {
 	margin-bottom: 0.5rem;
 }
 
+.dewier .dw-review-upload input[type="file"] {
+	max-width: 100%;
+}
+
 .dw-review-upload__hint {
 	color: var(--dw-muted);
 	font-size: 0.8125rem;

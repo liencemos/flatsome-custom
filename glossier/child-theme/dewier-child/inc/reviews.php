@@ -198,7 +198,7 @@ function dewier_review_summary( $product ) {
 		<h2 id="dw-review-summary-title" class="screen-reader-text"><?php esc_html_e( 'Rating summary', 'dewier' ); ?></h2>
 		<div class="dw-review-summary__score">
 			<span class="dw-review-summary__avg"><?php echo esc_html( number_format_i18n( $average, 1 ) ); ?></span>
-			<?php echo wc_get_rating_html( $average, $total ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<span class="dw-pdp__rating"><?php echo wc_get_rating_html( $average ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
 			<?php /* translators: %s: number of reviews */ ?>
 			<p><?php echo esc_html( sprintf( _n( 'Based on %s review', 'Based on %s reviews', $total, 'dewier' ), number_format_i18n( $total ) ) ); ?></p>
 			<?php echo dewier_button( __( 'Write a review', 'dewier' ), '#review_form_wrapper', 'secondary', 'data-dw-write-review' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
