@@ -99,8 +99,12 @@ function dewier_newsletter_subscribe( WP_REST_Request $request ) {
 		// The code only goes to the inbox, so typing someone else's email does not reveal it.
 		$code = (string) get_post_meta( $existing, '_dw_coupon', true );
 		if ( $code && dewier_newsletter_code_open( $code ) ) {
-			dewier_newsletter_mail( $email, $code, dewier_newsletter_discount() );
-			return array( 'code' => '', 'message' => __( 'You are already on the list. We sent your code to your inbox again.', 'dewier' ) );
+			// One resend a day per address, so the form cannot be used to flood an inbox.
+			if ( time() - (int) get_post_meta( $existing, '_dw_resent', true ) > DAY_IN_SECONDS ) {
+				update_post_meta( $existing, '_dw_resent', time() );
+				dewier_newsletter_mail( $email, $code, dewier_newsletter_discount() );
+			}
+			return array( 'code' => '', 'message' => __( 'You are already on the list. Check your inbox for your code.', 'dewier' ) );
 		}
 		return new WP_Error( 'dewier_used', __( 'You are already on the list, and your welcome code has been used.', 'dewier' ), array( 'status' => 409 ) );
 	}
