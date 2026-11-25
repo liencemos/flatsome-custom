@@ -25,6 +25,22 @@ function vertuo_card_spec() {
 	}
 }
 
+function vertuo_collection_product_ids( $collection ) {
+	$ordered_ids = get_term_meta( $collection->term_id, 'vertuo_product_order', true );
+	if ( ! is_array( $ordered_ids ) || ! $ordered_ids ) {
+		return array();
+	}
+	$current_ids = wc_get_products( array(
+		'category' => array( $collection->slug ),
+		'status'   => 'publish',
+		'limit'    => -1,
+		'orderby'  => 'menu_order',
+		'order'    => 'ASC',
+		'return'   => 'ids',
+	) );
+	return array_merge( array_intersect( $ordered_ids, $current_ids ), array_diff( $current_ids, $ordered_ids ) );
+}
+
 function vertuo_catalog_shortcode() {
 	if ( ! function_exists( 'wc_get_products' ) ) {
 		return '';
@@ -85,11 +101,13 @@ function vertuo_catalog_shortcode() {
 		<?php
 		add_action( 'woocommerce_after_shop_loop_item_title', 'vertuo_card_spec', 7 );
 		foreach ( $groups as $group ) {
+			$ids = 'featured' === $sort ? vertuo_collection_product_ids( $group ) : array();
 			echo '<h3>' . esc_html( $group->name ) . '</h3>';
 			echo do_shortcode( sprintf(
-				'[products category="%s" columns="4" limit="-1" orderby="%s" order="%s"]',
+				'[products category="%s" columns="4" limit="-1" ids="%s" orderby="%s" order="%s"]',
 				sanitize_title( $group->slug ),
-				$orders[ $sort ][0],
+				implode( ',', array_map( 'absint', $ids ) ),
+				$ids ? 'post__in' : $orders[ $sort ][0],
 				$orders[ $sort ][1]
 			) );
 		}

@@ -15,14 +15,15 @@ $parent = term_exists( 'Vertuo', 'product_cat', 0 ) ?: wp_insert_term( 'Vertuo',
 if ( is_wp_error( $parent ) ) {
 	WP_CLI::error( $parent );
 }
+$parent_id = (int) $parent['term_id'];
+$collection_terms = array();
 foreach ( $catalog['collections'] as $collection ) {
-	$parent_id = (int) $parent['term_id'];
-	if ( ! term_exists( $collection['name'], 'product_cat', $parent_id ) ) {
-		$result = wp_insert_term( $collection['name'], 'product_cat', array( 'parent' => $parent_id ) );
-		if ( is_wp_error( $result ) ) {
-			WP_CLI::error( $result );
-		}
+	$term = term_exists( $collection['name'], 'product_cat', $parent_id )
+		?: wp_insert_term( $collection['name'], 'product_cat', array( 'parent' => $parent_id ) );
+	if ( is_wp_error( $term ) ) {
+		WP_CLI::error( $term );
 	}
+	$collection_terms[ $term['term_id'] ] = $collection['skus'];
 }
 
 $mapping = array(
@@ -60,4 +61,23 @@ foreach ( $results['failed'] as $error ) {
 if ( $results['failed'] ) {
 	WP_CLI::error( 'One or more rows failed to import.' );
 }
+
+$product_ids = array();
+foreach ( $catalog['products'] as $row ) {
+	$id = wc_get_product_id_by_sku( 'VERTUO-' . $row['sku'] );
+	if ( ! $id ) {
+		WP_CLI::error( 'Missing imported SKU: ' . $row['sku'] );
+	}
+	$product_ids[ $row['sku'] ] = $id;
+}
+foreach ( $collection_terms as $term_id => $skus ) {
+	$ordered_ids = array_map( static function ( $sku ) use ( $product_ids ) {
+		return $product_ids[ $sku ];
+	}, $skus );
+	$saved = update_term_meta( $term_id, 'vertuo_product_order', $ordered_ids );
+	if ( is_wp_error( $saved ) ) {
+		WP_CLI::error( $saved );
+	}
+}
+
 WP_CLI::success( sprintf( 'Imported %d products; skipped %d existing products.', count( $results['imported'] ), count( $results['skipped'] ) ) );

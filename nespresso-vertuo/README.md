@@ -22,9 +22,9 @@ WP_PATH=/path/to/wordpress bash nespresso-vertuo/setup/setup.sh
 bash nespresso-vertuo/setup/setup.sh /path/to/flatsome.zip
 ```
 
-Đường dẫn ZIP có thể bỏ qua khi Flatsome đã cài. Đặt `WP_ADMIN` thành tên người dùng quản trị WordPress nếu khác `admin`. Sau cài đặt, script in URL trang **Cà phê Vertuo**. Chạy lại sẽ bỏ qua SKU và trang đã tồn tại để không ghi đè nội dung biên tập.
+Đường dẫn ZIP có thể bỏ qua khi Flatsome đã cài. Đặt `WP_ADMIN` thành tên người dùng quản trị WordPress nếu khác `admin`. Sau cài đặt, script in URL trang **Cà phê Vertuo**. Chạy lại sẽ cập nhật thứ tự theo từng bộ sưu tập nhưng bỏ qua SKU và trang đã tồn tại để không ghi đè nội dung biên tập.
 
-**Cài thủ công:** kích hoạt child theme; nhập CSV tại **Products → Import** với các cột mặc định; tạo trang **Cà phê Vertuo** và dán `ux-builder/catalog.txt` trong trình soạn thảo mã trước khi chỉnh sửa bằng UX Builder.
+**Cài thủ công:** kích hoạt child theme; nhập CSV tại **Products → Import** với các cột mặc định; tạo trang **Cà phê Vertuo** và dán `ux-builder/catalog.txt` trong trình soạn thảo mã trước khi chỉnh sửa bằng UX Builder. CSV thủ công dùng thứ tự chung của sản phẩm; để lấy đúng thứ tự riêng theo từng bộ sưu tập, chạy `setup/setup.sh`.
 
 ## Giá, ảnh và dữ liệu chưa công bố
 
