@@ -36,8 +36,10 @@ function vertuo_apply_storefront_design() {
 		'product_image_width'         => 7,
 		'product_share'               => false,
 		'product_next_prev_nav'       => false,
+		'footer_1'                    => false,
+		'footer_2'                    => false,
 		'footer_bottom_color'         => '#f5f2ee',
-		'footer_bottom_text'          => 'dark',
+		'footer_bottom_text'          => 'light',
 		'vertuo_storefront_design'    => 1,
 	);
 	foreach ( $mods as $name => $value ) {
