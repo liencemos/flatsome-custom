@@ -61,7 +61,7 @@ for ( $i = 1; $i <= 7; $i++ ) {
 }
 
 $refresh = '1' === ( $args[0] ?? '' );
-$legacy_attributes = array_flip( array_map( 'sanitize_title', array( 'Dung tích', 'Cường độ', 'Hương vị', 'Quy cách', 'Mức rang', 'Xuất xứ', 'Ghi chú', 'Source Pack Price' ) ) );
+$legacy_attributes = array_flip( array_map( 'sanitize_title', array( 'Dung tích', 'Cường độ', 'Hương vị', 'Quy cách', 'Mức rang', 'Xuất xứ', 'Ghi chú' ) ) );
 $legacy_skus = array();
 foreach ( $catalog['products'] as $row ) {
 	$sku = 'VERTUO-' . $row['sku'];
@@ -128,7 +128,7 @@ foreach ( $catalog['products'] as $row ) {
 	if ( $refresh || isset( $legacy_skus[ 'VERTUO-' . $row['sku'] ] ) ) {
 		$product = wc_get_product( $id );
 		$attributes = $product->get_attributes( 'edit' );
-		$remaining = array_diff_key( $attributes, $legacy_attributes );
+		$remaining = array_diff_key( $attributes, $legacy_attributes + array( 'source-pack-price' => true ) );
 		if ( $attributes !== $remaining ) {
 			$product->set_attributes( $remaining );
 			$product->save();
