@@ -45,6 +45,10 @@ function vertuo_card_spec() {
 	if ( $specs ) {
 		echo '<p class="vertuo-card-spec">' . esc_html( implode( ' · ', $specs ) ) . '</p>';
 	}
+	$compatibility = $product->get_meta( 'vertuo_machine_compatibility' );
+	if ( $compatibility ) {
+		echo '<p class="vertuo-card-spec">' . esc_html( $compatibility ) . '</p>';
+	}
 }
 
 function vertuo_catalog_shortcode_limit( $attributes ) {

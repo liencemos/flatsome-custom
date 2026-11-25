@@ -50,6 +50,7 @@ $mapping = array(
 	'Meta: vertuo_image_source' => 'meta:vertuo_image_source',
 	'Meta: vertuo_listing_current_usd' => 'meta:vertuo_listing_current_usd',
 	'Meta: vertuo_listing_cup' => 'meta:vertuo_listing_cup',
+	'Meta: vertuo_machine_compatibility' => 'meta:vertuo_machine_compatibility',
 );
 
 for ( $i = 1; $i <= 7; $i++ ) {
