@@ -3511,7 +3511,8 @@ body.dewier {
 	padding: 1rem;
 }
 
-.dw-nl[hidden] {
+.dw-nl[hidden],
+.dw-nl [hidden] {
 	display: none;
 }
 
