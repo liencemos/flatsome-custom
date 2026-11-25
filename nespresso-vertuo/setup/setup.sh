@@ -7,6 +7,7 @@ CONTAINER="${WP_CONTAINER:-wp-local-wordpress-1}"
 FLATSOME_ZIP="${1:-}"
 WP_ADMIN="${WP_ADMIN:-admin}"
 REFRESH="${VERTUO_REFRESH:-0}"
+SKIP_IMAGES="${VERTUO_SKIP_IMAGES:-0}"
 
 if [[ -n "${WP_PATH:-}" ]]; then
 	WP_ROOT="$(realpath "$WP_PATH")"
@@ -63,16 +64,17 @@ if [[ -z "${WP_PATH:-}" ]]; then
 fi
 
 if [[ -n "${WP_PATH:-}" ]]; then
-	wp_cli eval-file "$ROOT_DIR/setup/import-products.php" "$REFRESH" --user="$WP_ADMIN"
+	wp_cli eval-file "$ROOT_DIR/setup/import-products.php" "$REFRESH" "$SKIP_IMAGES" --user="$WP_ADMIN"
 else
 	stage="$(docker exec "$CONTAINER" mktemp -d)"
 	trap 'docker exec "$CONTAINER" rm -rf "$stage"; if [[ -n "${zip_path:-}" ]]; then docker exec "$CONTAINER" rm -f "$zip_path"; fi' EXIT
 	docker exec "$CONTAINER" chmod a+rx "$stage"
 	docker exec "$CONTAINER" mkdir "$stage/setup" "$stage/data"
 	docker cp "$ROOT_DIR/setup/import-products.php" "$CONTAINER:$stage/setup/import-products.php"
+	docker cp "$ROOT_DIR/setup/import-images.php" "$CONTAINER:$stage/setup/import-images.php"
 	docker cp "$ROOT_DIR/data/woocommerce-products.csv" "$CONTAINER:$stage/data/woocommerce-products.csv"
 	docker cp "$ROOT_DIR/data/catalog.json" "$CONTAINER:$stage/data/catalog.json"
-	wp_cli eval-file "$stage/setup/import-products.php" "$REFRESH" --user="$WP_ADMIN"
+	wp_cli eval-file "$stage/setup/import-products.php" "$REFRESH" "$SKIP_IMAGES" --user="$WP_ADMIN"
 fi
 
 wp_cli theme activate vertuo-child

@@ -155,3 +155,8 @@ foreach ( $collection_terms as $term_id => $skus ) {
 }
 
 WP_CLI::success( sprintf( 'Saved source order for %d collections.', count( $collection_terms ) ) );
+
+if ( '1' !== ( $args[1] ?? '' ) ) {
+	require_once __DIR__ . '/import-images.php';
+	vertuo_import_images( $catalog['products'], $product_ids );
+}

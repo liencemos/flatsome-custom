@@ -9,6 +9,7 @@ function vertuo_check( $condition, $message ) {
 }
 
 $product_ids = array();
+$source_image_count = 0;
 foreach ( $catalog['products'] as $row ) {
 	$sku = 'VERTUO-' . $row['sku'];
 	$product = wc_get_product( wc_get_product_id_by_sku( $sku ) );
@@ -29,7 +30,15 @@ foreach ( $catalog['products'] as $row ) {
 		: ! $pack_size && $product->is_type( 'simple' ), "$sku has incorrect Pack Size attributes or product type." );
 	vertuo_check( ! $product->get_attribute( 'Source Pack Price' ), "$sku still displays an archived listing price." );
 	vertuo_check( ! $product->get_attribute( 'Hương vị' ), "$sku still has a translated flavor attribute." );
-	vertuo_check( $row['image_url'] === $product->get_meta( 'vertuo_image_source' ) && ! $product->get_image_id(), "$sku has incorrect image handling." );
+	vertuo_check( $row['image_url'] === $product->get_meta( 'vertuo_image_source' ), "$sku has the wrong image source URL." );
+	$image_id = $product->get_image_id();
+	if ( $image_id ) {
+		vertuo_check( wp_attachment_is_image( $image_id ), "$sku has an invalid featured image." );
+		if ( $row['image_url'] === get_post_meta( $image_id, '_source_url', true ) ) {
+			vertuo_check( is_readable( get_attached_file( $image_id ) ), "$sku's downloaded image is missing from the Media Library." );
+			++$source_image_count;
+		}
+	}
 
 	$terms = wp_get_post_terms( $product->get_id(), 'product_cat', array( 'fields' => 'names' ) );
 	vertuo_check( ! is_wp_error( $terms ), "$sku collections could not be read." );
@@ -37,6 +46,10 @@ foreach ( $catalog['products'] as $row ) {
 }
 
 WP_CLI::success( sprintf( 'Validated %d published products: source descriptions, USD prices, attributes, image metadata and collections.', count( $catalog['products'] ) ) );
+if ( '1' === ( $args[0] ?? '' ) ) {
+	vertuo_check( count( $catalog['products'] ) === $source_image_count, 'Some catalog products are missing their local source image.' );
+}
+WP_CLI::success( sprintf( '%d of %d products use a local image from their source URL.', $source_image_count, count( $catalog['products'] ) ) );
 
 $root = get_term_by( 'slug', 'vertuo', 'product_cat' );
 vertuo_check( $root, 'Vertuo catalog category is missing.' );

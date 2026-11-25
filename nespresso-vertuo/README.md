@@ -1,6 +1,6 @@
 # Cửa hàng cà phê Vertuo · Flatsome + WooCommerce
 
-Bản dựng cửa hàng tiếng Anh dựa trên bố cục danh mục Vertuo của Nespresso Mỹ: dải giới thiệu, banner lớn, bộ lọc bộ sưu tập, sắp xếp và lưới sản phẩm WooCommerce. Thông số và lời mô tả sản phẩm hiển thị theo nguồn tiếng Anh; bảng tra cứu vẫn bằng tiếng Việt. Đây là demo, không phải website chính thức của Nespresso. Nội dung banner được viết mới; không sao chép hình ảnh, logo hoặc chương trình ưu đãi đang chạy.
+Bản dựng cửa hàng tiếng Anh dựa trên bố cục danh mục Vertuo của Nespresso Mỹ: dải giới thiệu, banner lớn, bộ lọc bộ sưu tập, sắp xếp và lưới sản phẩm WooCommerce. Thông số và lời mô tả sản phẩm hiển thị theo nguồn tiếng Anh; bảng tra cứu vẫn bằng tiếng Việt. Đây là demo, không phải website chính thức của Nespresso. Banner được viết mới, không sao chép logo hoặc chương trình ưu đãi đang chạy.
 
 | Tệp | Công dụng |
 |---|---|
@@ -31,6 +31,7 @@ bash nespresso-vertuo/setup/setup.sh /path/to/flatsome.zip
 - WooCommerce nhập giá niêm yết chuẩn, không phát lại ưu đãi Black Friday, giá đăng ký hoặc giảm giá trực tiếp từ Nespresso. Giá quan sát được lưu trong JSON và metadata CSV.
 - Sản phẩm viên cà phê tự tạo thuộc tính WooCommerce dùng chung **Pack Size** với các mức **50**, **100**, **150**, **200**. Đây là thuộc tính, không phải biến thể mua hàng; không thay đổi giá và quy cách từ nguồn. Combo và phụ kiện giữ nguyên.
 - Dung tích trên cửa hàng giữ cách ghi của Nespresso, gồm cả ml và oz khi nguồn có ghi cả hai. Các quy đổi trong bảng thông số tiếng Việt không thay thế số đo trên cửa hàng.
-- Không đính kèm hoặc hotlink ảnh sản phẩm. WooCommerce dùng ảnh giữ chỗ mặc định; URL ảnh nguồn nằm trong JSON và metadata CSV để thay bằng ảnh đã có quyền sử dụng.
+- Setup tải ảnh sản phẩm từ URL nguồn trong JSON vào **Media Library** và đặt làm ảnh đại diện; không hotlink hoặc commit tệp ảnh. Setup giữ ảnh đại diện đã có và tái sử dụng ảnh đã tải. Nếu tải lỗi, WooCommerce dùng ảnh giữ chỗ; chạy lại setup để thử lại. Đặt `VERTUO_SKIP_IMAGES=1` để không tải ảnh; nhập CSV thủ công cũng không tải ảnh.
+- Ảnh sản phẩm thuộc bản quyền của Nespresso hoặc chủ sở hữu tương ứng. Chỉ dùng cho demo nếu được phép; cần có quyền sử dụng trước khi đưa ảnh lên cửa hàng công khai.
 - Tình trạng tồn kho chỉ là dữ liệu tại thời điểm quét; không đồng bộ. Không dùng dữ liệu này như tồn kho thực tế.
 - Dữ liệu trống là thông số không áp dụng hoặc nguồn chưa công bố. Một SKU xuất hiện trong nhiều bộ sưu tập chỉ tạo một sản phẩm WooCommerce và một dòng trong bảng tóm tắt.
