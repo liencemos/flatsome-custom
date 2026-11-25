@@ -10,7 +10,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'DEWIER_REVIEW_PHOTOS', 3 );
-define( 'DEWIER_REVIEW_PHOTO_BYTES', 5 * MB_IN_BYTES );
+
+/**
+ * Per-photo limit: 5 MB, or less when PHP accepts less.
+ */
+function dewier_review_photo_bytes() {
+	return min( 5 * MB_IN_BYTES, wp_max_upload_size() );
+}
+
+/**
+ * Bytes PHP accepts for the whole form; above it PHP drops the review text too.
+ */
+function dewier_review_post_bytes() {
+	$post = wp_convert_hr_to_bytes( ini_get( 'post_max_size' ) );
+	return $post > 0 ? (int) ( $post * 0.9 ) : 0;
+}
 
 function dewier_review_photo_types() {
 	return array(
@@ -25,16 +39,17 @@ function dewier_review_photo_types() {
  */
 function dewier_review_photo_field( $args ) {
 	$args['comment_field'] .= sprintf(
-		'<p class="comment-form-photos dw-review-upload" hidden><label for="dw-review-photos">%1$s <span class="dw-review-upload__hint">%2$s</span></label><input type="file" id="dw-review-photos" name="dw_review_photos[]" accept="image/jpeg,image/png,image/webp" multiple data-max="%3$d" data-bytes="%4$d" data-error-count="%5$s" data-error-file="%6$s"><span class="dw-review-upload__preview"></span><span class="dw-review-upload__error" role="alert"></span></p>',
+		'<p class="comment-form-photos dw-review-upload" hidden><label for="dw-review-photos">%1$s <span class="dw-review-upload__hint">%2$s</span></label><input type="file" id="dw-review-photos" name="dw_review_photos[]" accept="image/jpeg,image/png,image/webp" multiple data-max="%3$d" data-bytes="%4$d" data-total="%7$d" data-error-count="%5$s" data-error-file="%6$s"><span class="dw-review-upload__preview"></span><span class="dw-review-upload__error" role="alert"></span></p>',
 		esc_html__( 'Add photos', 'dewier' ),
 		/* translators: 1: number of photos, 2: size in MB */
-		esc_html( sprintf( __( '(optional, up to %1$d JPG, PNG or WebP, %2$d MB each)', 'dewier' ), DEWIER_REVIEW_PHOTOS, DEWIER_REVIEW_PHOTO_BYTES / MB_IN_BYTES ) ),
+		esc_html( sprintf( __( '(optional, up to %1$d JPG, PNG or WebP, %2$d MB each)', 'dewier' ), DEWIER_REVIEW_PHOTOS, max( 1, floor( dewier_review_photo_bytes() / MB_IN_BYTES ) ) ) ),
 		DEWIER_REVIEW_PHOTOS,
-		DEWIER_REVIEW_PHOTO_BYTES,
+		dewier_review_photo_bytes(),
 		/* translators: %d: number of photos */
 		esc_attr( sprintf( __( 'You can add up to %d photos.', 'dewier' ), DEWIER_REVIEW_PHOTOS ) ),
 		/* translators: %d: size in MB */
-		esc_attr( sprintf( __( 'Photos must be JPG, PNG or WebP and under %d MB.', 'dewier' ), DEWIER_REVIEW_PHOTO_BYTES / MB_IN_BYTES ) )
+		esc_attr( sprintf( __( 'Photos must be JPG, PNG or WebP and under %d MB.', 'dewier' ), max( 1, floor( dewier_review_photo_bytes() / MB_IN_BYTES ) ) ) ),
+		dewier_review_post_bytes()
 	);
 	return $args;
 }
@@ -66,7 +81,7 @@ function dewier_review_save_photos( $comment_id, $approved, $data ) {
 			'error'    => (int) $files['error'][ $i ],
 			'size'     => (int) $files['size'][ $i ],
 		);
-		if ( UPLOAD_ERR_OK !== $file['error'] || $file['size'] > DEWIER_REVIEW_PHOTO_BYTES || ! is_uploaded_file( $file['tmp_name'] ) ) {
+		if ( UPLOAD_ERR_OK !== $file['error'] || $file['size'] > dewier_review_photo_bytes() || ! is_uploaded_file( $file['tmp_name'] ) ) {
 			continue;
 		}
 		$check = wp_check_filetype_and_ext( $file['tmp_name'], $file['name'], dewier_review_photo_types() );
@@ -85,6 +100,9 @@ function dewier_review_save_photos( $comment_id, $approved, $data ) {
 	}
 	if ( $saved ) {
 		update_comment_meta( $comment_id, 'dw_review_photos', $saved );
+		if ( 1 === (int) $approved ) {
+			dewier_review_photo_status( 'approved', '', get_comment( $comment_id ) );
+		}
 	}
 }
 add_action( 'comment_post', 'dewier_review_save_photos', 10, 3 );
@@ -109,7 +127,7 @@ function dewier_review_store_photo( $file, $post_id, $author ) {
 			'post_mime_type' => $moved['type'],
 			/* translators: %s: reviewer name */
 			'post_title'     => sprintf( __( 'Review photo by %s', 'dewier' ), $author ),
-			'post_status'    => 'inherit',
+			'post_status'    => 'private',
 		),
 		$moved['file'],
 		$post_id,
@@ -122,6 +140,21 @@ function dewier_review_store_photo( $file, $post_id, $author ) {
 	wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $moved['file'] ) );
 	return (int) $id;
 }
+
+/**
+ * Photos stay private, out of the public media list, until their review is approved.
+ */
+function dewier_review_photo_status( $new_status, $old_status, $comment ) {
+	foreach ( dewier_review_photo_ids( $comment->comment_ID ) as $id ) {
+		wp_update_post(
+			array(
+				'ID'          => $id,
+				'post_status' => 'approved' === $new_status ? 'inherit' : 'private',
+			)
+		);
+	}
+}
+add_action( 'transition_comment_status', 'dewier_review_photo_status', 10, 3 );
 
 function dewier_review_delete_photos( $comment_id ) {
 	foreach ( dewier_review_photo_ids( $comment_id ) as $id ) {
@@ -201,7 +234,9 @@ function dewier_review_summary( $product ) {
 			<span class="dw-pdp__rating"><?php echo wc_get_rating_html( $average ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
 			<?php /* translators: %s: number of reviews */ ?>
 			<p><?php echo esc_html( sprintf( _n( 'Based on %s review', 'Based on %s reviews', $total, 'dewier' ), number_format_i18n( $total ) ) ); ?></p>
-			<?php echo dewier_button( __( 'Write a review', 'dewier' ), '#review_form_wrapper', 'secondary', 'data-dw-write-review' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php if ( comments_open( $product->get_id() ) && ( 'yes' !== get_option( 'woocommerce_review_rating_verification_required' ) || wc_customer_bought_product( '', get_current_user_id(), $product->get_id() ) ) ) : ?>
+				<?php echo dewier_button( __( 'Write a review', 'dewier' ), '#review_form_wrapper', 'secondary', 'data-dw-write-review' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php endif; ?>
 		</div>
 		<ul class="dw-review-summary__bars">
 			<?php for ( $stars = 5; $stars >= 1; $stars-- ) : ?>

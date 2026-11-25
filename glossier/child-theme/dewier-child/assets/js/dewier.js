@@ -794,6 +794,10 @@
 				var bad = files.some( function ( item ) {
 					return ! /^image\/(jpeg|png|webp)$/.test( item.type ) || item.size > Number( file.dataset.bytes );
 				} );
+				var total = files.reduce( function ( sum, item ) {
+					return sum + item.size;
+				}, 0 );
+				bad = bad || ( Number( file.dataset.total ) > 0 && total > Number( file.dataset.total ) );
 				error.textContent = files.length > Number( file.dataset.max ) ? file.dataset.errorCount : ( bad ? file.dataset.errorFile : '' );
 				preview.innerHTML = '';
 				if ( error.textContent ) {
