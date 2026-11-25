@@ -74,7 +74,7 @@ function dewier_newsletter_code_open( $code ) {
 }
 
 function dewier_newsletter_subscribe( WP_REST_Request $request ) {
-	if ( ! class_exists( 'WC_Coupon' ) ) {
+	if ( ! class_exists( 'WC_Coupon' ) || ! wc_coupons_enabled() ) {
 		return new WP_Error( 'dewier_unavailable', __( 'Sign-up is not available right now.', 'dewier' ), array( 'status' => 503 ) );
 	}
 	// Bots fill the hidden field; people never see it.
@@ -96,9 +96,11 @@ function dewier_newsletter_subscribe( WP_REST_Request $request ) {
 
 	$existing = dewier_newsletter_find( $email );
 	if ( $existing ) {
+		// The code only goes to the inbox, so typing someone else's email does not reveal it.
 		$code = (string) get_post_meta( $existing, '_dw_coupon', true );
 		if ( $code && dewier_newsletter_code_open( $code ) ) {
-			return array( 'code' => $code, 'message' => __( 'You are already on the list. Here is your code again.', 'dewier' ) );
+			dewier_newsletter_mail( $email, $code, dewier_newsletter_discount() );
+			return array( 'code' => '', 'message' => __( 'You are already on the list. We sent your code to your inbox again.', 'dewier' ) );
 		}
 		return new WP_Error( 'dewier_used', __( 'You are already on the list, and your welcome code has been used.', 'dewier' ), array( 'status' => 409 ) );
 	}
@@ -111,6 +113,7 @@ function dewier_newsletter_subscribe( WP_REST_Request $request ) {
 	$coupon->set_amount( $percent );
 	$coupon->set_usage_limit( 1 );
 	$coupon->set_individual_use( true );
+	$coupon->set_email_restrictions( array( $email ) );
 	/* translators: %s: email address */
 	$coupon->set_description( sprintf( __( 'Email sign-up: %s', 'dewier' ), $email ) );
 	$coupon->save();
@@ -197,7 +200,7 @@ add_action( 'admin_post_dewier_subscribers_csv', 'dewier_newsletter_export' );
  * Popup markup. It stays hidden until the script decides to show it.
  */
 function dewier_newsletter_popup() {
-	if ( ! function_exists( 'is_cart' ) || is_cart() || is_checkout() || is_account_page() || ! apply_filters( 'dewier_newsletter_popup', true ) ) {
+	if ( ! function_exists( 'is_cart' ) || ! wc_coupons_enabled() || is_cart() || is_checkout() || is_account_page() || ! apply_filters( 'dewier_newsletter_popup', true ) ) {
 		return;
 	}
 	$percent = dewier_newsletter_discount();
@@ -232,7 +235,7 @@ function dewier_newsletter_popup() {
 				<div class="dw-nl__done" hidden>
 					<p class="dw-nl__text dw-nl__status" role="status"></p>
 					<div class="dw-nl__code"><code></code><button type="button" class="dw-link" data-nl-copy data-copied="<?php esc_attr_e( 'Copied', 'dewier' ); ?>"><?php esc_html_e( 'Copy', 'dewier' ); ?></button></div>
-					<p class="dw-nl__fine"><?php esc_html_e( 'Enter it at checkout. It works once and does not combine with other codes. We also sent it to your inbox.', 'dewier' ); ?></p>
+					<p class="dw-nl__fine"><?php esc_html_e( 'Enter it at checkout. It works once with this email address and does not combine with other codes. We also sent it to your inbox.', 'dewier' ); ?></p>
 					<?php echo dewier_button( __( 'Start shopping', 'dewier' ), wc_get_page_permalink( 'shop' ), 'dark' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</div>
 				<button type="button" class="dw-link dw-nl__skip" data-nl-close><?php esc_html_e( 'No thanks', 'dewier' ); ?></button>

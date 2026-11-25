@@ -763,11 +763,13 @@
 			} ).then( function ( data ) {
 				store( KEY, { s: 'joined', t: Date.now() } );
 				done.querySelector( 'code' ).textContent = data.code;
+				done.querySelector( '.dw-nl__code' ).hidden = ! data.code;
+				done.querySelector( '.dw-nl__code + .dw-nl__fine' ).hidden = ! data.code;
 				done.querySelector( '.dw-nl__status' ).textContent = data.message;
 				form.hidden = true;
 				done.hidden = false;
 				root.querySelector( '.dw-nl__skip' ).hidden = true;
-				done.querySelector( '[data-nl-copy]' ).focus();
+				( data.code ? done.querySelector( '[data-nl-copy]' ) : dialog ).focus();
 			} ).catch( function ( error ) {
 				msg.textContent = ( error && error.message ) || input.placeholder;
 			} ).then( function () {
