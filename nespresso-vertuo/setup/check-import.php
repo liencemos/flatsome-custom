@@ -19,7 +19,7 @@ foreach ( $catalog['products'] as $row ) {
 	vertuo_check( $specs['headline'] === $product->get_short_description(), "$sku has the wrong source headline." );
 	vertuo_check( $specs['product_description_html'] === $product->get_description(), "$sku has the wrong source description." );
 	vertuo_check( $specs['listing_cup'] === $product->get_meta( 'vertuo_listing_cup' ), "$sku has the wrong listing cup size." );
-	vertuo_check( ( $row['compatibility'] ?? '' ) === $product->get_meta( 'vertuo_machine_compatibility' ), "$sku has the wrong machine compatibility." );
+	vertuo_check( ( $row['compatibility'] ?? '' ) === html_entity_decode( $product->get_meta( 'vertuo_machine_compatibility' ) ), "$sku has the wrong machine compatibility." );
 	foreach ( $specs['attributes'] as $name => $expected ) {
 		vertuo_check( $expected === $product->get_attribute( $name ), "$sku has the wrong $name attribute." );
 	}
