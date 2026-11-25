@@ -29,7 +29,9 @@ function vertuo_card_spec() {
 	}
 	$specs = array();
 	foreach ( array( 'Aromatic Notes', 'Cup Size', 'Intensity', 'Pods per Pack' ) as $name ) {
-		$value = 'Cup Size' === $name ? $product->get_meta( 'vertuo_listing_cup' ) : $product->get_attribute( $name );
+		$value = 'Cup Size' === $name && $product->meta_exists( 'vertuo_listing_cup' )
+			? $product->get_meta( 'vertuo_listing_cup' )
+			: $product->get_attribute( $name );
 		if ( '' !== $value ) {
 			if ( 'Intensity' === $name ) {
 				$value = 'Intensity ' . $value;
