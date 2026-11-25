@@ -122,7 +122,7 @@ add_shortcode( 'vertuo_hero_products', function () {
 	<div class="vertuo-featured">
 	<?php foreach ( array( '169604', '7070.10', '7076.10' ) as $sku ) : ?>
 		<?php $product = wc_get_product( wc_get_product_id_by_sku( 'VERTUO-' . $sku ) ); ?>
-		<?php if ( ! $product || 'publish' !== $product->get_status() ) { continue; } ?>
+		<?php if ( ! $product || 'publish' !== $product->get_status() || ! $product->is_visible() ) { continue; } ?>
 		<a class="vertuo-featured-card" href="<?php echo esc_url( $product->get_permalink() ); ?>">
 			<div><span class="vertuo-featured-label">Shop Vertuo</span><strong><?php echo esc_html( $product->get_name() ); ?></strong><span class="vertuo-featured-cta">View product</span></div>
 			<?php echo $product->get_image( 'woocommerce_thumbnail' ); ?>
