@@ -46,6 +46,8 @@ function dewier_checkout_assets() {
 	}
 	wp_enqueue_style( 'dewier-checkout', DEWIER_URI . '/assets/css/checkout.css', array( 'dewier' ), dewier_asset_version( '/assets/css/checkout.css' ) );
 	if ( dewier_is_checkout_flow() ) {
+		// WooPayments' card iframe can only load fonts from a public font host such as Bunny Fonts.
+		wp_enqueue_style( 'dewier-checkout-font', 'https://fonts.bunny.net/css?family=dm-sans:400,500', array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_script( 'dewier-checkout', DEWIER_URI . '/assets/js/checkout.js', array( 'jquery', 'wc-checkout' ), dewier_asset_version( '/assets/js/checkout.js' ), true );
 		wp_localize_script(
 			'dewier-checkout',

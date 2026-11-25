@@ -355,6 +355,34 @@
 	transition: border-color 0.15s var(--dw-ease), box-shadow 0.15s var(--dw-ease);
 }
 
+/* WooPayments copies this padding into its card fields, so they need the vertical part too. */
+.dw-co .input-text {
+	padding-top: 0.8125rem;
+	padding-bottom: 0.8125rem;
+}
+
+/* WooPayments reads the card text size and font from this fieldset. */
+.dw-co #payment,
+.dw-co #payment .payment_methods li,
+.dw-co #payment .payment_methods li .payment_box fieldset {
+	font-family: var(--dw-font);
+}
+
+.dw-co #payment .payment_methods li .payment_box fieldset {
+	font-size: 0.875rem;
+}
+
+.dw-co #payment .woopay-save-new-user-container .phone-input {
+	border: 1px solid #bdbdbd;
+	border-radius: 0;
+}
+
+.dw-co #payment .woopay-save-new-user-container .phone-input:focus {
+	border-color: #000;
+	outline: none;
+	box-shadow: inset 0 0 0 1px #000;
+}
+
 .dw-co textarea {
 	height: auto;
 	min-height: 6rem;
