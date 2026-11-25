@@ -9,6 +9,14 @@ if ( ! current_user_can( 'manage_product_terms' ) ) {
 
 require_once WC_ABSPATH . 'includes/import/class-wc-product-csv-importer.php';
 
+class Vertuo_Product_CSV_Importer extends WC_Product_CSV_Importer {
+	public function keep_skus( $skus ) {
+		$this->parsed_data = array_filter( $this->parsed_data, static function ( $row ) use ( $skus ) {
+			return isset( $skus[ $row['sku'] ?? '' ] );
+		} );
+	}
+}
+
 $data_dir = dirname( __DIR__ ) . '/data';
 $catalog = json_decode( file_get_contents( $data_dir . '/catalog.json' ), true, 512, JSON_THROW_ON_ERROR );
 $parent = term_exists( 'Vertuo', 'product_cat', 0 ) ?: wp_insert_term( 'Vertuo', 'product_cat' );
@@ -52,12 +60,40 @@ for ( $i = 1; $i <= 7; $i++ ) {
 }
 
 $refresh = '1' === ( $args[0] ?? '' );
-foreach ( $refresh ? array( false, true ) : array( false ) as $update_existing ) {
-	$importer = new WC_Product_CSV_Importer(
+$legacy_attributes = array_flip( array_map( 'sanitize_title', array( 'Dung tích', 'Cường độ', 'Hương vị', 'Quy cách', 'Mức rang', 'Xuất xứ', 'Ghi chú' ) ) );
+$legacy_skus = array();
+foreach ( $catalog['products'] as $row ) {
+	$sku = 'VERTUO-' . $row['sku'];
+	$product = wc_get_product( wc_get_product_id_by_sku( $sku ) );
+	if ( $product ) {
+		$attributes = $product->get_attributes( 'edit' );
+		if ( array_intersect_key( $attributes, $legacy_attributes ) ) {
+			$legacy_skus[ $sku ] = array_diff_key( $attributes, $legacy_attributes );
+		}
+	}
+}
+$preserve_attributes = static function ( $product ) use ( $legacy_skus ) {
+	$retained = $legacy_skus[ $product->get_sku() ] ?? array();
+	$product->set_attributes( array_filter( $product->get_attributes( 'edit' ) ) + $retained );
+	return $product;
+};
+foreach ( $refresh || $legacy_skus ? array( false, true ) : array( false ) as $update_existing ) {
+	$import_mapping = $mapping;
+	if ( $update_existing && ! $refresh ) {
+		foreach ( array( 'Type', 'Name', 'Published', 'Visibility in catalog', 'In stock?', 'Regular price', 'Categories', 'Position' ) as $column ) {
+			$import_mapping[ $column ] = '';
+		}
+	}
+	$importer = new Vertuo_Product_CSV_Importer(
 		$data_dir . '/woocommerce-products.csv',
-		array( 'mapping' => $mapping, 'parse' => true, 'prevent_timeouts' => false, 'update_existing' => $update_existing )
+		array( 'mapping' => $import_mapping, 'parse' => true, 'prevent_timeouts' => false, 'update_existing' => $update_existing )
 	);
+	if ( $update_existing && ! $refresh ) {
+		$importer->keep_skus( $legacy_skus );
+		add_filter( 'woocommerce_product_import_pre_insert_product_object', $preserve_attributes );
+	}
 	$results = $importer->import();
+	remove_filter( 'woocommerce_product_import_pre_insert_product_object', $preserve_attributes );
 	foreach ( $results['failed'] as $error ) {
 		WP_CLI::warning( $error->get_error_message() );
 	}
@@ -81,7 +117,6 @@ if ( 'name_num' !== wc_attribute_orderby( 'pa_pack-size' ) ) {
 	}
 }
 
-$legacy_attributes = array_map( 'sanitize_title', array( 'Dung tích', 'Cường độ', 'Hương vị', 'Quy cách', 'Mức rang', 'Xuất xứ', 'Ghi chú' ) );
 $product_ids = array();
 foreach ( $catalog['products'] as $row ) {
 	$id = wc_get_product_id_by_sku( 'VERTUO-' . $row['sku'] );
@@ -89,10 +124,10 @@ foreach ( $catalog['products'] as $row ) {
 		WP_CLI::error( 'Missing imported SKU: ' . $row['sku'] );
 	}
 	$product_ids[ $row['sku'] ] = $id;
-	if ( $refresh ) {
+	if ( $refresh || isset( $legacy_skus[ 'VERTUO-' . $row['sku'] ] ) ) {
 		$product = wc_get_product( $id );
 		$attributes = $product->get_attributes( 'edit' );
-		$remaining = array_diff_key( $attributes, array_flip( $legacy_attributes ) );
+		$remaining = array_diff_key( $attributes, $legacy_attributes );
 		if ( $attributes !== $remaining ) {
 			$product->set_attributes( $remaining );
 			$product->save();
