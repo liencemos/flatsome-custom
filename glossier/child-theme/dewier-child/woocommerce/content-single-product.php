@@ -23,7 +23,7 @@ $dewier_rating = (float) $product->get_average_rating();
 $dewier_count  = (int) $product->get_review_count();
 $dewier_facts  = apply_filters( 'dewier_product_facts', array( __( 'Buildable', 'dewier' ), __( 'Cruelty free', 'dewier' ), __( 'Easy', 'dewier' ) ), $product );
 ?>
-<div id="product-<?php the_ID(); ?>" <?php wc_product_class( 'dw-pdp', $product ); ?> data-price="<?php echo esc_attr( wp_strip_all_tags( wc_price( wc_get_price_to_display( $product ) ) ) ); ?>">
+<div id="product-<?php the_ID(); ?>" <?php wc_product_class( 'dw-pdp', $product ); ?> data-product-id="<?php echo esc_attr( $product->get_id() ); ?>" data-price="<?php echo esc_attr( wp_strip_all_tags( wc_price( wc_get_price_to_display( $product ) ) ) ); ?>">
 	<?php do_action( 'dewier_pdp_before', $product ); ?>
 	<div class="dw-pdp__grid">
 		<div class="dw-pdp__info summary entry-summary">
@@ -95,6 +95,7 @@ $dewier_facts  = apply_filters( 'dewier_product_facts', array( __( 'Buildable', 
 	<div class="dw-pdp__more">
 		<?php dewier_accordions( $product ); ?>
 		<div id="reviews-wrap" class="dw-pdp__reviews">
+			<?php dewier_review_summary( $product ); ?>
 			<?php comments_template(); ?>
 		</div>
 	</div>
@@ -102,6 +103,7 @@ $dewier_facts  = apply_filters( 'dewier_product_facts', array( __( 'Buildable', 
 	<?php
 	woocommerce_upsell_display( 4, 4 );
 	woocommerce_output_related_products();
+	dewier_recent_slot( $product->get_id() );
 	?>
 </div>
 

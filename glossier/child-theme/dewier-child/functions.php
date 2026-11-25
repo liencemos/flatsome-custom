@@ -19,3 +19,7 @@ require_once DEWIER_DIR . '/inc/woocommerce.php';
 require_once DEWIER_DIR . '/inc/checkout.php';
 require_once DEWIER_DIR . '/inc/commercekit.php';
 require_once DEWIER_DIR . '/inc/elementor.php';
+require_once DEWIER_DIR . '/inc/newsletter.php';
+require_once DEWIER_DIR . '/inc/reviews.php';
+require_once DEWIER_DIR . '/inc/recent.php';
+require_once DEWIER_DIR . '/inc/quiz.php';

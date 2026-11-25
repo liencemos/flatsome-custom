@@ -90,13 +90,15 @@ function dewier_selected_option( $product, $options ) {
 	if ( ! $options ) {
 		return null;
 	}
-	$default = $product->get_default_attributes();
+	$default  = $product->get_default_attributes();
+	$selected = $options[0];
 	foreach ( $options as $option ) {
 		if ( isset( $default[ $option['taxonomy'] ] ) && $default[ $option['taxonomy'] ] === $option['slug'] ) {
-			return $option;
+			$selected = $option;
+			break;
 		}
 	}
-	return $options[0];
+	return apply_filters( 'dewier_selected_option', $selected, $product, $options );
 }
 
 /**

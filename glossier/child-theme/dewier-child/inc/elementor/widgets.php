@@ -689,3 +689,32 @@ class Dewier_Widget_Help_Contact extends Dewier_Widget {
 		<?php
 	}
 }
+
+class Dewier_Widget_Quiz extends Dewier_Widget {
+
+	public function get_name() {
+		return 'dewier-quiz';
+	}
+
+	public function get_title() {
+		return __( 'Meredithzone Routine Quiz', 'dewier' );
+	}
+
+	public function get_icon() {
+		return 'eicon-form-horizontal';
+	}
+
+	protected function fields() {
+		return array(
+			array( 'id' => 'eyebrow', 'label' => __( 'Eyebrow', 'dewier' ), 'type' => 'text', 'default' => __( 'Find your routine', 'dewier' ) ),
+			array( 'id' => 'title', 'label' => __( 'Title', 'dewier' ), 'type' => 'text', 'default' => __( 'Not sure where to start?', 'dewier' ) ),
+			array( 'id' => 'text', 'label' => __( 'Text', 'dewier' ), 'type' => 'textarea', 'default' => __( 'Answer four quick questions and we will pick the products for your skin, your shade and your everyday look.', 'dewier' ) ),
+			array( 'id' => 'button', 'label' => __( 'Button label', 'dewier' ), 'type' => 'text', 'default' => __( 'Start the quiz', 'dewier' ) ),
+		);
+	}
+
+	protected function render() {
+		$s = $this->get_settings_for_display();
+		echo dewier_quiz_render( array_intersect_key( $s, array_flip( array( 'eyebrow', 'title', 'text', 'button' ) ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+}
