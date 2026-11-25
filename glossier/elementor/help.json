@@ -1,0 +1,85 @@
+{
+    "version": "0.4",
+    "title": "Meredithzone Help",
+    "type": "page",
+    "content": [
+        {
+            "id": "da3dafb",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "5531c60",
+                    "elType": "widget",
+                    "widgetType": "dewier-help-search",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "id": "b5c2076",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "21e53d5",
+                    "elType": "widget",
+                    "widgetType": "dewier-faq",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "id": "03a7c96",
+            "elType": "container",
+            "isInner": false,
+            "settings": {
+                "content_width": "full",
+                "padding": {
+                    "unit": "px",
+                    "top": "0",
+                    "right": "0",
+                    "bottom": "0",
+                    "left": "0",
+                    "isLinked": true
+                }
+            },
+            "elements": [
+                {
+                    "id": "d8408ab",
+                    "elType": "widget",
+                    "widgetType": "dewier-help-contact",
+                    "settings": {},
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "page_settings": {
+        "template": "elementor_header_footer"
+    }
+}
