@@ -1,0 +1,232 @@
+/*
+Theme Name: Vertuo Storefront
+Template: flatsome
+Version: 1.5.0
+Text Domain: vertuo-child
+*/
+
+:root {
+  --vertuo-ink: #322520;
+  --vertuo-plum: #412f34;
+  --vertuo-mustard: #ffc62c;
+  --vertuo-tan: #ebe8e3;
+  --vertuo-sand: #eee1cd;
+  --vertuo-line: #d6d2cd;
+  --vertuo-forest: #173c2b;
+}
+
+#top-bar { background: var(--vertuo-mustard); color: var(--vertuo-ink); }
+#top-bar .flex-row { justify-content: center; min-height: 42px; }
+#top-bar .vertuo-announcement { font-size: .85rem; font-weight: 700; line-height: 1.4; padding: .65rem .25rem; text-align: center; }
+#top-bar .vertuo-announcement a { color: inherit; display: inline; margin-left: .3rem; padding: 0; text-decoration: underline; text-transform: uppercase; }
+#masthead, #wide-nav { background: var(--vertuo-tan); }
+#masthead .header-inner, #wide-nav > .container { max-width: 1440px; padding-inline: clamp(.95rem, 3vw, 2.65rem); }
+#logo a { color: var(--vertuo-ink); font-size: 1.9rem; font-weight: 800; letter-spacing: -.035em; }
+#masthead .header-search-form { width: min(100%, 600px); }
+#masthead .header-search-form input, #wide-nav .header-search-form input {
+  background: #fff;
+  border: 1px solid #c5bfb8;
+  border-radius: 99px;
+  box-shadow: none;
+  color: var(--vertuo-ink);
+  padding-inline: 1rem 2.5rem;
+}
+#masthead .header-search-form button, #wide-nav .header-search-form button { background: transparent; border: 0; color: var(--vertuo-ink); }
+.header-search-form .searchform > .flex-row > .flex-col:last-child { position: absolute; right: .25rem; }
+#masthead .nav > li > a, #wide-nav .nav > li > a { color: var(--vertuo-ink); font-size: .91rem; text-transform: none; }
+#masthead .nav > li > a:hover, #wide-nav .nav > li > a:hover { text-decoration: underline; }
+#wide-nav .nav > li { margin-inline: 0 2rem; }
+.vertuo-collection-strip { background: var(--vertuo-plum); color: #fff; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: .85rem 0; }
+.vertuo-collection-strip a { color: inherit; font-size: .9rem; font-weight: 700; padding: .55rem; text-align: center; }
+.vertuo-collection-strip a + a { border-left: 1px solid #a49295; }
+.vertuo-collection-strip span { display: block; font-size: .76rem; font-weight: 400; margin-top: .15rem; text-decoration: underline; }
+
+.section.vertuo-hero-section {
+  background: radial-gradient(ellipse at 12% 0%, #416451, transparent 35%),
+    radial-gradient(ellipse at 91% 12%, #345a3c, transparent 31%), var(--vertuo-forest);
+}
+.vertuo-hero > .col-inner { color: #fff; margin-inline: auto; max-width: 1220px; padding: 3rem 0 3.5rem; text-align: center; }
+.vertuo-hero h1 { color: #fff; font-size: clamp(2.3rem, 4.75vw, 4.35rem); line-height: 1.05; margin-bottom: .6rem; }
+.vertuo-hero h1 + p { font-size: clamp(1rem, 1.75vw, 1.45rem); font-weight: 600; margin-bottom: .8rem; }
+.vertuo-eyebrow { color: #ffe1a5; font-size: .8rem; font-weight: 700; letter-spacing: .12em; margin-bottom: .7rem; }
+.vertuo-hero .vertuo-hero-button { color: #fff; font-size: .9rem; font-weight: 800; text-decoration: underline; text-transform: uppercase; }
+.vertuo-featured { display: grid; gap: 1rem; grid-template-columns: 1.6fr 1fr; grid-template-rows: repeat(2, minmax(140px, auto)); margin: 2.2rem auto 0; text-align: left; }
+.vertuo-featured .vertuo-featured-card {
+  align-items: center;
+  background: var(--vertuo-sand);
+  border-radius: 1.35rem;
+  color: var(--vertuo-ink);
+  display: grid;
+  gap: .65rem;
+  grid-template-columns: 1.15fr .85fr;
+  padding: 1.2rem;
+}
+.vertuo-featured-card:first-child { grid-row: span 2; padding: clamp(1.3rem, 3vw, 2.7rem); }
+.vertuo-featured-card img { height: auto; justify-self: center; max-width: 100%; width: 180px; }
+.vertuo-featured-card:first-child img { width: 300px; }
+.vertuo-featured .vertuo-featured-card strong { color: var(--vertuo-ink); display: block; font-size: clamp(1.15rem, 1.85vw, 1.75rem); line-height: 1.12; margin: .6rem 0 .8rem; }
+.vertuo-featured-card:first-child strong { font-size: clamp(1.55rem, 3vw, 2.65rem); }
+.vertuo-featured-label, .vertuo-featured-cta { border-radius: .35rem; display: inline-block; font-size: .72rem; font-weight: 800; padding: .35rem .6rem; text-transform: uppercase; }
+.vertuo-featured-label { background: var(--vertuo-mustard); color: var(--vertuo-ink); }
+.vertuo-featured-cta { background: var(--vertuo-plum); border-radius: 99px; color: #fff; }
+.vertuo-featured-card:hover .vertuo-featured-cta { text-decoration: underline; }
+
+.vertuo-shop-view .vertuo-hero-section { display: none; }
+.vertuo-shop-view .vertuo-products { padding-top: 0 !important; }
+.vertuo-products { background: #fff; }
+.vertuo-products > .section-content > .row { max-width: 1245px; }
+.vertuo-catalog { color: var(--vertuo-ink); scroll-margin-top: 5rem; }
+.vertuo-catalog-heading { background: linear-gradient(110deg, #efe3d1, #e3d2b9); padding: 1.65rem 1rem; text-align: center; }
+.vertuo-catalog h2, .vertuo-catalog h3 { color: inherit; }
+.vertuo-catalog h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 0; }
+.vertuo-catalog h3 { font-size: 1.4rem; margin-top: 1.1em; }
+.vertuo-catalog-form {
+  align-items: end;
+  background: #fff;
+  border-bottom: 1px solid var(--vertuo-line);
+  display: grid;
+  gap: .6rem;
+  grid-template-columns: minmax(200px, 1fr) minmax(160px, .65fr) auto;
+  padding: .9rem 0;
+}
+.vertuo-catalog-form select { border: 1px solid #8d8278; border-radius: .15rem; box-shadow: none; margin: 0; }
+.vertuo-catalog-form .button { background: #fff; border: 1px solid var(--vertuo-ink); border-radius: .15rem; color: var(--vertuo-ink); margin: 0; }
+.vertuo-catalog .products { max-width: none; }
+.vertuo-catalog .products > .product { display: flex; padding-bottom: 1.3rem; }
+.vertuo-catalog .products > .product > .col-inner { display: flex; }
+.vertuo-catalog .product-small.box {
+  background: #fff;
+  box-shadow: 0 3px 16px rgb(34 24 16 / 12%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+}
+.vertuo-catalog .product-small.box .box-image { background: #fff; }
+.vertuo-catalog .product-small.box .box-image img { padding: .75rem; }
+.vertuo-catalog .woocommerce-placeholder { aspect-ratio: 4 / 3; object-fit: cover; }
+.vertuo-catalog .product-small.box .box-text { display: flex; flex: 1; flex-direction: column; padding: .8rem; }
+.vertuo-catalog .product-small.box .name a { color: var(--vertuo-ink); font-weight: 800; }
+.vertuo-catalog .product-small.box .category { display: none; }
+.vertuo-catalog .product-small.box .price-wrapper { border-top: 1px solid var(--vertuo-line); font-size: 1rem; padding: .5rem 0; }
+.vertuo-catalog .star-rating { color: #966000; }
+.vertuo-card-spec { color: #5c4d44; font-size: .79rem; margin: .3rem 0 .45rem; }
+.vertuo-card-packs { color: var(--vertuo-ink); font-size: .74rem; font-weight: 700; margin-bottom: .55rem; }
+.vertuo-card-pack-options { display: grid; gap: .3rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: .25rem; }
+.vertuo-card-pack-options a {
+  border: 1px solid var(--vertuo-line);
+  border-radius: .25rem;
+  color: var(--vertuo-ink);
+  line-height: 1.2;
+  padding: .42rem .2rem;
+  text-align: center;
+}
+.vertuo-card-pack-options a:hover, .vertuo-card-pack-options a:focus-visible { background: #fff5d8; border-color: var(--vertuo-ink); }
+.vertuo-catalog .product-small.box .add-to-cart-button { margin: auto 0 0; }
+.vertuo-catalog .product-small.box .box-text .button {
+  background: #fff;
+  border: 2px solid #d59300;
+  border-radius: .12rem;
+  color: var(--vertuo-ink);
+  font-size: .8rem;
+  margin: .55rem 0 0;
+  width: 100%;
+}
+.vertuo-catalog .product-small.box .box-text .button:hover, .vertuo-catalog-form .button:hover { background: #fff5d8; }
+.vertuo-catalog .product-small.box .box-text > .button { margin-top: auto; }
+
+.single-product .product-main { padding-block: 2.3rem; }
+.single-product .product-main > .row { max-width: 1245px; }
+.single-product .product-main .product-gallery-slider img { max-height: 515px; object-fit: contain; }
+.single-product .product-info h1 { color: var(--vertuo-ink); font-size: clamp(1.85rem, 3vw, 2.8rem); line-height: 1.12; }
+.single-product .product-short-description { color: #594c46; }
+.single-product .product-info form.cart { border: 1px solid var(--vertuo-line); border-radius: .25rem; padding: 1rem; }
+.single-product .variations .label { color: var(--vertuo-ink); font-weight: 700; }
+.single-product .ux-swatches-attribute-ux_label { display: flex; flex-wrap: wrap; gap: .45rem; }
+.single-product .ux-swatches-attribute-ux_label .ux-swatch {
+  border: 1px solid var(--vertuo-line);
+  border-radius: .25rem;
+  box-shadow: none;
+  color: var(--vertuo-ink);
+  margin: 0;
+  min-height: 42px;
+  min-width: 64px;
+}
+.single-product .ux-swatches-attribute-ux_label .ux-swatch[aria-checked="true"] { border-color: var(--vertuo-ink); box-shadow: inset 0 0 0 1px var(--vertuo-ink); font-weight: 800; }
+.single-product .product-info .single_add_to_cart_button { background: var(--vertuo-mustard); border-radius: .12rem; color: var(--vertuo-ink); min-width: min(13rem, 100%); }
+.single-product .product-info .single_add_to_cart_button:hover { background: #eab021; }
+.vertuo-mobile-product-title { display: none; }
+
+.vertuo-footer { background: #fff; border-top: 1px solid var(--vertuo-line); color: var(--vertuo-ink); }
+.vertuo-footer-band { background: var(--vertuo-plum); color: #fff; padding: .75rem 0; }
+.vertuo-footer-band :is(.text, .uxb-wrapper--text > div > p) { display: flex; flex-wrap: wrap; font-weight: 700; gap: .55rem 1.6rem; justify-content: space-between; margin: 0 auto; max-width: 1050px; }
+.vertuo-footer .row > .col { padding-bottom: 0; }
+.vertuo-footer-band a { color: inherit; text-decoration: underline; }
+.vertuo-footer-links { padding-block: 1.65rem; row-gap: 1.25rem; }
+.vertuo-footer-links nav > br { display: none; }
+.vertuo-footer-links strong { display: block; margin-bottom: .5rem; }
+.vertuo-footer-links a { color: inherit; display: block; font-size: .9rem; margin-bottom: .25rem; }
+.vertuo-footer-links a:hover { text-decoration: underline; }
+.vertuo-newsletter p { margin-bottom: .65rem; }
+.vertuo-newsletter form, .vertuo-newsletter input[type="submit"], .vertuo-contact-panel form { margin-bottom: 0; }
+.vertuo-newsletter input[type="submit"], .vertuo-contact-panel input[type="submit"], .vertuo-footer-contact input[type="submit"] {
+  background-color: var(--vertuo-mustard);
+  color: var(--vertuo-ink);
+  border-radius: .2rem;
+}
+.vertuo-service-page { max-width: 1080px; padding-block: clamp(1.75rem, 5vw, 3.75rem); }
+.vertuo-service-page h1, .vertuo-service-page h2 { color: var(--vertuo-ink); }
+.vertuo-service-page h2 { font-size: clamp(1.15rem, 2vw, 1.55rem); margin-top: 1.3rem; }
+.vertuo-service-page a { color: var(--vertuo-plum); font-weight: 700; text-decoration: underline; }
+.vertuo-contact-options { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-block: 1.4rem; }
+.vertuo-contact-options article, .vertuo-contact-panel { background: var(--vertuo-tan); border: 1px solid var(--vertuo-line); border-radius: .5rem; padding: clamp(1rem, 3vw, 1.6rem); }
+.vertuo-contact-options h2, .vertuo-contact-panel h2 { margin-top: 0; }
+.vertuo-contact-panel { background: #faf9f7; scroll-margin-top: 10rem; }
+.vertuo-footer-contact { padding-bottom: 1.65rem; }
+.vertuo-footer-contact .accordion-item { background: #faf9f7; border: 1px solid var(--vertuo-line); border-radius: .5rem; }
+.vertuo-footer-contact .accordion-title { border: 0; color: var(--vertuo-ink); font-weight: 700; }
+.vertuo-footer-contact .accordion-title.active { background: transparent; }
+.vertuo-footer-contact form { margin-bottom: 0; }
+.vertuo-contact-fields { display: grid; gap: .9rem 1.1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.vertuo-contact-fields p { margin: 0; }
+.vertuo-contact-fields .vertuo-field-wide { grid-column: 1 / -1; }
+.vertuo-contact-fields input, .vertuo-contact-fields select, .vertuo-contact-fields textarea, .vertuo-newsletter input[type="email"] {
+  border: 1px solid #8a827d;
+  border-radius: .2rem;
+  box-shadow: none;
+  margin-bottom: .35rem;
+}
+
+@media (min-width: 1200px), (min-width: 370px) and (max-width: 549px) {
+  .vertuo-card-pack-options { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 849px) {
+  #top-bar .vertuo-announcement { padding-block: .72rem; }
+  #masthead .logo { flex: 1; text-align: center; }
+  #masthead .flex-col.show-for-medium { min-width: 3.8rem; }
+  #wide-nav .mobile-nav .header-search-form { margin: 0 0 .55rem; width: 100%; }
+  #wide-nav .header-search-form input { min-height: 41px; }
+  .vertuo-collection-strip { display: none; }
+  .single-product .product-main { padding-block: .85rem 1.5rem; }
+  .vertuo-mobile-product-title { color: var(--vertuo-ink); display: block; font-size: 1.95rem; line-height: 1.12; }
+  .product-main:has(.vertuo-mobile-product-title) .product-info .product-title { display: none; }
+  .vertuo-newsletter .col-inner { max-width: 27rem; }
+}
+
+@media (max-width: 549px) {
+  .vertuo-hero > .col-inner { padding: 2.2rem .7rem 2.3rem; }
+  .vertuo-featured { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
+  .vertuo-featured-card:first-child { grid-row: auto; grid-template-columns: 1fr; text-align: center; }
+  .vertuo-featured-card:first-child img { max-width: 190px; }
+  .vertuo-catalog-heading { padding: 1.4rem .75rem; }
+  .vertuo-catalog-form { gap: .55rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vertuo-catalog-form .button { grid-column: 1 / -1; }
+  .vertuo-catalog .products { margin-inline: -.35rem; }
+  .vertuo-catalog .products > .product { flex: 0 0 100%; max-width: 100%; padding: 0 .35rem .7rem; }
+  .vertuo-catalog .product-small.box { align-items: start; display: grid; grid-template-columns: 29% minmax(0, 1fr); }
+  .vertuo-catalog .product-small.box .box-image { margin-top: .7rem; width: 100% !important; }
+  .vertuo-catalog .product-small.box .box-text { padding: .65rem .65rem .7rem .25rem; }
+  .vertuo-catalog .product-small.box .box-image img { padding: .35rem; }
+  .vertuo-contact-options, .vertuo-contact-fields { grid-template-columns: minmax(0, 1fr); }
+}
