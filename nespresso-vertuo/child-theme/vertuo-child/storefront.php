@@ -159,6 +159,37 @@ add_shortcode( 'vertuo_contact_form', function () {
 	return vertuo_render_support_form( 'contact' );
 } );
 
+function vertuo_page_has_contact_form( $content ) {
+	if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
+		return false;
+	}
+
+	$id = (int) get_option( 'vertuo_form_contact' );
+	$form = $id ? WPCF7_ContactForm::get_instance( $id ) : null;
+	if ( ! $form || 'publish' !== get_post_status( $id ) ) {
+		return false;
+	}
+
+	preg_match_all( '/' . get_shortcode_regex( array( 'vertuo_contact_form', 'contact-form-7' ) ) . '/', $content, $matches, PREG_SET_ORDER );
+	foreach ( $matches as $match ) {
+		if ( '[' === $match[1] && ']' === $match[6] ) {
+			continue;
+		}
+		if ( 'vertuo_contact_form' === $match[2] ) {
+			return true;
+		}
+		$atts = shortcode_parse_atts( $match[3] );
+		$reference = trim( $atts['id'] ?? '' );
+		if ( 'raw_form' !== ( $atts['output'] ?? '' ) && (
+			(string) $id === $reference ||
+			( strlen( $reference ) >= 7 && $reference === $form->hash( strlen( $reference ) ) )
+		) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
 add_action( 'flatsome_footer', function () {
 	if ( ! function_exists( 'wc_get_page_permalink' ) ) {
 		return;
@@ -196,8 +227,7 @@ add_action( 'flatsome_footer', function () {
 				</div>
 			<?php endif; ?>
 		</div>
-		<?php $contact_page = get_page_by_path( 'contact-us', OBJECT, array( 'page' ) ); ?>
-		<?php $contact = $contact_page && is_page( $contact_page->ID ) ? '' : vertuo_render_support_form( 'contact' ); ?>
+		<?php $contact = is_page( 'contact-us' ) && vertuo_page_has_contact_form( get_queried_object()->post_content ) ? '' : vertuo_render_support_form( 'contact' ); ?>
 		<?php if ( $contact ) : ?>
 			<div class="container vertuo-footer-contact">
 				<details class="vertuo-contact-panel">

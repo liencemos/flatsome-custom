@@ -1,12 +1,42 @@
 <?php
 
 $key = $args[0] ?? 'contact';
+$page = get_page_by_path( 'contact-us', OBJECT, array( 'page' ) );
+if ( 'footer' === $key ) {
+	$contact = WPCF7_ContactForm::get_instance( (int) get_option( 'vertuo_form_contact' ) );
+	$newsletter = WPCF7_ContactForm::get_instance( (int) get_option( 'vertuo_form_newsletter' ) );
+	if ( ! $page || ! $contact || ! $newsletter ) {
+		WP_CLI::error( 'Contact page or forms are missing.' );
+	}
+	$GLOBALS['wp_query'] = new WP_Query( array( 'page_id' => $page->ID ) );
+	$queried_page = get_queried_object();
+	$content_cases = array(
+		'[vertuo_contact_form]' => false,
+		$contact->shortcode() => false,
+		'<!-- wp:contact-form-7/contact-form-selector --><div>' . $contact->shortcode() . '</div><!-- /wp:contact-form-7/contact-form-selector -->' => false,
+		'[contact-form-7 id="' . $contact->id() . '"]' => false,
+		'<p>An edited Contact Us page without a form.</p>' => true,
+		'[[vertuo_contact_form]]' => true,
+		'[contact-form-7 id="' . $contact->id() . '" output="raw_form"]' => true,
+		$newsletter->shortcode() => true,
+	);
+	foreach ( $content_cases as $content => $expect_footer_form ) {
+		$queried_page->post_content = $content;
+		ob_start();
+		do_action( 'flatsome_footer' );
+		$footer = ob_get_clean();
+		if ( $expect_footer_form !== str_contains( $footer, 'class="container vertuo-footer-contact"' ) ) {
+			WP_CLI::error( 'Unexpected footer form visibility on Contact Us.' );
+		}
+	}
+	WP_CLI::success( 'Contact Us footer fallback appears only when the page lacks the contact form.' );
+	return;
+}
 if ( ! in_array( $key, array( 'contact', 'newsletter' ), true ) ) {
-	WP_CLI::error( 'Expected contact or newsletter.' );
+	WP_CLI::error( 'Expected contact, newsletter, or footer.' );
 }
 
 $id = (int) get_option( 'vertuo_form_' . $key );
-$page = get_page_by_path( 'contact-us', OBJECT, array( 'page' ) );
 if ( ! $page || ! $id || ! str_contains( vertuo_render_support_form( $key ), '_wpcf7_unit_tag' ) ) {
 	WP_CLI::error( 'Support page or form is missing.' );
 }
