@@ -58,6 +58,12 @@ if [[ "$(wp_cli option get woocommerce_currency)" != USD ]]; then
 	exit 1
 fi
 
+if ! wp_cli plugin is-installed contact-form-7; then
+	wp_cli plugin install contact-form-7 --activate
+elif ! wp_cli plugin is-active contact-form-7; then
+	wp_cli plugin activate contact-form-7
+fi
+
 copy_to_wp "$CHILD_DIR" wp-content/themes/vertuo-child
 if [[ -z "${WP_PATH:-}" ]]; then
 	docker exec "$CONTAINER" chown -R www-data:www-data "$WP_ROOT/wp-content/themes/vertuo-child"
@@ -68,6 +74,7 @@ wp_cli eval 'vertuo_apply_storefront_design();'
 
 if [[ -n "${WP_PATH:-}" ]]; then
 	wp_cli eval-file "$ROOT_DIR/setup/import-products.php" "$REFRESH" "$SKIP_IMAGES" --user="$WP_ADMIN"
+	wp_cli eval-file "$ROOT_DIR/setup/import-support.php" --user="$WP_ADMIN"
 else
 	stage="$(docker exec "$CONTAINER" mktemp -d)"
 	trap 'docker exec "$CONTAINER" rm -rf "$stage"; if [[ -n "${zip_path:-}" ]]; then docker exec "$CONTAINER" rm -f "$zip_path"; fi' EXIT
@@ -76,9 +83,11 @@ else
 	docker cp "$ROOT_DIR/setup/import-products.php" "$CONTAINER:$stage/setup/import-products.php"
 	docker cp "$ROOT_DIR/setup/import-pack-sizes.php" "$CONTAINER:$stage/setup/import-pack-sizes.php"
 	docker cp "$ROOT_DIR/setup/import-images.php" "$CONTAINER:$stage/setup/import-images.php"
+	docker cp "$ROOT_DIR/setup/import-support.php" "$CONTAINER:$stage/setup/import-support.php"
 	docker cp "$ROOT_DIR/data/woocommerce-products.csv" "$CONTAINER:$stage/data/woocommerce-products.csv"
 	docker cp "$ROOT_DIR/data/catalog.json" "$CONTAINER:$stage/data/catalog.json"
 	wp_cli eval-file "$stage/setup/import-products.php" "$REFRESH" "$SKIP_IMAGES" --user="$WP_ADMIN"
+	wp_cli eval-file "$stage/setup/import-support.php" --user="$WP_ADMIN"
 fi
 
 page_id="$(wp_cli post list --post_type=page --post_status=publish --name=vertuo-coffee-pods --format=ids)"

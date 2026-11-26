@@ -91,6 +91,10 @@ add_action( 'flatsome_header_elements', function ( $element ) {
 		foreach ( vertuo_storefront_links() as $label => $url ) {
 			printf( '<li class="menu-item"><a href="%s">%s</a></li>', esc_url( $url ), esc_html( $label ) );
 		}
+		$support = vertuo_service_link( 'help-center', 'Support' );
+		if ( $support ) {
+			echo '<li class="menu-item">' . $support . '</li>';
+		}
 	} elseif ( 'vertuo-announcement' === $element ) {
 		printf( '<li class="vertuo-announcement">Find your next favorite cup. <a href="%s">Shop coffee pods</a></li>', esc_url( vertuo_storefront_collection_url() ) );
 	}
@@ -133,13 +137,35 @@ add_shortcode( 'vertuo_hero_products', function () {
 	return ob_get_clean();
 } );
 
+function vertuo_service_link( $slug, $label = '' ) {
+	$page = get_page_by_path( $slug, OBJECT, array( 'page' ) );
+	if ( ! $page || 'publish' !== $page->post_status ) {
+		return '';
+	}
+	return sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $page ) ), esc_html( $label ?: get_the_title( $page ) ) );
+}
+
+add_shortcode( 'vertuo_service_link', function ( $atts ) {
+	return vertuo_service_link( sanitize_title( $atts['page'] ?? '' ) );
+} );
+
+function vertuo_render_support_form( $key ) {
+	$id = (int) get_option( 'vertuo_form_' . $key );
+	$form = $id && class_exists( 'WPCF7_ContactForm' ) ? WPCF7_ContactForm::get_instance( $id ) : null;
+	return $form && 'publish' === get_post_status( $id ) ? do_shortcode( $form->shortcode() ) : '';
+}
+
+add_shortcode( 'vertuo_contact_form', function () {
+	return vertuo_render_support_form( 'contact' );
+} );
+
 add_action( 'flatsome_footer', function () {
 	if ( ! function_exists( 'wc_get_page_permalink' ) ) {
 		return;
 	}
 	?>
 	<div class="vertuo-footer">
-		<div class="vertuo-footer-band"><div class="container"><?php echo esc_html( get_bloginfo( 'name' ) ); ?> <a href="<?php echo esc_url( vertuo_storefront_collection_url() ); ?>">Explore the coffee collection</a></div></div>
+		<div class="vertuo-footer-band"><div class="container"><?php echo esc_html( get_bloginfo( 'name' ) ); ?> <?php echo vertuo_service_link( 'contact-us', 'Customer Support' ); ?></div></div>
 		<div class="container vertuo-footer-links">
 			<nav aria-label="Shop"><strong>Shop</strong>
 				<?php foreach ( vertuo_storefront_links() as $label => $url ) : ?>
@@ -148,10 +174,39 @@ add_action( 'flatsome_footer', function () {
 			</nav>
 			<nav aria-label="Orders"><strong>Orders</strong>
 				<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>">My Account</a>
+				<?php echo vertuo_service_link( 'track-order' ); ?>
 				<a href="<?php echo esc_url( wc_get_cart_url() ); ?>">Shopping Cart</a>
 			</nav>
-			<div><strong>About Vertuo</strong><p>Explore coffee pods, coffee packs, and accessories for the way you brew.</p></div>
+			<nav aria-label="Helpful information"><strong>Helpful Info</strong>
+				<?php foreach ( array( 'contact-us', 'help-center', 'shipping', 'returns-and-warranty' ) as $slug ) {
+					echo vertuo_service_link( $slug );
+				} ?>
+			</nav>
+			<nav aria-label="About"><strong>About</strong>
+				<?php foreach ( array( 'about-vertuo', 'store-privacy', 'terms-of-use', 'accessibility' ) as $slug ) {
+					echo vertuo_service_link( $slug );
+				} ?>
+			</nav>
+			<?php $newsletter = vertuo_render_support_form( 'newsletter' ); ?>
+			<?php if ( $newsletter ) : ?>
+				<div class="vertuo-newsletter">
+					<strong>Join our mailing list</strong>
+					<p>Get new coffee releases and store updates by email.</p>
+					<?php echo $newsletter; ?>
+				</div>
+			<?php endif; ?>
 		</div>
+		<?php $contact_page = get_page_by_path( 'contact-us', OBJECT, array( 'page' ) ); ?>
+		<?php $contact = $contact_page && is_page( $contact_page->ID ) ? '' : vertuo_render_support_form( 'contact' ); ?>
+		<?php if ( $contact ) : ?>
+			<div class="container vertuo-footer-contact">
+				<details class="vertuo-contact-panel">
+					<summary>Send us a message</summary>
+					<p>Please don't include payment card details or passwords.</p>
+					<?php echo $contact; ?>
+				</details>
+			</div>
+		<?php endif; ?>
 	</div>
 	<?php
 }, 9 );
