@@ -1,5 +1,39 @@
 <?php
 
+function vertuo_rebind_footer_form( $old_id, $new_id ) {
+	$footer = get_page_by_path( 'vertuo-footer', OBJECT, array( 'blocks' ) );
+	if ( ! $footer ) {
+		return;
+	}
+
+	$content = preg_replace_callback( '/' . get_shortcode_regex( array( 'contact-form-7' ) ) . '/', static function ( $match ) use ( $old_id, $new_id ) {
+		if ( '[' === $match[1] && ']' === $match[6] ) {
+			return $match[0];
+		}
+		$attributes = shortcode_parse_atts( $match[3] );
+		if ( (string) $old_id !== ( $attributes['id'] ?? '' ) ) {
+			return $match[0];
+		}
+		preg_match_all( get_shortcode_atts_regex(), $match[3], $parts, PREG_SET_ORDER | PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL );
+		foreach ( array_reverse( $parts ) as $part ) {
+			foreach ( array( 1, 3, 5 ) as $key ) {
+				if ( 0 === strcasecmp( $part[ $key ][0] ?? '', 'id' ) ) {
+					$value = $part[ $key + 1 ];
+					return substr_replace( $match[0], (string) $new_id, 1 + strlen( $match[1] . $match[2] ) + $value[1], strlen( $value[0] ) );
+				}
+			}
+		}
+		return $match[0];
+	}, $footer->post_content );
+
+	if ( $content !== $footer->post_content ) {
+		$result = wp_update_post( wp_slash( array( 'ID' => $footer->ID, 'post_content' => $content ) ), true );
+		if ( is_wp_error( $result ) ) {
+			WP_CLI::error( $result->get_error_message() );
+		}
+	}
+}
+
 function vertuo_seed_form( $key, $title, $fields, $mail_body ) {
 	$option = 'vertuo_form_' . $key;
 	$id = (int) get_option( $option );
@@ -17,6 +51,9 @@ function vertuo_seed_form( $key, $title, $fields, $mail_body ) {
 	$form->save();
 	if ( ! $form->id() ) {
 		WP_CLI::error( 'Could not create the ' . $title . ' form.' );
+	}
+	if ( $id ) {
+		vertuo_rebind_footer_form( $id, $form->id() );
 	}
 	update_option( $option, $form->id() );
 	return $form->id();
