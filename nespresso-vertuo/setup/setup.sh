@@ -79,7 +79,7 @@ else
 	stage="$(docker exec "$CONTAINER" mktemp -d)"
 	trap 'docker exec "$CONTAINER" rm -rf "$stage"; if [[ -n "${zip_path:-}" ]]; then docker exec "$CONTAINER" rm -f "$zip_path"; fi' EXIT
 	docker exec "$CONTAINER" chmod a+rx "$stage"
-	docker exec "$CONTAINER" mkdir "$stage/setup" "$stage/data"
+	docker exec "$CONTAINER" mkdir "$stage/setup" "$stage/data" "$stage/ux-builder"
 	docker cp "$ROOT_DIR/setup/import-products.php" "$CONTAINER:$stage/setup/import-products.php"
 	docker cp "$ROOT_DIR/setup/import-pack-sizes.php" "$CONTAINER:$stage/setup/import-pack-sizes.php"
 	docker cp "$ROOT_DIR/setup/import-images.php" "$CONTAINER:$stage/setup/import-images.php"
@@ -101,6 +101,14 @@ else
 		[[ "$page_title" == 'Vertuo Coffee Pods' && "$page_hash" == '69f7b2c8289e74ef62fd31da0f0095127766435f84b17cc9e8ada27c22885a05' ]]; then
 		wp_cli post update "$page_id" --post_title='Vertuo Coffee Pods' --page_template=page-blank.php --post_content="$(< "$ROOT_DIR/ux-builder/catalog.txt")"
 	fi
+fi
+
+if [[ -n "${WP_PATH:-}" ]]; then
+	wp_cli eval-file "$ROOT_DIR/setup/import-footer.php" --user="$WP_ADMIN"
+else
+	docker cp "$ROOT_DIR/setup/import-footer.php" "$CONTAINER:$stage/setup/import-footer.php"
+	docker cp "$ROOT_DIR/ux-builder/footer.txt" "$CONTAINER:$stage/ux-builder/footer.txt"
+	wp_cli eval-file "$stage/setup/import-footer.php" --user="$WP_ADMIN"
 fi
 
 wp_cli eval "echo get_permalink( (int) '$page_id' ) . PHP_EOL;"

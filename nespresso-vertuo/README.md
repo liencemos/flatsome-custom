@@ -28,6 +28,8 @@ Lệnh setup áp dụng cấu hình giao diện Flatsome mới một lần và c
 
 Setup cài và kích hoạt **Contact Form 7**, tạo form **Contact Us** (trang riêng và mở trực tiếp từ footer), form **Newsletter Signup** ở footer và các trang hỗ trợ tiếng Anh. Chạy lại không ghi đè form và trang hiện có. Hai form mặc định gửi tới email quản trị WordPress; hãy kiểm tra mục **Contact → Contact Forms → Mail** và cấu hình gửi thư trước khi mở trang. Newsletter chỉ gửi yêu cầu đăng ký qua email, chưa tự ghi vào danh sách gửi thư. Rà soát nội dung mẫu về giao hàng, đổi trả, quyền riêng tư và điều khoản trước khi bán hàng.
 
+Footer được lưu trong WordPress: vào **UX Blocks → Footer → Edit with UX Builder** để sửa bố cục, nội dung và từng liên kết. Flatsome chọn block tại **Appearance → Customize → Footer → Custom Footer Block**. Mẫu cài đặt nằm ở `ux-builder/footer.txt`; chạy lại setup không ghi đè block đã sửa hoặc block khác đang được chọn. Giữ lớp `vertuo-footer-contact` trên hàng form để không hiện form hai lần trên trang Contact Us.
+
 Kiểm tra trên WordPress đã cài gói bằng `wp eval-file nespresso-vertuo/setup/check-support.php contact` và chạy lại với `newsletter`. Các lệnh kiểm tra phản hồi CF7 mà không gửi email thật. Dùng tham số `footer` để kiểm tra form dự phòng trong footer.
 
 **Cài thủ công:** kích hoạt child theme; nhập CSV tại **Products → Import** với các cột mặc định; tạo trang **Vertuo Coffee Pods** với mẫu **Page - Full Width** và dán `ux-builder/catalog.txt` trong trình soạn thảo mã trước khi chỉnh sửa bằng UX Builder. Để áp dụng cấu hình Flatsome, tạo biến thể Pack Size và lấy đúng thứ tự riêng theo từng bộ sưu tập, chạy `setup/setup.sh`; chỉ nhập CSV không tạo biến thể.

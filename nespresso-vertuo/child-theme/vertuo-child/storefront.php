@@ -190,53 +190,11 @@ function vertuo_page_has_contact_form( $content ) {
 	return false;
 }
 
-add_action( 'flatsome_footer', function () {
-	if ( ! function_exists( 'wc_get_page_permalink' ) ) {
-		return;
+add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $atts ) {
+	if ( 'row' === $tag && is_page( 'contact-us' )
+		&& in_array( 'vertuo-footer-contact', preg_split( '/\s+/', $atts['class'] ?? '' ), true )
+		&& vertuo_page_has_contact_form( get_queried_object()->post_content ) ) {
+		return '';
 	}
-	?>
-	<div class="vertuo-footer">
-		<div class="vertuo-footer-band"><div class="container"><?php echo esc_html( get_bloginfo( 'name' ) ); ?> <?php echo vertuo_service_link( 'contact-us', 'Customer Support' ); ?></div></div>
-		<div class="container vertuo-footer-links">
-			<nav aria-label="Shop"><strong>Shop</strong>
-				<?php foreach ( vertuo_storefront_links() as $label => $url ) : ?>
-					<a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $label ); ?></a>
-				<?php endforeach; ?>
-			</nav>
-			<nav aria-label="Orders"><strong>Orders</strong>
-				<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>">My Account</a>
-				<?php echo vertuo_service_link( 'track-order' ); ?>
-				<a href="<?php echo esc_url( wc_get_cart_url() ); ?>">Shopping Cart</a>
-			</nav>
-			<nav aria-label="Helpful information"><strong>Helpful Info</strong>
-				<?php foreach ( array( 'contact-us', 'help-center', 'shipping', 'returns-and-warranty' ) as $slug ) {
-					echo vertuo_service_link( $slug );
-				} ?>
-			</nav>
-			<nav aria-label="About"><strong>About</strong>
-				<?php foreach ( array( 'about-vertuo', 'store-privacy', 'terms-of-use', 'accessibility' ) as $slug ) {
-					echo vertuo_service_link( $slug );
-				} ?>
-			</nav>
-			<?php $newsletter = vertuo_render_support_form( 'newsletter' ); ?>
-			<?php if ( $newsletter ) : ?>
-				<div class="vertuo-newsletter">
-					<strong>Join our mailing list</strong>
-					<p>Get new coffee releases and store updates by email.</p>
-					<?php echo $newsletter; ?>
-				</div>
-			<?php endif; ?>
-		</div>
-		<?php $contact = is_page( 'contact-us' ) && vertuo_page_has_contact_form( get_queried_object()->post_content ) ? '' : vertuo_render_support_form( 'contact' ); ?>
-		<?php if ( $contact ) : ?>
-			<div class="container vertuo-footer-contact">
-				<details class="vertuo-contact-panel">
-					<summary>Send us a message</summary>
-					<p>Please don't include payment card details or passwords.</p>
-					<?php echo $contact; ?>
-				</details>
-			</div>
-		<?php endif; ?>
-	</div>
-	<?php
-}, 9 );
+	return $output;
+}, 10, 3 );

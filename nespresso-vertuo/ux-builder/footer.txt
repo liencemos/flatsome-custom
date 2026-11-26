@@ -1,0 +1,77 @@
+[section padding="0px" class="vertuo-footer"]
+[row width="full-width" class="vertuo-footer-band"]
+[col span="12"]
+[ux_text]
+<span>{{site_name}}</span><a href="{{contact-us}}">Customer Support</a>
+[/ux_text]
+[/col]
+[/row]
+
+[row class="vertuo-footer-links"]
+[col span="2" span__md="3" span__sm="6"]
+[ux_text]
+<nav aria-label="Shop">
+<strong>Shop</strong>
+<a href="{{coffee-pods}}">Coffee Pods</a>
+<a href="{{espresso}}">Espresso</a>
+<a href="{{double-espresso}}">Double Espresso</a>
+<a href="{{coffee}}">Coffee</a>
+<a href="{{coffee-packs}}">Coffee Packs</a>
+<a href="{{fall-favorites}}">Fall Favorites</a>
+</nav>
+[/ux_text]
+[/col]
+[col span="2" span__md="3" span__sm="6"]
+[ux_text]
+<nav aria-label="Orders">
+<strong>Orders</strong>
+<a href="{{my-account}}">My Account</a>
+<a href="{{track-order}}">Track Your Order</a>
+<a href="{{cart}}">Shopping Cart</a>
+</nav>
+[/ux_text]
+[/col]
+[col span="2" span__md="3" span__sm="6"]
+[ux_text]
+<nav aria-label="Helpful information">
+<strong>Helpful Info</strong>
+<a href="{{contact-us}}">Contact Us</a>
+<a href="{{help-center}}">Help Center</a>
+<a href="{{shipping}}">Shipping</a>
+<a href="{{returns-and-warranty}}">Returns &amp; Warranty</a>
+</nav>
+[/ux_text]
+[/col]
+[col span="2" span__md="3" span__sm="6"]
+[ux_text]
+<nav aria-label="About">
+<strong>About</strong>
+<a href="{{about-vertuo}}">About Vertuo</a>
+<a href="{{store-privacy}}">Privacy Policy</a>
+<a href="{{terms-of-use}}">Terms of Use</a>
+<a href="{{accessibility}}">Accessibility</a>
+</nav>
+[/ux_text]
+[/col]
+[col span="4" span__md="12" span__sm="12" class="vertuo-newsletter"]
+[ux_text]
+<strong>Join our mailing list</strong>
+<p>Get new coffee releases and store updates by email.</p>
+[/ux_text]
+[contact-form-7 id="{{newsletter_form}}"]
+[/col]
+[/row]
+
+[row class="vertuo-footer-contact"]
+[col span="12"]
+[accordion]
+[accordion-item title="Send us a message"]
+[ux_text]
+<p>Please don't include payment card details or passwords.</p>
+[/ux_text]
+[contact-form-7 id="{{contact_form}}"]
+[/accordion-item]
+[/accordion]
+[/col]
+[/row]
+[/section]
