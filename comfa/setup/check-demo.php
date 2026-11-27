@@ -106,6 +106,13 @@ $cf_studio_block   = get_page_by_path( 'pdp-studio', OBJECT, 'blocks' );
 $cf_expect( $cf_studio_product && get_post_meta( $cf_studio_product, '_cf_studio_layout_seeded', true ), 'Studio product layout was not seeded.' );
 $cf_expect( $cf_studio_block && has_shortcode( $cf_studio_block->post_content, 'ux_product_add_to_cart' ) && has_shortcode( $cf_studio_block->post_content, 'ux_product_gallery' ), 'Studio product layout must retain the native Flatsome gallery and WooCommerce form.' );
 $cf_expect( ! $cf_studio_block || 'custom' !== get_theme_mod( 'product_layout' ) || (int) get_theme_mod( 'product_custom_layout' ) !== $cf_studio_block->ID, 'The Studio product layout must not replace the default product layout.' );
+if ( $cf_studio_product ) {
+	$cf_previous_product = $GLOBALS['product'] ?? null;
+	$GLOBALS['product'] = wc_get_product( $cf_studio_product );
+	$cf_deal = do_shortcode( '[cf_studio_deal]' );
+	$cf_expect( false !== strpos( $cf_deal, 'cf-price__from' ) && false === strpos( $cf_deal, '<del>' ), 'The Studio price without a variation must show the starting price without variation savings.' );
+	$GLOBALS['product'] = $cf_previous_product;
+}
 foreach ( array( 'home', 'mission', 'help', 'shipping-returns', 'size-guide', 'contact', 'privacy-policy', 'terms-of-service', 'return-refund-policy', 'dmca', 'ip-claim' ) as $cf_slug ) {
 	$cf_page = get_page_by_path( $cf_slug );
 	$cf_expect( $cf_page && 'publish' === $cf_page->post_status && false === strpos( $cf_page->post_content, '{{' ), 'Page missing or has unresolved placeholders: ' . $cf_slug );

@@ -56,8 +56,19 @@ function cf_studio_deal() {
 	if ( ! $product ) {
 		return '';
 	}
-	$item = $product->is_type( 'variable' ) ? cf_default_variation( $product ) : $product;
-	return '<div class="price-wrapper cf-studio-deal" aria-live="polite">' . ( $item ? cf_studio_deal_markup( $item ) : wp_kses_post( $product->get_price_html() ) ) . '</div>';
+	if ( $product->is_type( 'variable' ) ) {
+		$prices = $product->get_variation_prices( true );
+		$markup = '';
+		if ( ! empty( $prices['price'] ) ) {
+			$min    = reset( $prices['price'] );
+			$max    = end( $prices['price'] );
+			$prefix = $min !== $max ? '<span class="cf-price__from">' . esc_html__( 'From', 'comfa' ) . '</span> ' : '';
+			$markup = '<p class="price cf-studio-deal__main">' . $prefix . wc_price( $min ) . '</p>';
+		}
+	} else {
+		$markup = cf_studio_deal_markup( $product );
+	}
+	return '<div class="price-wrapper cf-studio-deal" aria-live="polite">' . $markup . '</div>';
 }
 
 add_filter( 'woocommerce_available_variation', function ( $data, $product, $variation ) {

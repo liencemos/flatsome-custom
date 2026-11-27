@@ -67,7 +67,7 @@
 		return $form.closest('.product-info, .product-lightbox-inner, .product');
 	}
 	function mainPrice($form) {
-		return scope($form).find('.price-wrapper .price, .product-lightbox-inner > .price, p.price').not($form.find('.price')).first();
+		return scope($form).find('.price-wrapper .price, .product-lightbox-inner > .price, p.price').not('.cf-studio-deal .price').not($form.find('.price')).first();
 	}
 	$(document).on('found_variation', '.variations_form', function (event, variation) {
 		var $form = $(this);
