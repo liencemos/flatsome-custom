@@ -63,7 +63,7 @@ function cf_studio_deal() {
 			$min    = reset( $prices['price'] );
 			$max    = end( $prices['price'] );
 			$prefix = $min !== $max ? '<span class="cf-price__from">' . esc_html__( 'From', 'comfa' ) . '</span> ' : '';
-			$markup = '<p class="price cf-studio-deal__main">' . $prefix . wc_price( $min ) . '</p>';
+			$markup = '<p class="price cf-studio-deal__main">' . $prefix . wc_price( $min ) . $product->get_price_suffix() . '</p>';
 		}
 	} else {
 		$markup = cf_studio_deal_markup( $product );

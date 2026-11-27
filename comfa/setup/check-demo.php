@@ -115,6 +115,17 @@ if ( $cf_studio_product ) {
 	$GLOBALS['product'] = wc_get_product( $cf_studio_product );
 	$cf_deal = do_shortcode( '[cf_studio_deal]' );
 	$cf_expect( false !== strpos( $cf_deal, 'cf-price__from' ) && false === strpos( $cf_deal, '<del>' ), 'The Studio price without a variation must show the starting price without variation savings.' );
+	$cf_enable_taxes = static function () {
+		return 'yes';
+	};
+	$cf_price_suffix = static function () {
+		return '(tax excluded)';
+	};
+	add_filter( 'pre_option_woocommerce_calc_taxes', $cf_enable_taxes );
+	add_filter( 'pre_option_woocommerce_price_display_suffix', $cf_price_suffix );
+	$cf_expect( false !== strpos( do_shortcode( '[cf_studio_deal]' ), '<small class="woocommerce-price-suffix">(tax excluded)</small>' ), 'The Studio starting price must show the WooCommerce price suffix.' );
+	remove_filter( 'pre_option_woocommerce_price_display_suffix', $cf_price_suffix );
+	remove_filter( 'pre_option_woocommerce_calc_taxes', $cf_enable_taxes );
 	$GLOBALS['product'] = $cf_previous_product;
 }
 foreach ( array( 'home', 'mission', 'help', 'shipping-returns', 'size-guide', 'contact', 'privacy-policy', 'terms-of-service', 'return-refund-policy', 'dmca', 'ip-claim' ) as $cf_slug ) {
