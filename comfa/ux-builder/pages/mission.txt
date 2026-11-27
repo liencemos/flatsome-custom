@@ -1,0 +1,38 @@
+[section class="cf-page-hero" bg_color="rgb(233, 185, 77)" padding="64px" padding__sm="40px"]
+[row]
+[col span__sm="12" align="center"]
+<p class="cf-impact__badges cf-center"><span class="cf-pill cf-pill--solid">One Bought</span><span class="cf-pill cf-pill--outline">One Given</span></p>
+<h1 class="cf-display">Comfort Is For Everyone</h1>
+<p class="cf-serif cf-statement__sub">Every item you buy sends one to someone who needs it.</p>
+[/col]
+[/row]
+[/section]
+[section padding="56px" padding__sm="32px"]
+[row v_align="middle"]
+[col span="6" span__sm="12"]
+[ux_image id="{{img:mission.webp}}" image_size="large" class="cf-rounded"]
+[/col]
+[col span="6" span__sm="12"]
+<h2 class="cf-serif">How giving works</h2>
+<p>Clean tees, warm hats and socks are some of the most requested items at shelters. For each item sold we set aside a specially made one and deliver it through local partner organisations.</p>
+<p><strong>[cf_given_total base="250000"]</strong> items given so far.</p>
+[button text="Shop to Give" color="secondary" radius="12" link="{{url:/shop/}}" class="cf-btn-dark"]
+[/col]
+[/row]
+[/section]
+[section class="cf-give" bg_color="rgb(178, 198, 147)" padding="48px" padding__sm="28px"]
+[row]
+[col span="4" span__sm="12" align="center"]
+<h3 class="cf-display">1. You Buy</h3>
+<p>Pick anything in the store. Packs count for every item inside.</p>
+[/col]
+[col span="4" span__sm="12" align="center"]
+<h3 class="cf-display">2. We Make</h3>
+<p>A matching item is made for giving, built for durability.</p>
+[/col]
+[col span="4" span__sm="12" align="center"]
+<h3 class="cf-display">3. Partners Give</h3>
+<p>Community partners hand them out where they are needed most.</p>
+[/col]
+[/row]
+[/section]

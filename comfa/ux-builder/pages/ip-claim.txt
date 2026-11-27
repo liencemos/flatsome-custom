@@ -1,0 +1,20 @@
+[section class="cf-doc cf-doc--form" padding="40px" padding__sm="16px"]
+[row style="collapse" class="cf-doc__card"]
+[col span="4" span__md="12" span__sm="12" class="cf-doc__side"]
+<h1 class="cf-serif">Intellectual Property Claim Form</h1>
+<p class="cf-doc__sub">Report a design, photo or other content on this website that you believe infringes your rights.</p>
+<div class="cf-doc__cta">
+<p class="cf-doc__cta-title">Before you start</p>
+<ul>
+<li>Only the rights owner, or someone authorised to act for them, can send a report.</li>
+<li>Have the page addresses of the content ready, and any registration numbers.</li>
+<li>Knowingly sending a false report can make you liable for damages.</li>
+</ul>
+</div>
+<p class="cf-doc__more">How we handle reports: <a href="{{url:/dmca/}}">Intellectual Property Rights Policy</a></p>
+[/col]
+[col span="8" span__md="12" span__sm="12" class="cf-doc__body"]
+[cf_ip_claim_form]
+[/col]
+[/row]
+[/section]

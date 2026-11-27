@@ -1,0 +1,10 @@
+[section class="cf-404" padding="80px" padding__sm="48px"]
+[row]
+[col span__sm="12" align="center"]
+<h1 class="cf-display">Lost a Sock?</h1>
+<p class="cf-serif cf-statement__sub">We could not find that page, but there is plenty of comfort left.</p>
+[button text="Shop All" color="secondary" radius="12" link="{{url:/shop/}}" class="cf-btn-dark"]
+[button text="Back Home" style="outline" color="secondary" radius="12" link="{{url:/}}"]
+[/col]
+[/row]
+[/section]

@@ -1,0 +1,58 @@
+# Comfa design spec
+
+Comfa is a Flatsome + WooCommerce storefront for printed tees, caps, hoodies and socks. Its layout and shopping UX follow the structure of bombas.com (captured November 2026, desktop 1440 px and mobile 390 px). Brand name, logo, photography, product data and copy are original demo content; nothing from Bombas is bundled.
+
+## Tokens
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| Page | `#fdfcf8` | body and header background |
+| Ink | `#000814` | text, dark buttons, button outlines |
+| Navy | `#213858` top bar, `#003566` secondary buttons, links, savings and badges |
+| Cream | `#ecebdc` | collection banner, mobile chips, story band |
+| Card | `#f3f3f1` | product image background |
+| Soft | `#f8f8f4` | Quick View button, size buttons, info card |
+| Yellow | `#ffc300`, hover `#ffd60a` | Add to Bag, checkout and hero buttons, hero sticker, headline underline |
+| Giving bands | `#e9b94d` / `#b2c693` | yellow and green home bands |
+| Accents | red `#d4240d` promo line, orange `#f04e23` wavy underline, sky `#a0c7ff` sign-up button |
+| Footer | `#1b1b1b`, tag chips `#312b2b` |
+| Radius | 12 px tiles and buttons, 8 px cards and chips |
+
+## Type
+
+| Role | Font | Notes |
+| --- | --- | --- |
+| Display | Bowlby One | uppercase, line-height 0.82–0.92; hero 96 px, statement 64 px, tiles 35 px |
+| Body / UI | Outfit 400, 700, 800 | nav 14 px / 800, product name 16 px / 700 |
+| Accent serif | Fraunces 300 | section titles 32–36 px, product title 34 px, giving lines |
+
+Outfit and Fraunces are set in Flatsome > Theme Options > Typography; the child theme ships Bowlby One as a local WOFF2.
+
+## Page structure
+
+**Header:** two-line navy promo bar, cream sticky header with wordmark left, centred navigation, Login / search / bag right. T-Shirts and Caps open full-width mega menus (UX Blocks). Mobile: menu and search left, wordmark centre, account and bag right.
+
+**Home (UX Builder page):** category chips → cream hero (copy left, image right, round offer sticker) → four style tiles → scrolling ticker strip → product rail → "Shop by Colour" circles linking to the colour filter → product rail (intro column + four cards each) → six shape tiles → yellow giving band with blob counter → green "Comfort Beyond Tees" tiles → dark footer with sign-up, link columns, guarantee and tag chips.
+
+**Product card:** grey 3:4 image, badge pill, Flatsome colour swatches (swap the image on click), name, price with struck regular price and "10% Pack Savings", "Unisex · Midweight" line, full-width Quick View.
+
+**Collection page:** cream banner with breadcrumb, serif title and sub-collection tiles; left filter sidebar (weight, size, colour, pack, price); toolbar with item count and sorting; three-column grid (two on mobile, filters in Flatsome's off-canvas drawer).
+
+**Product page:** info column left, two-up image grid right (slider on mobile). Order: breadcrumb, serif title, price line, first-order promo, pack segmented control, colour circles, two-line size buttons with Size Guide lightbox, navy Add to Bag, "N Bought = N Given", info card (rating, shipping, highlight, details). Below: editable story band, giving band, reviews with score header, related products.
+
+**Bag and checkout:** off-canvas mini bag and cart page show free-shipping progress and the giving count; classic WooCommerce cart and checkout styled to match.
+
+**Policy and FAQ pages (UX Builder pages):** one rounded white card. Cream left column with serif title, subtitle and a numbered contents list that stays in view while scrolling; right column with the document, sub-headings marked by a yellow bar. The FAQ groups questions in Flatsome accordions with a yellow +/− marker. The DMCA page adds a white "Trademark & IP reports" card with an outline button under the contents list; the card stays visible on mobile. Its button opens the Intellectual Property Claim Form: the same card with a "Before you start" box on the left and a four-group form on the right (two columns on desktop, one on mobile, yellow submit button). Main sections are separated by a thin rule. Below 850 px the columns stack and the contents list is hidden, leaving the title band above the document.
+
+## Print-to-order designs
+
+One product per design, sold as Product (style) × Color × Size with native WooCommerce variations and Flatsome swatches.
+
+- **Product** (`pa_style`, Flatsome `ux_image` swatch, size x-large, shape rounded): garment thumbnails above Color. 14 styles.
+- **Color** (`pa_color`, `ux_color`, large, circle) and **Size** (`pa_size`, `ux_label`, large, rounded). Size surcharges are part of the variation price.
+- Swatch type, size and shape are Flatsome's per-attribute settings (Products > Attributes). Label layout (`stacked`: label, then the selected value) and the selected ring colour are Theme Options > Product Page > Swatches. The CSS skins swatches by Flatsome type class (`.ux-swatches-attribute-ux_*`), not by attribute slug; Pack keeps its segmented-control skin.
+- Availability is WooCommerce's own: options that do not go with the other picks are disabled and Flatsome strikes them through. `woocommerce_ajax_variation_threshold` is raised to 1000 so this also runs for designs with hundreds of variations. Repeated image and price markup is stored once per form and restored before the native variation picker runs. Clicking a struck-through swatch switches to it and keeps the other picks that still fit; "Clear" is shown.
+- The default selection is a complete variation (product, colour, size), so the page opens with its price and photo. While a pick is missing, the price is "From" + lowest price and the photo is the first variation matching the picks so far.
+- Cards: "From" + lowest price, "N products · N colours", and Flatsome's own colour dots built from the product's variations (6 dots, then "+N").
+- Sidebar: a Product filter above Weight; swatch filters run in two columns.
+

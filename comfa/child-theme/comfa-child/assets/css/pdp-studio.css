@@ -1,0 +1,91 @@
+.cf-threadless {
+	--studio-swatch-blue: #008ccd;
+	--studio-swatch-label: #0076ad;
+}
+
+.cf-threadless .variations tr:has([name="attribute_pa_color"]) .label {
+	justify-content: flex-start;
+	gap: 4px;
+	text-transform: none;
+}
+.cf-threadless .variations tr:has([name="attribute_pa_color"]) .ux-swatch-selected-value {
+	font-weight: 400;
+	text-transform: none;
+}
+.cf-threadless .variations tr:has([name="attribute_pa_size"]) .label { text-transform: uppercase; }
+.cf-threadless .variations tr:has([name="attribute_pa_size"]) .ux-swatch-selected-value { display: none; }
+.cf-threadless .variations .cf-size-guide-link {
+	color: var(--studio-swatch-label);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+.cf-threadless .variations_form .ux-swatches[data-attribute_name="attribute_pa_color"] {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	max-width: 594px;
+}
+.cf-threadless .variations_form .ux-swatches[data-attribute_name="attribute_pa_color"] .ux-swatch {
+	--swatch-size: 24px;
+	display: grid;
+	place-items: center;
+	width: 24px;
+	height: 24px;
+	min-width: 24px;
+	padding: 0;
+	border: 1px solid #0003;
+	border-radius: 50%;
+	box-shadow: none;
+}
+.cf-threadless .ux-swatches[data-attribute_name="attribute_pa_color"] .ux-swatch__color {
+	width: 22px;
+	height: 22px;
+	border-radius: inherit;
+}
+.cf-threadless .ux-swatches[data-attribute_name="attribute_pa_color"] .ux-swatch.selected {
+	outline: 2px solid currentColor;
+	outline-offset: 1px;
+}
+.cf-threadless .variations_form .ux-swatches[data-attribute_name="attribute_pa_size"] {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(max(34px, calc((100% - 32px) / 9)), 1fr));
+	gap: 4px;
+}
+.cf-threadless .variations_form .ux-swatches[data-attribute_name="attribute_pa_size"] .ux-swatch {
+	min-width: 0;
+	min-height: 34px;
+	padding: 0 3px;
+	border: 1px solid var(--studio-swatch-blue);
+	border-radius: 4px;
+	background: #fff;
+	box-shadow: none;
+	color: var(--studio-swatch-label);
+	font-size: 13px;
+	font-weight: 700;
+}
+.cf-threadless .variations_form .ux-swatches[data-attribute_name="attribute_pa_size"] .ux-swatch.selected {
+	background: var(--studio-swatch-label);
+	color: #fff;
+}
+.cf-threadless .ux-swatches[data-attribute_name="attribute_pa_size"] .cf-size-note { display: none; }
+
+@media (max-width: 549px) {
+	.row.cf-threadless {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 15px;
+		padding-inline: 15px;
+		margin-inline: auto;
+	}
+	.row.cf-threadless::before, .row.cf-threadless::after { display: none; }
+	.cf-threadless > .cf-studio-gallery, .cf-threadless > .cf-studio-gallery > .col-inner { display: contents; }
+	.cf-threadless > .cf-studio-summary { order: 1; padding: 0; }
+	.cf-threadless .cf-studio-gallery :is(.product-images, .product-thumbnails) {
+		min-width: 0;
+		width: 100%;
+		margin-inline: 0;
+	}
+	.cf-threadless .cf-studio-features { order: 2; }
+}

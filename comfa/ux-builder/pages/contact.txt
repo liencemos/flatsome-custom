@@ -1,0 +1,20 @@
+[section class="cf-page-hero" bg_color="rgb(236, 235, 220)" padding="48px" padding__sm="32px"]
+[row]
+[col span__sm="12"]
+<h1 class="cf-serif">Contact</h1>
+<p>We reply within one business day, Monday to Friday.</p>
+[/col]
+[/row]
+[/section]
+[section padding="40px"]
+[row]
+[col span="6" span__sm="12"]
+<h2 class="cf-serif">Email</h2>
+<p><a href="mailto:hello@example.com">hello@example.com</a></p>
+<p>Replace this address, or drop a contact form shortcode from your form plugin into this column with UX Builder.</p>
+[/col]
+[col span="6" span__sm="12"]
+<div class="cf-help-card"><p class="cf-display">Quick Answers</p><p>Shipping times, returns and sizing are covered in the FAQ.</p>[button text="Read the FAQ" color="secondary" radius="12" link="{{url:/help/}}" class="cf-btn-dark"]</div>
+[/col]
+[/row]
+[/section]

@@ -1,0 +1,13 @@
+[row]
+[col span__sm="12" align="center"]
+<p class="cf-serif cf-statement__sub">Start with something soft. Every item you buy gives one to someone in need.</p>
+[button text="Shop T-Shirts" radius="12" link="{{url:/product-category/t-shirts/}}" class="cf-btn-cta"]
+[button text="Shop All" style="outline" color="secondary" radius="12" link="{{url:/shop/}}"]
+[/col]
+[/row]
+[row]
+[col span__sm="12"]
+<h2 class="cf-bag-empty__title cf-serif">Popular right now</h2>
+[ux_products type="row" col_spacing="small" columns="4" columns__sm="2" columns__md="4" orderby="sales" products="4"]
+[/col]
+[/row]
