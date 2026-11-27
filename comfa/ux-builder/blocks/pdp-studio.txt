@@ -14,7 +14,7 @@
 [ux_product_add_to_cart]
 [cf_studio_wishlist]
 [ux_text]
-<p><a href="/return-refund-policy/">Our satisfaction promise</a>. If your order arrives damaged or isn’t what you ordered, see how we can help.</p>
+<p><a href="{{url:/return-refund-policy/}}">Our satisfaction promise</a>. If your order arrives damaged or isn’t what you ordered, see how we can help.</p>
 [/ux_text]
 [row_inner style="small"]
 [col_inner padding="15px 15px 0 15px" bg_color="rgb(248, 248, 248)"]
@@ -28,7 +28,7 @@
 [ux_product_excerpt]
 [share]
 [ux_text text_align="center"]
-<p><a href="/return-refund-policy/">Easy returns</a> · Secure checkout · Supports the artist</p>
+<p><a href="{{url:/return-refund-policy/}}">Easy returns</a> · Secure checkout · Supports the artist</p>
 [/ux_text]
 [/col]
 [/row]

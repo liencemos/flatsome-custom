@@ -105,6 +105,10 @@ $cf_studio_product = wc_get_product_id_by_sku( 'CF-SUNRISE-TRAIL' );
 $cf_studio_block   = get_page_by_path( 'pdp-studio', OBJECT, 'blocks' );
 $cf_expect( $cf_studio_product && get_post_meta( $cf_studio_product, '_cf_studio_layout_seeded', true ), 'Studio product layout was not seeded.' );
 $cf_expect( $cf_studio_block && has_shortcode( $cf_studio_block->post_content, 'ux_product_add_to_cart' ) && has_shortcode( $cf_studio_block->post_content, 'ux_product_gallery' ), 'Studio product layout must retain the native Flatsome gallery and WooCommerce form.' );
+if ( $cf_studio_block && md5( $cf_studio_block->post_content ) === get_post_meta( $cf_studio_block->ID, '_cf_seed_hash', true ) ) {
+	$cf_returns_link = 'href="' . esc_url( home_url( '/return-refund-policy/' ) ) . '"';
+	$cf_expect( 2 === substr_count( $cf_studio_block->post_content, $cf_returns_link ), 'Both seeded Studio return policy links must use the site home URL.' );
+}
 $cf_expect( ! $cf_studio_block || 'custom' !== get_theme_mod( 'product_layout' ) || (int) get_theme_mod( 'product_custom_layout' ) !== $cf_studio_block->ID, 'The Studio product layout must not replace the default product layout.' );
 if ( $cf_studio_product ) {
 	$cf_previous_product = $GLOBALS['product'] ?? null;
