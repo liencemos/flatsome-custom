@@ -459,7 +459,8 @@ foreach ( $cf_catalog['designs'] as $cf_index => $cf_item ) {
 		$cf_variation->set_sku( $cf_sku );
 		$cf_variation->set_attributes( array( $cf_tax['style'] => $cf_row[0], $cf_tax['color'] => $cf_row[1], $cf_tax['size'] => $cf_row[2] ) );
 		$cf_variation->set_regular_price( wc_format_decimal( $cf_row[3], 2 ) );
-		$cf_variation->set_sale_price( '' );
+		$cf_default_row = array( $cf_item['default'][0], $cf_item['default'][1], sanitize_title( $cf_item['default'][2] ) );
+		$cf_variation->set_sale_price( isset( $cf_item['default_sale_price'] ) && array_slice( $cf_row, 0, 3 ) === $cf_default_row ? wc_format_decimal( $cf_item['default_sale_price'], 2 ) : '' );
 		$cf_variation->set_image_id( cf_seed_asset( $cf_item['slug'] . '-' . $cf_row[0] . '-' . $cf_row[1] . '.webp' ) );
 		$cf_variation->set_manage_stock( false );
 		$cf_variation->set_stock_status( 'instock' );
@@ -533,9 +534,20 @@ if ( function_exists( 'swatches' ) ) {
 // ---------------------------------------------------------------- UX Blocks and pages.
 $cf_ux      = CF_SEED_DIR . 'ux-builder/';
 $cf_context = array( 'ids' => $cf_ids, 'blocks' => array() );
-$cf_blocks  = array( 'footer' => 'Footer', 'mega-tees' => 'Mega Menu: T-Shirts', 'mega-caps' => 'Mega Menu: Caps', 'pdp-story' => 'Product Story', 'page-404' => '404 Page', 'bag-empty' => 'Empty Bag' );
+$cf_blocks  = array( 'footer' => 'Footer', 'mega-tees' => 'Mega Menu: T-Shirts', 'mega-caps' => 'Mega Menu: Caps', 'pdp-story' => 'Product Story', 'page-404' => '404 Page', 'bag-empty' => 'Empty Bag', 'pdp-studio' => 'Studio Product Layout' );
 foreach ( $cf_blocks as $cf_slug => $cf_title ) {
 	$cf_context['blocks'][ $cf_slug ] = cf_seed_post( 'blocks', $cf_slug, $cf_title, cf_seed_render( (string) file_get_contents( $cf_ux . 'blocks/' . $cf_slug . '.txt' ), $cf_context ) );
+}
+$cf_studio_product = wc_get_product_id_by_sku( 'CF-SUNRISE-TRAIL' );
+$cf_studio_block   = $cf_context['blocks']['pdp-studio'];
+if ( $cf_studio_product && 'publish' === get_post_status( $cf_studio_block ) && ! get_post_meta( $cf_studio_product, '_cf_studio_layout_seeded', true ) ) {
+	$cf_layout_options = get_post_meta( $cf_studio_product, 'wc_productdata_options', true );
+	$cf_layout_options = is_array( $cf_layout_options ) ? $cf_layout_options : array();
+	if ( ! isset( $cf_layout_options[0]['_product_block'] ) ) {
+		$cf_layout_options[0]['_product_block'] = $cf_studio_block;
+		update_post_meta( $cf_studio_product, 'wc_productdata_options', $cf_layout_options );
+	}
+	update_post_meta( $cf_studio_product, '_cf_studio_layout_seeded', 1 );
 }
 $cf_pages = array( 'home' => 'Home', 'mission' => 'Our Mission', 'help' => 'Help & FAQ', 'shipping-returns' => 'Shipping & Returns', 'size-guide' => 'Size Guide', 'contact' => 'Contact', 'privacy-policy' => 'Privacy Policy', 'terms-of-service' => 'Terms of Service', 'return-refund-policy' => 'Return & Refund Policy', 'dmca' => 'DMCA', 'ip-claim' => 'Intellectual Property Claim Form' );
 $cf_page_ids = array();

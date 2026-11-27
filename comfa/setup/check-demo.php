@@ -62,6 +62,9 @@ foreach ( $cf_catalog['designs'] as $cf_item ) {
 		}
 	}
 	$cf_found = array();
+	if ( isset( $cf_item['default_sale_price'] ) ) {
+		$cf_expected[ $cf_item['default'][0] . '/' . $cf_item['default'][1] . '/' . sanitize_title( $cf_item['default'][2] ) ] = $cf_item['default_sale_price'];
+	}
 	foreach ( $wpdb->get_results( $wpdb->prepare( "SELECT p.ID, MAX( CASE WHEN m.meta_key = 'attribute_pa_style' THEN m.meta_value END ) AS style, MAX( CASE WHEN m.meta_key = 'attribute_pa_color' THEN m.meta_value END ) AS color, MAX( CASE WHEN m.meta_key = 'attribute_pa_size' THEN m.meta_value END ) AS size, MAX( CASE WHEN m.meta_key = '_price' THEN m.meta_value END ) AS price, MAX( CASE WHEN m.meta_key = '_thumbnail_id' THEN m.meta_value END ) AS image, MAX( CASE WHEN m.meta_key = '_stock_status' THEN m.meta_value END ) AS stock FROM {$wpdb->posts} p JOIN {$wpdb->postmeta} m ON m.post_id = p.ID WHERE p.post_parent = %d AND p.post_type = 'product_variation' AND p.post_status = 'publish' GROUP BY p.ID", $cf_product->get_id() ) ) as $cf_row ) {
 		$cf_key = $cf_row->style . '/' . $cf_row->color . '/' . $cf_row->size;
 		$cf_expect( ! isset( $cf_found[ $cf_key ] ), $cf_item['slug'] . ': duplicate variation ' . $cf_key );
@@ -94,10 +97,15 @@ foreach ( $cf_catalog['styles'] as $cf_slug => $cf_style ) {
 		$cf_expect( $cf_term && '' !== (string) get_term_meta( $cf_term->term_id, 'ux_color', true ), 'Colour term missing or has no swatch: ' . $cf_color );
 	}
 }
-foreach ( array( 'footer', 'mega-tees', 'mega-caps', 'pdp-story', 'page-404', 'bag-empty' ) as $cf_slug ) {
+foreach ( array( 'footer', 'mega-tees', 'mega-caps', 'pdp-story', 'page-404', 'bag-empty', 'pdp-studio' ) as $cf_slug ) {
 	$cf_block = get_page_by_path( $cf_slug, OBJECT, 'blocks' );
 	$cf_expect( $cf_block && 'publish' === $cf_block->post_status && false === strpos( $cf_block->post_content, '{{' ), 'UX Block missing or has unresolved placeholders: ' . $cf_slug );
 }
+$cf_studio_product = wc_get_product_id_by_sku( 'CF-SUNRISE-TRAIL' );
+$cf_studio_block   = get_page_by_path( 'pdp-studio', OBJECT, 'blocks' );
+$cf_expect( $cf_studio_product && get_post_meta( $cf_studio_product, '_cf_studio_layout_seeded', true ), 'Studio product layout was not seeded.' );
+$cf_expect( $cf_studio_block && has_shortcode( $cf_studio_block->post_content, 'ux_product_add_to_cart' ) && has_shortcode( $cf_studio_block->post_content, 'ux_product_gallery' ), 'Studio product layout must retain the native Flatsome gallery and WooCommerce form.' );
+$cf_expect( ! $cf_studio_block || 'custom' !== get_theme_mod( 'product_layout' ) || (int) get_theme_mod( 'product_custom_layout' ) !== $cf_studio_block->ID, 'The Studio product layout must not replace the default product layout.' );
 foreach ( array( 'home', 'mission', 'help', 'shipping-returns', 'size-guide', 'contact', 'privacy-policy', 'terms-of-service', 'return-refund-policy', 'dmca', 'ip-claim' ) as $cf_slug ) {
 	$cf_page = get_page_by_path( $cf_slug );
 	$cf_expect( $cf_page && 'publish' === $cf_page->post_status && false === strpos( $cf_page->post_content, '{{' ), 'Page missing or has unresolved placeholders: ' . $cf_slug );
@@ -152,4 +160,4 @@ if ( $cf_failures ) {
 	}
 	WP_CLI::error( count( $cf_failures ) . ' check(s) failed.' );
 }
-WP_CLI::success( sprintf( 'Comfa demo verified: %d products with %d variations, %d print-to-order designs with %d variations, 6 UX Blocks, 11 pages, swatches, coupon and classic cart.', count( $cf_catalog['products'] ), $cf_variations, count( $cf_catalog['designs'] ), $cf_design_variations ) );
+WP_CLI::success( sprintf( 'Comfa demo verified: %d products with %d variations, %d print-to-order designs with %d variations, 7 UX Blocks, 11 pages, swatches, coupon and classic cart.', count( $cf_catalog['products'] ), $cf_variations, count( $cf_catalog['designs'] ), $cf_design_variations ) );

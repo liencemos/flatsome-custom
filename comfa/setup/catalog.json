@@ -138,7 +138,7 @@
      "short": "A cabin, three pines and nowhere to be. Our winter badge, printed to order on the style, colour and size you pick.",
      "highlight": "Printed one at a time when you order, so nothing sits in a warehouse."},
     {"slug": "sunrise-trail", "name": "Sunrise Trail", "print": "sunrise-trail", "cats": ["t-shirts", "graphic-tees", "hoodies"], "tag": "outdoor", "badge": "Made to Order",
-     "styles": ["unisex-t-shirt", "long-sleeve-tee", "hoodie", "tank-top", "youth-t-shirt"], "colors": ["navy", "black", "forest-green", "charcoal", "gold", "orange", "royal", "kiwi"], "default": ["unisex-t-shirt", "navy", "M"],
+     "styles": ["unisex-t-shirt", "long-sleeve-tee", "hoodie", "tank-top", "youth-t-shirt"], "colors": ["navy", "black", "forest-green", "charcoal", "gold", "orange", "royal", "kiwi"], "default": ["unisex-t-shirt", "navy", "M"], "default_sale_price": 19.95,
      "short": "For the ones who are up before the light is. A trail badge printed to order on tees, long sleeves, hoodies and tanks.",
      "highlight": "Pick the style first: colours and sizes follow what that style comes in."},
     {"slug": "good-dog-walking-club", "name": "Good Dog Walking Club", "print": "good-dog", "cats": ["t-shirts", "graphic-tees", "hoodies"], "tag": "graphic", "badge": "Made to Order",
